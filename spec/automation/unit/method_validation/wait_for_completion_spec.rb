@@ -1,5 +1,4 @@
-require Rails.root.join('db/fixtures/ae_datastore/ManageIQ/ConfigurationManagement/AnsibleTower/Operations/StateMachines/Job.class/__methods__/wait_for_completion').to_s
-require Rails.root.join('spec/support/miq_ae_mock_service').to_s
+require ManageIQ::Content::Engine.root.join('content/automate/ManageIQ/ConfigurationManagement/AnsibleTower/Operations/StateMachines/Job.class/__methods__/wait_for_completion').to_s
 
 describe WaitForCompletion do
   let(:job_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_ConfigurationManager_Job }

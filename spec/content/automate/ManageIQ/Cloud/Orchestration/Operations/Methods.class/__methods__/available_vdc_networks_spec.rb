@@ -1,4 +1,4 @@
-require Rails.root.join('db/fixtures/ae_datastore/ManageIQ/Cloud/Orchestration/Operations/Methods.class/__methods__/available_vdc_networks').to_s
+require_domain_file
 
 describe AvailableVdcNetworks do
   let(:default_desc_none) { "<none>" }

@@ -1,4 +1,4 @@
-require Rails.root.join('db/fixtures/ae_datastore/ManageIQ/ConfigurationManagement/AnsibleTower/Service/Provisioning/StateMachines/Provision.class/__methods__/provision').to_s
+require ManageIQ::Content::Engine.root.join('content/automate/ManageIQ/ConfigurationManagement/AnsibleTower/Service/Provisioning/StateMachines/Provision.class/__methods__/provision').to_s
 
 describe AnsibleTowerProvision do
   let(:admin) { FactoryGirl.create(:user_admin) }

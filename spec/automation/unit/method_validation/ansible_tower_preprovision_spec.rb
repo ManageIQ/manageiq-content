@@ -1,4 +1,4 @@
-require Rails.root.join('db/fixtures/ae_datastore/ManageIQ/ConfigurationManagement/AnsibleTower/Service/Provisioning/StateMachines/Provision.class/__methods__/preprovision').to_s
+require ManageIQ::Content::Engine.root.join('content/automate/ManageIQ/ConfigurationManagement/AnsibleTower/Service/Provisioning/StateMachines/Provision.class/__methods__/preprovision').to_s
 
 describe AnsibleTowerPreprovision do
   let(:ansible_tower_manager) { FactoryGirl.create(:configuration_manager) }

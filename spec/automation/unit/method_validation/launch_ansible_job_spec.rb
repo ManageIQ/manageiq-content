@@ -1,4 +1,4 @@
-require Rails.root.join('db/fixtures/ae_datastore/ManageIQ/ConfigurationManagement/AnsibleTower/Operations/StateMachines/Job.class/__methods__/launch_ansible_job').to_s
+require ManageIQ::Content::Engine.root.join('content/automate/ManageIQ/ConfigurationManagement/AnsibleTower/Operations/StateMachines/Job.class/__methods__/launch_ansible_job').to_s
 
 describe LaunchAnsibleJob do
   let(:job_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_ConfigurationManager_Job }

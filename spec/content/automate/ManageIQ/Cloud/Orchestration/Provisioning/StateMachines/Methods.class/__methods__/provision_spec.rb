@@ -1,5 +1,4 @@
-require Rails.root.join('db/fixtures/ae_datastore/ManageIQ/Cloud/Orchestration/Provisioning/' \
-                        'StateMachines/Methods.class/__methods__/provision.rb').to_s
+require_domain_file
 
 describe ManageIQ::Automate::Cloud::Orchestration::Provisioning::StateMachines::Provision do
   let(:request)               { FactoryGirl.create(:service_template_provision_request, :requester => user) }

@@ -1,5 +1,4 @@
-require Rails.root.join('db/fixtures/ae_datastore/ManageIQ/Cloud/Orchestration/' \
-                        'Operations/Methods.class/__methods__/available_tenants').to_s
+require_domain_file
 
 describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableTenants do
   let(:tenant1) { FactoryGirl.create(:cloud_tenant) }

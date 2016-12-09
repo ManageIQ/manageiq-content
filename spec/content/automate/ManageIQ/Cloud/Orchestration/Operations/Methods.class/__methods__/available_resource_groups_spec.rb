@@ -1,5 +1,4 @@
-require Rails.root.join('db/fixtures/ae_datastore/ManageIQ/Cloud/Orchestration/Operations' \
-                        '/Methods.class/__methods__/available_resource_groups.rb').to_s
+require_domain_file
 
 describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableResoureceGroups do
   let(:root_hash) do

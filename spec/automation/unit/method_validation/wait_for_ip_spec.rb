@@ -1,4 +1,4 @@
-require Rails.root.join('db/fixtures/ae_datastore/ManageIQ/ConfigurationManagement/AnsibleTower/Operations/StateMachines/Job.class/__methods__/wait_for_ip').to_s
+require ManageIQ::Content::Engine.root.join('content/automate/ManageIQ/ConfigurationManagement/AnsibleTower/Operations/StateMachines/Job.class/__methods__/wait_for_ip').to_s
 
 describe WaitForIP do
   let(:user) { FactoryGirl.create(:user_with_group) }

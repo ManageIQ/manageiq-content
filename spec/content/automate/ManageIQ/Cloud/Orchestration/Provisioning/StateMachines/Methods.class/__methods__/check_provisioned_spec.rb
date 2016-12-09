@@ -1,6 +1,4 @@
-require Rails.root.join('db/fixtures/ae_datastore/ManageIQ/Cloud/Orchestration' \
-                        '/Provisioning/StateMachines/Methods.class/' \
-                        '__methods__/check_provisioned.rb').to_s
+require_domain_file
 
 describe ManageIQ::Automate::Cloud::Orchestration::Provisioning::StateMachines::CheckProvisioned do
   let(:deploy_result)           { "deploy result" }

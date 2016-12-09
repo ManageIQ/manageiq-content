@@ -1,6 +1,4 @@
-require Rails.root.join(
-  'db/fixtures/ae_datastore/ManageIQ/Infrastructure/VM/Provisioning/Naming.class/__methods__/vmname'
-).to_s
+require ManageIQ::Content::Engine.root.join('content/automate/ManageIQ/Infrastructure/VM/Provisioning/Naming.class/__methods__/vmname').to_s
 
 describe VmName do
   let(:provision) { MiqProvision.new }
