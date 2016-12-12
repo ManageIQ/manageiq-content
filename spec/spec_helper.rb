@@ -1,5 +1,8 @@
 require 'manageiq-content'
 
+# Reset only the ManageIQ automate domain when testing.
+ENV["AUTOMATE_DOMAINS"] = "ManageIQ"
+
 def require_domain_file
   spec_name = caller_locations.first.path
   file_name = spec_name.sub("spec/", "").sub("_spec.rb", ".rb")
