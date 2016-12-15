@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 require 'manageiq-content'
 
 # Reset only the ManageIQ automate domain when testing.
