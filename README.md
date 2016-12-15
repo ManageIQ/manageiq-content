@@ -16,7 +16,25 @@ reports, and policies.
 
 ## Contributing
 
-Contribution directions go here.
+First, you will need to set up your repo for development.
+
+1. Clone the repo.
+2. Set up the ManageIQ application in the spec/manageiq directory.  This can be
+   done in one of two ways.
+   - Run `bin/setup`.  This command will do a shallow clone of ManageIQ into spec/manageiq,
+     and also prepare any files for setup.
+   - Create a symlink from spec/manageiq to a local source checkout of ManageIQ.
+     This is especially useful if you will be modifying ManageIQ itself at the
+     same time.
+3. `bundle`
+4. `bundle exec rake spec:setup`
+
+Now you are ready to begin development.  You can run the specs with
+`bundle exec rake`.
+
+Please be sure to add specs for any new automate methods you create, and follow
+the [ManageIQ development guidelines](https://github.com/ManageIQ/guides/blob/master/coding_style_and_standards.md).
+Thanks for your contribution!
 
 ## License
 
