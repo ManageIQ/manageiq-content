@@ -1,3 +1,10 @@
-Gemfile.lock
-
-spec/manageiq
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/manageiq/
+/spec/reports/
+/tmp/

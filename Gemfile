@@ -12,4 +12,7 @@ else
   exit 1
 end
 
-gem "codeclimate-test-reporter", :require => false
+group :test do
+  gem "codeclimate-test-reporter", :require => false
+  gem "simplecov", :require => false
+end
