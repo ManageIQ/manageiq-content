@@ -6,7 +6,7 @@ object:
     display_name: 
     name: CatalogItemInitialization
     inherits: 
-    description:
+    description: 
   fields:
   - sequencer:
       value: "/Service/Provisioning/StateMachines/Methods/GroupSequenceCheck"
