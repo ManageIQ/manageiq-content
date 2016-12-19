@@ -1,6 +1,6 @@
-require ManageIQ::Content::Engine.root.join('content/automate/ManageIQ/Cloud/VM/Provisioning/Naming.class/__methods__/vmname').to_s
+require_domain_file
 
-describe ManageIQ::Automate::Cloud::VM::Provisioning::Naming::VmName do
+describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Naming::VmName do
   let(:provision) { MiqProvision.new }
   let(:root_object) { Spec::Support::MiqAeMockObject.new.tap { |ro| ro["miq_provision"] = provision } }
   let(:service) { Spec::Support::MiqAeMockService.new(root_object).tap { |s| s.object = {'vm_prefix' => "abc"} } }
