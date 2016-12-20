@@ -9,6 +9,8 @@ begin
 rescue LoadError
 end
 
+ManageIQ::Content::Engine.load_tasks
+
 if defined?(RSpec) && defined?(RSpec::Core::RakeTask)
   namespace :spec do
     desc "Setup environment for specs"
