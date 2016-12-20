@@ -1,5 +1,7 @@
 require 'bundler/setup'
 require 'bundler/gem_tasks'
+require 'manageiq-content'
+ManageIQ::Content::Engine.load_tasks
 
 begin
   require 'rspec/core/rake_task'
@@ -8,8 +10,6 @@ begin
   load 'rails/tasks/engine.rake'
 rescue LoadError
 end
-
-ManageIQ::Content::Engine.load_tasks
 
 if defined?(RSpec) && defined?(RSpec::Core::RakeTask)
   namespace :spec do
