@@ -3,9 +3,9 @@ require 'pathname'
 
 gem_root = Pathname.new(__dir__).join("..")
 
-unless gem_root.join("spec/manageiq").exist?
-  puts "== Cloning manageiq sample app =="
-  system "git clone https://github.com/ManageIQ/manageiq.git --depth 1 spec/manageiq"
+unless gem_root.join("spec/manageiq").symlink?
+  puts "== Updating manageiq sample app =="
+  system("git pull", :chdir => gem_root.join("spec/manageiq"))
 end
 
 require gem_root.join("spec/manageiq/lib/manageiq/environment").to_s
