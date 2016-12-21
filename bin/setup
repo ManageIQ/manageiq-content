@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'pathname'
 
-GEM_ROOT = Pathname.new File.expand_path('../../',  __FILE__)
+GEM_ROOT = Pathname.new(__dir__).join("..")
 
 Dir.chdir(GEM_ROOT) do
   if File.exist?("spec/manageiq")
@@ -9,20 +9,10 @@ Dir.chdir(GEM_ROOT) do
     system "cd spec/manageiq && git pull"
   else
     puts "== Cloning manageiq sample app =="
-    system "git clone git@github.com:ManageIQ/manageiq.git --depth 1 spec/manageiq"
+    source = ENV["CI"] ? "https://github.com/ManageIQ/manageiq.git" : "git@github.com:ManageIQ/manageiq.git"
+    system "git clone #{source} --depth 1 spec/manageiq"
   end
 
-  puts "== Installing dependencies =="
-  system "gem install bundler --conservative"
-  system "bundle check || bundle install"
-
-  unless File.exist?("spec/manageiq/config/database.yml")
-    puts "\n== Copying sample config/database.yml =="
-    system "cp spec/manageiq/config/database.pg.yml spec/manageiq/config/database.yml"
-  end
-
-  unless File.exist?("spec/manageiq/certs/v2_key")
-    puts "\n== Copying sample certs/v2_key =="
-    system "cp spec/manageiq/certs/v2_key.dev spec/manageiq/certs/v2_key"
-  end
+  require GEM_ROOT.join("spec/manageiq/lib/manageiq/environment").to_s
+  ManageIQ::Environment.manageiq_plugin_setup
 end
