@@ -3,16 +3,16 @@ require 'pathname'
 
 GEM_ROOT = Pathname.new(__dir__).join("..")
 
-Dir.chdir(GEM_ROOT) do
-  if File.exist?("spec/manageiq")
-    puts "== Updating manageiq sample app =="
-    system "cd spec/manageiq && git pull"
-  else
-    puts "== Cloning manageiq sample app =="
-    source = ENV["CI"] ? "https://github.com/ManageIQ/manageiq.git" : "git@github.com:ManageIQ/manageiq.git"
-    system "git clone #{source} --depth 1 spec/manageiq"
-  end
-
-  require GEM_ROOT.join("spec/manageiq/lib/manageiq/environment").to_s
-  ManageIQ::Environment.manageiq_plugin_setup
+if GEM_ROOT.join("spec/manageiq").symlink?
+  # Don't change developer directories that are symlinked
+elsif GEM_ROOT.join("spec/manageiq").file?
+  puts "== Updating manageiq sample app =="
+  system "cd spec/manageiq && git pull"
+else
+  puts "== Cloning manageiq sample app =="
+  source = ENV["CI"] ? "https://github.com/ManageIQ/manageiq.git" : "git@github.com:ManageIQ/manageiq.git"
+  system "git clone #{source} --depth 1 spec/manageiq"
 end
+
+require GEM_ROOT.join("spec/manageiq/lib/manageiq/environment").to_s
+ManageIQ::Environment.manageiq_plugin_setup
