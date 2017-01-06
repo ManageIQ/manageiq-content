@@ -113,7 +113,7 @@ def requested_memory(args_hash, vendor)
 
   if @reconfigure_request && args_hash[:resource].options[:vm_memory]
     # Account for the VM's existing memory IF additional memory has been requested
-    args_hash[:prov_value] = args_hash[:prov_value].to_i - @vm.hardware.memory_mb.to_i * 1024 * 1024
+    args_hash[:prov_value] = args_hash[:prov_value].to_i - @vm.hardware.memory_mb.to_i.megabytes
   end
   request_hash_value(args_hash)
 end
@@ -137,13 +137,10 @@ end
 
 def requested_storage(args_hash)
   if @reconfigure_request
-    if args_hash[:resource].options[:disk_add].nil?
-      vm_size = 0
-    else
-      vm_size = 0
+    vm_size = 0
+    unless args_hash[:resource].options[:disk_add].nil?
       args_hash[:resource].options[:disk_add].each do |disk|
         vm_size += disk[:disk_size_in_mb].to_i.megabytes if disk[:disk_size_in_mb]
-        vm_size += disk[:disk_size_in_gb].to_i.kilobytes if disk[:disk_size_in_gb]
       end
     end
   else
@@ -305,4 +302,3 @@ if @reconfigure_request
 end
 
 $evm.root['quota_requested'] = calculate_requested(options_hash)
-$evm.log(:info, $evm.root['quota_requested'])
