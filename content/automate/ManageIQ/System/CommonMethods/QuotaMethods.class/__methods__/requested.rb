@@ -86,10 +86,16 @@ def vm_prov_option_value(prov_option, options_array = [])
                :flavor        => flavor_obj(@miq_request.get_option(:instance_type)),
                :number_of_vms => get_option_value(@miq_request, :number_of_vms),
                :cloud         => vm_provision_cloud?}
+  # number_of_vms doesn't exist for VmReconfigureRequest
+  args_hash[:number_of_vms] = 1 if @reconfigure_request
 
   case prov_option
   when :vm_memory
-    requested_memory(args_hash, @miq_request.source.vendor)
+    if @reconfigure_request
+      requested_memory(args_hash, @vm.vendor)
+    else
+      requested_memory(args_hash, @miq_request.source.vendor)
+    end
   when :number_of_cpus
     requested_number_of_cpus(args_hash)
   when :storage
@@ -104,6 +110,11 @@ def requested_memory(args_hash, vendor)
   memory = get_option_value(args_hash[:resource], :vm_memory)
   memory = memory.megabytes if %w(amazon openstack google).exclude?(vendor)
   args_hash[:prov_value] = args_hash[:number_of_vms] * memory
+
+  if @reconfigure_request && args_hash[:resource].options[:vm_memory]
+    # Account for the VM's existing memory IF additional memory has been requested
+    args_hash[:prov_value] = args_hash[:prov_value].to_i - @vm.hardware.memory_mb.to_i * 1024 * 1024
+  end
   request_hash_value(args_hash)
 end
 
@@ -112,6 +123,11 @@ def requested_number_of_cpus(args_hash)
                    get_option_value(args_hash[:resource], :cores_per_socket)
   cpu_in_request = get_option_value(args_hash[:resource], args_hash[:number_of_cpus]) if cpu_in_request.zero?
   args_hash[:prov_value] = args_hash[:number_of_vms] * cpu_in_request
+
+  if @reconfigure_request && args_hash[:resource].options[:number_of_sockets]
+    # Account for the VM's existing CPUs IF additional CPUs have been requested
+    args_hash[:prov_value] = args_hash[:prov_value].to_i - @vm.hardware.cpu_total_cores.to_i * @vm.hardware.cpu_cores_per_socket.to_i
+  end
   request_hash_value(args_hash)
 end
 
@@ -120,8 +136,24 @@ def vmdb_object(model, id)
 end
 
 def requested_storage(args_hash)
-  vm_size = args_hash[:resource].vm_template.provisioned_storage
+  if @reconfigure_request
+    if args_hash[:resource].options[:disk_add].nil?
+      vm_size = 0
+    else
+      vm_size = 0
+      args_hash[:resource].options[:disk_add].each do |disk|
+        vm_size += disk[:disk_size_in_mb].to_i.megabytes if disk[:disk_size_in_mb]
+        vm_size += disk[:disk_size_in_gb].to_i.kilobytes if disk[:disk_size_in_gb]
+      end
+    end
+  else
+    vm_size = args_hash[:resource].vm_template.provisioned_storage
+  end
   args_hash[:prov_value] = args_hash[:number_of_vms] * vm_size
+  if @reconfigure_request && args_hash[:resource].options[:disk_add]
+    # Account for the VM's existing storage IF additional disks have been requested
+    args_hash[:prov_value] = args_hash[:prov_value].to_i - @vm.provisioned_storage / (1024 * 1024)
+  end
   request_hash_value(args_hash)
 end
 
@@ -265,4 +297,12 @@ if @service && !@service_template.prov_type.nil? && @service_template.prov_type.
   exit MIQ_OK
 end
 
+@reconfigure_request = @miq_request.type == "VmReconfigureRequest"
+
+if @reconfigure_request
+  vm_id = @miq_request.options[:src_ids]
+  @vm = $evm.vmdb(:vm).find_by_id(vm_id)
+end
+
 $evm.root['quota_requested'] = calculate_requested(options_hash)
+$evm.log(:info, $evm.root['quota_requested'])
