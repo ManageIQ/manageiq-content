@@ -2,6 +2,7 @@
 # Description: This method updates the service provision status.
 # Required inputs: status
 #
+
 module ManageIQ
   module Automate
     module ConfigurationManagement
@@ -28,12 +29,14 @@ module ManageIQ
                 private
 
                 def update_status_message(prov, status)
-                  updated_message  = "Server [#{@handle.root['miq_server'].name}] "
-                  updated_message += "Service [#{prov.destination.name}] "
-                  updated_message += "Step [#{@handle.root['ae_state']}] "
-                  updated_message += "Status [#{status}] "
-                  updated_message += "Message [#{prov.message}] "
-                  updated_message += "Current Retry Number [#{@handle.root['ae_state_retries']}]"\
+                  # Update Status Message
+                  updated_message = String.new
+                  updated_message << "Server [#{@handle.root['miq_server'].name}] "
+                  updated_message << "Service [#{prov.destination.name}] "
+                  updated_message << "Step [#{@handle.root['ae_state']}] "
+                  updated_message << "Status [#{status}] "
+                  updated_message << "Message [#{prov.message}] "
+                  updated_message << "Current Retry Number [#{@handle.root['ae_state_retries']}]"\
                                       if @handle.root['ae_result'] == 'retry'
                   prov.miq_request.user_message = updated_message
                   prov.message = status

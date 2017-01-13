@@ -24,11 +24,12 @@ $evm.log("info", "Server:<#{server.name}> Ae_Result:<#{$evm.root['ae_result']}> 
 $evm.log("info", "Status_State:<#{status_state}> Status:<#{status}>")
 
 # Update Status Message
-updated_message  = "Server [#{server.name}] "
-updated_message += "VM [#{vm.name}] " if vm
-updated_message += "Step [#{step}] "
-updated_message += "Status [#{status}] "
-updated_message += "Current Retry Number [#{$evm.root['ae_state_retries']}]" if $evm.root['ae_result'] == 'retry'
+updated_message = String.new
+updated_message << "Server [#{server.name}] "
+updated_message << "VM [#{vm.name}] " if vm
+updated_message << "Step [#{step}] "
+updated_message << "Status [#{status}] "
+updated_message << "Current Retry Number [#{$evm.root['ae_state_retries']}]" if $evm.root['ae_result'] == 'retry'
 
 # Update Status for on_error for all states other than the first state which is startretirement
 # in the retirement state machine.

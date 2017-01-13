@@ -2,6 +2,7 @@
 # Description: This method updates the service provision status.
 # Required inputs: status
 #
+
 module ManageIQ
   module Automate
     module Service
@@ -21,29 +22,30 @@ module ManageIQ
                   raise "service_template_provision_task object not provided"
                 end
 
-                updated_message = update_status_message(prov, @handle.inputs['status'])
-
-                if @handle.root['ae_result'] == "error"
-                  @handle.create_notification(:level   => "error",
-                                              :subject => prov.miq_request,
-                                              :message => "Service Provision Error: #{updated_message}")
-                end
+                update_status_message(prov, @handle.inputs['status'])
               end
 
               private
 
               def update_status_message(prov, status)
-                updated_message  = "Server [#{@handle.root['miq_server'].name}] "
-                updated_message += "Service [#{prov.destination.name}] "
-                updated_message += "Step [#{@handle.root['ae_state']}] "
-                updated_message += "Status [#{status}] "
-                updated_message += "Message [#{prov.message}] "
-                updated_message += "Current Retry Number [#{@handle.root['ae_state_retries']}]"\
+                updated_message = String.new
+                updated_message << "Server [#{@handle.root['miq_server'].name}] "
+                updated_message << "Service [#{prov.destination.name}] "
+                updated_message << "Step [#{@handle.root['ae_state']}] "
+                updated_message << "Status [#{status}] "
+                updated_message << "Message [#{prov.message}] "
+                updated_message << "Current Retry Number [#{@handle.root['ae_state_retries']}]"\
                                     if @handle.root['ae_result'] == 'retry'
                 prov.miq_request.user_message = updated_message
                 prov.message = status
 
-                updated_message
+                error_notification(prov, updated_message) if @handle.root['ae_result'] == "error"
+              end
+
+              def error_notification(prov, updated_message)
+                @handle.create_notification(:level   => "error",
+                                            :subject => prov.miq_request,
+                                            :message => "Service Provision Error: #{updated_message}")
               end
             end
           end
@@ -52,6 +54,7 @@ module ManageIQ
     end
   end
 end
+
 if __FILE__ == $PROGRAM_NAME
   ManageIQ::Automate::Service::Provisioning::StateMachines::
     ServiceProvision_Template::UpdateServiceProvisionStatus.new.main
