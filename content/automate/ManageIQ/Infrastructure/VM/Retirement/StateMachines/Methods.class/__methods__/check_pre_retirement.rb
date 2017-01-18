@@ -1,5 +1,6 @@
 # / Infra / VM / Retirement / StateMachines / CheckPreRetirement
 
+
 #
 # Description: This method checks to see if the VM has been powered off or suspended
 #

@@ -1,3 +1,4 @@
+
 require_domain_file
 
 describe ManageIQ::Automate::ConfigurationManagement::AnsibleTower::Service::
