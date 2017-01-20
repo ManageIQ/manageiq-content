@@ -12,97 +12,120 @@
 #    requester replies to the email
 # 3. signature - used to stamp the email with a custom signature
 #
+module ManageIQ
+  module Automate
+    module Cloud
+      module Orchestration
+        module Provisioning
+          module Email
+            class ServiceTemplateProvisionRequestApproved
+              def initialize(handle = $evm)
+                @handle = handle
+              end
 
-def emailrequester(miq_request, appliance)
-  $evm.log('info', "Requester email logic starting")
+              def main
+                # Get miq_request from root
+                miq_request = @handle.root['miq_request']
+                raise 'miq_request is missing' if miq_request.nil?
 
-  # Get requester object
-  requester = miq_request.requester
+                @handle.log("info",
+                            "Detected Request:<#{miq_request.id}> with Approval State:<#{miq_request.approval_state}>")
 
-  # Get requester email else set to nil
-  requester_email = requester.email || nil
+                # appliance ||= 'evmserver.example.com'
+                appliance = @handle.root['miq_server'].ipaddress
 
-  # Get Owner Email else set to nil
-  owner_email = miq_request.options[:owner_email] || nil
-  $evm.log('info', "Requester email:<#{requester_email}> Owner Email:<#{owner_email}>")
+                # Email Requester
+                email_requester(miq_request, appliance)
+              end
 
-  # if to is nil then use requester_email
-  to = nil
-  to ||= requester_email
+              private
 
-  # If to is still nil use to_email_address from model
-  to ||= $evm.object['to_email_address']
+              def email_requester(miq_request, appliance)
+                @handle.log('info', "Requester email logic starting")
 
-  # Get from_email_address from model unless specified below
-  from = nil
-  from ||= $evm.object['from_email_address']
+                # Get requester object
+                requester = miq_request.requester
 
-  # Get signature from model unless specified below
-  signature = nil
-  signature ||= $evm.object['signature']
+                # Get requester email else set to nil
+                requester_email = requester.email
 
-  # Build subject
-  subject = "Request ID #{miq_request.id} - Your Service provision request was Approved"
+                # Get Owner Email else set to nil
+                owner_email = miq_request.options[:owner_email]
+                @handle.log('info', "Requester email:<#{requester_email}> Owner Email:<#{owner_email}>")
 
-  # Build email body
-  body = "Hello, "
-  body += "<br>Your Service provision request was approved. If Service provisioning is successful you will be notified via email when the Service is available."
-  body += "<br><br>Approvers notes: #{miq_request.reason}"
-  body += "<br><br>To view this Request go to: <a href='https://#{appliance}/miq_request/show/#{miq_request.id}'>https://#{appliance}/miq_request/show/#{miq_request.id}</a>"
-  body += "<br><br> Thank you,"
-  body += "<br> #{signature}"
+                # Get to, from and signature parameters for email
+                to, from, signature = email_params(requester_email)
 
-  # Send email
-  $evm.log("info", "Sending email to <#{to}> from <#{from}> subject: <#{subject}>")
-  $evm.execute(:send_email, to, from, subject, body)
+                # Build subject
+                subject = "Request ID #{miq_request.id} - Your Service provision request was Approved"
+
+                # Build email body
+                body = build_requester_email_body(miq_request, appliance, signature)
+
+                # Send email
+                @handle.log("info", "Sending email to <#{to}> from <#{from}> subject: <#{subject}>")
+                @handle.execute(:send_email, to, from, subject, body)
+              end
+
+              def email_params(requester_email)
+                # If requester_email is nil use to_email_address from model
+                to = requester_email || @handle.object['to_email_address']
+
+                # Get from_email_address from model unless specified below
+                from = @handle.object['from_email_address']
+
+                # Get signature from model unless specified below
+                signature = @handle.object['signature']
+
+                return to, from, signature
+              end
+
+              def build_requester_email_body(miq_request, appliance, signature)
+                "Hello, <br>Your Service provision request was approved. If Service provisioning is successful"\
+                " you will be notified via email when the Service is available.<br><br>Approvers notes: "\
+                "#{miq_request.reason}<br><br>To view this Request go to: <a href='https://#{appliance}/"\
+                "miq_request/show/#{miq_request.id}'>https://#{appliance}/miq_request/show/#{miq_request.id}</a>"\
+                "<br><br> Thank you,<br> #{signature}"
+              end
+
+              def build_approver_email_body(miq_request, requester_email, appliance, signature)
+                "Approver, <br>Service provision request received from #{requester_email} was approved.<br><br>"\
+                "Approvers reason: #{miq_request.reason}br><br>To view this Request go to: <a href='https://"\
+                "#{appliance}/miq_request/show/#{miq_request.id}'>https://#{appliance}/miq_request/show/"\
+                "#{miq_request.id}</a><br><br> Thank you,<br> #{signature}"
+              end
+
+              def email_approver(miq_request, appliance)
+                @handle.log('info', "Requester email logic starting")
+
+                # Get requester object
+                requester = miq_request.requester
+
+                # Get requester email else set to nil
+                requester_email = requester.email
+
+                # Get to, from and signature parameters for email
+                to, from, signature = email_params(requester_email)
+
+                # Build subject
+                subject = "Request ID #{miq_request.id} - Your Service provision request was Approved"
+
+                # Build email body
+                body = build_approver_email_body(miq_request, requester_email, appliance, signature)
+
+                # Send email
+                @handle.log("info", "Sending email to <#{to}> from <#{from}> subject: <#{subject}>")
+                @handle.execute(:send_email, to, from, subject, body)
+              end
+            end
+          end
+        end
+      end
+    end
+  end
 end
 
-def emailapprover(miq_request, appliance)
-  $evm.log('info', "Requester email logic starting")
-
-  # Get requester object
-  requester = miq_request.requester
-
-  # Get requester email else set to nil
-  requester_email = requester.email || nil
-
-  # If to is still nil use to_email_address from model
-  to = nil
-  to ||= $evm.object['to_email_address']
-
-  # Get from_email_address from model unless specified below
-  from = nil
-  from ||= $evm.object['from_email_address']
-
-  # Get signature from model unless specified below
-  signature = nil
-  signature ||= $evm.object['signature']
-
-  # Build subject
-  subject = "Request ID #{miq_request.id} - Your Service provision request was Approved"
-
-  # Build email body
-  body = "Approver, "
-  body += "<br>Service provision request received from #{requester_email} was approved."
-  body += "<br><br>Approvers reason: #{miq_request.reason}"
-  body += "<br><br>To view this Request go to: <a href='https://#{appliance}/miq_request/show/#{miq_request.id}'>https://#{appliance}/miq_request/show/#{miq_request.id}</a>"
-  body += "<br><br> Thank you,"
-  body += "<br> #{signature}"
-
-  # Send email
-  $evm.log("info", "Sending email to <#{to}> from <#{from}> subject: <#{subject}>")
-  $evm.execute(:send_email, to, from, subject, body)
+if __FILE__ == $PROGRAM_NAME
+  ManageIQ::Automate::Cloud::Orchestration::Provisioning::
+    Email::ServiceTemplateProvisionRequestApproved.new.main
 end
-
-# Get miq_request from root
-miq_request = $evm.root['miq_request']
-raise "miq_request missing" if miq_request.nil?
-$evm.log("info", "Detected Request:<#{miq_request.id}> with Approval State:<#{miq_request.approval_state}>")
-
-# Override the default appliance IP Address below
-appliance = nil
-# appliance ||= 'evmserver.example.com'
-appliance ||= $evm.root['miq_server'].ipaddress
-
-# Email Requester
-emailrequester(miq_request, appliance)
