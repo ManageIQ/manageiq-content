@@ -112,8 +112,12 @@ def requested_memory(args_hash, vendor)
   args_hash[:prov_value] = args_hash[:number_of_vms] * memory
 
   if @reconfigure_request && args_hash[:resource].options[:vm_memory]
-    # Account for the VM's existing memory IF additional memory has been requested
+    # Account for the VM's existing memory
     args_hash[:prov_value] = args_hash[:prov_value].to_i - @vm.hardware.memory_mb.to_i.megabytes
+
+    $evm.log(:info, "vm_memory:         #{@vm.hardware.memory_mb.to_i.megabytes}")
+    $evm.log(:info, "requested_memory:  #{args_hash[:prov_value].to_i}")
+    @bypass_quota = false if args_hash[:prov_value].to_i > 0
   end
   request_hash_value(args_hash)
 end
@@ -125,8 +129,14 @@ def requested_number_of_cpus(args_hash)
   args_hash[:prov_value] = args_hash[:number_of_vms] * cpu_in_request
 
   if @reconfigure_request && args_hash[:resource].options[:number_of_sockets]
-    # Account for the VM's existing CPUs IF additional CPUs have been requested
-    args_hash[:prov_value] = args_hash[:prov_value].to_i - @vm.hardware.cpu_total_cores.to_i * @vm.hardware.cpu_cores_per_socket.to_i
+    # Account for the VM's existing CPUs
+    args_hash[:prov_value] = args_hash[:prov_value].to_i - @vm.hardware.cpu_total_cores.to_i \
+      * @vm.hardware.cpu_cores_per_socket.to_i
+
+    $evm.log(:info, "vm_number_of_cpus:         #{@vm.hardware.cpu_total_cores.to_i \
+      * @vm.hardware.cpu_cores_per_socket.to_i}")
+    $evm.log(:info, "requested_number_of_cpus:  #{args_hash[:prov_value].to_i}")
+    @bypass_quota = false if args_hash[:prov_value].to_i > 0
   end
   request_hash_value(args_hash)
 end
@@ -137,19 +147,40 @@ end
 
 def requested_storage(args_hash)
   if @reconfigure_request
-    vm_size = 0
-    unless args_hash[:resource].options[:disk_add].nil?
+    args_hash[:prov_value] = @vm.provisioned_storage
+
+    # Adding/removing disks only supported for VMware
+    if args_hash[:resource].options[:disk_add]
       args_hash[:resource].options[:disk_add].each do |disk|
-        vm_size += disk[:disk_size_in_mb].to_i.megabytes if disk[:disk_size_in_mb]
+        # $evm.log(:info, "disk_add:  #{disk}")
+        # $evm.log(:info, disk[:disk_size_in_mb].to_i.megabytes)
+        # $evm.log(:info, args_hash[:prov_value].to_i)
+        args_hash[:prov_value] += disk[:disk_size_in_mb].to_i.megabytes
+      end
+    end
+    if args_hash[:resource].options[:disk_remove]
+      args_hash[:resource].options[:disk_remove].each do |disk|
+        # $evm.log(:info, "disk_remove:  #{disk}")
+        if disk_num = disk[:disk_name].match(/_(\d).vmdk/)
+          disk_n_number = "disk_#{disk_num[1].succ}_size"
+          disk_n_size   = @vm.send("#{disk_n_number}")
+          # $evm.log(:info, "#{disk_n_number}:  #{disk_n_size}")
+          args_hash[:prov_value] -= disk_n_size unless disk_n_size.nil?
+        end
       end
     end
   else
     vm_size = args_hash[:resource].vm_template.provisioned_storage
+    args_hash[:prov_value] = args_hash[:number_of_vms] * vm_size
   end
-  args_hash[:prov_value] = args_hash[:number_of_vms] * vm_size
-  if @reconfigure_request && args_hash[:resource].options[:disk_add]
-    # Account for the VM's existing storage IF additional disks have been requested
-    args_hash[:prov_value] = args_hash[:prov_value].to_i - @vm.provisioned_storage / (1024 * 1024)
+
+  if @reconfigure_request && args_hash[:resource].options[:disk_add] || args_hash[:resource].options[:disk_remove]
+    # Account for the VM's existing storage
+    args_hash[:prov_value] = args_hash[:prov_value].to_i - @vm.provisioned_storage.to_i
+
+    $evm.log(:info, "vm_storage:         #{@vm.provisioned_storage}")
+    $evm.log(:info, "requested_storage:  #{args_hash[:prov_value].to_i}")
+    @bypass_quota = false if args_hash[:prov_value].to_i > 0
   end
   request_hash_value(args_hash)
 end
@@ -263,7 +294,7 @@ def get_dialog_options_hash(dialog_options)
       set_hash_value(sequence_id, option_key.downcase.to_sym, v, options_hash)
     else
       set_hash_value(0, k.downcase.to_sym, v, options_hash)
-    end
+    end 
   end
   $evm.log(:info, "Inspecting options_hash: #{options_hash.inspect}")
   options_hash
@@ -297,8 +328,11 @@ end
 @reconfigure_request = @miq_request.type == "VmReconfigureRequest"
 
 if @reconfigure_request
+  @bypass_quota = true # default, unless additional quota is requested
   vm_id = @miq_request.options[:src_ids]
   @vm = $evm.vmdb(:vm).find_by_id(vm_id)
 end
 
 $evm.root['quota_requested'] = calculate_requested(options_hash)
+
+$evm.root['bypass_quota'] = @bypass_quota unless @bypass_quota.nil?
