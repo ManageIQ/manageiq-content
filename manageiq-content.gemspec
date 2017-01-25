@@ -14,4 +14,7 @@ Gem::Specification.new do |s|
   s.licenses    = ["Apache-2.0"]
 
   s.files = Dir["{content,lib}/**/*", "LICENSE.txt", "Rakefile", "README.md"]
+
+  s.add_development_dependency "codeclimate-test-reporter"
+  s.add_development_dependency "simplecov"
 end
