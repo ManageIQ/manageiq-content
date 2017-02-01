@@ -1,6 +1,6 @@
 require_domain_file
 
-describe ManageIQ::Automate::ConfigurationManagement::AnsibleTower::Service::
+describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Service::
           Provisioning::StateMachines::UpdateServiceProvisionStatus do
   let(:user)                  { FactoryGirl.create(:user_with_group) }
   let(:miq_server)            { EvmSpecHelper.local_miq_server }
