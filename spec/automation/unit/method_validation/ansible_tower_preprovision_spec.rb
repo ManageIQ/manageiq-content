@@ -1,7 +1,7 @@
-require ManageIQ::Content::Engine.root.join('content/automate/ManageIQ/ConfigurationManagement/AnsibleTower/Service/Provisioning/StateMachines/Provision.class/__methods__/preprovision').to_s
+require ManageIQ::Content::Engine.root.join('content/automate/ManageIQ/AutomationManagement/AnsibleTower/Service/Provisioning/StateMachines/Provision.class/__methods__/preprovision').to_s
 
 describe AnsibleTowerPreprovision do
-  let(:ansible_tower_manager) { FactoryGirl.create(:configuration_manager) }
+  let(:ansible_tower_manager) { FactoryGirl.create(:automation_manager) }
   let(:job_template) { FactoryGirl.create(:ansible_configuration_script, :manager => ansible_tower_manager) }
   let(:service_ansible_tower) { FactoryGirl.create(:service_ansible_tower, :job_template => job_template) }
   let(:task) { FactoryGirl.create(:service_template_provision_task, :destination => service_ansible_tower) }

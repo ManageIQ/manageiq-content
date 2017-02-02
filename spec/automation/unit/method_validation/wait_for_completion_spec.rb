@@ -1,7 +1,7 @@
-require ManageIQ::Content::Engine.root.join('content/automate/ManageIQ/ConfigurationManagement/AnsibleTower/Operations/StateMachines/Job.class/__methods__/wait_for_completion').to_s
+require ManageIQ::Content::Engine.root.join('content/automate/ManageIQ/AutomationManagement/AnsibleTower/Operations/StateMachines/Job.class/__methods__/wait_for_completion').to_s
 
 describe WaitForCompletion do
-  let(:job_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_ConfigurationManager_Job }
+  let(:job_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_AutomationManager_Job }
   let(:user) { FactoryGirl.create(:user_with_group) }
   let(:vm) { FactoryGirl.create(:vm) }
   let(:svc_vm) { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }

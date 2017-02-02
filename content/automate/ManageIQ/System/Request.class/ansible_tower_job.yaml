@@ -9,4 +9,4 @@ object:
     description: 
   fields:
   - rel4:
-      value: "/ConfigurationManagement/AnsibleTower/Operations/StateMachines/Job/default"
+      value: "/AutomationManagement/AnsibleTower/Operations/StateMachines/Job/default"
