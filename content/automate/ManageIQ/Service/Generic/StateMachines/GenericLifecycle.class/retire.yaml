@@ -1,0 +1,26 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: retire
+    inherits: 
+    description: 
+  fields:
+  - start:
+      value: METHOD::start
+      on_entry: update_status(status => 'Processing Start')
+      on_exit: update_status(status => 'Processed Start')
+      on_error: update_status(status => 'Error Processing Start')
+  - execute:
+      value: METHOD::execute
+      on_entry: update_status(status => 'Starting execute')
+      on_exit: update_status(status => 'Ending execute')
+      on_error: update_status(status => '${/#ae_reason}')
+  - check_completed:
+      value: METHOD::check_completed
+      on_exit: update_status(status => 'Processed check_completed')
+      on_error: update_status(status => 'Error Processing check_completed')
+  - finish:
+      value: METHOD::finish
