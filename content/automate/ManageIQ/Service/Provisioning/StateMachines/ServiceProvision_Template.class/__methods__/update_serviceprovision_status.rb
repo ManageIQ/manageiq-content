@@ -1,8 +1,6 @@
-
 #
 # Description: This method updates the service provision status.
 # Required inputs: status
-#
 
 module ManageIQ
   module Automate
@@ -24,7 +22,6 @@ module ManageIQ
                 end
 
                 update_status_message(prov, @handle.inputs['status'])
-
               end
 
               private
