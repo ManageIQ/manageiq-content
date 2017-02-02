@@ -15,9 +15,6 @@ module ManageIQ
               def main
                 @handle.log("info", "Starting execute")
 
-                task = @handle.root["service_template_provision_task"]
-                service = task.destination
-
                 begin
                   service.execute(@handle.root["service_action"])
                   @handle.log("info", "Ending execute")
@@ -26,6 +23,26 @@ module ManageIQ
                   @handle.root['ae_reason'] = err.message
                   task.miq_request.user_message = err.message
                   @handle.log("info", "Error in execute")
+                end
+              end
+
+              private
+
+              def task
+                @handle.root["service_template_provision_task"].tap do |task|
+                  if task.nil?
+                    @handle.log(:error, 'service_template_provision_task is nil')
+                    raise "service_template_provision_task not found"
+                  end
+                end
+              end
+
+              def service
+                task.destination.tap do |service|
+                  if service.nil?
+                    @handle.log(:error, 'Service is nil')
+                    raise 'Service not found'
+                  end
                 end
               end
             end

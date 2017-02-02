@@ -14,20 +14,29 @@ module ManageIQ
 
               def main
                 @handle.log("info", "Starting check_completed")
-
-                task = @handle.root["service_template_provision_task"]
-                service = task.try(:destination)
-
-                unless service
-                  @handle.log(:error, 'Service is nil')
-                  raise 'Service is nil'
-                end
-
                 check_completed(service)
                 @handle.log("info", "Ending check_completed")
               end
 
               private
+
+              def task
+                @handle.root["service_template_provision_task"].tap do |task|
+                  if task.nil?
+                    @handle.log(:error, 'service_template_provision_task is nil')
+                    raise "service_template_provision_task not found"
+                  end
+                end
+              end
+
+              def service
+                task.destination.tap do |service|
+                  if service.nil?
+                    @handle.log(:error, 'Service is nil')
+                    raise 'Service not found'
+                  end
+                end
+              end
 
               def check_completed(service)
                 done, message = service.check_completed(@handle.root["service_action"])

@@ -13,20 +13,37 @@ module ManageIQ
 
               def main
                 @handle.log("info", "Starting preprocess")
+                dump_root
+                options = {}
+                # user can insert options to override options from dialog
+                service.preprocess(@handle.root["service_action"], options)
+              end
 
+              private
+
+              def dump_root
                 @handle.log("info", "Root:<$evm.root> Attributes - Begin")
                 @handle.root.attributes.sort.each { |k, v| $evm.log("info", "  Attribute - #{k}: #{v}") }
                 @handle.log("info", "Root:<$evm.root> Attributes - End")
                 @handle.log("info", "")
+              end
 
-                service = @handle.root["service_template_provision_task"].try(:destination)
-                unless service
-                  @handle.log(:error, 'Service is nil')
-                  raise 'Service is nil'
+              def task
+                @handle.root["service_template_provision_task"].tap do |task|
+                  if task.nil?
+                    @handle.log(:error, 'service_template_provision_task is nil')
+                    raise "service_template_provision_task not found"
+                  end
                 end
-                options = {}
-                # user can insert options to override options from dialog
-                service.preprocess(@handle.root["service_action"], options)
+              end
+
+              def service
+                task.destination.tap do |service|
+                  if service.nil?
+                    @handle.log(:error, 'Service is nil')
+                    raise 'Service not found'
+                  end
+                end
               end
             end
           end
