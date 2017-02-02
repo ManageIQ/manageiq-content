@@ -8,7 +8,7 @@ describe AnsibleTowerCheckProvisioned do
   let(:svc_task) { MiqAeMethodService::MiqAeServiceServiceTemplateProvisionTask.find(task.id) }
   let(:root_object) { Spec::Support::MiqAeMockObject.new('service_template_provision_task' => svc_task) }
   let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
-  let(:job_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_ConfigurationManager_Job }
+  let(:job_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_AutomationManager_Job }
   let(:job) { FactoryGirl.create(:ansible_tower_job) }
 
   describe 'check provision status' do

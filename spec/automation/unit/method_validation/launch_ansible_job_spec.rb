@@ -1,11 +1,11 @@
 require ManageIQ::Content::Engine.root.join('content/automate/ManageIQ/ConfigurationManagement/AnsibleTower/Operations/StateMachines/Job.class/__methods__/launch_ansible_job').to_s
 
 describe LaunchAnsibleJob do
-  let(:job_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_ConfigurationManager_Job }
-  let(:jt_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_ConfigurationManager_ConfigurationScript }
+  let(:job_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_AutomationManager_Job }
+  let(:jt_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_AutomationManager_ConfigurationScript }
   let(:user) { FactoryGirl.create(:user_with_group) }
   let(:vm) { FactoryGirl.create(:vm) }
-  let(:manager) { FactoryGirl.create(:configuration_manager_ansible_tower, :name => "AT1") }
+  let(:manager) { FactoryGirl.create(:automation_manager_ansible_tower, :name => "AT1") }
   let(:svc_vm) { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }
   let(:job_template) do
     FactoryGirl.create(:ansible_configuration_script, :manager_id => manager.id)
