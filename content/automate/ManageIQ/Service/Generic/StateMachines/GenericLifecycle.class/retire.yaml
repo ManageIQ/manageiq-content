@@ -13,6 +13,16 @@ object:
       on_entry: update_status(status => 'Processing Start')
       on_exit: update_status(status => 'Processed Start')
       on_error: update_status(status => 'Error Processing Start')
+  - pre1:
+      value: "/Service/Provisioning/StateMachines/Methods/CatalogItemInitialization"
+      on_entry: update_status(status => 'Processing CatalogItemInitialization’)
+      on_exit: update_status(status => 'Processed CatalogItemInitialization’)
+      on_error: update_status(status => 'Error Processing CatalogItemInitialization’)
+  - pre4:
+      value: METHOD::preprocess
+      on_entry: update_status(status => 'Processing Preprocess’)
+      on_exit: update_status(status => 'Processed Preprocess’)
+      on_error: update_status(status => 'Error Processing Preprocess’)
   - execute:
       value: METHOD::execute
       on_entry: update_status(status => 'Starting execute')
