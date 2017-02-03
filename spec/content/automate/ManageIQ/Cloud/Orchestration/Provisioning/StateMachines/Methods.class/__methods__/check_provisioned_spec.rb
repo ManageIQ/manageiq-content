@@ -110,6 +110,16 @@ describe ManageIQ::Automate::Cloud::Orchestration::Provisioning::StateMachines::
       expect(ae_service.root['ae_result']).to eq("retry")
     end
 
+    it "does not need to wait for refresh completes if the stack has been removed from provider" do
+      ae_service.set_state_var('provider_last_refresh', true)
+      ae_service.set_state_var('deploy_result', 'error')
+      allow(svc_model_service)
+        .to receive(:orchestration_stack_status) { ['check_status_failed', 'stack does not exist'] }
+      amazon_stack.update_attributes(:ems_ref => nil)
+      described_class.new(ae_service).main
+      expect(ae_service.root['ae_result']).to eq('error')
+    end
+
     it "completes check_provisioned step when refresh is done" do
       ae_service.set_state_var('provider_last_refresh', true)
       ae_service.set_state_var('deploy_result', deploy_result)

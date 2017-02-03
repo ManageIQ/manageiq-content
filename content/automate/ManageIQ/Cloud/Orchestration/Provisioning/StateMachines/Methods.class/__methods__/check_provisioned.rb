@@ -62,7 +62,14 @@ module ManageIQ
                 stack = service.orchestration_stack
                 refreshed_stack = @handle.vmdb(:orchestration_stack).find_by(:name    => stack.name,
                                                                              :ems_ref => stack.ems_ref)
-                refreshed_stack && refreshed_stack.status != 'CREATE_IN_PROGRESS'
+                if refreshed_stack
+                  refreshed_stack.status != 'CREATE_IN_PROGRESS'
+                elsif @handle.get_state_var('deploy_result') == 'error' && service.orchestration_stack_status[0] == 'check_status_failed'
+                  # stack failed and has been removed from the provider, no need to wait for refresh complete
+                  true
+                else
+                  false
+                end
               end
 
               def check_deployed(service)
