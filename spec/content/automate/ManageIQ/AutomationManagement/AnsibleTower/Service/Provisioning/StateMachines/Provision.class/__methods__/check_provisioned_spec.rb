@@ -10,12 +10,15 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Service::Provis
   let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
   let(:job_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_AutomationManager_Job }
   let(:job) { FactoryGirl.create(:ansible_tower_job) }
+  let(:ok_status) { %w(create_complete ok) }
+  let(:running_status) { %w(running ok) }
+  let(:bad_status) { %w(create_failed bad) }
 
   describe 'check provision status' do
     before { allow_any_instance_of(ServiceAnsibleTower).to receive(:job).and_return(job) }
 
     context 'ansible tower job completed' do
-      before { allow_any_instance_of(job_class).to receive(:normalized_live_status).and_return(['create_complete', 'ok']) }
+      before { allow_any_instance_of(job_class).to receive(:normalized_live_status).and_return(ok_status) }
       it "refreshes the job status" do
         expect(job).to receive(:refresh_ems)
         described_class.new(ae_service).main
@@ -24,7 +27,7 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Service::Provis
     end
 
     context 'ansible tower job is running' do
-      before { allow_any_instance_of(job_class).to receive(:normalized_live_status).and_return(['running', 'ok']) }
+      before { allow_any_instance_of(job_class).to receive(:normalized_live_status).and_return(running_status) }
       it "retries the step" do
         described_class.new(ae_service).main
         expect(ae_service.root['ae_result']).to eq('retry')
@@ -32,7 +35,7 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Service::Provis
     end
 
     context 'ansible tower job failed' do
-      before { allow_any_instance_of(job_class).to receive(:normalized_live_status).and_return(['create_failed', 'bad']) }
+      before { allow_any_instance_of(job_class).to receive(:normalized_live_status).and_return(bad_status) }
       it "signals error" do
         expect(job).to receive(:refresh_ems)
         expect(job).to receive(:raw_stdout)
