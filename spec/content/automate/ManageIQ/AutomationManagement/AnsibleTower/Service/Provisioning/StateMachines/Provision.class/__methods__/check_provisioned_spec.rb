@@ -1,6 +1,6 @@
 require_domain_file
 
-describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Serivce::Provisioning::StateMachines::Provision::CheckProvisioned do
+describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Service::Provisioning::StateMachines::Provision::CheckProvisioned do
   let(:admin) { FactoryGirl.create(:user_admin) }
   let(:request) { FactoryGirl.create(:service_template_provision_request, :requester => admin) }
   let(:service_ansible_tower) { FactoryGirl.create(:service_ansible_tower) }

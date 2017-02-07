@@ -1,7 +1,7 @@
 require_domain_file
 
-describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Serivce::Provisioning::StateMachines::Provision::Preprovision do
-  let(:ansible_tower_manager) { FactoryGirl.create(:automation_manager) }
+describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Service::Provisioning::StateMachines::Provision::Preprovision do
+  let(:ansible_tower_manager) { FactoryGirl.create(:configuration_manager) }
   let(:job_template) { FactoryGirl.create(:ansible_configuration_script, :manager => ansible_tower_manager) }
   let(:service_ansible_tower) { FactoryGirl.create(:service_ansible_tower, :job_template => job_template) }
   let(:task) { FactoryGirl.create(:service_template_provision_task, :destination => service_ansible_tower) }

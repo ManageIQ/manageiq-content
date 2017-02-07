@@ -6,7 +6,7 @@ module ManageIQ
   module Automate
     module AutomationManagement
       module AnsibleTower
-        module Serivce
+        module Service
           module Provisioning
             module StateMachines
               module Provision
@@ -53,5 +53,5 @@ module ManageIQ
   end
 end
 if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::AutomationManagement::AnsibleTower::Serivce::Provisioning::StateMachines::Provision::Provision.new.main
+  ManageIQ::Automate::AutomationManagement::AnsibleTower::Service::Provisioning::StateMachines::Provision::Provision.new.main
 end

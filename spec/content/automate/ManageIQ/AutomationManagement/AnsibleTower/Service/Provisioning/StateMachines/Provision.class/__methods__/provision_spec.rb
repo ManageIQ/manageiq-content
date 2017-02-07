@@ -1,6 +1,6 @@
-require_domain_file
+sp require_domain_file
 
-describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Serivce::Provisioning::StateMachines::Provision::Provision do
+describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Service::Provisioning::StateMachines::Provision::Provision do
   let(:admin) { FactoryGirl.create(:user_admin) }
   let(:request) { FactoryGirl.create(:service_template_provision_request, :requester => admin) }
   let(:job_class) { ManageIQ::Providers::AnsibleTower::AutomationManager::Job }
