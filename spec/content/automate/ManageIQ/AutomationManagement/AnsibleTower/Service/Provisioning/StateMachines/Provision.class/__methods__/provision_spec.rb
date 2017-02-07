@@ -1,4 +1,4 @@
-sp require_domain_file
+require_domain_file
 
 describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Service::Provisioning::StateMachines::Provision::Provision do
   let(:admin) { FactoryGirl.create(:user_admin) }
