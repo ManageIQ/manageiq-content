@@ -17,6 +17,7 @@ module ManageIQ
 
                 begin
                   service.execute(@handle.root["service_action"])
+                  @handle.root['ae_result'] = 'ok'
                   @handle.log("info", "Ending execute")
                 rescue => err
                   @handle.root['ae_result'] = 'error'
