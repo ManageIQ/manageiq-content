@@ -15,26 +15,28 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
   shared_examples_for "check_completed" do
     it "check" do
       allow(svc_task).to receive(:destination).and_return(svc_service)
-      allow(svc_service).to receive(:check_completed).and_return(done)
+      allow(svc_service).to receive(:check_completed).and_return(status_and_message)
+
       described_class.new(ae_service).main
+
       expect(ae_service.root['ae_result']).to eq(ae_result)
     end
   end
 
   context "returns ok when job launching works" do
-    let(:done) { [true, ""] }
+    let(:status_and_message) { [true, ""] }
     let(:ae_result) { "ok" }
     it_behaves_like "check_completed"
   end
 
   context "returns error when job launching fails" do
-    let(:done) { [true, "error"] }
+    let(:status_and_message) { [true, "error"] }
     let(:ae_result) { "error" }
     it_behaves_like "check_completed"
   end
 
   context "returns retry when job launching is not done" do
-    let(:done) { [false, "retry"] }
+    let(:status_and_message) { [false, "retry"] }
     let(:ae_result) { "retry" }
     it_behaves_like "check_completed"
   end
