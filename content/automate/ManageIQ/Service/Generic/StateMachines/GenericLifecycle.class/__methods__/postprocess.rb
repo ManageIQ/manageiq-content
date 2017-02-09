@@ -13,9 +13,18 @@ module ManageIQ
               end
 
               def main
-                @handle.log("info", "Starting PostProcessing")
-                service.postprocess(@handle.root["service_action"])
-                @handle.log("info", "Ending PostProcessing")
+                @handle.log("info", "Starting PostProcess")
+
+                begin
+                  service.postprocess(@handle.root["service_action"])
+                  @handle.root['ae_result'] = 'ok'
+                rescue => err
+                  @handle.root['ae_result'] = 'error'
+                  @handle.root['ae_reason'] = err.message
+                  task.miq_request.user_message = err.message
+                  @handle.log(:error, "Error in PostProcess: #{err.message}")
+                end
+                @handle.log("info", "Ending PostProcess")
               end
 
               private
