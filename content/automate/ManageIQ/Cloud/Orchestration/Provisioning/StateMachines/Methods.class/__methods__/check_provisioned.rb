@@ -22,11 +22,6 @@ module ManageIQ
                   raise 'Service is nil'
                 end
 
-                unless service.instance_of?(MiqAeMethodService::MiqAeServiceServiceOrchestration)
-                  @handle.log(:error, 'Service has a different type from MiqAeServiceServiceOrchestration')
-                  raise 'Service has a different type from MiqAeServiceServiceOrchestration'
-                end
-
                 if @handle.state_var_exist?('provider_last_refresh')
                   check_refreshed(service)
                 else

@@ -140,14 +140,5 @@ describe ManageIQ::Automate::Cloud::Orchestration::Provisioning::StateMachines::
         expect { described_class.new(ae_service).main }.to raise_error('Service is nil')
       end
     end
-
-    context 'with other than orchestration service' do
-      let(:service_orchestration) { FactoryGirl.create(:service_ansible_tower) }
-
-      it "raises the service has a different type exception" do
-        expect { described_class.new(ae_service).main }.to raise_error(
-          'Service has a different type from MiqAeServiceServiceOrchestration')
-      end
-    end
   end
 end
