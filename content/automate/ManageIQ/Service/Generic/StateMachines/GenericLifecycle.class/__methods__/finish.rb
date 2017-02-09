@@ -15,6 +15,8 @@ module ManageIQ
               def main
                 @handle.log("info", "finish starting")
 
+                @handle.root['ae_result'] = 'ok'
+
                 @handle.log("info", "finish ending")
               end
             end
