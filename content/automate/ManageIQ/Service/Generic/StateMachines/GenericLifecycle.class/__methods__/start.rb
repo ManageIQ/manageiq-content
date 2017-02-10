@@ -14,7 +14,7 @@ module ManageIQ
 
               def main
                 @handle.log('info', "State Machine Starting")
-                $evm.create_notification(:level => 'info', :message => "Starting")
+                @handle.create_notification(:level => 'info', :message => "Starting")
               end
             end
           end
