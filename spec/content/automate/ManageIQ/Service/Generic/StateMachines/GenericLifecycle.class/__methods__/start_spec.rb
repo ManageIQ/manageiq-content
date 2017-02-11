@@ -15,7 +15,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
   context "Start" do
     it "creates notification " do
       expect(ae_service).to receive(:create_notification)
-      described_class.new(ae_service).main 
+      described_class.new(ae_service).main
     end
   end
 end
