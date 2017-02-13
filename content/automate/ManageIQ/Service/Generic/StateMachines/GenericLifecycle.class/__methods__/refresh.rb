@@ -1,6 +1,7 @@
 #
 # Description: This class calls a refresh
 #
+
 module ManageIQ
   module Automate
     module Service
@@ -13,9 +14,18 @@ module ManageIQ
               end
 
               def main
-                @handle.log("info", "Starting Refresh")
-                service.refresh(@handle.root["service_action"])
-                @handle.log("info", "Ending Refresh")
+                @handle.log(:info, "Starting Refresh")
+
+                begin
+                  service.refresh(@handle.root["service_action"])
+                  @handle.root['ae_result'] = 'ok'
+                rescue => err
+                  @handle.root['ae_result'] = 'error'
+                  @handle.root['ae_reason'] = err.message
+                  task.miq_request.user_message = err.message
+                  @handle.log(:error, "Error in Refresh: #{err.message}")
+                end
+                @handle.log(:info, "Ending Refresh")
               end
 
               private
