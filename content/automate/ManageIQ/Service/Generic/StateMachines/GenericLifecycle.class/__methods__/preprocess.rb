@@ -12,20 +12,30 @@ module ManageIQ
               end
 
               def main
-                @handle.log("info", "Starting preprocess")
-                dump_root
-                options = {}
-                # user can insert options to override options from dialog
-                service.preprocess(@handle.root["service_action"], options)
+                @handle.log(:info, "Starting preprocess")
+
+                begin
+                  dump_root
+                  options = {}
+                  # user can insert options to override options from dialog
+                  service.preprocess(@handle.root["service_action"], options)
+                  @handle.root['ae_result'] = 'ok'
+                  @handle.log(:info, "Ending preprocess")
+                rescue => err
+                  @handle.root['ae_result'] = 'error'
+                  @handle.root['ae_reason'] = err.message
+                  task.miq_request.user_message = err.message
+                  @handle.log(:info, "Error in preprocess")
+                end
               end
 
               private
 
               def dump_root
-                @handle.log("info", "Root:<$evm.root> Attributes - Begin")
-                @handle.root.attributes.sort.each { |k, v| $evm.log("info", "  Attribute - #{k}: #{v}") }
-                @handle.log("info", "Root:<$evm.root> Attributes - End")
-                @handle.log("info", "")
+                @handle.log(:info, "Root:<$evm.root> Attributes - Begin")
+                @handle.root.attributes.sort.each { |k, v| @handle.log(:info, "  Attribute - #{k}: #{v}") }
+                @handle.log(:info, "Root:<$evm.root> Attributes - End")
+                @handle.log(:info, "")
               end
 
               def task
