@@ -25,7 +25,7 @@ module ManageIQ
                   @handle.root['ae_result'] = 'error'
                   @handle.root['ae_reason'] = err.message
                   task.miq_request.user_message = err.message
-                  @handle.log(:info, "Error in execute")
+                  @handle.log(:info, "Error in preprocess")
                 end
               end
 
