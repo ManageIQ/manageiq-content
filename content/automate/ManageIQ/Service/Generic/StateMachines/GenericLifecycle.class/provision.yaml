@@ -36,7 +36,7 @@ object:
   - check_completed:
       value: METHOD::check_completed
       on_exit: update_status(status => 'Processed check_completed')
-      on_error: update_status(status => 'Error Processing check_completed)
+      on_error: update_status(status => 'Error Processing check_completed')
   - refresh:
       value: METHOD::refresh
       on_entry: update_status(status => 'Processing refresh')
