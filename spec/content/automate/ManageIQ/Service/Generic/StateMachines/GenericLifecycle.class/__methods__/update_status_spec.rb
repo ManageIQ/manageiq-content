@@ -1,12 +1,12 @@
 require_domain_file
 
 describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::UpdateStatus do
-  let(:user)                  { FactoryGirl.create(:user_with_group) }
-  let(:miq_server)            { EvmSpecHelper.local_miq_server }
-  let(:service_orchestration) { FactoryGirl.create(:service_orchestration) }
+  let(:user)       { FactoryGirl.create(:user_with_group) }
+  let(:miq_server) { EvmSpecHelper.local_miq_server }
+  let(:service)    { FactoryGirl.create(:service) }
 
   let(:miq_request_task) do
-    FactoryGirl.create(:miq_request_task, :destination => service_orchestration,
+    FactoryGirl.create(:miq_request_task, :destination => service,
                        :miq_request => request, :state => 'fred')
   end
 
@@ -24,14 +24,14 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
 
   let(:svc_model_miq_server)       { MiqAeMethodService::MiqAeServiceMiqServer.find(miq_server.id) }
   let(:svc_model_miq_request_task) { MiqAeMethodService::MiqAeServiceMiqRequestTask.find(miq_request_task.id) }
-  let(:svc_model_service)          { MiqAeMethodService::MiqAeServiceService.find(service_orchestration.id) }
+  let(:svc_model_service)          { MiqAeMethodService::MiqAeServiceService.find(service.id) }
   let(:svc_model_request) do
     MiqAeMethodService::MiqAeServiceServiceTemplateProvisionRequest.find(request.id)
   end
 
   context "with a stp request object" do
     let(:root_hash) do
-      { 'service_template' => MiqAeMethodService::MiqAeServiceService.find(service_orchestration.id) }
+      { 'service_template' => MiqAeMethodService::MiqAeServiceService.find(service.id) }
     end
 
     let(:root_object) do
@@ -56,7 +56,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
     it "request message set properly" do
       described_class.new(ae_service).main
 
-      msg = "Server [#{miq_server.name}] Service [#{service_orchestration.name}] Step [] Status [fred] "
+      msg = "Server [#{miq_server.name}] Service [#{service.name}] Step [] Status [fred] "
       expect(svc_model_request.reload.message).to eq(msg)
     end
   end
