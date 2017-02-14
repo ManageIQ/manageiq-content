@@ -23,6 +23,12 @@ module ManageIQ
                   end
 
                   update_status_message(prov, @handle.inputs['status'])
+
+                  if @handle.root['ae_result'] == 'error'
+                    @handle.create_notification(:level   => 'error',
+                                                :subject => prov.miq_request,
+                                                :message => "Ansible Tower Provision Error: #{updated_message}")
+                  end
                 end
 
                 private
