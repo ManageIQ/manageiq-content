@@ -10,28 +10,28 @@ module ManageIQ
           class AvailableCredentials
             def initialize(handle = $evm)
               @handle = handle
-            end 
+            end
 
             def main
               fill_dialog_field(fetch_list_data)
-            end 
+            end
 
             private
-    
-            def get_provider
+
+            def provider
               # for provisioning we use     service_template
               # for reconfig and retire use service
               service = @handle.root['service_template'] || @handle.root['service']
               service.try(:job_template, 'Provision').try(:manager)
-            end 
-
-            def get_credentials
-              credentials = get_provider.try(:credentials) || []
-              credentials.select { |c| c.type == @handle.inputs['credential_type'] }
             end
-            
+
+            def credentials
+              result = provider.try(:credentials) || []
+              result.select { |c| c.type == @handle.inputs['credential_type'] }
+            end
+
             def fetch_list_data
-              credential_list = Hash[*get_credentials.pluck(:id, :name).flatten]
+              credential_list = Hash[*credentials.pluck(:id, :name).flatten]
               @handle.log(:info, "Number of credentials found #{credential_list.keys.count}")
               return nil => "<none>" if credential_list.blank?
               credential_list[nil] = "<select>" if credential_list.length > 1

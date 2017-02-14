@@ -42,14 +42,12 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Ava
   shared_examples_for "#having only default value" do
     let(:default_desc_blank) { "<none>" }
     it "provides only default value if no credentials" do
-
       described_class.new(ae_service).main
 
       expect(ae_service["values"]).to eq(nil => default_desc_blank)
       expect(ae_service["default_value"]).to be_nil
     end
   end
-
 
   shared_examples_for "#having specific values based on credential type" do
     it "provides only default value if no credentials" do
