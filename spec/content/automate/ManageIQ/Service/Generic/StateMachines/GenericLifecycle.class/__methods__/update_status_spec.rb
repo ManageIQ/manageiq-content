@@ -56,7 +56,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
     it "request message set properly" do
       described_class.new(ae_service).main
 
-      msg = "Service_Template_Provisioning - Request Created"
+      msg = "Server [#{miq_server.name}] Service [#{service_orchestration.name}] Step [] Status [fred] "
       expect(svc_model_request.reload.message).to eq(msg)
     end
   end
