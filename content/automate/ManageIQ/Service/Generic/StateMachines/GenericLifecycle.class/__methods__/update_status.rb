@@ -14,25 +14,45 @@ module ManageIQ
               end
 
               def main
-                @handle.log(:error, "Starting update_status")
-
-                update_status
-                @handle.log(:error, "Ending update_status")
+                @handle.log(:info, "Starting update_status")
+                update_status(task, service)
+                @handle.log(:info, "Ending update_status")
               end
 
               private
 
-              def update_status
+              def task
+                @handle.root["service_template_provision_task"].tap do |task|
+                  if task.nil?
+                    @handle.log(:error, 'service_template_provision_task is nil')
+                    raise "service_template_provision_task not found"
+                  end
+                end
+              end
+
+              def service
+                task.destination.tap do |service|
+                  if service.nil?
+                    @handle.log(:error, 'Service is nil')
+                    raise 'Service not found'
+                  end
+                end
+              end
+
+              def update_status(task, service)
                 # Get status from input field status
                 status = @handle.inputs['status']
 
                 updated_message = String.new
                 updated_message << "Server [#{@handle.root['miq_server'].name}] "
+                updated_message << "Service [#{service.name}] "
                 updated_message << "Step [#{@handle.root['ae_state']}] "
                 updated_message << "Status [#{status}] "
                 updated_message << "Current Retry Number [#{@handle.root['ae_state_retries']}]"\
                                     if @handle.root['ae_result'] == 'retry'
-                @handle.log(:error, "Status message: #{updated_message} ")
+                @handle.log(:info, "Status message: #{updated_message} ")
+                task.miq_request.user_message = updated_message
+                task.message = status
               end
             end
           end
