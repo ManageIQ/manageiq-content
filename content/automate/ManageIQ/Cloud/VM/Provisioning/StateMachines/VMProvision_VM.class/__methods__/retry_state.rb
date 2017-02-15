@@ -43,6 +43,9 @@ module ManageIQ
                 updated_message += "Step [#{@handle.root['ae_state']}] "
                 updated_message += "Status [#{status}] "
                 updated_message += "Message [#{@prov.message}] "
+                if @handle.root['ae_result'] == 'restart'
+                  updated_message += "Restarting from #{@restart_from_state} step"
+                end
                 @prov.miq_request.user_message = updated_message
                 @prov.message = status
               end

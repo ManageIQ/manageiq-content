@@ -28,10 +28,13 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::VMProvision_VM::Re
         ro["ae_next_state"] = "some_state"
       end
     end
-    let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
+    let(:ae_service) do
+      Spec::Support::MiqAeMockService.new(root_object).tap do |ae|
+        ae.inputs = {}
+      end
+    end
 
     it "retries and increments count because of a matching error" do
-      allow(ae_service).to receive(:inputs).and_return({})
       expect(ae_service.root['ae_result']).to eq("error")
       expect(ae_service.root['ae_next_state']).to eq("some_state")
       expect(ae_service.get_state_var(:state_retries)).to eq(nil)
@@ -41,10 +44,11 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::VMProvision_VM::Re
       expect(ae_service.root['ae_result']).to eq("restart")
       expect(ae_service.root['ae_next_state']).to eq("Placement")
       expect(ae_service.get_state_var(:state_retries)).to eq(1)
+      expect(miq_request[:options][:user_message]).to include("Restarting from Placement")
     end
 
     it "remains in error and does not retry if the max tries have been reached" do
-      allow(ae_service).to receive(:inputs).and_return("max_retries" => 3)
+      ae_service.inputs["max_retries"] = 3
       ae_service.set_state_var(:state_retries, 3)
       expect(ae_service.root['ae_result']).to eq("error")
       expect(ae_service.root['ae_next_state']).to eq("some_state")
@@ -54,10 +58,11 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::VMProvision_VM::Re
       expect(ae_service.root['ae_result']).to eq("error")
       expect(ae_service.root['ae_next_state']).to eq("some_state")
       expect(ae_service.get_state_var(:state_retries)).to eq(3)
+      expect(miq_request[:options][:user_message]).not_to include("Restarting")
     end
 
     it "remains in error and does not retry for an error that does not match" do
-      allow(ae_service).to receive(:inputs).and_return("error_to_catch" => "non-matching error")
+      ae_service.inputs["error_to_catch"] = "non-matching error"
       expect(ae_service.get_state_var(:state_retries)).to eq(nil)
       expect(ae_service.root['ae_result']).to eq("error")
       expect(ae_service.root['ae_next_state']).to eq("some_state")
@@ -67,6 +72,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::VMProvision_VM::Re
       expect(ae_service.root['ae_result']).to eq("error")
       expect(ae_service.root['ae_next_state']).to eq("some_state")
       expect(ae_service.get_state_var(:state_retries)).to eq(nil)
+      expect(miq_request[:options][:user_message]).not_to include("Restarting")
     end
   end
 end
