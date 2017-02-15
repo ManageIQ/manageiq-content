@@ -21,7 +21,7 @@ $evm.log("info", "Step:<#{step}> Status_State:<#{status_state}> Status:<#{status
 stack = $evm.root['orchestration_stack']
 
 # Update Status Message
-updated_message = String.new
+updated_message = ''
 updated_message << "Server [#{server.name}] "
 updated_message << "Stack [#{stack.name}] " if stack
 updated_message << "Step [#{step}] "

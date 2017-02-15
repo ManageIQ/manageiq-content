@@ -30,7 +30,7 @@ module ManageIQ
 
                 def update_status_message(prov, status)
                   # Update Status Message
-                  updated_message = String.new
+                  updated_message = ''
                   updated_message << "Server [#{@handle.root['miq_server'].name}] "
                   updated_message << "Service [#{prov.destination.name}] "
                   updated_message << "Step [#{@handle.root['ae_state']}] "

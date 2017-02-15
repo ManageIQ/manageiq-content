@@ -24,7 +24,7 @@ $evm.log("info", "Server:<#{server.name}> Ae_Result:<#{$evm.root['ae_result']}> 
 $evm.log("info", "Status_State:<#{status_state}> Status:<#{status}>")
 
 # Update Status Message
-updated_message = String.new
+updated_message = ''
 updated_message << "Server [#{server.name}] "
 updated_message << "VM [#{vm.name}] " if vm
 updated_message << "Step [#{step}] "
