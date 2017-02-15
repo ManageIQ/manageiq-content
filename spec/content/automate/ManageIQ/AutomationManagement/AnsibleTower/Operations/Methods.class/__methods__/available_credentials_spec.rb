@@ -54,6 +54,8 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Ava
       described_class.new(ae_service).main
 
       expect(ae_service["values"].keys).to match_array(valid_ids)
+      expect(ae_service["default_value"]).to be_nil
+      expect(ae_service["required"]).to be_falsey
     end
   end
 

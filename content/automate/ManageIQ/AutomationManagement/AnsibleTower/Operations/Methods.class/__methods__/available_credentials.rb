@@ -8,6 +8,7 @@ module ManageIQ
       module AnsibleTower
         module Operations
           class AvailableCredentials
+            AUTH_CLASS = "ManageIQ_Providers_AutomationManager_Authentication".freeze
             def initialize(handle = $evm)
               @handle = handle
             end
@@ -26,8 +27,9 @@ module ManageIQ
             end
 
             def credentials
-              result = provider.try(:credentials) || []
-              result.select { |c| c.type == @handle.inputs['credential_type'] }
+              @handle.vmdb(AUTH_CLASS).where("resource_id = ? AND type = ?",
+                                             provider.try(:id),
+                                             @handle.inputs['credential_type'])
             end
 
             def fetch_list_data
@@ -42,10 +44,10 @@ module ManageIQ
               dialog_hash = {
                 'sort_by'       => "value",
                 'data_type'     => "string",
-                'required'      => true,
+                'required'      => false,
                 'sort_order'    => "ascending",
                 'values'        => list,
-                'default_value' => list.length == 1 ? list.keys.first : nil
+                'default_value' => nil
               }
 
               dialog_hash.each { |key, value| @handle.object[key] = value }
