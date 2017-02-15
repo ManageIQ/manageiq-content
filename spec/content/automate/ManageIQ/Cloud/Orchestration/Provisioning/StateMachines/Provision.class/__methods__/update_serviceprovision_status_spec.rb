@@ -1,4 +1,3 @@
-
 require_domain_file
 
 describe ManageIQ::Automate::Cloud::Orchestration::Provisioning::StateMachines::UpdateServiceProvisionStatus do
