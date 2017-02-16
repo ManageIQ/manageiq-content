@@ -56,6 +56,9 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Ava
       expect(ae_service["values"].keys).to match_array(valid_ids)
       expect(ae_service["default_value"]).to be_nil
       expect(ae_service["required"]).to be_falsey
+      expect(ae_service["sort_by"]).to eq('description')
+      expect(ae_service["sort_order"]).to eq('ascending')
+      expect(ae_service["data_type"]).to eq('string')
     end
   end
 
