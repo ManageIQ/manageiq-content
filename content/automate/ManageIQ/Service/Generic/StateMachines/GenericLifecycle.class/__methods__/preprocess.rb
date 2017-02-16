@@ -18,7 +18,7 @@ module ManageIQ
                   dump_root
                   options = {}
                   # user can insert options to override options from dialog
-                  service.preprocess(@handle.root["service_action"], options)
+                  service.preprocess(service_action, options)
                   @handle.root['ae_result'] = 'ok'
                   @handle.log(:info, "Ending preprocess")
                 rescue => err
@@ -52,6 +52,15 @@ module ManageIQ
                   if service.nil?
                     @handle.log(:error, 'Service is nil')
                     raise 'Service not found'
+                  end
+                end
+              end
+
+              def service_action
+                @handle.root["service_action"].tap do |action|
+                  unless %w(Provision Retirement Reconfigure).include?(action)
+                    @handle.log(:error, "Invalid service action: #{action}")
+                    raise "Invalid service_action"
                   end
                 end
               end
