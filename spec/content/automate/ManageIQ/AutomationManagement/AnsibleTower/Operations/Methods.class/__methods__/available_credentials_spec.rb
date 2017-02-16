@@ -40,7 +40,7 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Ava
   end
 
   shared_examples_for "#having only default value" do
-    let(:default_desc_blank) { "<none>" }
+    let(:default_desc_blank) { "<Default>" }
     it "provides only default value if no credentials" do
       described_class.new(ae_service).main
 

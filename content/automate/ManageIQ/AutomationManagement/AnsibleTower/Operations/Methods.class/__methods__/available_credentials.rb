@@ -34,10 +34,8 @@ module ManageIQ
 
             def fetch_list_data
               credential_list = Hash[*credentials.pluck(:id, :name).flatten]
-              @handle.log(:info, "Number of credentials found #{credential_list.count}")
-              return nil => "<none>" if credential_list.blank?
-              credential_list[nil] = "<select>" if credential_list.length > 1
-              credential_list
+              @handle.log(:debug, "Number of credentials found #{credential_list.count}")
+              {nil => '<Default>'}.merge(credential_list)
             end
 
             def fill_dialog_field(list)
