@@ -79,16 +79,12 @@ describe "Quota Validation" do
   context "VmReconfig quota calculate_request" do
     it "add 2 cpus and add 4096 memory " do
       setup_model("vmware_reconfigure")
-
-      puts " provisioned_storage: #{@vm_vmware.provisioned_storage.inspect}"
-      
       @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :cores_per_socket => 2,\
       :number_of_sockets => 2, :number_of_cpus => 4, :vm_memory => 8192, :request_type => :vm_reconfigure,\
-      :disk_add => [{"disk_size_in_mb" => "10", "persistent" => true, "thin_provisioned"=>true,\
-      "dependent"=>true, "bootable"=>false}]})
-
+      :disk_add => [{"disk_size_in_mb" => "10", "persistent" => true, "thin_provisioned" => true,\
+      "dependent" => true, "bootable" => false}]})
       ws = run_automate_method(reconfigure_attrs)
-      check_results(ws.root['quota_requested'], 0, 2, 0, 4096.megabytes)
+      check_results(ws.root['quota_requested'], 10.megabytes, 2, 0, 4096.megabytes)
     end
 
     it "minus 1 cpu and minus 2048 memory" do
