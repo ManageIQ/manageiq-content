@@ -9,8 +9,12 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
   let(:task) { FactoryGirl.create(:service_template_provision_task, :destination => service_ansible_tower, :miq_request => request) }
   let(:svc_task) { MiqAeMethodService::MiqAeServiceServiceTemplateProvisionTask.find(task.id) }
   let(:svc_service) { MiqAeMethodService::MiqAeServiceServiceAnsibleTower.find(service_ansible_tower.id) }
-  let(:root_object) { Spec::Support::MiqAeMockObject.new('service_template_provision_task' => svc_task) }
   let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
+  let(:root_object) do
+    Spec::Support::MiqAeMockObject.new('service'                         => svc_service,
+                                       'service_template_provision_task' => task,
+                                       'service_action'                  => 'Provision')
+  end
 
   shared_examples_for "check_refreshed" do
     it "check" do
@@ -20,6 +24,14 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
       described_class.new(ae_service).main
 
       expect(ae_service.root['ae_result']).to eq(ae_result)
+    end
+  end
+
+  shared_examples_for "check_refreshed_error" do
+    it "error" do
+      allow(svc_service).to receive(:check_refreshed).and_return(status_and_message)
+
+      expect { described_class.new(ae_service).main }.to raise_error(errormsg)
     end
   end
 
@@ -39,5 +51,35 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
     let(:status_and_message) { [false, "retry"] }
     let(:ae_result) { "retry" }
     it_behaves_like "check_refreshed"
+  end
+
+  context "invalid service_action" do
+    let(:status_and_message) { [true, ""] }
+    let(:errormsg)           { 'Invalid service_action' }
+    let(:root_object) do
+      Spec::Support::MiqAeMockObject.new('service'        => svc_service,
+                                         'service_action' => 'fred')
+    end
+    it_behaves_like "check_refreshed_error"
+  end
+
+  context "service not found" do
+    let(:status_and_message) { [true, ""] }
+    let(:errormsg)           { 'Service not found' }
+    let(:root_object) do
+      Spec::Support::MiqAeMockObject.new('service_template_provision_task' => task,
+                                         'service_action'                  => 'Provision')
+    end
+    it_behaves_like "check_refreshed_error"
+  end
+
+  context "task not found" do
+    let(:status_and_message) { [true, "error"] }
+    let(:errormsg)           { 'service_template_provision_task not found' }
+    let(:root_object) do
+      Spec::Support::MiqAeMockObject.new('service'        => svc_service,
+                                         'service_action' => 'Provision')
+    end
+    it_behaves_like "check_refreshed_error"
   end
 end
