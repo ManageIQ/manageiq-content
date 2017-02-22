@@ -13,16 +13,6 @@ object:
       on_entry: update_status(status => 'Processing Start')
       on_exit: update_status(status => 'Processed Start')
       on_error: update_status(status => 'Error Processing Start')
-  - pre0:
-      value: "/Service/Provisioning/StateMachines/Methods/GroupSequenceCheck"
-      on_entry: update_status(status => 'Processing Sequencer')
-      on_exit: update_status(status => 'Processed Sequencer')
-      on_error: update_status(status => 'Error Processing Sequencer')
-  - pre1:
-      value: "/Service/Provisioning/StateMachines/Methods/CatalogItemInitialization"
-      on_entry: update_status(status => 'Processing CatalogItemInitialization')
-      on_exit: update_status(status => 'Processed CatalogItemInitialization')
-      on_error: update_status(status => 'Error Processing CatalogItemInitialization')
   - pre4:
       value: METHOD::preprocess
       on_entry: update_status(status => 'Processing Preprocess')

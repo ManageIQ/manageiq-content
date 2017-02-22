@@ -9,20 +9,15 @@ object:
     description: 
   fields:
   - start:
-      value: METHOD::start
-      on_entry: update_status(status => 'Processing Start')
-      on_exit: update_status(status => 'Processed Start')
-      on_error: update_status(status => 'Error Processing Start')
-  - pre1:
-      value: "/Service/Provisioning/StateMachines/Methods/CatalogItemInitialization"
-      on_entry: update_status(status => 'Processing CatalogItemInitialization’)
-      on_exit: update_status(status => 'Processed CatalogItemInitialization’)
-      on_error: update_status(status => 'Error Processing CatalogItemInitialization’)
+      value: "/Service/Retirement/StateMachines/Methods/StartRetirement"
+      on_entry: update_status(status => 'Processing StartRetirement')
+      on_exit: update_status(status => 'Processed StartRetirement')
+      on_error: update_status(status => 'Error Processing StartRetirement')
   - pre4:
       value: METHOD::preprocess
-      on_entry: update_status(status => 'Processing Preprocess’)
-      on_exit: update_status(status => 'Processed Preprocess’)
-      on_error: update_status(status => 'Error Processing Preprocess’)
+      on_entry: update_status(status => 'Processing Preprocess')
+      on_exit: update_status(status => 'Processed Preprocess')
+      on_error: update_status(status => 'Error Processing Preprocess')
   - execute:
       value: METHOD::execute
       on_entry: update_status(status => 'Starting execute')
@@ -33,4 +28,4 @@ object:
       on_exit: update_status(status => 'Processed check_completed')
       on_error: update_status(status => 'Error Processing check_completed')
   - finish:
-      value: METHOD::finish
+      value: "/Service/Retirement/StateMachines/Methods/FinishRetirement"

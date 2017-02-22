@@ -24,8 +24,8 @@ module ManageIQ
                 rescue => err
                   @handle.root['ae_result'] = 'error'
                   @handle.root['ae_reason'] = err.message
-                  task.miq_request.user_message = err.message
-                  @handle.log(:info, "Error in preprocess")
+                  @handle.log(:info, "Error in preprocess: #{err.message}")
+                  update_task(err.message)
                 end
               end
 
@@ -38,17 +38,19 @@ module ManageIQ
                 @handle.log(:info, "")
               end
 
-              def task
+              def update_task(message)
+                return unless service_action == 'Provision'
                 @handle.root["service_template_provision_task"].tap do |task|
                   if task.nil?
                     @handle.log(:error, 'service_template_provision_task is nil')
                     raise "service_template_provision_task not found"
                   end
+                task.miq_request.user_message = message
                 end
               end
 
               def service
-                task.destination.tap do |service|
+                @handle.root["service"].tap do |service|
                   if service.nil?
                     @handle.log(:error, 'Service is nil')
                     raise 'Service not found'

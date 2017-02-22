@@ -20,17 +20,19 @@ module ManageIQ
 
               private
 
-              def task
+              def update_task(message)
+                return unless service_action == 'Provision'
                 @handle.root["service_template_provision_task"].tap do |task|
                   if task.nil?
                     @handle.log(:error, 'service_template_provision_task is nil')
                     raise "service_template_provision_task not found"
                   end
+                task.miq_request.user_message = message
                 end
               end
 
               def service
-                task.destination.tap do |service|
+                @handle.root["service"].tap do |service|
                   if service.nil?
                     @handle.log(:error, 'Service is nil')
                     raise 'Service not found'
@@ -38,15 +40,25 @@ module ManageIQ
                 end
               end
 
+              def service_action
+                @handle.root["service_action"].tap do |action|
+                  unless %w(Provision Retirement Reconfigure).include?(action)
+                    @handle.log(:error, "Invalid service action: #{action}")
+                    raise "Invalid service_action"
+                  end
+                end
+              end
+
               def check_refreshed(service)
-                done, message = service.check_refreshed(@handle.root['service_action'])
+                done, message = service.check_refreshed(service_action)
                 if done
                   if message.blank?
                     @handle.root['ae_result'] = 'ok'
                   else
                     @handle.root['ae_result'] = 'error'
                     @handle.root['ae_reason'] = message
-                    task.miq_request.user_message = message
+                    @handle.log(:error, "Error in check refreshed: #{message}")
+                    update_task(message)
                   end
                 else
                   @handle.root['ae_result'] = 'retry'
