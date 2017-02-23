@@ -27,7 +27,7 @@ module ManageIQ
                     @handle.log(:error, 'service_template_provision_task is nil')
                     raise "service_template_provision_task not found"
                   end
-                task.miq_request.user_message = message
+                  task.miq_request.user_message = message
                 end
               end
 
