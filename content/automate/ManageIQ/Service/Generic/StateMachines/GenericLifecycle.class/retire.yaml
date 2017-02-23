@@ -27,5 +27,19 @@ object:
       value: METHOD::check_completed
       on_exit: update_status(status => 'Processed check_completed')
       on_error: update_status(status => 'Error Processing check_completed')
+  - refresh:
+      value: METHOD::refresh
+      on_entry: update_status(status => 'Processing refresh')
+      on_exit: update_status(status => 'Processed refresh')
+      on_error: update_status(status => 'Error Processing refresh')
+  - check_refreshed:
+      value: METHOD::check_refreshed
+      on_exit: update_status(status => 'Processed check_refreshed')
+      on_error: update_status(status => 'Error Processing check_refreshed')
+  - post0:
+      value: METHOD::postprocess
+      on_entry: update_status(status => 'Processing Postprocess')
+      on_exit: update_status(status => 'Processed Postprocess')
+      on_error: update_status(status => 'Error Processing Postprocess')
   - finish:
       value: "/Service/Retirement/StateMachines/Methods/FinishRetirement"
