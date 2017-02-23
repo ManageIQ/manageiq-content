@@ -11,4 +11,5 @@ if entry_point.blank?
 end
 
 $evm.root['retirement_entry_point'] = entry_point
+$evm.root['service_action'] = 'Retirement'
 $evm.log("info", "retirement_entrypoint: #{entry_point}")

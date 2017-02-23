@@ -15,23 +15,21 @@ module ManageIQ
 
               def main
                 @handle.log(:info, "Starting update_status")
-                update_status(task, service)
+                update_status(service)
                 @handle.log(:info, "Ending update_status")
               end
 
               private
 
-              def task
-                @handle.root["service_template_provision_task"].tap do |task|
-                  if task.nil?
-                    @handle.log(:error, 'service_template_provision_task is nil')
-                    raise "service_template_provision_task not found"
-                  end
+              def update_task(message, status)
+                @handle.root['service_template_provision_task'].try do |task|
+                  task.miq_request.user_message = message
+                  task.message = status
                 end
               end
 
               def service
-                task.destination.tap do |service|
+                @handle.root["service"].tap do |service|
                   if service.nil?
                     @handle.log(:error, 'Service is nil')
                     raise 'Service not found'
@@ -39,20 +37,28 @@ module ManageIQ
                 end
               end
 
-              def update_status(task, service)
+              def service_action
+                @handle.root["service_action"].tap do |action|
+                  unless %w(Provision Retirement Reconfigure).include?(action)
+                    @handle.log(:error, "Invalid service action: #{action}")
+                    raise "Invalid service_action"
+                  end
+                end
+              end
+
+              def update_status(service)
                 # Get status from input field status
                 status = @handle.inputs['status']
 
                 updated_message = String.new
                 updated_message << "Server [#{@handle.root['miq_server'].name}] "
-                updated_message << "Service [#{service.name}] "
+                updated_message << "Service [#{service.name}] #{service_action} "
                 updated_message << "Step [#{@handle.root['ae_state']}] "
                 updated_message << "Status [#{status}] "
                 updated_message << "Current Retry Number [#{@handle.root['ae_state_retries']}]"\
                                     if @handle.root['ae_result'] == 'retry'
                 @handle.log(:info, "Status message: #{updated_message} ")
-                task.miq_request.user_message = updated_message
-                task.message = status
+                update_task(updated_message, status)
               end
             end
           end

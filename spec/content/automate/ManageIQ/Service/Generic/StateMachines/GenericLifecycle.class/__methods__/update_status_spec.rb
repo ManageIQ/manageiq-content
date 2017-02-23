@@ -1,62 +1,69 @@
 require_domain_file
 
 describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::UpdateStatus do
-  let(:user)       { FactoryGirl.create(:user_with_group) }
+  let(:admin) { FactoryGirl.create(:user_admin) }
+  let(:request) { FactoryGirl.create(:service_template_provision_request, :requester => admin) }
+  let(:ansible_tower_manager) { FactoryGirl.create(:automation_manager) }
+  let(:job_template) { FactoryGirl.create(:ansible_configuration_script, :manager => ansible_tower_manager) }
+  let(:service_ansible_tower) { FactoryGirl.create(:service_ansible_tower, :job_template => job_template) }
+  let(:task) { FactoryGirl.create(:service_template_provision_task, :destination => service_ansible_tower, :miq_request => request) }
+  let(:svc_task) { MiqAeMethodService::MiqAeServiceServiceTemplateProvisionTask.find(task.id) }
+  let(:svc_service) { MiqAeMethodService::MiqAeServiceServiceAnsibleTower.find(service_ansible_tower.id) }
+  let(:root_object) do
+    Spec::Support::MiqAeMockObject.new('service'        => svc_service,
+                                       'service_action' => 'Provision',
+                                       'miq_server'     => svc_model_miq_server)
+  end
+  let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
+  let(:errormsg) { "simple error" }
+  let(:svc_model_request) { MiqAeMethodService::MiqAeServiceServiceTemplateProvisionRequest.find(request.id) }
   let(:miq_server) { EvmSpecHelper.local_miq_server }
-  let(:service)    { FactoryGirl.create(:service) }
+  let(:svc_model_miq_server) { MiqAeMethodService::MiqAeServiceMiqServer.find(miq_server.id) }
 
-  let(:miq_request_task) do
-    FactoryGirl.create(:miq_request_task, :destination => service,
-                       :miq_request => request, :state => 'fred')
-  end
-
-  let(:request) do
-    FactoryGirl.create(:service_template_provision_request, :requester => user)
-  end
-
-  let(:ae_service) do
-    Spec::Support::MiqAeMockService.new(root_object).tap do |service|
-      current_object = Spec::Support::MiqAeMockObject.new
-      current_object.parent = root_object
-      service.object = current_object
-    end
-  end
-
-  let(:svc_model_miq_server)       { MiqAeMethodService::MiqAeServiceMiqServer.find(miq_server.id) }
-  let(:svc_model_miq_request_task) { MiqAeMethodService::MiqAeServiceMiqRequestTask.find(miq_request_task.id) }
-  let(:svc_model_service)          { MiqAeMethodService::MiqAeServiceService.find(service.id) }
-  let(:svc_model_request) do
-    MiqAeMethodService::MiqAeServiceServiceTemplateProvisionRequest.find(request.id)
-  end
-
-  context "with a stp request object" do
-    let(:root_hash) do
-      { 'service_template' => MiqAeMethodService::MiqAeServiceService.find(service.id) }
-    end
-
-    let(:root_object) do
-      obj = Spec::Support::MiqAeMockObject.new(root_hash)
-      obj["service_template_provision_task"] = svc_model_miq_request_task
-      obj["miq_server"] = svc_model_miq_server
-      obj
-    end
-
-    before do
+  shared_examples_for "update_status_error" do
+    it "error" do
+      allow(svc_service).to receive(:destination).and_return(svc_service)
       allow(ae_service).to receive(:inputs) { {'status' => "fred"} }
-      allow(svc_model_miq_request_task).to receive(:destination) { svc_model_service }
-      ae_service.root['ae_result'] = 'ok'
-    end
 
-    it "method succeeds" do
+      expect { described_class.new(ae_service).main }.to raise_error(errormsg)
+    end
+  end
+
+  context "invalid service_action" do
+    let(:errormsg) { 'Invalid service_action' }
+    let(:root_object) do
+      Spec::Support::MiqAeMockObject.new('service'        => svc_service,
+                                         'service_action' => 'fred',
+                                         'miq_server'     => svc_model_miq_server)
+    end
+    it_behaves_like "update_status_error"
+  end
+
+  context "service not found" do
+    let(:errormsg) { 'Service not found' }
+    let(:root_object) do
+      Spec::Support::MiqAeMockObject.new('service_template_provision_task' => task,
+                                         'service_action'                  => 'Provision',
+                                         'miq_server'                      => svc_model_miq_server)
+    end
+    it_behaves_like "update_status_error"
+  end
+
+  context "update_status" do
+    let(:root_object) do
+      Spec::Support::MiqAeMockObject.new('service_template_provision_task' => task,
+                                         'service_action'                  => 'Provision',
+                                         'service'                         => svc_service,
+                                         'miq_server'                      => svc_model_miq_server)
+    end
+    it "successful scenario" do
+      allow(svc_task).to receive(:destination).and_return(svc_service)
+      allow(svc_service).to receive(:update_status).and_return(nil)
+      allow(ae_service).to receive(:inputs) { {'status' => "fred"} }
+
       described_class.new(ae_service).main
 
-      expect(svc_model_request.reload.status).to eq('Ok')
-    end
-
-    it "request message set properly" do
-      described_class.new(ae_service).main
-
-      msg = "Server [#{miq_server.name}] Service [#{service.name}] Step [] Status [fred] "
+      msg = "Server [#{miq_server.name}] Service [#{svc_service.name}] Provision Step [] Status [fred] "
       expect(svc_model_request.reload.message).to eq(msg)
     end
   end
