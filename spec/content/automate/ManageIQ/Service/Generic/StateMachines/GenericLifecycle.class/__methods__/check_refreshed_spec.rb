@@ -72,14 +72,4 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
     end
     it_behaves_like "check_refreshed_error"
   end
-
-  context "task not found" do
-    let(:status_and_message) { [true, "error"] }
-    let(:errormsg)           { 'service_template_provision_task not found' }
-    let(:root_object) do
-      Spec::Support::MiqAeMockObject.new('service'        => svc_service,
-                                         'service_action' => 'Provision')
-    end
-    it_behaves_like "check_refreshed_error"
-  end
 end

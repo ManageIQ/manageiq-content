@@ -39,14 +39,7 @@ module ManageIQ
               end
 
               def update_task(message)
-                return unless service_action == 'Provision'
-                @handle.root["service_template_provision_task"].tap do |task|
-                  if task.nil?
-                    @handle.log(:error, 'service_template_provision_task is nil')
-                    raise "service_template_provision_task not found"
-                  end
-                  task.miq_request.user_message = message
-                end
+                @handle.root['service_template_provision_task'].try { |task| task.miq_request.user_message = message }
               end
 
               def service

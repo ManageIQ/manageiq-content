@@ -13,37 +13,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
   let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
   let(:error_msg) { "failed" }
 
-  shared_examples_for "execute_error" do
-    it "error" do
-      allow(svc_service).to receive(:destination).and_return(svc_service)
-      allow(svc_service).to receive(:execute).and_raise(errormsg)
-
-      expect { described_class.new(ae_service).main }.to raise_error(errormsg)
-
-      expect(ae_service.root['ae_result']).to eq("error")
-      expect(ae_service.root['ae_reason']).to eq(errormsg)
-    end
-  end
-
-  context "invalid service_action" do
-    let(:errormsg) { 'Invalid service_action' }
-    let(:root_object) do
-      Spec::Support::MiqAeMockObject.new('service'        => svc_service,
-                                         'service_action' => 'fred')
-    end
-    it_behaves_like "execute_error"
-  end
-
-  context "task not found" do
-    let(:errormsg) { 'service_template_provision_task not found' }
-    let(:root_object) do
-      Spec::Support::MiqAeMockObject.new('service'        => svc_service,
-                                         'service_action' => 'Provision')
-    end
-    it_behaves_like "execute_error"
-  end
-
-  shared_examples_for "execute" do
+  shared_examples_for "execute_errors" do
     it "execute" do
       allow(svc_service).to receive(:destination).and_return(svc_service)
       allow(svc_service).to receive(:execute).and_return(nil)
@@ -63,7 +33,18 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
       Spec::Support::MiqAeMockObject.new('service_template_provision_task' => task,
                                          'service_action'                  => 'Provision')
     end
-    it_behaves_like "execute"
+    it_behaves_like "execute_errors"
+  end
+
+  context "Invalid service action" do
+    let(:msg) { 'Invalid service_action' }
+    let(:rc) { 'error' }
+    let(:root_object) do
+      Spec::Support::MiqAeMockObject.new('service'                         => svc_service,
+                                         'service_template_provision_task' => task,
+                                         'service_action'                  => 'fred')
+    end
+    it_behaves_like "execute_errors"
   end
 
   context "execute" do

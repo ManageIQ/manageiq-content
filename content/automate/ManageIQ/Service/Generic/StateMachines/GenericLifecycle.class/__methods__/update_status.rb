@@ -22,12 +22,7 @@ module ManageIQ
               private
 
               def update_task(message, status)
-                return unless service_action == 'Provision'
-                @handle.root["service_template_provision_task"].tap do |task|
-                  if task.nil?
-                    @handle.log(:error, 'service_template_provision_task is nil')
-                    raise "service_template_provision_task not found"
-                  end
+                @handle.root['service_template_provision_task'].try do |task|
                   task.miq_request.user_message = message
                   task.message = status
                 end
@@ -57,7 +52,7 @@ module ManageIQ
 
                 updated_message = String.new
                 updated_message << "Server [#{@handle.root['miq_server'].name}] "
-                updated_message << "Service [#{service.name}] "
+                updated_message << "Service [#{service.name}] #{service_action} "
                 updated_message << "Step [#{@handle.root['ae_state']}] "
                 updated_message << "Status [#{status}] "
                 updated_message << "Current Retry Number [#{@handle.root['ae_state_retries']}]"\

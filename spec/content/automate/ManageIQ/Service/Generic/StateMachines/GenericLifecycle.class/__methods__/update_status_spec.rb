@@ -39,16 +39,6 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
     it_behaves_like "update_status_error"
   end
 
-  context "task not found" do
-    let(:errormsg) { 'service_template_provision_task not found' }
-    let(:root_object) do
-      Spec::Support::MiqAeMockObject.new('service'        => svc_service,
-                                         'service_action' => 'Provision',
-                                         'miq_server'     => svc_model_miq_server)
-    end
-    it_behaves_like "update_status_error"
-  end
-
   context "service not found" do
     let(:errormsg) { 'Service not found' }
     let(:root_object) do
@@ -73,7 +63,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
 
       described_class.new(ae_service).main
 
-      msg = "Server [#{miq_server.name}] Service [#{svc_service.name}] Step [] Status [fred] "
+      msg = "Server [#{miq_server.name}] Service [#{svc_service.name}] Provision Step [] Status [fred] "
       expect(svc_model_request.reload.message).to eq(msg)
     end
   end
