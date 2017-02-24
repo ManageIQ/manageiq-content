@@ -50,15 +50,20 @@ module ManageIQ
                 # Get status from input field status
                 status = @handle.inputs['status']
 
-                updated_message = String.new
-                updated_message << "Server [#{@handle.root['miq_server'].name}] "
-                updated_message << "Service [#{service.name}] #{service_action} "
-                updated_message << "Step [#{@handle.root['ae_state']}] "
-                updated_message << "Status [#{status}] "
-                updated_message << "Current Retry Number [#{@handle.root['ae_state_retries']}]"\
+                updated_message = "Server [#{@handle.root['miq_server'].name}] "
+                updated_message += "Service [#{service.name}] #{service_action} "
+                updated_message += "Step [#{@handle.root['ae_state']}] "
+                updated_message += "Status [#{status}] "
+                updated_message += "Current Retry Number [#{@handle.root['ae_state_retries']}]"\
                                     if @handle.root['ae_result'] == 'retry'
                 @handle.log(:info, "Status message: #{updated_message} ")
                 update_task(updated_message, status)
+
+                if @handle.root['ae_result'] == "error"
+                  @handle.create_notification(:level   => "error",
+                                              :subject => service,
+                                              :message => "Generic Service Error: #{updated_message}")
+                end
               end
             end
           end

@@ -48,3 +48,4 @@ object:
       on_error: update_status(status => 'Error Emailing Owner')
   - finish:
       value: METHOD::finish
+      on_exit: update_status(status => "${/#service_action} Completed Successfully")
