@@ -57,7 +57,7 @@ module ManageIQ
                 instance_id = prov.get_option(:instance_type)
                 raise "Instance Type not specified" if instance_id.nil?
 
-                flavor = $evm.vmdb('flavor').find(instance_id)
+                flavor = @handle.vmdb('flavor').find_by(:id => instance_id)
                 @handle.log("debug", "instance id=#{instance_id} name=#{flavor.try(:name)}")
 
                 return prov, image, flavor
