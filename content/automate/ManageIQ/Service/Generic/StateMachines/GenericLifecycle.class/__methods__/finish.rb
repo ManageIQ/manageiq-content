@@ -13,11 +13,29 @@ module ManageIQ
               end
 
               def main
-                @handle.log("info", "finish starting")
+                msg = "Service: #{service.name} #{service_action} Finished"
+                @handle.log('info', msg)
+                @handle.create_notification(:level => 'info', :subject => service, :message => msg)
+              end
 
-                @handle.root['ae_result'] = 'ok'
+              private
 
-                @handle.log("info", "finish ending")
+              def service
+                @handle.root["service"].tap do |service|
+                  if service.nil?
+                    @handle.log(:error, 'Service is nil')
+                    raise 'Service not found'
+                  end
+                end
+              end
+
+              def service_action
+                @handle.root["service_action"].tap do |action|
+                  unless %w(Provision Retirement Reconfigure).include?(action)
+                    @handle.log(:error, "Invalid service action: #{action}")
+                    raise "Invalid service_action"
+                  end
+                end
               end
             end
           end

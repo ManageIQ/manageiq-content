@@ -59,6 +59,12 @@ module ManageIQ
                                     if @handle.root['ae_result'] == 'retry'
                 @handle.log(:info, "Status message: #{updated_message} ")
                 update_task(updated_message, status)
+
+                if @handle.root['ae_result'] == "error"
+                  @handle.create_notification(:level   => "error",
+                                              :subject => service,
+                                              :message => "Generic Service Error: #{updated_message}")
+                end
               end
             end
           end
