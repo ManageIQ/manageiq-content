@@ -7,11 +7,11 @@ end
 entry_point = service.automate_retirement_entrypoint
 $evm.log("info", "Starting get_retirement_entrypoint: #{entry_point}")
 if entry_point.blank?
-  if service.type == "ServiceAnsiblePlaybook"
-    entry_point = '/Service/Generic/StateMachines/GenericLifecycle/retire'
-  else
-    entry_point = '/Service/Retirement/StateMachines/ServiceRetirement/Default'
-  end
+  entry_point = if service.type == "ServiceAnsiblePlaybook"
+                  '/Service/Generic/StateMachines/GenericLifecycle/retire'
+                else
+                  '/Service/Retirement/StateMachines/ServiceRetirement/Default'
+                end
   $evm.log("info", "get_retirement_entrypoint not specified using default: #{entry_point}")
 end
 
