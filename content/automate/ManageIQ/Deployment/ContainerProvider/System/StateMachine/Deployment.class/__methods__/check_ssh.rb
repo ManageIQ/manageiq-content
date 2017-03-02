@@ -1,6 +1,6 @@
 def check_ssh
   $evm.log(:info, "**************** #{$evm.root['ae_state']} ****************")
-  $evm.log(:info, "tyring to ssh to: #{$evm.root['deployment_master']}")
+  $evm.log(:info, "trying to ssh to: #{$evm.root['deployment_master']}")
   $evm.root['container_deployment'] ||= $evm.vmdb(:container_deployment).find(
     $evm.root['automation_task'].automation_request.options[:attrs][:deployment_id]
   )
