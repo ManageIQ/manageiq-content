@@ -9,13 +9,15 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
   let(:task) { FactoryGirl.create(:service_template_provision_task, :destination => service_ansible_tower, :miq_request => request) }
   let(:svc_task) { MiqAeMethodService::MiqAeServiceServiceTemplateProvisionTask.find(task.id) }
   let(:svc_service) { MiqAeMethodService::MiqAeServiceServiceAnsibleTower.find(service_ansible_tower.id) }
-  let(:root_object) { Spec::Support::MiqAeMockObject.new('service_template_provision_task' => svc_task) }
+  let(:root_object) { Spec::Support::MiqAeMockObject.new('service' => svc_service, 'service_action' => 'Provision') }
   let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
 
   context "Start" do
     it "creates notification " do
-      expect(ae_service).to receive(:create_notification)
+      allow(ae_service).to receive(:create_notification)
+
       described_class.new(ae_service).main
+      expect(ae_service.root['ae_result']).to eq("ok")
     end
   end
 end
