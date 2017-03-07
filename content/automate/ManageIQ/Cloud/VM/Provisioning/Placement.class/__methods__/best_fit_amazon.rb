@@ -24,32 +24,63 @@
 # For other instance types EC2 provides the defaults.
 # This method checks the instance types and sets the VPC and subnet for T2 and C4 instances
 #
+module ManageIQ
+  module Automate
+    module Cloud
+      module VM
+        module Provisioning
+          module Placement
+            class BestFitAmazon
+              def initialize(handle = $evm)
+                @handle = handle
+              end
 
-def set_property(prov, image, list_method, property)
-  return if prov.get_option(property)
-  result = prov.send(list_method)
-  $evm.log("debug", "#{property} #{result.inspect}")
-  object = result.try(:first)
-  return unless object
+              def main
+                prov, image, flavor = variables
 
-  prov.send("set_#{property}", object)
-  $evm.log("info", "Image=[#{image.name}] #{property}=[#{object.name}]")
+                if flavor.try(:cloud_subnet_required)
+                  @handle.log("info", "Setting VPC parameters for instance type=[#{flavor.name}]")
+                  set_property(prov, image, :eligible_cloud_networks, :cloud_network)
+                  set_property(prov, image, :eligible_cloud_subnets,  :cloud_subnet)
+                else
+                  @handle.log("info", "Using EC2 for default placement of instance type=[#{flavor.try(:name)}]")
+                end
+              end
+
+              private
+
+              def variables
+                prov  = @handle.root["miq_provision"]
+                image = prov.try(:vm_template)
+                raise "Image not specified" if image.nil?
+
+                instance_id = prov.get_option(:instance_type)
+                raise "Instance Type not specified" if instance_id.nil?
+
+                flavor = @handle.vmdb('flavor').find_by(:id => instance_id)
+                @handle.log("debug", "instance id=#{instance_id} name=#{flavor.try(:name)}")
+
+                return prov, image, flavor
+              end
+
+              def set_property(prov, image, list_method, property)
+                return if prov.get_option(property)
+                result = prov.send(list_method)
+                @handle.log("debug", "#{property} #{result.inspect}")
+                object = result.try(:first)
+                return unless object
+
+                prov.send("set_#{property}", object)
+                @handle.log("info", "Image=[#{image.name}] #{property}=[#{object.name}]")
+              end
+            end
+          end
+        end
+      end
+    end
+  end
 end
 
-# Get variables
-prov     = $evm.root["miq_provision"]
-image    = prov.vm_template
-raise "Image not specified" if image.nil?
-
-instance_id    = prov.get_option(:instance_type)
-raise "Instance Type not specified" if instance_id.nil?
-flavor         = $evm.vmdb('flavor').find(instance_id)
-$evm.log("debug", "instance id=#{instance_id} name=#{flavor.try(:name)}")
-
-if flavor.try(:cloud_subnet_required)
-  $evm.log("info", "Setting VPC parameters for instance type=[#{flavor.name}]")
-  set_property(prov, image, :eligible_cloud_networks, :cloud_network)
-  set_property(prov, image, :eligible_cloud_subnets,  :cloud_subnet)
-else
-  $evm.log("info", "Using EC2 for default placement of instance type=[#{flavor.try(:name)}]")
+if __FILE__ == $PROGRAM_NAME
+  ManageIQ::Automate::Cloud::VM::Provisioning::Placement::BestFitAmazon.new.main
 end
