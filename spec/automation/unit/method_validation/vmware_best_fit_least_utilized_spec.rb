@@ -53,7 +53,7 @@ describe "Vmware_best_fit_least_utilized" do
 
         ws.root
         miq_provision.reload
-        expect(miq_provision.options[:placement_host_name]).to eq([host1.id, host1.name])
+        expect(miq_provision.options[:placement_host_name]).to eq([host1.id, host1.hostname])
         expect(miq_provision.options[:placement_ds_name]).to   eq([host1.storages[1].id, host1.storages[1].name])
       end
 
@@ -80,7 +80,7 @@ describe "Vmware_best_fit_least_utilized" do
 
         ws.root
         miq_provision.reload
-        expect(miq_provision.options[:placement_host_name]).to eq([host1.id, host1.name])
+        expect(miq_provision.options[:placement_host_name]).to eq([host1.id, host1.hostname])
         expect(miq_provision.options[:placement_ds_name]).to   eq([host1.storages[1].id, host1.storages[1].name])
       end
     end
