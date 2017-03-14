@@ -1,0 +1,27 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: retire_basic_resource
+    inherits: 
+    description: 
+  fields:
+  - start:
+      value: "/Service/Retirement/StateMachines/Methods/StartRetirement"
+      on_entry: update_status(status => 'Processing StartRetirement')
+      on_exit: update_status(status => 'Processed StartRetirement')
+      on_error: update_status(status => 'Error Processing StartRetirement')
+  - pre1:
+      value: "/Service/Retirement/StateMachines/Methods/RetireService"
+      on_entry: update_status(status => 'Retiring Service')
+      on_exit: update_status(status => 'Retired Service')
+      on_error: update_status(status => 'Error Retiring Service')
+  - pre2:
+      value: "/Service/Retirement/StateMachines/Methods/CheckServiceRetired"
+      on_entry: update_status(status => 'Checking Service retirement')
+      on_exit: update_status(status => 'Checked Service retirement')
+      on_error: update_status(status => 'Error Checking Service retirement')
+  - finish:
+      value: "/Service/Retirement/StateMachines/Methods/FinishRetirement"
