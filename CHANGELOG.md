@@ -2,7 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased - as of Sprint 56 end 2017-02-27
+## Unreleased - as of Sprint 57 end 2017-03-27
+
+### Added
+- Generic Service State Machine - new retirement instances. [(#72)](https://github.com/ManageIQ/manageiq-content/pull/72)
+- Add Automate modeling for Embedded Ansible Events. [(#69)](https://github.com/ManageIQ/manageiq-content/pull/69)
+- Add Automate modeling for External Ansible Tower Events. [(#68)](https://github.com/ManageIQ/manageiq-content/pull/68)
+- Change default behavior of Service Retirement to not remove the Service [(#76)](https://github.com/ManageIQ/manageiq-content/pull/76)
+
+### Fixed
+- Fixes VM extend retirement [(#62)](https://github.com/ManageIQ/manageiq-content/pull/62)
+- Disabled DeleteFromVMDB in 2 places [(#55)](https://github.com/ManageIQ/manageiq-content/pull/55)
+
+## Unreleased - as of Sprint 56 end 2017-03-13
 
 ### Added
 - Generic Service State Machine - added notifications and improved logging. [(#61)](https://github.com/ManageIQ/manageiq-content/pull/61)
