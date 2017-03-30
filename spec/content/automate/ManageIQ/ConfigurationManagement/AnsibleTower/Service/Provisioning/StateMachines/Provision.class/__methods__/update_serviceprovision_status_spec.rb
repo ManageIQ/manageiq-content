@@ -58,6 +58,12 @@ describe ManageIQ::Automate::ConfigurationManagement::AnsibleTower::Service::
       msg = "Server [#{miq_server.name}] Service [#{service_orchestration.name}] Step [] Status [fred] Message [] "
       expect(svc_model_request.reload.message).to eq(msg)
     end
+
+    it "creates notification due to ae_result is 'error'" do
+      ae_service.root['ae_result'] = "error"
+      expect(ae_service).to receive(:create_notification)
+      described_class.new(ae_service).main
+    end
   end
 
   context "without a stp request object" do
