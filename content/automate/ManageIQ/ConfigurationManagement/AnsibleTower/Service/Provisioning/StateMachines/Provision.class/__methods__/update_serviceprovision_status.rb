@@ -22,7 +22,13 @@ module ManageIQ
                     raise "Service Template Provision Task not provided"
                   end
 
-                  update_status_message(prov, @handle.inputs['status'])
+                  updated_message = update_status_message(prov, @handle.inputs['status'])
+
+                  if @handle.root['ae_result'] == 'error'
+                    @handle.create_notification(:level   => 'error',
+                                                :subject => prov.miq_request,
+                                                :message => "Ansible Tower Provision Error: #{updated_message}")
+                  end
                 end
 
                 private
