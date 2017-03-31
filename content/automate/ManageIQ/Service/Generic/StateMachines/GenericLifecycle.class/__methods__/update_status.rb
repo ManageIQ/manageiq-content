@@ -46,10 +46,11 @@ module ManageIQ
                 end
               end
 
-              def update_status(service)
-                # Get status from input field status
-                status = @handle.inputs['status']
+              def error
+                @handle.root['ae_result'] == "error"
+              end
 
+              def updated_message(service, status)
                 updated_message = "Server [#{@handle.root['miq_server'].name}] "
                 updated_message += "Service [#{service.name}] #{service_action} "
                 updated_message += "Step [#{@handle.root['ae_state']}] "
@@ -57,13 +58,22 @@ module ManageIQ
                 updated_message += "Current Retry Number [#{@handle.root['ae_state_retries']}]"\
                                     if @handle.root['ae_result'] == 'retry'
                 @handle.log(:info, "Status message: #{updated_message} ")
-                update_task(updated_message, status)
+                updated_message
+              end
 
-                if @handle.root['ae_result'] == "error"
-                  @handle.create_notification(:level   => "error",
-                                              :subject => service,
-                                              :message => "Generic Service Error: #{updated_message}")
-                end
+              def error_handling(service, message)
+                @handle.create_notification(:level   => "error",
+                                            :subject => service,
+                                            :message => "Generic Service Error: #{message}")
+                service.on_error(service_action)
+              end
+
+              def update_status(service)
+                # Get status from input field status
+                status = @handle.inputs['status']
+                message = updated_message(service, status)
+                update_task(message, status)
+                error_handling(service, message) if error
               end
             end
           end
