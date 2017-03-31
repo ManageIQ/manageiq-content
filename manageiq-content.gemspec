@@ -15,6 +15,8 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{content,lib}/**/*", "LICENSE.txt", "Rakefile", "README.md"]
 
+  s.add_runtime_dependency "savon", "~>2.11.1" # Because users expect it to be there for custom code
+
   s.add_development_dependency "codeclimate-test-reporter"
   s.add_development_dependency "simplecov"
 end
