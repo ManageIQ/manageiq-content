@@ -155,8 +155,8 @@ if !limits_set(@max_limit) && !limits_set(@warn_limit)
   exit MIQ_OK
 end
 
-unless $evm.root['bypass_quota'].nil?
-  if $evm.root['bypass_quota'] == true
+unless $evm.root['check_quota'].nil?
+  if $evm.root['check_quota'] == false
     $evm.log(:info, "VmReconfigureRequest: Bypassing quota check.")
     $evm.root['ae_result'] = 'ok'
     exit MIQ_OK

@@ -128,18 +128,18 @@ describe "Quota Validation" do
     end
   end
 
-  context "bypass_quota for VMReconfigure" do
-    it "bypass_quota false " do
+  context "check_quota for VMReconfigure" do
+    it "check_quota false " do
       ws = run_automate_method
       expect(ws.root['ae_result']).to eq('ok')
-      expect(ws.root['bypass_quota']).to be_nil
+      expect(ws.root['check_quota']).to be_nil
     end
 
-    it "bypass_quota true " do
-      @extra_attrs = "bypass_quota=true"
+    it "check_quota true " do
+      @extra_attrs = "check_quota=true"
       ws = run_automate_method
       expect(ws.root['ae_result']).to eq('ok')
-      expect(ws.root['bypass_quota']).to eq('true')
+      expect(ws.root['check_quota']).to eq('true')
     end
   end
 end
