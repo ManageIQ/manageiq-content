@@ -4,7 +4,7 @@ version: 1.0
 object:
   attributes:
     name: ConfigurationManagement
-    description: 
-    display_name: 
+    description: Deprecated please use AutomationManagement
+    display_name: ConfigurationManagement (Deprecated)
     priority: 
     enabled: 
