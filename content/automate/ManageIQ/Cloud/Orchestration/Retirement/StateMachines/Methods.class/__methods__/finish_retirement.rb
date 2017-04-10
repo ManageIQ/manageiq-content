@@ -1,6 +1,31 @@
 #
 # Description: This method marks the stack as retired
 #
+module ManageIQ
+  module Automate
+    module Cloud
+      module Orchestration
+        module Retirement
+          module StateMachines
+            module Methods
+              class FinishRetirement
+                def initialize(handle = $evm)
+                  @handle = handle
+                end
 
-stack = $evm.root['orchestration_stack']
-stack.finish_retirement if stack
+                def main
+                  stack = @handle.root['orchestration_stack']
+                  stack.finish_retirement if stack
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+if __FILE__ == $PROGRAM_NAME
+  ManageIQ::Automate::Cloud::Orchestration::Retirement::StateMachines::Methods::FinishRetirement.new.main
+end
