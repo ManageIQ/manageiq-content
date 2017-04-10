@@ -9,6 +9,7 @@ class AnsibleTowerCheckProvisioned
   end
 
   def main
+    @handle.log("warn", "[DEPRECATION] This method will be deprecated. Please use AutomationManagement method instead.")
     @handle.log("info", "Checking status of Ansible Tower Provisioning")
     check_provisioned(task, service)
   end

@@ -15,6 +15,7 @@ module ManageIQ
                 end
 
                 def main
+                  @handle.log("warn", "[DEPRECATION] This method will be deprecated. Please use AutomationManagement method instead.")
                   prov = @handle.root['service_template_provision_task']
 
                   if prov.nil?

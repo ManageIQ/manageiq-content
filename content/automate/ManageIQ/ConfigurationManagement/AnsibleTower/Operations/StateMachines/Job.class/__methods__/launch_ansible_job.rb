@@ -16,6 +16,7 @@ class LaunchAnsibleJob
   end
 
   def main
+    @handle.log("warn", "[DEPRECATION] This method will be deprecated. Please use AutomationManagement method instead.")
     run(job_template, target)
   end
 

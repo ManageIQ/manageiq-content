@@ -8,6 +8,7 @@ class WaitForCompletion
   end
 
   def main
+    @handle.log("warn", "[DEPRECATION] This method will be deprecated. Please use AutomationManagement method instead.")
     check_status(ansible_job)
   end
 

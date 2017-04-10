@@ -9,6 +9,7 @@ class WaitForIP
   end
 
   def main
+    @handle.log("warn", "[DEPRECATION] This method will be deprecated. Please use AutomationManagement method instead.")
     vm = @handle.root["miq_provision"].try(:destination)
     vm ||= @handle.root["vm"]
     vm ? check_ip_addr_available(vm) : vm_not_found
