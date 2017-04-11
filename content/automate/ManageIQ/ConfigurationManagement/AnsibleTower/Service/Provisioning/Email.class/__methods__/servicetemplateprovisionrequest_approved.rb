@@ -97,7 +97,7 @@ end
 # Get miq_request from root
 miq_request = $evm.root['miq_request']
 raise "miq_request missing" if miq_request.nil?
-$evm.log("warn", "[DEPRECATION] This method will be deprecated. Please use AutomationManagement method instead.")
+$evm.log("warn", "[DEPRECATION] This method will be deprecated. Please use similarly named method from AutomationManagement namespace.")
 $evm.log("info", "Detected Request:<#{miq_request.id}> with Approval State:<#{miq_request.approval_state}>")
 
 # Override the default appliance IP Address below

@@ -7,7 +7,7 @@ class AnsibleTowerProvision
   end
 
   def main
-    @handle.log("warn", "[DEPRECATION] This method will be deprecated. Please use AutomationManagement method instead.")
+    @handle.log("warn", "[DEPRECATION] This method will be deprecated. Please use similarly named method from AutomationManagement namespace.")
     @handle.log("info", "Starting Ansible Tower Provisioning")
     run(task, service)
   end
