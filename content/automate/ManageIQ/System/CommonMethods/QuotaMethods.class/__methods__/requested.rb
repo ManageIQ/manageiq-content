@@ -50,6 +50,10 @@ def service_prov_option(prov_option, options_array = [])
   options_array
 end
 
+def vendor
+  @reconfigure_request ? @vm.vendor : @miq_request.source.vendor
+end
+
 def service_prov_option_value(prov_option, resource, options_array = [])
   args_hash = {:prov_option   => prov_option,
                :options_array => options_array,
@@ -91,11 +95,7 @@ def vm_prov_option_value(prov_option, options_array = [])
 
   case prov_option
   when :vm_memory
-    if @reconfigure_request
-      requested_memory(args_hash, @vm.vendor)
-    else
-      requested_memory(args_hash, @miq_request.source.vendor)
-    end
+    requested_memory(args_hash, vendor)
   when :number_of_cpus
     requested_number_of_cpus(args_hash)
   when :storage
@@ -117,7 +117,7 @@ def requested_memory(args_hash, vendor)
 
     $evm.log(:info, "vm_memory:         #{@vm.hardware.memory_mb.to_i.megabytes}")
     $evm.log(:info, "requested_memory:  #{args_hash[:prov_value].to_i}")
-    @bypass_quota = false if args_hash[:prov_value].to_i > 0
+    @check_quota = true if args_hash[:prov_value].to_i > 0
   end
   request_hash_value(args_hash)
 end
@@ -136,7 +136,7 @@ def requested_number_of_cpus(args_hash)
     $evm.log(:info, "vm_number_of_cpus:         #{@vm.hardware.cpu_total_cores.to_i \
       * @vm.hardware.cpu_cores_per_socket.to_i}")
     $evm.log(:info, "requested_number_of_cpus:  #{args_hash[:prov_value].to_i}")
-    @bypass_quota = false if args_hash[:prov_value].to_i > 0
+    @check_quota = true if args_hash[:prov_value].to_i > 0
   end
   request_hash_value(args_hash)
 end
@@ -173,7 +173,7 @@ def requested_storage(args_hash)
 
   if @reconfigure_request
     $evm.log(:info, "VM Reconfigure storage change: #{args_hash[:prov_value].to_s(:human_size)}")
-    @bypass_quota = false if args_hash[:prov_value].to_i > 0
+    @check_quota = true if args_hash[:prov_value].to_i > 0
   end
   request_hash_value(args_hash)
 end
@@ -320,11 +320,11 @@ end
 
 @reconfigure_request = @miq_request.type == "VmReconfigureRequest"
 if @reconfigure_request
-  @bypass_quota = true # default, unless additional quota is requested
+  @check_quota = false # default, unless additional quota is requested
   vm_id = @miq_request.options[:src_ids]
   @vm = $evm.vmdb(:vm).find_by(:id => vm_id)
 end
 
 $evm.root['quota_requested'] = calculate_requested(options_hash)
 
-$evm.root['bypass_quota'] = @bypass_quota unless @bypass_quota.nil?
+$evm.root['check_quota'] = @check_quota unless @check_quota.nil?
