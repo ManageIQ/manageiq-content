@@ -50,7 +50,7 @@ def service_prov_option(prov_option, options_array = [])
   options_array
 end
 
-def vm_vendor
+def vendor
   @reconfigure_request ? @vm.vendor : @miq_request.source.vendor
 end
 
@@ -95,7 +95,7 @@ def vm_prov_option_value(prov_option, options_array = [])
 
   case prov_option
   when :vm_memory
-    requested_memory(args_hash, vm_vendor)
+    requested_memory(args_hash, vendor)
   when :number_of_cpus
     requested_number_of_cpus(args_hash)
   when :storage
