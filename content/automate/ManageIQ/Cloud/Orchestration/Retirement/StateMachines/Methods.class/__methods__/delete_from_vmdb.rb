@@ -1,11 +1,37 @@
 #
 # Description: This method removes the stack from the VMDB database
 #
+module ManageIQ
+  module Automate
+    module Cloud
+      module Orchestration
+        module Retirement
+          module StateMachines
+            module Methods
+              class DeleteFromVmdb
 
-stack = $evm.root['orchestration_stack']
+                def initialize(handle = $evm)
+                  @handle = handle
+                end
 
-if stack && !$evm.get_state_var('stack_exists_in_provider')
-  $evm.log('info', "Removing stack <#{stack.name}> from VMDB")
-  stack.remove_from_vmdb
-  $evm.root['orchestration_stack'] = nil
+                def main
+                  stack = @handle.root['orchestration_stack']
+
+                  if stack && !@handle.get_state_var('stack_exists_in_provider')
+                    @handle.log('info', "Removing stack <#{stack.name}> from VMDB")
+                    stack.remove_from_vmdb
+                    @handle.root['orchestration_stack'] = nil
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+if __FILE__ == $PROGRAM_NAME
+  ManageIQ::Automate::Cloud::Orchestration::Retirement::StateMachines::Methods::DeleteFromVmdb.new.main
 end
