@@ -158,12 +158,12 @@ def requested_storage(args_hash)
     if args_hash[:resource].options[:disk_remove]
       args_hash[:resource].options[:disk_remove].each do |disk|
         $evm.log(:info, "Removing disk: #{disk.inspect}")
-        if disk_num == disk[:disk_name].match(/_(\d).vmdk/)
-          disk_n_number = "disk_#{disk_num[1].succ}_size"
-          disk_n_size   = @vm.send(disk_n_number.to_s)
-          $evm.log(:info, "Removing disk size: #{disk_n_size.to_s(:human_size)}")
-          args_hash[:prov_value] -= disk_n_size.to_i
-        end
+        disk_num = disk[:disk_name].match(/_(\d).vmdk/)
+        next unless disk_num
+        disk_n_number = "disk_#{disk_num[1].succ}_size"
+        disk_n_size   = @vm.send(disk_n_number.to_s)
+        $evm.log(:info, "Removing disk size: #{disk_n_size.to_s(:human_size)}") if disk_n_size
+        args_hash[:prov_value] -= disk_n_size.to_i
       end
     end
   else
