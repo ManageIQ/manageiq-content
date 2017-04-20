@@ -208,7 +208,7 @@ object:
       condition: 
       on_entry: 
       on_exit: update_provision_status(status => 'Creating VM')
-      on_error: update_provision_status(status => 'Error Provisioning Instance')
+      on_error: update_provision_status(status => 'Error Creating VM')
       max_retries: '100'
       max_time: 
   - field:
