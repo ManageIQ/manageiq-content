@@ -29,7 +29,7 @@ module ManageIQ
                 end
 
                 unless @handle.root['ae_reason'].blank?
-                  task.miq_request.user_message = @handle.root['ae_reason'].truncate(255)
+                  task.miq_request.user_message = @handle.root['ae_reason']
                 end
               end
 

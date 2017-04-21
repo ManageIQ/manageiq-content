@@ -25,7 +25,7 @@ module ManageIQ
                 rescue => err
                   @handle.root['ae_result'] = 'error'
                   @handle.root['ae_reason'] = err.message
-                  task.miq_request.user_message = err.message.truncate(255)
+                  task.miq_request.user_message = err.message
                   @handle.log("error", "Stack #{service.stack_name} creation failed. Reason: #{err.message}")
                 end
               end
