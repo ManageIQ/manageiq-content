@@ -24,8 +24,7 @@ module ManageIQ
               private
 
               def check_retire_extend(vm)
-                vm_retire_extend_days = nil
-                vm_retire_extend_days ||= @handle.object['vm_retire_extend_days']
+                vm_retire_extend_days = @handle.object['vm_retire_extend_days']
                 raise "ERROR - vm_retire_extend_days not found!" if vm_retire_extend_days.nil?
 
                 @handle.log("info", "Number of days to extend: <#{vm_retire_extend_days}>")
@@ -51,7 +50,6 @@ module ManageIQ
                 @handle.log("info", "Inspecting retirement vm: <#{vm.retirement_state.try}>")
 
                 evm_owner_id = vm.attributes['evm_owner_id']
-                owner = nil
                 owner = @handle.vmdb('user', evm_owner_id) unless evm_owner_id.nil?
                 @handle.log("info", "Inspecting VM Owner: #{owner.inspect}")
 
@@ -61,12 +59,8 @@ module ManageIQ
                        @handle.object['to_email_address']
                      end
 
-                from = nil
-                from ||= @handle.object['from_email_address']
-
-                signature = nil
-                signature ||= @handle.object['signature']
-
+                from = @handle.object['from_email_address']
+                signature = @handle.object['signature']
                 subject = "VM Retirement Extended for #{vm_name}"
 
                 body = "Hello, "
