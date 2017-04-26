@@ -57,7 +57,7 @@ unless max_cpus.blank?
   end
 
   if desired_cpus > max_cpus.to_i
-    $evm.log("info", "Auto-Approval Threshold(Warning): Number of vCPUs requested:<#{desired_cpus}> exceeds:<#{max_cpus}>")
+    $evm.log('warn', "Auto-Approval Threshold(Warning): Number of vCPUs requested:<#{desired_cpus}> exceeds:<#{max_cpus}>")
     approval_req = true
     reason1 = "Requested CPUs #{desired_cpus} limit is #{max_cpus}"
   end
@@ -94,7 +94,7 @@ end
 unless max_vms.blank?
   desired_nvms = prov_resource.get_option(:number_of_vms)
   if desired_nvms && (desired_nvms.to_i > max_vms.to_i)
-    $evm.log("info", "Auto-Approval Threshold(Warning): Number of VMs requested:<#{desired_nvms}> exceeds:<#{max_vms}>")
+    $evm.log('warn', "Auto-Approval Threshold(Warning): Number of VMs requested:<#{desired_nvms}> exceeds:<#{max_vms}>")
     approval_req = true
     reason3 = "Requested VMs #{desired_nvms} limit is #{max_vms}"
   end
@@ -131,7 +131,7 @@ end
 unless max_memory.blank?
   desired_mem = prov_resource.get_option(:vm_memory)
   if desired_mem && (desired_mem.to_i > max_memory.to_i)
-    $evm.log("info", "Auto-Approval Threshold(Warning): Number of vRAM requested:<#{desired_mem}> exceeds:<#{max_memory}>")
+    $evm.log('warn', "Auto-Approval Threshold(Warning): Number of vRAM requested:<#{desired_mem}> exceeds:<#{max_memory}>")
     approval_req = true
     reason2 = "Requested Memory #{desired_mem}MB limit is #{max_memory}MB"
   end
@@ -168,7 +168,7 @@ end
 unless max_retirement_days.blank?
   desired_retirement_days = prov_resource.get_retirement_days
   if desired_retirement_days && (desired_retirement_days.to_i > max_retirement_days.to_i)
-    $evm.log("info", "Auto-Approval Threshold(Warning): Number of Retirement Days requested:<#{desired_retirement_days}> exceeds:<#{max_retirement_days}>")
+    $evm.log('warn', "Auto-Approval Threshold(Warning): Number of Retirement Days requested:<#{desired_retirement_days}> exceeds:<#{max_retirement_days}>")
     approval_req = true
     reason4 = "Requested Retirement Days #{desired_retirement_days} limit is #{max_retirement_days}"
   end
