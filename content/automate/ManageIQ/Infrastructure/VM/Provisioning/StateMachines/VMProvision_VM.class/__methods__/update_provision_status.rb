@@ -23,4 +23,5 @@ prov.message = status
 if $evm.root['ae_result'] == "error"
   $evm.create_notification(:level => "error", :subject => prov.miq_request, \
                            :message => "VM Provision Error: #{updated_message}")
+  @handle.log(:error, "VM Provision Error: #{updated_message}")
 end
