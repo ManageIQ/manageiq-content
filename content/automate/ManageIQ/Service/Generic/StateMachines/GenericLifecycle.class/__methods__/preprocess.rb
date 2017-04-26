@@ -24,7 +24,7 @@ module ManageIQ
                 rescue => err
                   @handle.root['ae_result'] = 'error'
                   @handle.root['ae_reason'] = err.message
-                  @handle.log(:info, "Error in preprocess: #{err.message}")
+                  @handle.log(:error, "Error in preprocess: #{err.message}")
                   update_task(err.message)
                 end
               end

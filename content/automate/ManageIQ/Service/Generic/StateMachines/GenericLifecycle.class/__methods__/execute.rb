@@ -22,7 +22,7 @@ module ManageIQ
                 rescue => err
                   @handle.root['ae_result'] = 'error'
                   @handle.root['ae_reason'] = err.message
-                  @handle.log("info", "Error in execute: #{err.message}")
+                  @handle.log('error', "Error in execute: #{err.message}")
                   update_task(err.message)
                 end
               end
