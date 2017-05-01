@@ -4,3 +4,4 @@
 
 service = $evm.root['service']
 service.finish_retirement if service
+$evm.create_notification(:type => :service_retired, :subject => service) if service

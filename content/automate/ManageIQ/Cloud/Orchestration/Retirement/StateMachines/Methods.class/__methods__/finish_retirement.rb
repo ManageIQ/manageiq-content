@@ -16,6 +16,7 @@ module ManageIQ
                 def main
                   stack = @handle.root['orchestration_stack']
                   stack.finish_retirement if stack
+                  @handle.create_notification(:type => :orchestration_stack_retired, :subject => stack) if stack
                 end
               end
             end
