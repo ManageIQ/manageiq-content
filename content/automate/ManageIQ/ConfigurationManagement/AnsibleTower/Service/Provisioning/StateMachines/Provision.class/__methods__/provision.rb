@@ -32,7 +32,7 @@ class AnsibleTowerProvision
   rescue => err
     @handle.root['ae_result'] = 'error'
     @handle.root['ae_reason'] = err.message
-    task.miq_request.user_message = err.message.truncate(255)
+    task.miq_request.user_message = err.message
     @handle.log("error", "Template #{service.job_template.name} launching failed. Reason: #{err.message}")
   end
 end
