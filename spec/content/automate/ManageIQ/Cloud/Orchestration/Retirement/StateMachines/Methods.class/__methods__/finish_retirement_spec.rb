@@ -25,6 +25,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Retirement::StateMachines::Me
   end
 
   it "retires orchestration stack" do
+    expect(ae_service).to receive(:create_notification)
     described_class.new(ae_service).main
 
     expect(svc_model_stack.retired).to eq(true)
