@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## Fine Release Candidate
+
+### Fixed
+- Add notifications for finish_retirement. [(#106)](https://github.com/ManageIQ/manageiq-content/pull/106)
+
 ## Fine Beta-2
 
 ### Added
