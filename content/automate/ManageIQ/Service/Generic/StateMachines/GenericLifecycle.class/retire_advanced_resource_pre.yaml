@@ -32,7 +32,7 @@ object:
       value: METHOD::execute
       on_entry: update_status(status => 'Starting execute')
       on_exit: update_status(status => 'Ending execute')
-      on_error: update_status(status => '${/#ae_reason}')
+      on_error: update_status(status => 'Error Processing execute')
   - check_completed:
       value: METHOD::check_completed
       on_exit: update_status(status => 'Processed check_completed')
