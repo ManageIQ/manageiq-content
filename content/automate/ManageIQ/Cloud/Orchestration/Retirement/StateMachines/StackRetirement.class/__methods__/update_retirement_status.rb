@@ -21,11 +21,12 @@ $evm.log("info", "Step:<#{step}> Status_State:<#{status_state}> Status:<#{status
 stack = $evm.root['orchestration_stack']
 
 # Update Status Message
-updated_message  = "Server [#{server.name}] "
-updated_message += "Stack [#{stack.name}] " if stack
-updated_message += "Step [#{step}] "
-updated_message += "Status [#{status}] "
-updated_message += "Current Retry Number [#{$evm.root['ae_state_retries']}]" if $evm.root['ae_result'] == 'retry'
+updated_message = ''
+updated_message << "Server [#{server.name}] "
+updated_message << "Stack [#{stack.name}] " if stack
+updated_message << "Step [#{step}] "
+updated_message << "Status [#{status}] "
+updated_message << "Current Retry Number [#{$evm.root['ae_state_retries']}]" if $evm.root['ae_result'] == 'retry'
 
 # Update Status for on_error for all states other than the first state which is startretirement
 # in the retirement state machine.
