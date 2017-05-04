@@ -12,8 +12,13 @@ describe "Quota Validation" do
   end
 
   def service_attrs
-    ["MiqRequest::miq_request=#{@service_request.id}&" \
+    ["MiqRequest::miq_request=#{@service_request.id}&"\
      "vmdb_object_type=service_template_provision_request"]
+  end
+
+  def reconfigure_attrs
+    ["MiqRequest::miq_request=#{@reconfigure_request.id}&"\
+    "vmdb_object_type=VmReconfigureRequest"]
   end
 
   def check_results(requested_hash, storage, cpu, vms, memory)
@@ -68,6 +73,34 @@ describe "Quota Validation" do
       setup_model("google")
       ws = run_automate_method(vm_attrs)
       check_results(ws.root['quota_requested'], 10.gigabytes, 4, 1, 1024)
+    end
+  end
+
+  context "VmReconfig quota calculate_request" do
+    it "add 2 cpus and add 4096 memory " do
+      setup_model("vmware_reconfigure")
+      @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :cores_per_socket => 2,\
+      :number_of_sockets => 2, :number_of_cpus => 4, :vm_memory => 8192, :request_type => :vm_reconfigure,\
+      :disk_add => [{"disk_size_in_mb" => "10", "persistent" => true, "thin_provisioned" => true,\
+      "dependent" => true, "bootable" => false}]})
+      ws = run_automate_method(reconfigure_attrs)
+      check_results(ws.root['quota_requested'], 10.megabytes, 2, 0, 4096.megabytes)
+    end
+
+    it "minus 1 cpu and minus 2048 memory" do
+      setup_model("vmware_reconfigure")
+      @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :cores_per_socket => 1,\
+      :number_of_sockets => 1, :number_of_cpus => 1, :vm_memory => 2048, :request_type => :vm_reconfigure})
+      ws = run_automate_method(reconfigure_attrs)
+      check_results(ws.root['quota_requested'], 0, -1, 0, -2048.megabytes)
+    end
+
+    it "no change" do
+      setup_model("vmware_reconfigure")
+      @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :cores_per_socket => 2,\
+      :number_of_sockets => 1, :number_of_cpus => 2, :vm_memory => 4096, :request_type => :vm_reconfigure})
+      ws = run_automate_method(reconfigure_attrs)
+      check_results(ws.root['quota_requested'], 0, 0, 0, 0.megabytes)
     end
   end
 end

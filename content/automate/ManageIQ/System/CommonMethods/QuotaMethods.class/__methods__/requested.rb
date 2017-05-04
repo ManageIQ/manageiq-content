@@ -50,6 +50,10 @@ def service_prov_option(prov_option, options_array = [])
   options_array
 end
 
+def vendor
+  @reconfigure_request ? @vm.vendor : @miq_request.source.vendor
+end
+
 def service_prov_option_value(prov_option, resource, options_array = [])
   args_hash = {:prov_option   => prov_option,
                :options_array => options_array,
@@ -86,10 +90,12 @@ def vm_prov_option_value(prov_option, options_array = [])
                :flavor        => flavor_obj(@miq_request.get_option(:instance_type)),
                :number_of_vms => get_option_value(@miq_request, :number_of_vms),
                :cloud         => vm_provision_cloud?}
+  # number_of_vms doesn't exist for VmReconfigureRequest
+  args_hash[:number_of_vms] = 1 if @reconfigure_request
 
   case prov_option
   when :vm_memory
-    requested_memory(args_hash, @miq_request.source.vendor)
+    requested_memory(args_hash, vendor)
   when :number_of_cpus
     requested_number_of_cpus(args_hash)
   when :storage
@@ -104,6 +110,15 @@ def requested_memory(args_hash, vendor)
   memory = get_option_value(args_hash[:resource], :vm_memory)
   memory = memory.megabytes if %w(amazon openstack google).exclude?(vendor)
   args_hash[:prov_value] = args_hash[:number_of_vms] * memory
+
+  if @reconfigure_request && args_hash[:resource].options[:vm_memory]
+    # Account for the VM's existing memory
+    args_hash[:prov_value] = args_hash[:prov_value].to_i - @vm.hardware.memory_mb.to_i.megabytes
+
+    $evm.log(:info, "vm_memory:         #{@vm.hardware.memory_mb.to_i.megabytes}")
+    $evm.log(:info, "requested_memory:  #{args_hash[:prov_value].to_i}")
+    @check_quota = true if args_hash[:prov_value].to_i > 0
+  end
   request_hash_value(args_hash)
 end
 
@@ -112,6 +127,17 @@ def requested_number_of_cpus(args_hash)
                    get_option_value(args_hash[:resource], :cores_per_socket)
   cpu_in_request = get_option_value(args_hash[:resource], args_hash[:number_of_cpus]) if cpu_in_request.zero?
   args_hash[:prov_value] = args_hash[:number_of_vms] * cpu_in_request
+
+  if @reconfigure_request && args_hash[:resource].options[:number_of_sockets]
+    # Account for the VM's existing CPUs
+    args_hash[:prov_value] = args_hash[:prov_value].to_i - @vm.hardware.cpu_total_cores.to_i \
+      * @vm.hardware.cpu_cores_per_socket.to_i
+
+    $evm.log(:info, "vm_number_of_cpus:         #{@vm.hardware.cpu_total_cores.to_i \
+      * @vm.hardware.cpu_cores_per_socket.to_i}")
+    $evm.log(:info, "requested_number_of_cpus:  #{args_hash[:prov_value].to_i}")
+    @check_quota = true if args_hash[:prov_value].to_i > 0
+  end
   request_hash_value(args_hash)
 end
 
@@ -120,8 +146,36 @@ def vmdb_object(model, id)
 end
 
 def requested_storage(args_hash)
-  vm_size = args_hash[:resource].vm_template.provisioned_storage
-  args_hash[:prov_value] = args_hash[:number_of_vms] * vm_size
+  if @reconfigure_request
+    args_hash[:prov_value] = 0
+    # Adding/removing disks only supported for VMware
+    if args_hash[:resource].options[:disk_add]
+      args_hash[:resource].options[:disk_add].each do |disk|
+        $evm.log(:info, "Adding a disk:  #{disk.inspect}")
+        args_hash[:prov_value] += disk['disk_size_in_mb'].to_i.megabytes
+      end
+    end
+    if args_hash[:resource].options[:disk_remove]
+      args_hash[:resource].options[:disk_remove].each do |disk|
+        disk_num = disk[:disk_name].match(/_(\d).vmdk/)
+        next unless disk_num
+        $evm.log(:info, "Reconfigure Disk Removal: #{disk.inspect}")
+        disk_n_number = "disk_#{disk_num[1].succ}_size"
+        disk_n_size   = @vm.send(disk_n_number.to_s)
+        next unless disk_n_size
+        $evm.log(:info, "Disk size: #{disk_n_size.to_s(:human_size)}")
+        args_hash[:prov_value] -= disk_n_size.to_i
+      end
+    end
+  else
+    vm_size = args_hash[:resource].vm_template.provisioned_storage
+    args_hash[:prov_value] = args_hash[:number_of_vms] * vm_size
+  end
+
+  if @reconfigure_request
+    $evm.log(:info, "VM Reconfigure storage change: #{args_hash[:prov_value].to_s(:human_size)}")
+    @check_quota = true if args_hash[:prov_value].to_i > 0
+  end
   request_hash_value(args_hash)
 end
 
@@ -265,4 +319,14 @@ if @service && !@service_template.prov_type.nil? && @service_template.prov_type.
   exit MIQ_OK
 end
 
+@reconfigure_request = @miq_request.type == "VmReconfigureRequest"
+if @reconfigure_request
+  @check_quota = false # default, unless additional quota is requested
+  vm_id = @miq_request.options[:src_ids]
+  @vm = $evm.vmdb(:vm).find_by(:id => vm_id)
+  raise "VM not found" if @vm.nil?
+end
+
 $evm.root['quota_requested'] = calculate_requested(options_hash)
+
+$evm.root['check_quota'] = @check_quota unless @check_quota.nil?
