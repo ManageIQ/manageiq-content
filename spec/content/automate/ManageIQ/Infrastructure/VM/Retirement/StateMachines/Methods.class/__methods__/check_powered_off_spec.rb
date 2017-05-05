@@ -1,7 +1,6 @@
 require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::CheckPoweredOff do
-  let(:user) { FactoryGirl.create(:user_with_group) }
   let(:zone) { FactoryGirl.create(:zone) }
   let(:ems) { FactoryGirl.create(:ems_microsoft, :zone => zone) }
   let(:vm) do
@@ -42,6 +41,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::Chec
       svc_model_vm
       described_class.new(ae_service).main
       expect(ae_service.root['vm'].power_state).to eq(power_state)
+      expect(ae_service.root['ae_result']).to eq(ae_result)
     end
   end
 
@@ -60,7 +60,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::Chec
   context "suspended" do
     let(:raw_power_state) { "suspended" }
     let(:power_state) { "unknown" }
-    let(:ae_result) { "unknown" }
+    let(:ae_result) { "retry" }
     it_behaves_like "#vm power state"
   end
   context "never" do
