@@ -10,18 +10,22 @@ module ManageIQ
         module Retirement
           module Email
             class VmRetireExtend
-              def initialize(handle = @evm)
+              def initialize(handle = $evm)
                 @handle = handle
               end
 
               def main
                 @handle.log("info", "Starting vm_retire_extend")
-                vm = @handle.root['vm']
                 check_retire_extend(vm)
                 @handle.log("info", "Ending vm_retire_extend")
               end
 
               private
+
+              def vm
+                raise "ERROR - vm object not passed in" unless @handle.root['vm']
+                @handle.root['vm']
+              end
 
               def check_retire_extend(vm)
                 vm_retire_extend_days = @handle.object['vm_retire_extend_days']
@@ -47,10 +51,10 @@ module ManageIQ
                 vm.extend_retires_on(vm_retire_extend_days, vm.retires_on)
 
                 @handle.log("info", "VM: <#{vm_name}> new retirement date is #{vm.retires_on}")
-                @handle.log("info", "Inspecting retirement vm: <#{vm.retirement_state.try}>")
+                @handle.log("info", "Inspecting retirement vm: <#{vm.retirement_state}>")
 
                 evm_owner_id = vm.attributes['evm_owner_id']
-                owner = @handle.vmdb('user', evm_owner_id) unless evm_owner_id.nil?
+                owner = @handle.vmdb('user', evm_owner_id) if evm_owner_id
                 @handle.log("info", "Inspecting VM Owner: #{owner.inspect}")
 
                 to = if owner
