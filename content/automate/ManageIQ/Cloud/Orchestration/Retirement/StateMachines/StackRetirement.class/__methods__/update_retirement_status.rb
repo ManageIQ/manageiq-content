@@ -36,8 +36,10 @@ if $evm.root['ae_result'] == 'error'
     $evm.log('info', msg)
     updated_message += msg
     $evm.create_notification(:level => 'warning', :message => "Stack Retirement Warning: #{updated_message}")
+    $evm.log(:warn, "Stack Retirement Warning: #{updated_message}")
   else
     $evm.create_notification(:level => 'error', :message => "Stack Retirement Error: #{updated_message}")
+    $evm.log(:error, "Stack Retirement Error: #{updated_message}")
     stack.retirement_state = 'error' if stack
   end
 end

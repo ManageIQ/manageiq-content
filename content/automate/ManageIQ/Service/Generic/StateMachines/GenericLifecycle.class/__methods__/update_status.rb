@@ -65,6 +65,7 @@ module ManageIQ
                 @handle.create_notification(:level   => "error",
                                             :subject => service,
                                             :message => "Generic Service Error: #{message}")
+                @handle.log(:error, "Generic Service Error: #{message}")
                 service.on_error(service_action)
               end
 

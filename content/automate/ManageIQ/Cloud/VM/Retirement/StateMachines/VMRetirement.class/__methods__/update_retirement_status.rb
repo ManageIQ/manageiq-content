@@ -39,8 +39,10 @@ if $evm.root['ae_result'] == 'error'
     $evm.log('info', msg)
     updated_message += msg
     $evm.create_notification(:level => 'warning', :message => "Instance Retirement Warning: #{updated_message}")
+    $evm.log(:warn, "Instance Retirement Warning: #{updated_message}")
   else
     $evm.create_notification(:level => 'error', :message => "Instance Retirement Error: #{updated_message}")
+    $evm.log(:error, "Instance Retirement Error: #{updated_message}")
     vm.retirement_state = 'error' if vm
   end
 end

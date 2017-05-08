@@ -71,7 +71,7 @@ end
 unless max_cpus.blank?
   desired_cpus = requested_cpu(prov_resource, desired_nvms)
   if desired_cpus > max_cpus.to_i
-    $evm.log("info", "Auto-Approval Threshold(Warning): Number of vCPUs requested:<#{desired_cpus}> exceeds:<#{max_cpus}>")
+    $evm.log('warn', "Auto-Approval Threshold(Warning): Number of vCPUs requested:<#{desired_cpus}> exceeds:<#{max_cpus}>")
     approval_req = true
     reason1 = "Requested CPUs #{desired_cpus} limit is #{max_cpus}"
   end
@@ -107,7 +107,7 @@ end
 # Validate max_vms if not nil or empty
 unless max_vms.blank?
   if desired_nvms && (desired_nvms.to_i > max_vms.to_i)
-    $evm.log("info", "Auto-Approval Threshold(Warning): Number of VMs requested:<#{desired_nvms}> exceeds:<#{max_vms}>")
+    $evm.log('warn', "Auto-Approval Threshold(Warning): Number of VMs requested:<#{desired_nvms}> exceeds:<#{max_vms}>")
     approval_req = true
     reason3 = "Requested VMs #{desired_nvms} limit is #{max_vms}"
   end
@@ -182,7 +182,7 @@ end
 unless max_retirement_days.blank?
   desired_retirement_days = prov_resource.get_retirement_days
   if desired_retirement_days && (desired_retirement_days.to_i > max_retirement_days.to_i)
-    $evm.log("info", "Auto-Approval Threshold(Warning): Number of Retirement Days requested:<#{desired_retirement_days}> exceeds:<#{max_retirement_days}>")
+    $evm.log('warn', "Auto-Approval Threshold(Warning): Number of Retirement Days requested:<#{desired_retirement_days}> exceeds:<#{max_retirement_days}>")
     approval_req = true
     reason4 = "Requested Retirement Days #{desired_retirement_days} limit is #{max_retirement_days}"
   end

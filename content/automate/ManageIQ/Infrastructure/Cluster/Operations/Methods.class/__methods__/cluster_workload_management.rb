@@ -97,7 +97,7 @@ host_suspects.each do |h|
 
   host_all << {:id => h.id, :percent => host_cpu_percent, :type => :cpu}
   if host_cpu_percent >= host_cpu_threshold
-    $evm.log("info", "Host: <#{h.name}> CPU Percent: <#{host_cpu_percent}> has exceeded CPU threshold: <#{host_cpu_threshold}>")
+    $evm.log('warn', "Host: <#{h.name}> CPU Percent: <#{host_cpu_percent}> has exceeded CPU threshold: <#{host_cpu_threshold}>")
     host_exceeded << {:id => h.id, :percent => host_cpu_percent, :type => :cpu}
   else
     $evm.log("info", "Host: <#{h.name}> CPU Percent: <#{host_cpu_percent}> is within CPU threshold: <#{host_cpu_threshold}>")
@@ -108,7 +108,7 @@ host_suspects.each do |h|
 
   host_all << {:id => h.id, :percent => host_mem_percent, :type => :mem}
   if host_mem_percent >= host_mem_threshold
-    $evm.log("info", "Host: <#{h.name}> Memory percent: <#{host_mem_percent}> has exceeded Memory threshold: <#{host_mem_threshold}>")
+    $evm.log('warn', "Host: <#{h.name}> Memory percent: <#{host_mem_percent}> has exceeded Memory threshold: <#{host_mem_threshold}>")
     host_exceeded << {:id => h.id, :percent => host_mem_percent, :type => :mem}
   else
     $evm.log("info", "Host: <#{h.name}> Memory percent: <#{host_mem_percent}> is within Memory threshold: <#{host_mem_threshold}>")
