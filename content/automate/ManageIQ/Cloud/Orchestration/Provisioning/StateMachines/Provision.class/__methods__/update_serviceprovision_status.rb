@@ -27,6 +27,7 @@ module ManageIQ
                   @handle.create_notification(:level   => "error",
                                               :subject => prov.miq_request,
                                               :message => "Instance Provision Error: #{updated_message}")
+                  @handle.log(:error, "Instance Provision Error: #{updated_message}")
                 end
               end
 

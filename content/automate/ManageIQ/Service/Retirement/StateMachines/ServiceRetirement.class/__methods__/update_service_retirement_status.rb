@@ -38,8 +38,10 @@ if $evm.root['ae_result'] == 'error'
     $evm.log('info', msg)
     updated_message += msg
     $evm.create_notification(:level => 'warning', :message => "Service Retirement Warning: #{updated_message}")
+    $evm.log(:warn, "Service Retirement Warning: #{updated_message}")
   else
     $evm.create_notification(:level => 'error', :message => "Service Retirement Error: #{updated_message}")
+    $evm.log(:error, "Service Retirement Error: #{updated_message}")
     service.retirement_state = 'error' if service
   end
 end

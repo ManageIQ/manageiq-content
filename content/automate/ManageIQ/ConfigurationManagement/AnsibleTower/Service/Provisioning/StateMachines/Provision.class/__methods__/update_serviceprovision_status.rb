@@ -29,6 +29,7 @@ module ManageIQ
                     @handle.create_notification(:level   => 'error',
                                                 :subject => prov.miq_request,
                                                 :message => "Ansible Tower Provision Error: #{updated_message}")
+                    @handle.log(:error, "Ansible Tower Provision Error: #{updated_message}")
                   end
                 end
 

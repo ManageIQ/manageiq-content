@@ -29,7 +29,7 @@ def quota_exceeded?(item, used, requested, quota, warn = false)
       $evm.log(:info, "Quota #{item} warning: Used(#{display_value(item, used, 2)})" \
       " + Requested(#{display_value(item, requested, 2)}) > Quota(#{display_value(item, quota, 2)})")
     else
-      $evm.log(:info, "Quota #{item} exceeded: Used(#{display_value(item, used, 2)})" \
+      $evm.log(:warn, "Quota #{item} exceeded: Used(#{display_value(item, used, 2)})" \
       " + Requested(#{display_value(item, requested, 2)}) > Quota(#{display_value(item, quota, 2)})")
     end
     return true
@@ -48,7 +48,7 @@ end
 
 def quota_limit_exceeded(item, reason)
   key = reason_key(item, nil)
-  $evm.log(:info, "Quota maximum exceeded for key: #{key} reason: #{reason}")
+  $evm.log(:warn, "Quota maximum exceeded for key: #{key} reason: #{reason}")
   @max_exceeded[key] = reason
 end
 
