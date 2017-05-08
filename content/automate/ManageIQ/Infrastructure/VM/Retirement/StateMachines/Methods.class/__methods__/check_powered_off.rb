@@ -14,17 +14,21 @@ module ManageIQ
               end
 
               def main
-                # Get vm from root object
-                vm = @handle.root['vm']
-
                 check_power_state(vm)
               end
 
+              private
+
+              def vm
+                raise "ERROR - vm object not passed in" unless @handle.root['vm']
+                @handle.root['vm']
+              end
+
               def check_power_state(vm)
-                ems = vm.ext_management_system if vm
-                if vm.nil? || ems.nil?
-                  @handle.log('info', "Skipping check powered on for VM:<#{vm.try(:name)}> "\
-                                      "on EMS:<#{ems.try(:name)}>")
+                ems = vm.ext_management_system
+                if ems.nil?
+                  @handle.log('info', "Skipping check powered on for VM:<#{vm(:name)}> "\
+                                      "with no EMS")
                   return
                 end
 

@@ -69,26 +69,28 @@ describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::Chec
     let(:ae_result) { "error" }
     it_behaves_like "#vm power state"
   end
+
   context "exceptions" do
-    let(:root_hash) { {} }
-    let(:svc_model_service) { nil }
-    shared_examples_for "#ae_result nil" do
-      it "values" do
-        described_class.new(ae_service).main
+    context "with no ems" do
+      let(:vm) do
+        FactoryGirl.create(:vm_microsoft, :raw_power_state => "PowerOff")
+      end
+
+      it "result is nil" do
         expect(ae_service.root['ae_result']).to be_nil
       end
     end
 
-    context "no vm" do
+    context "with no vm" do
+      let(:root_hash) { {} }
+      let(:svc_model_service) { nil }
       let(:vm) { nil }
-      it_behaves_like "#ae_result nil"
-    end
 
-    context "no ems" do
-      let(:vm) do
-        FactoryGirl.create(:vm_microsoft, :raw_power_state => "PowerOff")
+      it "raises the vm is nil exception" do
+        expect { described_class.new(ae_service).main }.to raise_error(
+          'ERROR - vm object not passed in'
+        )
       end
-      it_behaves_like "#ae_result nil"
     end
   end
 end
