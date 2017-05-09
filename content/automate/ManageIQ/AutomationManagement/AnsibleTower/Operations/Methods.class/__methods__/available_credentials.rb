@@ -9,6 +9,7 @@ module ManageIQ
         module Operations
           class AvailableCredentials
             AUTH_CLASS = "ManageIQ_Providers_AutomationManager_Authentication".freeze
+            EMBEDDED_ANSIBLE_CLASS = "ManageIQ_Providers_EmbeddedAnsible_AutomationManager".freeze
             def initialize(handle = $evm)
               @handle = handle
             end
@@ -22,8 +23,13 @@ module ManageIQ
             def provider
               # for provisioning we use     service_template
               # for reconfig and retire use service
+              # Or use the embedded_ansible_provider
               service = @handle.root['service_template'] || @handle.root['service']
-              service.try(:job_template, 'Provision').try(:manager)
+              service.try(:job_template, 'Provision').try(:manager) || embedded_ansible_provider
+            end
+
+            def embedded_ansible_provider
+              @handle.vmdb(EMBEDDED_ANSIBLE_CLASS).first if @handle.inputs.fetch('embedded_ansible', false)
             end
 
             def credentials
