@@ -32,11 +32,31 @@ object:
       max_retries: 
       max_time: 
   - field:
+      aetype: attribute
+      name: embedded_ansible
+      display_name: 
+      datatype: boolean
+      priority: 2
+      owner: 
+      default_value: 'false'
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
       aetype: method
       name: execute
       display_name: 
       datatype: string
-      priority: 2
+      priority: 3
       owner: 
       default_value: 
       substitute: true
