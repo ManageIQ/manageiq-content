@@ -1,19 +1,23 @@
 require_domain_file
 
 describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::AvailableCredentials do
-  let(:ansible_tower_manager) { FactoryGirl.create(:automation_manager_ansible_tower) }
+  let(:ansible_manager) { FactoryGirl.create(:automation_manager_ansible_tower) }
   let(:job_template) do
-    FactoryGirl.create(:ansible_configuration_script, :manager => ansible_tower_manager)
+    FactoryGirl.create(:ansible_configuration_script, :manager => ansible_manager)
   end
   let(:root_object) do
     Spec::Support::MiqAeMockObject.new('service_template' => svc_service_template)
   end
+  let(:method_args) do
+    { 'credential_type' => credential_type }
+  end
+
   let(:ae_service) do
     Spec::Support::MiqAeMockService.new(root_object).tap do |service|
       current_object = Spec::Support::MiqAeMockObject.new
       current_object.parent = root_object
       service.object = current_object
-      service.inputs = {'credential_type' => credential_type }
+      service.inputs = method_args
     end
   end
   let(:ra) { {:action => 'Provision', :configuration_template => job_template} }
@@ -27,16 +31,16 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Ava
     MiqAeMethodService::MiqAeServiceServiceTemplate.find(svc_template.id)
   end
   let(:mach_cred1) do
-    FactoryGirl.create(:ansible_machine_credential, :resource => ansible_tower_manager)
+    FactoryGirl.create(:ansible_machine_credential, :resource => ansible_manager)
   end
   let(:mach_cred2) do
-    FactoryGirl.create(:ansible_machine_credential, :resource => ansible_tower_manager)
+    FactoryGirl.create(:ansible_machine_credential, :resource => ansible_manager)
   end
   let(:net_cred1) do
-    FactoryGirl.create(:ansible_network_credential, :resource => ansible_tower_manager)
+    FactoryGirl.create(:ansible_network_credential, :resource => ansible_manager)
   end
   let(:net_cred2) do
-    FactoryGirl.create(:ansible_network_credential, :resource => ansible_tower_manager)
+    FactoryGirl.create(:ansible_network_credential, :resource => ansible_manager)
   end
 
   shared_examples_for "#having only default value" do
@@ -84,6 +88,22 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Ava
         "ManageIQ::Providers::AnsibleTower::AutomationManager::NetworkCredential"
       end
       let(:valid_ids) { [net_cred1.id, net_cred2.id, nil] }
+
+      it_behaves_like "#having specific values based on credential type"
+    end
+
+    context "no service template" do
+      let(:ansible_manager) { FactoryGirl.create(:embedded_automation_manager_ansible) }
+      let(:root_object) do
+        Spec::Support::MiqAeMockObject.new
+      end
+      let(:credential_type) do
+        "ManageIQ::Providers::AnsibleTower::AutomationManager::MachineCredential"
+      end
+      let(:method_args) do
+        { 'credential_type' => credential_type, 'embedded_ansible' => true }
+      end
+      let(:valid_ids) { [mach_cred1.id, mach_cred2.id, nil] }
 
       it_behaves_like "#having specific values based on credential type"
     end
