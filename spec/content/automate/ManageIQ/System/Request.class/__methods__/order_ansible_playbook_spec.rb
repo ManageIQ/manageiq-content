@@ -51,8 +51,7 @@ describe ManageIQ::Automate::System::Request::OrderAnsiblePlaybook do
       { 'service_template_name' => svc_service_template.name,
         'dialog_param_var1'     => 'A',
         'dialog_param_var2'     => 'B',
-        'vm'                    => svc_vm
-      }
+        'vm'                    => svc_vm }
     end
 
     it_behaves_like "order playbook"
