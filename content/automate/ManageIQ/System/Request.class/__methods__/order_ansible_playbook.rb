@@ -3,7 +3,7 @@
 #   service_template_name
 # Optional Parameters in the root object
 # hosts   localhost|vm|ip1,ip2,ip3
-#   vm    If the hosts is vm, at runtime will use the ip address of the vm in the hosts field
+#   vmdb_object    If the hosts is vmdb_object, at runtime will use the ip address of the vmdb_object in the hosts field
 
 module ManageIQ
   module Automate
@@ -31,22 +31,35 @@ module ManageIQ
           end
 
           def hosts
-            if @handle.root['hosts'] == 'vm'
-              vm_ip
+            if @handle.root['hosts'] == 'vmdb_object'
+              vmdb_object_ip
             else
               @handle.root['hosts'] || @handle.root['dialog_hosts']
             end
           end
 
-          def vm_ip
-            raise "VM object not passed in" unless @handle.root['vm']
-
-            @handle.root['vm'].ipaddresses.try(:first).tap do |ip|
+          def vmdb_object_ip
+            vmdb_object.try(:ipaddresses).try(:first).tap do |ip|
               if ip.nil?
-                @handle.log(:error, "IP address not specified for vm: #{@handle.root['vm'].name}")
-                raise "IP address not specified for vm: #{@handle.root['vm'].name}"
+                @handle.log(:error, "IP address not specified for vmdb_object")
+                raise "IP address not specified for vmdb_object"
               end
             end
+          end
+
+          def vmdb_object
+            if @handle.root['vmdb_object_type'].nil?
+              @handle.log(:error, "vmdb_object_type missing in root object")
+              raise "vmdb_object_type missing in root object"
+            end
+
+            vmdb_object_type = @handle.root['vmdb_object_type']
+
+            if @handle.root[vmdb_object_type].nil?
+              @handle.log(:error, "vmdb_object #{vmdb_object_type} missing in root object")
+              raise "vmdb_object #{vmdb_object_type} missing in root object"
+            end
+            @handle.root[vmdb_object_type]
           end
 
           def service_template

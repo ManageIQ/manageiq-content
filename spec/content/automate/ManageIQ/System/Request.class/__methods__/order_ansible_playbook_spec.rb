@@ -51,6 +51,7 @@ describe ManageIQ::Automate::System::Request::OrderAnsiblePlaybook do
       { 'service_template_name' => svc_service_template.name,
         'dialog_param_var1'     => 'A',
         'dialog_param_var2'     => 'B',
+        'vmdb_object_type'      => 'vm',
         'vm'                    => svc_vm }
     end
 
@@ -76,7 +77,8 @@ describe ManageIQ::Automate::System::Request::OrderAnsiblePlaybook do
       { 'service_template_name' => svc_service_template.name,
         'dialog_param_var1'     => 'A',
         'dialog_param_var2'     => 'B',
-        'hosts'                 => 'vm',
+        'hosts'                 => 'vmdb_object',
+        'vmdb_object_type'      => 'vm',
         'vm'                    => svc_vm }
     end
 
@@ -94,14 +96,14 @@ describe ManageIQ::Automate::System::Request::OrderAnsiblePlaybook do
       { 'service_template_name' => svc_service_template.name,
         'dialog_param_var1'     => 'A',
         'dialog_param_var2'     => 'B',
-        'hosts'                 => 'vm' }
+        'hosts'                 => 'vmdb_object' }
     end
 
     it "raises an error" do
       allow(ae_service).to receive(:vmdb).with('ServiceTemplate').and_return(svc_vmdb_handle)
       allow(svc_vmdb_handle).to receive(:where).with(:name => svc_template.name).and_return([svc_service_template])
 
-      expect { described_class.new(ae_service).main }.to raise_error(/VM object not passed/)
+      expect { described_class.new(ae_service).main }.to raise_error(/vmdb_object_type missing in root object/)
     end
   end
 
@@ -111,7 +113,8 @@ describe ManageIQ::Automate::System::Request::OrderAnsiblePlaybook do
         'dialog_param_var1'     => 'A',
         'dialog_param_var2'     => 'B',
         'vm'                    => svc_vm,
-        'hosts'                 => 'vm' }
+        'vmdb_object_type'      => 'vm',
+        'hosts'                 => 'vmdb_object' }
     end
 
     it "raises an error" do
