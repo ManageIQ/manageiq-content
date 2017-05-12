@@ -9,6 +9,6 @@ object:
     description: 
   fields:
   - rel4:
-      value: "/Infrastructure/VM/Reconfigure/Email/VmReconfigureTaskComplete"
+      value: "/System/Notification/Email/VmReconfigureTaskComplete"
   - rel5:
       value: "/System/event_handlers/event_enforce_policy"

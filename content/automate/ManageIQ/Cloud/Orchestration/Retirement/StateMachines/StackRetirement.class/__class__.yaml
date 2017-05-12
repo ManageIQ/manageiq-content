@@ -158,7 +158,7 @@ object:
       datatype: string
       priority: 8
       owner: 
-      default_value: "#/Cloud/Orchestration/Retirement/Email/stack_retirement_emails?event=stack_entered_retirement"
+      default_value: "#/System/Notification/Email/CloudOrchestrationVmEnteredRetirement?event=stack_entered_retirement"
       substitute: true
       message: create
       visibility: 
@@ -178,7 +178,7 @@ object:
       datatype: string
       priority: 9
       owner: 
-      default_value: "/Cloud/Orchestration/Retirement/Email/stack_retirement_emails?event=stack_retired"
+      default_value: "/System/Notification/Email/CloudOrchestrationVmRetired?event=stack_retired"
       substitute: true
       message: create
       visibility: 
