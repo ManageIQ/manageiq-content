@@ -1,0 +1,12 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: Order_Ansible_Playbook
+    inherits: 
+    description: 
+  fields:
+  - meth1:
+      value: order_ansible_playbook
