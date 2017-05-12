@@ -41,7 +41,6 @@ module ManageIQ
           def vmdb_object_ip
             vmdb_object.try(:ipaddresses).try(:first).tap do |ip|
               if ip.nil?
-                @handle.log(:error, "IP address not specified for vmdb_object")
                 raise "IP address not specified for vmdb_object"
               end
             end
@@ -49,14 +48,12 @@ module ManageIQ
 
           def vmdb_object
             if @handle.root['vmdb_object_type'].nil?
-              @handle.log(:error, "vmdb_object_type missing in root object")
               raise "vmdb_object_type missing in root object"
             end
 
             vmdb_object_type = @handle.root['vmdb_object_type']
 
             if @handle.root[vmdb_object_type].nil?
-              @handle.log(:error, "vmdb_object #{vmdb_object_type} missing in root object")
               raise "vmdb_object #{vmdb_object_type} missing in root object"
             end
             @handle.root[vmdb_object_type]
@@ -65,7 +62,6 @@ module ManageIQ
           def service_template
             @service_template ||= @handle.vmdb('ServiceTemplate').where(:name => service_template_name).first.tap do |st|
               if st.nil?
-                @handle.log(:error, "Service Template #{@handle.root['service_template_name']} not found")
                 raise "Service Template #{@handle.root['service_template_name']} not found"
               end
             end
@@ -73,7 +69,6 @@ module ManageIQ
 
           def service_template_name
             if @handle.root['service_template_name'].nil?
-              @handle.log(:error, "service_template_name is a required parameter")
               raise "service_template_name is a required parameter"
             end
             @handle.root['service_template_name']
