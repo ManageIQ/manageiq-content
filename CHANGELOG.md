@@ -2,7 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## Fine Beta-2
+## Unreleased Sprint 60 Ending 2017-05-08
+
+### Fixed
+
+- Add notifications for finish_retirement. [(#106)](https://github.com/ManageIQ/manageiq-content/pull/106)
+- Change exceeds message in log to warn type. [(#104)](https://github.com/ManageIQ/manageiq-content/pull/104)
+- Change errors in log to error type. [(#101)](https://github.com/ManageIQ/manageiq-content/pull/101)
+- Changed ${/#ae_reason} to a string value in on_error methods. [(#98)](https://github.com/ManageIQ/manageiq-content/pull/98)
+- Add quota checking for VMReconfigure tests. [(#56)](https://github.com/ManageIQ/manageiq-content/pull/56)
+
+## Fine Release Candidate
 
 ### Added
 - Remove createfolder event handler since it is now handled by MiqVimBrokerWorker [(#100)](https://github.com/ManageIQ/manageiq-content/pull/100)
