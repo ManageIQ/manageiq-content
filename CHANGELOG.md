@@ -2,17 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased Sprint 61 Ending 2017-05-22
+
+### Fixed
+- Support embedded_ansible to fetch credentials from provider [(#112)](https://github.com/ManageIQ/manageiq-content/pull/112)
+
 ## Unreleased Sprint 60 Ending 2017-05-08
 
 ### Fixed
-
-- Add notifications for finish_retirement. [(#106)](https://github.com/ManageIQ/manageiq-content/pull/106)
 - Change exceeds message in log to warn type. [(#104)](https://github.com/ManageIQ/manageiq-content/pull/104)
 - Change errors in log to error type. [(#101)](https://github.com/ManageIQ/manageiq-content/pull/101)
 - Changed ${/#ae_reason} to a string value in on_error methods. [(#98)](https://github.com/ManageIQ/manageiq-content/pull/98)
 - Add quota checking for VMReconfigure tests. [(#56)](https://github.com/ManageIQ/manageiq-content/pull/56)
 
-## Fine Release Candidate
+## Fine-1
 
 ### Added
 - Remove createfolder event handler since it is now handled by MiqVimBrokerWorker [(#100)](https://github.com/ManageIQ/manageiq-content/pull/100)
@@ -34,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Generic Service State Machine methods modified to use Service object. [(#58)](https://github.com/ManageIQ/manageiq-content/pull/58)
 
 ### Fixed
+- Add notifications for finish_retirement. [(#106)](https://github.com/ManageIQ/manageiq-content/pull/106)
 - Add policy checking for the retirement request. [(#86)](https://github.com/ManageIQ/manageiq-content/pull/86)
 - Modified vmware_best_fit_least_utilized to not select Hosts in maintenance. [(#81)](https://github.com/ManageIQ/manageiq-content/pull/81)
 - Added method instances for EmbeddedAnsible [(#80)](https://github.com/ManageIQ/manageiq-content/pull/80)
