@@ -16,7 +16,10 @@ module ManageIQ
           end
 
           def main
-            request = @handle.create_service_provision_request(service_template, extra_vars.merge(:hosts => hosts))
+            request = @handle.create_service_provision_request(
+              service_template,
+              extra_vars.merge(:credential => machine_credential, :hosts => hosts)
+            )
             @handle.log(:info, "Submitted provision request #{request.id} for service template #{service_template_name}")
           end
 
@@ -72,6 +75,10 @@ module ManageIQ
               raise "service_template_name is a required parameter"
             end
             @handle.root['service_template_name']
+          end
+
+          def machine_credential
+            @handle.root['dialog_credential']
           end
         end
       end
