@@ -43,7 +43,8 @@ describe ManageIQ::Automate::System::Request::OrderAnsiblePlaybook do
 
   context "with no host" do
     let(:extra_vars) do
-      { :hosts       => nil,
+      { :credential  => nil,
+        :hosts       => nil,
         'param_var1' => 'A',
         'param_var2' => 'B' }
     end
@@ -72,6 +73,47 @@ describe ManageIQ::Automate::System::Request::OrderAnsiblePlaybook do
     end
   end
 
+  context "with no machine credential" do
+    let(:attributes) do
+      { 'service_template_name' => svc_service_template.name,
+        'dialog_param_var1'     => 'A',
+        'dialog_param_var2'     => 'B',
+        'hosts'                 => 'vmdb_object',
+        'vmdb_object_type'      => 'vm',
+        'vm'                    => svc_vm }
+    end
+
+    let(:extra_vars) do
+      { :credential  => nil,
+        :hosts       => ip1,
+        'param_var1' => 'A',
+        'param_var2' => 'B' }
+    end
+
+    it_behaves_like "order playbook"
+  end
+
+  context "with machine credential" do
+    let(:attributes) do
+      { 'service_template_name' => svc_service_template.name,
+        'dialog_param_var1'     => 'A',
+        'dialog_param_var2'     => 'B',
+        'dialog_credential'     => '12',
+        'hosts'                 => 'vmdb_object',
+        'vmdb_object_type'      => 'vm',
+        'vm'                    => svc_vm }
+    end
+
+    let(:extra_vars) do
+      { :credential  => '12',
+        :hosts       => ip1,
+        'param_var1' => 'A',
+        'param_var2' => 'B' }
+    end
+
+    it_behaves_like "order playbook"
+  end
+
   context "with vm host" do
     let(:attributes) do
       { 'service_template_name' => svc_service_template.name,
@@ -83,7 +125,8 @@ describe ManageIQ::Automate::System::Request::OrderAnsiblePlaybook do
     end
 
     let(:extra_vars) do
-      { :hosts       => ip1,
+      { :credential  => nil,
+        :hosts       => ip1,
         'param_var1' => 'A',
         'param_var2' => 'B' }
     end
