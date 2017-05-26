@@ -2,10 +2,12 @@
 require 'pathname'
 
 gem_root = Pathname.new(__dir__).join("..")
+travis_branch = ENV["TRAVIS_BRANCH"]
 
 unless gem_root.join("spec/manageiq").exist?
   puts "== Cloning manageiq sample app =="
-  system "git clone https://github.com/ManageIQ/manageiq.git --depth 1 spec/manageiq"
+  puts "== Using Branch #{travis_branch} ==" if travis_branch
+  system "git clone https://github.com/ManageIQ/manageiq.git #{'-b ' + travis_branch if travis_branch} --depth 1 spec/manageiq"
 end
 
 require gem_root.join("spec/manageiq/lib/manageiq/environment").to_s
