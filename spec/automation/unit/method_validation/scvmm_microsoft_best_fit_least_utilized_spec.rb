@@ -62,7 +62,7 @@ describe "SCVMM microsoft_best_fit_least_utilized" do
           ws.root
           miq_provision.reload
 
-          expect(miq_provision.options[:placement_host_name]).to eq([host.id, host.name])
+          expect(miq_provision.options[:placement_host_name]).to eq([host.id, host.hostname])
           expect(miq_provision.options[:placement_ds_name]).to   eq([storage.id, storage.name])
         end
 
@@ -92,7 +92,7 @@ describe "SCVMM microsoft_best_fit_least_utilized" do
           ws.root
           miq_provision.reload
 
-          expect(miq_provision.options[:placement_host_name]).to eq([host.id, host.name])
+          expect(miq_provision.options[:placement_host_name]).to eq([host.id, host.hostname])
           expect(miq_provision.options[:placement_ds_name]).to   eq([storage.id, storage.name])
         end
 
