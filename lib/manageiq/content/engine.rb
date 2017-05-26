@@ -1,4 +1,4 @@
-require 'rails/all'
+require 'rails/engine'
 
 module ManageIQ
   module Content
