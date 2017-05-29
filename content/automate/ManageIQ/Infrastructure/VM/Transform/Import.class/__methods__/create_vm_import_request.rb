@@ -28,6 +28,7 @@ module ManageIQ
                     'cluster_id'  => @handle.root['dialog_cluster'],
                     'storage_id'  => @handle.root['dialog_storage'],
                     'sparse'      => @handle.root['dialog_sparse'],
+                    'drivers_iso' => @handle.root['dialog_install_drivers'] && @handle.root['dialog_drivers_iso']
                   },
                   :user_id       => @handle.root['user'].id
                 }

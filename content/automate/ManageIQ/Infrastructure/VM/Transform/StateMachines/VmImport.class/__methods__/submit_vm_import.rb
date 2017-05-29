@@ -21,10 +21,11 @@ module ManageIQ
                 new_ems_ref = provider.submit_import_vm(
                   @handle.root['user'].userid,
                   @handle.root['vm'].id,
-                  :name       => @handle.root['name'],
-                  :cluster_id => @handle.root['cluster_id'],
-                  :storage_id => @handle.root['storage_id'],
-                  :sparse     => @handle.root['sparse']
+                  :name        => @handle.root['name'],
+                  :cluster_id  => @handle.root['cluster_id'],
+                  :storage_id  => @handle.root['storage_id'],
+                  :sparse      => @handle.root['sparse'],
+                  :drivers_iso => @handle.root['drivers_iso']
                 )
                 @handle.log(:info, "New Ems Ref is #{new_ems_ref}")
                 @handle.set_state_var('new_ems_ref', new_ems_ref)
