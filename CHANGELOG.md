@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## Fine-2
+
+### Fixed
+- Order Ansible Playbook from a Custom Button using a Method[(#113)](https://github.com/ManageIQ/manageiq-content/pull/113)
+
 ## Fine-1
 
 ### Added
