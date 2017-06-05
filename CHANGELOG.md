@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased Sprint 62 Ending 2017-06-05
+
+### Added
+- Targeted refresh enhacements for VM import\rename\migration events [(#119)](https://github.com/ManageIQ/manageiq-content/pull/119)
+- v2v: Add support for driver ISOs [(#121)](https://github.com/ManageIQ/manageiq-content/pull/121)
+- Add automate methods for VM import between providers [(#36)](https://github.com/ManageIQ/manageiq-content/pull/36)
+
+### Fixed
+- Require just rails/engine [(#120)](https://github.com/ManageIQ/manageiq-content/pull/120)
+
 ## Unreleased Sprint 61 Ending 2017-05-22
 
 ### Fixed
