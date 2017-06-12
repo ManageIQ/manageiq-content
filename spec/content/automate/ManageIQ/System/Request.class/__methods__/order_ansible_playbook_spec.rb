@@ -35,7 +35,7 @@ describe ManageIQ::Automate::System::Request::OrderAnsiblePlaybook do
       allow(ae_service).to receive(:vmdb).with('ServiceTemplate').and_return(svc_vmdb_handle)
       allow(svc_vmdb_handle).to receive(:where).with(:name => svc_template.name).and_return([svc_service_template])
       allow(svc_vm).to receive(:ipaddresses).and_return([ip1])
-      expect(ae_service).to receive(:create_service_provision_request).with(svc_service_template, extra_vars).and_return(svc_miq_request)
+      expect(ae_service).to receive(:execute).with('create_service_provision_request', svc_service_template, extra_vars).and_return(svc_miq_request)
 
       described_class.new(ae_service).main
     end

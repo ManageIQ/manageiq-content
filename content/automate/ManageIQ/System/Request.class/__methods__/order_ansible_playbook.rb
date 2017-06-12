@@ -16,7 +16,7 @@ module ManageIQ
           end
 
           def main
-            request = @handle.create_service_provision_request(
+            request = @handle.execute('create_service_provision_request',
               service_template,
               extra_vars.merge(:credential => machine_credential, :hosts => hosts)
             )
