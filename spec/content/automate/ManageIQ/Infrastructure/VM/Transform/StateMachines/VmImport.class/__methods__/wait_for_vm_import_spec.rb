@@ -25,6 +25,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::StateMachines::WaitF
       described_class.new(ae_service).main
 
       expect(ae_service.root['ae_result']).to eq('ok')
+      expect(ae_service.get_state_var('imported_vm_id')).to eq(vm.id)
     end
   end
 
