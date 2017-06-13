@@ -19,6 +19,7 @@ module ManageIQ
                   status = vm.custom_get(:import_status)
                   case status
                   when 'success'
+                    @handle.set_state_var('imported_vm_id', vm.id)
                     @handle.root['ae_result'] = 'ok'
                   when 'failure'
                     @handle.root['ae_result'] = 'error'

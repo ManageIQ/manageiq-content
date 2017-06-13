@@ -134,27 +134,28 @@ object:
       max_time: 
   - field:
       aetype: state
-      name: post1
+      name: ConfigureNetworks
       display_name: 
       datatype: string
       priority: 7
       owner: 
-      default_value: 
-      substitute: true
+      default_value: METHOD::configure_vm_networks
+      substitute: false
       message: create
       visibility: 
       collect: 
       scope: 
       description: 
       condition: 
-      on_entry: 
-      on_exit: 
-      on_error: 
-      max_retries: 
+      on_entry: update_vm_import_status(status => 'Updating imported VM's networks')
+      on_exit: update_vm_import_status(status => 'Configuration of VM networks completed')
+      on_error: update_vm_import_status(status => 'Error configuring imported VM's
+        networks')
+      max_retries: '100'
       max_time: 
   - field:
       aetype: state
-      name: post2
+      name: post1
       display_name: 
       datatype: string
       priority: 8
@@ -174,7 +175,7 @@ object:
       max_time: 
   - field:
       aetype: state
-      name: post3
+      name: post2
       display_name: 
       datatype: string
       priority: 9
@@ -194,7 +195,7 @@ object:
       max_time: 
   - field:
       aetype: state
-      name: email
+      name: post3
       display_name: 
       datatype: string
       priority: 10
@@ -214,10 +215,30 @@ object:
       max_time: 
   - field:
       aetype: state
-      name: finish
+      name: email
       display_name: 
       datatype: string
       priority: 11
+      owner: 
+      default_value: 
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: state
+      name: finish
+      display_name: 
+      datatype: string
+      priority: 12
       owner: 
       default_value: 
       substitute: true
