@@ -6,7 +6,7 @@ def consumption(source)
   {
     :cpu                 => source.allocated_vcpu,
     :memory              => source.allocated_memory,
-    :vms                 => source.vms.count { |vm| vm.id unless vm.archived },
+    :vms                 => source.vms.count { |vm| vm.id unless vm.archived || vm.orphaned },
     :storage             => source.allocated_storage,
     :provisioned_storage => source.provisioned_storage
   }
