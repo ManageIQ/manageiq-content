@@ -19,7 +19,7 @@ describe "Quota Validation" do
     expect(root['quota_source']).to be_kind_of(MiqAeMethodService::MiqAeServiceTenant)
     expect(root['quota_used'][:storage]).to eq(1_000_000)
     expect(root['quota_used'][:cpu]).to eq(0)
-    expect(root['quota_used'][:vms]).to eq(2)
+    expect(root['quota_used'][:vms]).to eq(1)
     expect(root['quota_used'][:provisioned_storage]).to eq(1_074_741_824)
     expect(root['quota_used'][:memory]).to eq(1_073_741_824)
   end
