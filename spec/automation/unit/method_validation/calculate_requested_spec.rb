@@ -76,6 +76,24 @@ describe "Quota Validation" do
     end
   end
 
+  context "VM provisioning multiple vms quota" do
+    it "vmware calculate_requested number of vms 3" do
+      setup_model("vmware")
+      @miq_provision_request.options[:number_of_vms] = 3
+      @miq_provision_request.save
+      ws = run_automate_method(vm_attrs)
+      check_results(ws.root['quota_requested'], 1536.megabytes, 12, 3, 3.gigabytes)
+    end
+
+    it "google calculate_requested number of vms 3" do
+      setup_model("google")
+      @miq_provision_request.options[:number_of_vms] = 3
+      @miq_provision_request.save
+      ws = run_automate_method(vm_attrs)
+      check_results(ws.root['quota_requested'], 30.gigabytes, 12, 3, 3.kilobytes)
+    end
+  end
+
   context "VmReconfig quota calculate_request" do
     it "add 2 cpus and add 4096 memory " do
       setup_model("vmware_reconfigure")
