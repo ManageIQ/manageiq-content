@@ -31,10 +31,11 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::StateMachines::Submi
     expect(svc_model_provider).to receive(:submit_import_vm).with(
       user.userid,
       vm.id,
-      :name       => 'my_vm',
-      :cluster_id => 1,
-      :storage_id => 2,
-      :sparse     => true
+      :name        => 'my_vm',
+      :cluster_id  => 1,
+      :storage_id  => 2,
+      :sparse      => true,
+      :drivers_iso => nil
     ).and_return(new_ems_ref)
 
     described_class.new(ae_service).main
