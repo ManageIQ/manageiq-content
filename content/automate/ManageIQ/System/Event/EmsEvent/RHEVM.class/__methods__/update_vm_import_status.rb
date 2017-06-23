@@ -40,7 +40,6 @@ module ManageIQ
               def update_import_status(vm)
                 @handle.log(:info, "Updating VM [#{vm.name}] import status to [#{import_status}]")
                 vm.custom_set(:import_status, import_status)
-                exit MIQ_OK
               end
             end
           end
