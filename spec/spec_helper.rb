@@ -18,6 +18,17 @@ Dir[ManageIQ::AutomationEngine::Engine.root.join("spec/support/**/*.rb")].each {
 RSpec.configure do |config|
   config.include Spec::Support::AutomationHelper
 
+  config.around(:example) do |ex|
+    begin
+      ex.run
+    rescue SystemExit => e
+      STDERR.puts
+      STDERR.puts "Kernel.exit called from:"
+      STDERR.puts e.backtrace
+      exit 1
+    end
+  end
+
   config.before(:suite) do
     puts "** Resetting #{ENV["AUTOMATE_DOMAINS"]} domain(s)"
     Tenant.seed
