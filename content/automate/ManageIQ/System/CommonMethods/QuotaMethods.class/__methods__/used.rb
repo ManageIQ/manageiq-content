@@ -38,7 +38,7 @@ module ManageIQ
               {
                 :cpu                 => source.allocated_vcpu,
                 :memory              => source.allocated_memory,
-                :vms                 => source.vms.count { |vm| vm.id unless vm.archived },
+                :vms                 => source.vms.count { |vm| vm.id if vm.ems_id },
                 :storage             => source.allocated_storage,
                 :provisioned_storage => source.provisioned_storage
               }
