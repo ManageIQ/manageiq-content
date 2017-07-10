@@ -37,12 +37,12 @@ module ManageIQ
 
                 if vm.retires_on.blank?
                   @handle.log("info", "VM '#{vm_name}' has no retirement date - extension bypassed")
-                  exit MIQ_OK
+                  return
                 end
 
                 if vm.retired
                   @handle.log("info", "VM '#{vm_name}' is already retired. retires_on date: #{vm.retires_on}. No Action taken")
-                  exit MIQ_OK
+                  return
                 end
 
                 @handle.log("info", "VM: <#{vm_name}> current retirement date is #{vm.retires_on}")
