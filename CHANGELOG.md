@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased Sprint 64 Ending 2017-07-10
+
+### Added
+- Event switchboard entries for Amazon EBS events. [(#137)](https://github.com/ManageIQ/manageiq-content/pull/137)
+
+### Fixed
+- v2v: Fix confusing message in WaitForImport state [(#140)](https://github.com/ManageIQ/manageiq-content/pull/140)
+- v2v: Fix list drivers on missing ISO domain [(#139)](https://github.com/ManageIQ/manageiq-content/pull/139)
+- Fixed quota calculations for multiple vms in requested method. [(#128)](https://github.com/ManageIQ/manageiq-content/pull/128)
+
 ## Unreleased Sprint 63 Ending 2017-06-19
 
 ### Added
