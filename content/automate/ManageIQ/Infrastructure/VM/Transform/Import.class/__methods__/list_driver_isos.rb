@@ -17,9 +17,13 @@ module ManageIQ
                 if provider_id.present? && provider_id != '!'
                   provider = @handle.vmdb(:ext_management_system, provider_id)
                   unless provider.nil?
-                    values_hash[nil] = '-- select drivers ISO from list --'
-                    provider.iso_datastore.iso_images.pluck(:name).grep(/toolsSetup/).each do |iso|
-                      values_hash[iso] = iso
+                    if provider.iso_datastore.nil?
+                      values_hash[nil] = '-- no ISO datastore for provider --'
+                    else
+                      values_hash[nil] = '-- select drivers ISO from list --'
+                      provider.iso_datastore.iso_images.pluck(:name).grep(/toolsSetup/).each do |iso|
+                        values_hash[iso] = iso
+                      end
                     end
                   end
                 end
