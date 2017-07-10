@@ -34,12 +34,11 @@ describe ManageIQ::Automate::Infrastructure::VM::Retirement::Email::VmRetireExte
   end
 
   context "when vm_retire_extend_days is 7" do
-    it "Notification email sent" do
+    it "Calls execute to send_email" do
       ae_service.object[:vm_retire_extend_days] = 7
       ae_service.object[:from_email_address] = "evmadmin@example.com"
-      expect(GenericMailer).to receive(:deliver).with(:automation_notification,
-                                                      hash_including(:to   => user.email,
-                                                                     :from => "evmadmin@example.com"))
+      expect(ae_service).to receive(:execute).once
+      described_class.new(ae_service).main
     end
 
     it "returns a new retirement date " do
@@ -59,22 +58,22 @@ describe ManageIQ::Automate::Infrastructure::VM::Retirement::Email::VmRetireExte
   end
 
   context "when vm retires_on is nil" do
-    it "returns MIQ_OK" do
+    it "does not update retires_on date" do
       ae_service.object[:vm_retire_extend_days] = 7
       vm.update_attributes(:retires_on => nil)
-      expect(Kernel).to receive(:exit).with(MIQ_OK)
+      expect(ae_service).not_to receive(:execute)
       described_class.new(ae_service).main
-      expect(ae_service.root['ae_result']).to eq("ok")
+      expect(ae_service.root['ae_result']).to be_nil
     end
   end
 
   context "when vm retired is true " do
-    it "returns MIQ_OK" do
+    it "does not update retires_on date" do
       ae_service.object[:vm_retire_extend_days] = 7
       vm.update_attributes(:retired => true)
-      expect(Kernel).to receive(:exit).with(MIQ_OK)
+      expect(ae_service).not_to receive(:execute)
       described_class.new(ae_service).main
-      expect(ae_service.root['ae_result']).to eq("ok")
+      expect(ae_service.root['ae_result']).to be_nil
     end
   end
 
@@ -82,8 +81,9 @@ describe ManageIQ::Automate::Infrastructure::VM::Retirement::Email::VmRetireExte
     let(:root_hash) { {} }
     let(:svc_model_service) { nil }
     let(:vm) { nil }
-    it "returns ae_result is nil" do
-      expect(ae_service.root['ae_result']).to be_nil
+    it "raises error message" do
+      errormsg = 'ERROR - vm object not passed in'
+      expect { described_class.new(ae_service).main }.to raise_error(errormsg)
     end
   end
 end
