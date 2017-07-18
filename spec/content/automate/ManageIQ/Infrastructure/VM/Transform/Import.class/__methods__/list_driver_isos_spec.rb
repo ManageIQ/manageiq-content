@@ -27,6 +27,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListDriverIs
         oVirt-toolsSetup-4.0-1.fc24.iso
         oVirt-toolsSetup-4.1-3.fc24.iso
         another-random-image.iso
+        rhev-tools-setup.iso
         oVirt-toolsSetup-4.2-4.fc25.iso
       ).map { |iso| FactoryGirl.create(:iso_image, :name => iso) }
       FactoryGirl.create(:iso_datastore, :iso_images => iso_images)
@@ -47,6 +48,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListDriverIs
         oVirt-toolsSetup-4.0-1.fc24.iso
         oVirt-toolsSetup-4.1-3.fc24.iso
         oVirt-toolsSetup-4.2-4.fc25.iso
+        rhev-tools-setup.iso
       ).each { |iso| isos[iso] = iso }
 
       expect(ae_service.object['values']).to eq(isos)
