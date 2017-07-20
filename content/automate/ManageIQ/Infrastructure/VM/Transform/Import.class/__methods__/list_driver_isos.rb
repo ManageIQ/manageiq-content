@@ -21,7 +21,7 @@ module ManageIQ
                       values_hash[nil] = '-- no ISO datastore for provider --'
                     else
                       values_hash[nil] = '-- select drivers ISO from list --'
-                      provider.iso_datastore.iso_images.pluck(:name).grep(/tools.*setup/i).each do |iso|
+                      provider.iso_datastore.iso_images.pluck(:name).grep(/tools.*setup|virtio-win.*.iso$/i).each do |iso|
                         values_hash[iso] = iso
                       end
                     end
