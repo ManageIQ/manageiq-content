@@ -4,11 +4,9 @@ version: 1.0
 object:
   attributes:
     display_name: 
-    name: IMPORTEXPORT_IMPORT_VM
+    name: IMPORTEXPORT_STARTING_IMPORT_VM
     inherits: 
     description: 
   fields:
-  - rel4:
+  - rel5:
       value: "/System/event_handlers/event_action_refresh_new_target?target=src_vm"
-  - meth4:
-      value: update_vm_import_status
