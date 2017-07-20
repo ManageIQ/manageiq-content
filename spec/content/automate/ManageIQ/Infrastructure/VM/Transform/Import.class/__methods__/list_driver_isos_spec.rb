@@ -20,6 +20,8 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListDriverIs
   context 'with ISO domain added' do
     let!(:iso_datastore) do
       iso_images = %w(
+        virtio-win-1.9.0.iso
+        virtio-win-1.9.0_amd64.vfd
         RHEV-toolsSetup_3.5_15.iso
         RHEV-toolsSetup_4.0_7.iso
         random-image.iso
@@ -49,6 +51,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListDriverIs
         oVirt-toolsSetup-4.1-3.fc24.iso
         oVirt-toolsSetup-4.2-4.fc25.iso
         rhev-tools-setup.iso
+        virtio-win-1.9.0.iso
       ).each { |iso| isos[iso] = iso }
 
       expect(ae_service.object['values']).to eq(isos)
