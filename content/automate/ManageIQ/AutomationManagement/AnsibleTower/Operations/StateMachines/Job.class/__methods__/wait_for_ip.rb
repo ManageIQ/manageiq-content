@@ -29,7 +29,7 @@ module ManageIQ
                   if ip_list.empty?
                     vm.refresh
                     @handle.root['ae_result'] = 'retry'
-                    @handle.root['ae_retry_limit'] = 1.minute
+                    @handle.root['ae_retry_interval'] = 1.minute
                   else
                     @handle.root['ae_result'] = 'ok'
                   end
