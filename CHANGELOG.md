@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased Sprint 65 Ending 2017-07-24
+
+### Added
+- v2v: Support virtio-win drivers ISO [(#147)](https://github.com/ManageIQ/manageiq-content/pull/147)
+- Host removal [(#146)](https://github.com/ManageIQ/manageiq-content/pull/146)
+- Host install [(#145)](https://github.com/ManageIQ/manageiq-content/pull/145)
+- Host update [(#144)](https://github.com/ManageIQ/manageiq-content/pull/144)
+
+### Fixed
+- v2v: Fix filtering of drivers ISO to display [(#143)](https://github.com/ManageIQ/manageiq-content/pull/143)
+
 ## Unreleased Sprint 64 Ending 2017-07-10
 
 ### Added
