@@ -33,7 +33,7 @@ module ManageIQ
 
               def set_retry
                 @handle.root['ae_result'] = 'retry'
-                @handle.root['ae_retry_interval'] = @handle.inputs['retry_interval'] || 30.minutes
+                @handle.root['ae_retry_interval'] = @handle.inputs['retry_interval'] || 3.minutes
               end
 
               def imported_vm
