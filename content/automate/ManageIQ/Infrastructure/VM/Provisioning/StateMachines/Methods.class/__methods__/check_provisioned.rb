@@ -13,6 +13,7 @@ case result
 when 'error'
   $evm.root['ae_result'] = 'error'
   reason = $evm.root['miq_provision'].message
+  $evm.log('error', "ProvisionCheck error <#{reason}>")
   reason = reason[7..-1] if reason[0..6] == 'Error: '
   $evm.root['ae_reason'] = reason
 when 'retry'
