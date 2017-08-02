@@ -9,6 +9,6 @@ object:
     description: 
   fields:
   - Relationship5:
-      value: "/Infrastructure/Configured_System/Provisioning/Profile/${/#user.normalized_ldap_group}#get_state_machine"
+      value: "/Infrastructure/Configured_System/Provisioning/Profile/${/#miq_group.description}#get_state_machine"
   - Relationship6:
       value: "/Infrastructure/Configured_System/Provisioning/StateMachines/${/#state_machine}/${/#miq_provision_task.request_type}"
