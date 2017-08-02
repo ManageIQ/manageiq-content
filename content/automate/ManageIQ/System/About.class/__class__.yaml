@@ -18,7 +18,7 @@ object:
       datatype: string
       priority: 1
       owner: 
-      default_value: fine-2
+      default_value: fine-3
       substitute: true
       message: create
       visibility: 
