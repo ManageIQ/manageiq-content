@@ -13,7 +13,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::StateMachines::WaitF
       described_class.new(ae_service).main
 
       expect(ae_service.root['ae_result']).to eq('retry')
-      expect(ae_service.root['ae_retry_interval']).to eq(30.minutes)
+      expect(ae_service.root['ae_retry_interval']).to eq(3.minutes)
     end
   end
 
