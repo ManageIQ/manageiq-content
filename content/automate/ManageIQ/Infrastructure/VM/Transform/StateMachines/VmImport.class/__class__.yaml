@@ -128,8 +128,7 @@ object:
       condition: 
       on_entry: update_vm_import_status(status => 'Checking for VM Import completion')
       on_exit: update_vm_import_status(status => 'Waiting for VM Import completion')
-      on_error: update_vm_import_status(status => 'Error in checking for VM Import
-        completion')
+      on_error: update_vm_import_status(status => 'Error encountered during VM import')
       max_retries: '100'
       max_time: 
   - field:
