@@ -46,12 +46,6 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
     it_behaves_like "check_completed"
   end
 
-  context "returns retry when job launching is not done" do
-    let(:status_and_message) { [false, "retry"] }
-    let(:ae_result) { "retry" }
-    it_behaves_like "check_completed"
-  end
-
   context "invalid service_action" do
     let(:status_and_message) { [true, ""] }
     let(:errormsg)           { 'Invalid service_action' }
@@ -70,5 +64,94 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
                                          'service_action'                  => 'Provision')
     end
     it_behaves_like "check_completed_error"
+  end
+
+  context "retry ttl" do
+    let(:service_ansible_tower) { FactoryGirl.create(:service_ansible_tower, :job_template => job_template, :options => config_info_options) }
+    let(:config_info_options) do
+      {
+        :config_info => {
+          :provision  => {
+            :execution_ttl => ttl
+          },
+          :retirement => {
+            :execution_ttl => ttl
+          }
+        }
+      }
+    end
+    shared_examples_for "#ttl" do
+      it "check" do
+        allow(svc_service).to receive(:check_completed).and_return([false, "retry"])
+
+        described_class.new(ae_service).main
+        expect(ae_service.root['ae_retry_interval']).to eq(ae_retry_interval)
+      end
+    end
+
+    context "provision tests " do
+      let(:root_object) do
+        Spec::Support::MiqAeMockObject.new('service' => svc_service, 'service_action' => 'Provision', 'ae_state_max_retries' => 100)
+      end
+
+      context "600 ttl, 100 retries eq interval 6" do
+        let(:ae_retry_interval) { 6.minutes }
+        let(:ttl) { 600 }
+        it_behaves_like "#ttl"
+      end
+
+      context "60 ttl, 100 retries interval 1.minute" do
+        let(:ae_retry_interval) { 1.minute }
+        let(:ttl) { 60 }
+        it_behaves_like "#ttl"
+      end
+
+      context "0 ttl, 100 retries, interval 1.minute" do
+        let(:ae_retry_interval) { 1.minute }
+        let(:ttl) { 0 }
+        it_behaves_like "#ttl"
+      end
+    end
+    context "Retirement tests " do
+      let(:root_object) do
+        Spec::Support::MiqAeMockObject.new('service' => svc_service, 'service_action' => 'Retirement', 'ae_state_max_retries' => 100)
+      end
+
+      context "600 ttl, 100 retries eq interval 6" do
+        let(:ae_retry_interval) { 6.minutes }
+        let(:ttl) { 600 }
+        it_behaves_like "#ttl"
+      end
+
+      context "60 ttl, 100 retries interval 1.minute" do
+        let(:ae_retry_interval) { 1.minute }
+        let(:ttl) { 60 }
+        it_behaves_like "#ttl"
+      end
+
+      context "0 ttl, 100 retries, interval 1.minute" do
+        let(:ae_retry_interval) { 1.minute }
+        let(:ttl) { 0 }
+        it_behaves_like "#ttl"
+      end
+    end
+
+    context "Start 600 ttl, 50 retries eq interval 6" do
+      let(:ae_retry_interval) { 12.minutes }
+      let(:ttl) { 600 }
+      let(:root_object) do
+        Spec::Support::MiqAeMockObject.new('service' => svc_service, 'service_action' => 'Provision', 'ae_state_max_retries' => 50)
+      end
+      it_behaves_like "#ttl"
+    end
+
+    context "Start 600 ttl, 0 retries eq interval 1.minute" do
+      let(:ae_retry_interval) { 1.minute }
+      let(:ttl) { 600 }
+      let(:root_object) do
+        Spec::Support::MiqAeMockObject.new('service' => svc_service, 'service_action' => 'Provision', 'ae_state_max_retries' => 0)
+      end
+      it_behaves_like "#ttl"
+    end
   end
 end
