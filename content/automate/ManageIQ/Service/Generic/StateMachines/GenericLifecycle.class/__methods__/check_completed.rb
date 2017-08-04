@@ -55,6 +55,7 @@ module ManageIQ
                   end
                 else
                   @handle.root['ae_result'] = 'retry'
+                  @handle.root['ae_retry_interval'] = 1.minute
                 end
               end
             end
