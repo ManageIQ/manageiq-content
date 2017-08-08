@@ -1,7 +1,6 @@
 require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListDriverIsos do
-  let!(:provider) { FactoryGirl.create(:ems_redhat, :with_clusters, :iso_datastore => iso_datastore) }
 
   let(:root_object) do
     Spec::Support::MiqAeMockObject.new(
@@ -18,6 +17,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListDriverIs
   end
 
   context 'with ISO domain added' do
+    let!(:provider) { FactoryGirl.create(:ems_redhat, :with_clusters, :iso_datastore => iso_datastore) }
     let!(:iso_datastore) do
       iso_images = %w(
         virtio-win-1.9.0.iso
@@ -59,6 +59,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListDriverIs
   end
 
   context 'without ISO domain' do
+    let!(:provider) { FactoryGirl.create(:ems_redhat, :with_clusters) }
     let(:iso_domain) { nil }
 
     it 'should list informative message' do
