@@ -8,6 +8,7 @@ module ManageIQ
         module StateMachines
           module GenericLifecycle
             class CheckCompleted
+              MIN_RETRY_INTERVAL = 1
               def initialize(handle = $evm)
                 @handle = handle
               end
@@ -42,6 +43,23 @@ module ManageIQ
                 end
               end
 
+              def execution_ttl
+                service.options[:config_info][service_action.downcase.to_sym][:execution_ttl].to_i
+              end
+
+              def retry_interval
+                @handle.root['ae_retry_interval'] = 1.minute
+                ttl = execution_ttl
+                max_retry_count = @handle.root['ae_state_max_retries']
+                return if ttl.zero? || max_retry_count.zero?
+
+                interval = ttl / max_retry_count
+                if interval > MIN_RETRY_INTERVAL
+                  @handle.log('info', "Setting retry interval to #{interval} time to live #{ttl} / #{max_retry_count}")
+                  @handle.root['ae_retry_interval'] = interval.minutes
+                end
+              end
+
               def check_completed(service)
                 done, message = service.check_completed(service_action)
                 if done
@@ -55,7 +73,7 @@ module ManageIQ
                   end
                 else
                   @handle.root['ae_result'] = 'retry'
-                  @handle.root['ae_retry_interval'] = 1.minute
+                  retry_interval
                 end
               end
             end
