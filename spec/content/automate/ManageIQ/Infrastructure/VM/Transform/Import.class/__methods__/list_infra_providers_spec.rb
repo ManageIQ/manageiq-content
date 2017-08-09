@@ -3,7 +3,7 @@ require_domain_file
 describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListInfraProviders do
   let!(:vmware)     { FactoryGirl.create(:ems_vmware) }
   let!(:old_redhat) { FactoryGirl.create(:ems_redhat_v3) }
-  let!(:new_redhat) { FactoryGirl.create(:ems_redhat_v4) }
+  let!(:new_redhat) { FactoryGirl.create(:ems_redhat_v4, :api_version => '4.1.5') }
 
   let(:root_object) { Spec::Support::MiqAeMockObject.new }
 
