@@ -42,7 +42,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListDriverIs
       expect(ae_service.object['data_type']).to eq(:string)
       expect(ae_service.object['required']).to eq(true)
 
-      isos = { nil => '-- select drivers ISO from list --' }
+      isos = { nil => '-- select image from list --' }
       %w(
         RHEV-toolsSetup_3.5_15.iso
         RHEV-toolsSetup_4.0_7.iso
