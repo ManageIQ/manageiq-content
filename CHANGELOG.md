@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased Sprint 66 Ending 2017-08-07
+
+### Added
+- AWS DetachVolume event switchboard setting. [(#164)](https://github.com/ManageIQ/manageiq-content/pull/164)
+- New refresh method callable from the automate [(#159)](https://github.com/ManageIQ/manageiq-content/pull/159)
+- Fix message when import fails [(#161)](https://github.com/ManageIQ/manageiq-content/pull/161)
+- Support TTL (Time To Live) value for services. [(#148)](https://github.com/ManageIQ/manageiq-content/pull/148)
+
+### Fixed
+- Changed ae_retry_limit = 1.minute to ae_retry_interval = 1.minute. [(#151)](https://github.com/ManageIQ/manageiq-content/pull/151)
+- Changes made in Wait_for_ip and Wait_for_completion methods in [(#152)](https://github.com/ManageIQ/manageiq-content/pull/152)
+- v2v: Handle IMPORTEXPORT_STARTING_IMPORT_VM event [(#149)](https://github.com/ManageIQ/manageiq-content/pull/149)
+- Set retry interval to 1 minute for generic service state-machine. [(#163)](https://github.com/ManageIQ/manageiq-content/pull/163)
+
 ## Unreleased Sprint 65 Ending 2017-07-24
 
 ### Added
