@@ -18,7 +18,7 @@ class WaitForIP
   def check_ip_addr_available(vm)
     ip_list = vm.ipaddresses
     @handle.log(:info, "Current Power State #{vm.power_state}")
-    @handle.log(:info, "IP addresses for VM #{ip_list}")
+    @handle.log(:info, "IP addresses for VM #{vm.name}: #{ip_list}")
 
     if ip_list.empty?
       vm.refresh
