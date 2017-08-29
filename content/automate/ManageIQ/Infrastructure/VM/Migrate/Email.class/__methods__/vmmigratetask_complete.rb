@@ -26,8 +26,9 @@ owner = nil
 owner = $evm.vmdb('user', evm_owner_id) unless evm_owner_id.nil?
 $evm.log("info", "VM Owner: #{owner.inspect}")
 
-# to_email_address from owner.email then from model if nil
-to = owner.email || $evm.object['to_email_address']
+requester = miq_task.miq_request.requester
+
+to = owner.try(:email) || requester.email || $evm.object['to_email_address']
 
 # Get from_email_address from model unless specified below
 from = nil
@@ -42,7 +43,7 @@ subject = "Your virtual machine request has Completed - VM: #{vm['name']}"
 body = "Hello, "
 
 # VM Migration Email Body
-body += "<br><br>Your request to migrate virtual machine #{vm.name} was approved and completed on #{Time.now.strftime('%A, %B %d, %Y at %I:%M%p')}. "
+body += "<br><br>Your request to migrate virtual machine #{vm.name} was approved and completed on #{Time.zone.now.strftime('%A, %B %d, %Y at %I:%M%p')}. "
 body += "<br><br>If you are not already logged in, you can access and manage your virtual machine here <a href='https://#{miq_server.ipaddress}/vm/show/#{vm['id']}'>https://#{miq_server.ipaddress}/vm/show/#{vm['id']}</a>"
 body += "<br><br> Thank you,"
 body += "<br> #{signature}"
