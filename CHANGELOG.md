@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased Sprint 67 Ending 2017-08-21
+- v2v: Rephrase ISO driver selection [(#169)](https://github.com/ManageIQ/manageiq-content/pull/169)
+- Support TTL (Time To Live) value for services. [(#162)](https://github.com/ManageIQ/manageiq-content/pull/162)
+
+
 ## Unreleased Sprint 66 Ending 2017-08-07
 
 ### Added
