@@ -33,7 +33,7 @@ object:
       max_time: 
   - field:
       aetype: state
-      name: exectue
+      name: execute
       display_name: 
       datatype: string
       priority: 2
