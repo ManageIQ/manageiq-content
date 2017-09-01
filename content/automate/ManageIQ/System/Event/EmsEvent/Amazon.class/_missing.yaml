@@ -7,4 +7,6 @@ object:
     name: ".missing"
     inherits: 
     description: 
-  fields: []
+  fields:
+    - rel4:
+        value: "/System/event_handlers/refresh"
