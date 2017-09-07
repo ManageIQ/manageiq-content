@@ -4,7 +4,7 @@ version: 1.0
 object:
   attributes:
     display_name: 
-    name: DeleteVolume
+    name: AWS_API_CALL_CreateVpc
     inherits: 
     description: 
   fields:
