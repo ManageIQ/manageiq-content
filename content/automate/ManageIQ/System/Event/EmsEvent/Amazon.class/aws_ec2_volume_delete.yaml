@@ -4,7 +4,7 @@ version: 1.0
 object:
   attributes:
     display_name: 
-    name: CreateVolume
+    name: AWS_EC2_Volume_DELETE
     inherits: 
     description: 
   fields:
