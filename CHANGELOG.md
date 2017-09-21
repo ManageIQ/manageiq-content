@@ -46,29 +46,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased Sprint 64 Ending 2017-07-10
 
-### Added
-- Event switchboard entries for Amazon EBS events. [(#137)](https://github.com/ManageIQ/manageiq-content/pull/137)
-
 ### Fixed
-- v2v: Fix confusing message in WaitForImport state [(#140)](https://github.com/ManageIQ/manageiq-content/pull/140)
-- v2v: Fix list drivers on missing ISO domain [(#139)](https://github.com/ManageIQ/manageiq-content/pull/139)
 - Fixed quota calculations for multiple vms in requested method. [(#128)](https://github.com/ManageIQ/manageiq-content/pull/128)
 
 ## Unreleased Sprint 63 Ending 2017-06-19
 
 ### Added
-- v2v: Add automate methods for post-import network configuration [(#123)](https://github.com/ManageIQ/manageiq-content/pull/123)
 - Add Available_Projects method for dynamic dropdown in container template service dialog [(#127)](https://github.com/ManageIQ/manageiq-content/pull/127)
-
-### Changed
-- Update method order_ansible_playbook.rb to match the move of create_service_provision_request [(#126)](https://github.com/ManageIQ/manageiq-content/pull/126)
 
 ## Unreleased Sprint 62 Ending 2017-06-05
 
 ### Added
 - Targeted refresh enhacements for VM import\rename\migration events [(#119)](https://github.com/ManageIQ/manageiq-content/pull/119)
-- v2v: Add support for driver ISOs [(#121)](https://github.com/ManageIQ/manageiq-content/pull/121)
-- Add automate methods for VM import between providers [(#36)](https://github.com/ManageIQ/manageiq-content/pull/36)
 
 ### Fixed
 - Require just rails/engine [(#120)](https://github.com/ManageIQ/manageiq-content/pull/120)
@@ -78,13 +67,31 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ### Fixed
 - Support embedded_ansible to fetch credentials from provider [(#112)](https://github.com/ManageIQ/manageiq-content/pull/112)
 
-## Unreleased Sprint 60 Ending 2017-05-08
+## Fine-3
+
+### Added
+- Add automate methods for VM import between providers [(#36)](https://github.com/ManageIQ/manageiq-content/pull/36)
+- v2v: Add support for driver ISOs [(#121)](https://github.com/ManageIQ/manageiq-content/pull/121)
+- v2v: Add automate methods for post-import network configuration [(#123)](https://github.com/ManageIQ/manageiq-content/pull/123)
+- Event switchboard entries for Amazon EBS events. [(#137)](https://github.com/ManageIQ/manageiq-content/pull/137)
+
+### Changed
+- Update method order_ansible_playbook.rb to match the move of create_service_provision_request [(#126)](https://github.com/ManageIQ/manageiq-content/pull/126)
 
 ### Fixed
-- Change exceeds message in log to warn type. [(#104)](https://github.com/ManageIQ/manageiq-content/pull/104)
 - Change errors in log to error type. [(#101)](https://github.com/ManageIQ/manageiq-content/pull/101)
 - Changed ${/#ae_reason} to a string value in on_error methods. [(#98)](https://github.com/ManageIQ/manageiq-content/pull/98)
 - Add quota checking for VMReconfigure tests. [(#56)](https://github.com/ManageIQ/manageiq-content/pull/56)
+- Change exceeds message in log to warn type. [(#104)](https://github.com/ManageIQ/manageiq-content/pull/104)
+- Remove VM reconfiguration email. [(#116)](https://github.com/ManageIQ/manageiq-content/pull/116)
+- OrderAnsiblePlaybook method should collect machine credential. [(118)](https://github.com/ManageIQ/manageiq-content/pull/118)
+- v2v: Fix confusing message in WaitForImport state [(#140)](https://github.com/ManageIQ/manageiq-content/pull/140)
+- v2v: Fix list drivers on missing ISO domain [(#139)](https://github.com/ManageIQ/manageiq-content/pull/139)
+
+## Fine-2
+
+### Added
+- Order Ansible Playbook from a Custom Button using a Method. [(#113)(https://github.com/ManageIQ/manageiq-content/pull/113)
 
 ## Fine-1
 
