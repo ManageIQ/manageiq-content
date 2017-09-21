@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+
+## Unreleased Sprint 69 Ending 2017-09-18
+
+### Added
+- Services
+  - Revert "Support TTL (Time To Live) value for services." [(#186)](https://github.com/ManageIQ/manageiq-content/pull/186)
+- Events
+  - Target template related actions [(#153)](https://github.com/ManageIQ/manageiq-content/pull/153)
+
 ## Unreleased Sprint 68 Ending 2017-09-04
 
 ### Added
@@ -11,13 +20,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Record the name of the actual VM to simplify debugging [(#175)](https://github.com/ManageIQ/manageiq-content/pull/175)
 - Pre-check install_drivers checkbox for windows VMs [(#170)](https://github.com/ManageIQ/manageiq-content/pull/170)
 
-
 ## Unreleased Sprint 67 Ending 2017-08-21
 
 ### Added
 - v2v: Rephrase ISO driver selection [(#169)](https://github.com/ManageIQ/manageiq-content/pull/169)
 - Support TTL (Time To Live) value for services. [(#162)](https://github.com/ManageIQ/manageiq-content/pull/162)
-
 
 ## Unreleased Sprint 66 Ending 2017-08-07
 
