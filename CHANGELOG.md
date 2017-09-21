@@ -8,8 +8,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ## Unreleased Sprint 69 Ending 2017-09-18
 
 ### Added
-- Services
-  - Revert "Support TTL (Time To Live) value for services." [(#186)](https://github.com/ManageIQ/manageiq-content/pull/186)
 - Events
   - Target template related actions [(#153)](https://github.com/ManageIQ/manageiq-content/pull/153)
 
