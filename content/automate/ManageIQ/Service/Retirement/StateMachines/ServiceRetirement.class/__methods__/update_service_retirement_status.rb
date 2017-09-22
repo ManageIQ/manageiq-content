@@ -32,7 +32,7 @@ updated_message += "Current Retry Number [#{$evm.root['ae_state_retries']}]" if 
 # Update Status for on_error for all states other than the first state which is start retirement
 # in the retirement state machine.
 if $evm.root['ae_result'] == 'error'
-  if step.downcase == 'start retirement'
+  if step.downcase == 'startretirement'
     msg = 'Cannot continue because Service is '
     msg += service ? "#{service.retirement_state}." : 'nil.'
     $evm.log('info', msg)
