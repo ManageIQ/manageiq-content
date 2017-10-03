@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+## Unreleased Sprint 70 Ending 2017-10-02
+
+### Added
+- Do targeted refresh based on Openstack events. [(#184)](https://github.com/ManageIQ/manageiq-content/pull/184)
+- Add basic events handlers for AWS [(#183)](https://github.com/ManageIQ/manageiq-content/pull/183)
+
+### Fixed
+- Fix VM Migrate complete email when To field is nil. [(#177)](https://github.com/ManageIQ/manageiq-content/pull/177)
+
 ## Unreleased Sprint 69 Ending 2017-09-18
 
 ### Added
