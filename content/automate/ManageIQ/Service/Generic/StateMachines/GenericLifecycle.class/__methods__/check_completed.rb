@@ -53,7 +53,7 @@ module ManageIQ
                 max_retry_count = @handle.root['ae_state_max_retries']
                 return if ttl.zero? || max_retry_count.zero?
 
-                interval = ttl / max_retry_count
+                interval = ttl / max_retry_count.to_f
                 if interval > MIN_RETRY_INTERVAL
                   @handle.log('info', "Setting retry interval to #{interval} time to live #{ttl} / #{max_retry_count}")
                   @handle.root['ae_retry_interval'] = interval.minutes
