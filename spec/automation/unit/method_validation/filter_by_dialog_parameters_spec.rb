@@ -51,7 +51,7 @@ describe "FilterByDialogParameters Automate Method" do
       expect(ws.root['include_service']).to be_truthy
     end
 
-    it "with vm_serice" do
+    it "with vm_service" do
       post_create(:dialog => {'dialog_environment' => "vm_service"})
       ws = run_automate_method(ServiceTemplate.find_by_name("vm_service"),
                                root_service_template_task,
