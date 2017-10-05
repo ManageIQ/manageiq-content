@@ -42,7 +42,8 @@ module ManageIQ
           end
 
           def vmdb_object_ip
-            vmdb_object.try(:ipaddresses).try(:first).tap do |ip|
+            (vmdb_object.try(:floating_ip_addresses).try(:first) ||
+            vmdb_object.try(:ipaddresses).try(:first)).tap do |ip|
               if ip.nil?
                 raise "IP address not specified for vmdb_object"
               end
