@@ -94,9 +94,9 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
         Spec::Support::MiqAeMockObject.new('service' => svc_service, 'service_action' => 'Provision', 'ae_state_max_retries' => 100)
       end
 
-      context "600 ttl, 100 retries eq interval 6" do
-        let(:ae_retry_interval) { 6.minutes }
-        let(:ttl) { 600 }
+      context "650 ttl, 100 retries eq interval 6.5" do
+        let(:ae_retry_interval) { 6.5.minutes }
+        let(:ttl) { 650 }
         it_behaves_like "#ttl"
       end
 
@@ -117,9 +117,9 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
         Spec::Support::MiqAeMockObject.new('service' => svc_service, 'service_action' => 'Retirement', 'ae_state_max_retries' => 100)
       end
 
-      context "600 ttl, 100 retries eq interval 6" do
-        let(:ae_retry_interval) { 6.minutes }
-        let(:ttl) { 600 }
+      context "650 ttl, 100 retries eq interval 6.5" do
+        let(:ae_retry_interval) { 6.5.minutes }
+        let(:ttl) { 650 }
         it_behaves_like "#ttl"
       end
 
