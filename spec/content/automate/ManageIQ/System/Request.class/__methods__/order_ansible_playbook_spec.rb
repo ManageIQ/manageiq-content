@@ -132,6 +132,31 @@ describe ManageIQ::Automate::System::Request::OrderAnsiblePlaybook do
     end
 
     it_behaves_like "order playbook"
+
+    context 'without a floating_ip_addresses method defined' do
+      it_behaves_like "order playbook" do
+        let(:svc_vm) { double(:ipaddresses => []) }
+      end
+    end
+
+    context 'when floating_ip_addresses is empty' do
+      it_behaves_like "order playbook" do
+        let(:svc_vm) { double(:floating_ip_addresses => []) }
+      end
+    end
+
+    context 'with a floating_ip_address' do
+      it_behaves_like "order playbook" do
+        let(:floating_ip) { '2.2.2.94' }
+        let(:svc_vm) { double(:floating_ip_addresses => [floating_ip]) }
+        let(:extra_vars) do
+          { :credential  => nil,
+            :hosts       => floating_ip,
+            'param_var1' => 'A',
+            'param_var2' => 'B' }
+        end
+      end
+    end
   end
 
   context "with vm host but no vm" do
