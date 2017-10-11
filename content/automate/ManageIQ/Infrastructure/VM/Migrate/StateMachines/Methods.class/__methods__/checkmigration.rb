@@ -28,18 +28,27 @@ module ManageIQ
                 task_status = task['status']
                 result = task.statemachine_task_status
 
+                status = task.source.migration_status
+                result = status if status
+
                 @handle.log('info', "CheckMigration returned <#{result}> for state <#{task.state}> and status <#{task_status}>")
 
                 case result
                 when 'error'
+                  task.source.reset_migration_status
                   @handle.root['ae_result'] = 'error'
                   reason = @handle.root['vm_migrate_task'].message
                   reason = reason[7..-1] if reason[0..6] == 'Error: '
                   @handle.root['ae_reason'] = reason
+                when 'failure'
+                  task.source.reset_migration_status
+                  @handle.root['ae_result'] = 'error'
+                  @handle.root['ae_reason'] = "Migration failed"
                 when 'retry'
                   @handle.root['ae_result'] = 'retry'
-                when 'ok'
+                when 'ok' || 'success'
                   # Bump State
+                  task.source.reset_migration_status
                   @handle.root['ae_result'] = 'ok'
                 end
               end

@@ -47,6 +47,8 @@ module ManageIQ
                   if status == 'migration_complete'
                     task.finished('VM Migrated Successfully')
                   end
+                elsif @handle.root['ae_result'] == 'error'
+                  task.finished('VM migration failed')
                 end
               end
             end
