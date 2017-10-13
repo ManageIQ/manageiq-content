@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Description: calculate entity used quota values
 #
@@ -19,7 +20,13 @@ module ManageIQ
             private
 
             def used(quota_source)
-              @handle.root['quota_used'] = consumption(quota_source)
+              quota_used = consumption(quota_source)
+              @handle.log("info", "Quota Used: #{quota_used.inspect}")
+
+              quota_active = active_provision_counts
+              @handle.log("info", "Quota #{active_method_name}: #{quota_active.inspect}")
+
+              merge_counts(quota_used, quota_active)
             end
 
             def quota_source
@@ -35,6 +42,26 @@ module ManageIQ
                 :storage             => source.allocated_storage,
                 :provisioned_storage => source.provisioned_storage
               }
+            end
+
+            def active_method_name
+              quota_source = @handle.root['quota_source_type'].downcase
+              source = quota_source == 'user' ? 'owner' : quota_source
+              "active_provisions_by_#{source}".to_sym
+            end
+
+            def active_provision_counts
+              active_provisions = @handle.root['miq_request'].check_quota(active_method_name)
+              {:cpu                 => active_provisions[:cpu],
+               :memory              => active_provisions[:memory],
+               :vms                 => active_provisions[:count],
+               :storage             => active_provisions[:storage],
+               :provisioned_storage => 0}
+            end
+
+            def merge_counts(quota_used, quota_active)
+              @handle.root['quota_used'] = quota_used.merge(quota_active) { |_key, val1, val2| val1 + val2 }
+              @handle.log("info", "Quota Totals: #{@handle.root['quota_used'].inspect}")
             end
           end
         end
