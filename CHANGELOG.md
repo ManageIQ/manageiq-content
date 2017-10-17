@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+## Unreleased as of Sprint 71 Ending 2017-10-16
+
+### Fixed
+- Added active provisions to quota count. [(#196)](https://github.com/ManageIQ/manageiq-content/pull/196)
+- Fixed calculation for Ansible playbook service max TTL. [(#193)](https://github.com/ManageIQ/manageiq-content/pull/193)
+
 ## Unreleased Sprint 70 Ending 2017-10-02
 
 ### Added
