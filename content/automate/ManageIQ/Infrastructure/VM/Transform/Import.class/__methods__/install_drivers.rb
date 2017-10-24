@@ -10,7 +10,7 @@ module ManageIQ
               end
 
               def main
-                if not @handle.root['vm'].nil?
+                if !@handle.root['vm'].nil?
                   os = @handle.root['vm'].operating_system
                   is_windows = os.try(:product_name) =~ /windows/i
                 else
