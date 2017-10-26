@@ -17,11 +17,13 @@ module ManageIQ
 
                 if multi_vm
                   category_name = @handle.root['dialog_tag_category']
-                  @handle.log(:info, "Selected tag category: #{category_name}")
-                  category = @handle.vmdb(:classification).find_by_name(category_name)
-                  unless category.nil?
-                    category.entries.each do |tag|
-                      values_hash[tag.name] = tag.description
+                  if category_name.present?
+                    @handle.log(:info, "Selected tag category: #{category_name}")
+                    category = @handle.vmdb(:classification).find_by_name(category_name)
+                    unless category.nil?
+                      category.entries.each do |tag|
+                        values_hash[tag.name] = tag.description
+                      end
                     end
                   end
                 end
