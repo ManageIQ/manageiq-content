@@ -4,10 +4,10 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListTagNames
   let(:provider) { FactoryGirl.create(:ems_redhat) }
 
   let(:root_object) do
-    Spec::Support::MiqAeMockObject.new({
-        'dialog_provider' => provider.id.to_s,
-        'dialog_tag_category' => 'department'
-    })
+    Spec::Support::MiqAeMockObject.new(
+      'dialog_provider' => provider.id.to_s,
+      'dialog_tag_category' => 'department'
+    )
   end
 
   let(:ae_service) do
@@ -32,7 +32,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListTagNames
     expect(ae_service.object['required']).to eq(false)
     expect(ae_service.object['visible']).to eq(true)
 
-    tag_names = { nil => '<Noe>' }
+    tag_names = { nil => '<None>' }
     Classification.find_by_name('department').entries.each do |tag|
       tag_names[tag.name] = tag.description
     end

@@ -5,7 +5,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListTagCateg
 
   let(:root_object) do
     Spec::Support::MiqAeMockObject.new(
-        'dialog_provider' => provider.id.to_s
+      'dialog_provider' => provider.id.to_s
     )
   end
 
