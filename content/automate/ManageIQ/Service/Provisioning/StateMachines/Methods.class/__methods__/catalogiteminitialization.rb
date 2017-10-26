@@ -235,6 +235,14 @@ def parsed_dialog_information
   return merged_options_hash, merged_tags_hash
 end
 
+def service_retires_on_date(dialog_options_hash)
+  service_retires_on_date = dialog_options_hash.fetch(:service_retires_on, nil)
+  unless service_retires_on_date.nil?
+    @service.retires_on = service_retires_on_date unless service_retires_on_date.nil?
+    log_and_update_message(:info, "Service retires on: #{service_retires_on_date}")
+  end
+end
+
 begin
 
   @task = $evm.root['service_template_provision_task']
@@ -247,6 +255,7 @@ begin
   unless dialog_options_hash.blank?
     override_service_name(dialog_options_hash)
     override_service_description(dialog_options_hash)
+    service_retires_on_date(dialog_options_hash)
   end
 
   unless dialog_tags_hash.blank?
