@@ -15,9 +15,10 @@ module ManageIQ
 
               def main
                 validate_root_args(%w(vm dialog_provider dialog_cluster dialog_storage dialog_sparse))
-                if !@handle.root['dialog_tag_category'].empty? && !@handle.root['dialog_tag_name'].empty?
+                if @handle.root['dialog_tag_category'].present? && @handle.root['dialog_tag_name'].present?
                   tag = "/#{@handle.root['dialog_tag_category']}/#{@handle.root['dialog_tag_name']}"
-                  tagged_vms = @handle.vmdb(:vm).find_tagged_with(:all => tag, :ns => '/managed')
+                  tagged_vms = @handle.vmdb('ManageIQ_Providers_Vmware_InfraManager_Vm')
+                                      .find_tagged_with(:all => tag, :ns => '/managed')
                   tagged_vms.each do |vm|
                     create_request(vm, '')
                   end
@@ -43,7 +44,7 @@ module ManageIQ
                   :message       => 'create',
                   :attrs         => {
                     'Vm::vm'      => vm.id,
-                    'name'        => target_name.empty? ? vm.name : target_name,
+                    'name'        => target_name.present? ? target_name : vm.name,
                     'provider_id' => @handle.root['dialog_provider'],
                     'cluster_id'  => @handle.root['dialog_cluster'],
                     'storage_id'  => @handle.root['dialog_storage'],
