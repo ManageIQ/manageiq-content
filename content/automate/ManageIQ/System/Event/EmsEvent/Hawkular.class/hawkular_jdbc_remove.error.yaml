@@ -1,0 +1,12 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: JDBC Undeploy Error
+    name: hawkular_jdbc_remove.error
+    inherits: 
+    description: 
+  fields:
+  - rel4:
+      value: "/System/event_handlers/event_action_policy?target=middleware_server&policy_event=middleware_jdbc_remove_error&param="

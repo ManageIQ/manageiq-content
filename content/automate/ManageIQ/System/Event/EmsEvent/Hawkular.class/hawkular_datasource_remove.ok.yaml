@@ -1,0 +1,14 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: Datasource Undeploy Success
+    name: hawkular_datasource_remove.ok
+    inherits: 
+    description: 
+  fields:
+  - rel4:
+      value: "/System/event_handlers/event_action_refresh?target=ems"
+  - rel5:
+      value: "/System/event_handlers/event_action_policy?target=middleware_server&policy_event=middleware_datasource_remove_ok&param="
