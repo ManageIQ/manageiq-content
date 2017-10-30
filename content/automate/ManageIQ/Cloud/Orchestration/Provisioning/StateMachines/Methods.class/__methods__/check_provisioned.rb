@@ -47,10 +47,11 @@ module ManageIQ
 
               def refresh_provider(service)
                 provider = service.orchestration_manager
+                stack    = service.orchestration_stack
 
-                @handle.log("info", "Refreshing provider #{provider.name}")
+                @handle.log("info", "Refreshing provider '#{provider.name}' and stack '#{stack.name}'")
                 @handle.set_state_var('provider_last_refresh', provider.last_refresh_date.to_i)
-                provider.refresh
+                @handle.vmdb(:orchestration_stack).refresh(provider.id, stack.ems_ref)
               end
 
               def refresh_may_have_completed?(service)

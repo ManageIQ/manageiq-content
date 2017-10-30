@@ -3,12 +3,17 @@ require_domain_file
 describe ManageIQ::Automate::Cloud::Orchestration::Provisioning::StateMachines::CheckProvisioned do
   let(:deploy_result)           { "deploy result" }
   let(:deploy_reason)           { "deploy reason" }
-  let(:ems_amazon)              { FactoryGirl.create(:ems_amazon, :last_refresh_date => Time.now.getlocal - 100) }
   let(:failure_msg)             { "failure message" }
   let(:long_failure_msg)        { "t" * 300 }
   let(:request)                 { FactoryGirl.create(:service_template_provision_request, :requester => user) }
   let(:service_orchestration)   { FactoryGirl.create(:service_orchestration, :orchestration_manager => ems_amazon) }
   let(:user)                    { FactoryGirl.create(:user_with_group) }
+
+  let(:ems_amazon) do
+    ems = FactoryGirl.create(:ems_amazon, :last_refresh_date => Time.now.getlocal - 100)
+    ems.authentications << FactoryGirl.create(:authentication, :status => "Valid")
+    ems
+  end
 
   let(:miq_request_task) do
     FactoryGirl.create(:miq_request_task,
@@ -97,7 +102,9 @@ describe ManageIQ::Automate::Cloud::Orchestration::Provisioning::StateMachines::
       allow(svc_model_service).to receive(:orchestration_manager).and_return(svc_model_orchestration_manager)
       allow(svc_model_service)
         .to receive(:orchestration_stack_status) { ['CREATE_COMPLETE', nil] }
-      expect(svc_model_orchestration_manager).to receive(:refresh)
+      expect(MiqAeMethodService::MiqAeServiceOrchestrationStack).to(
+        receive(:refresh).with(svc_model_orchestration_manager.id, amazon_stack.ems_ref)
+      )
       described_class.new(ae_service).main
       expect(ae_service.root['ae_result']).to eq('retry')
     end
