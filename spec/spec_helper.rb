@@ -15,6 +15,8 @@ end
 
 Dir[ManageIQ::AutomationEngine::Engine.root.join("spec/support/**/*.rb")].each { |f| require f }
 
+Dir[__dir__ + "/../spec/factories/**{,/*/**}/*.rb"].each { |f| require f }
+
 RSpec.configure do |config|
   config.include Spec::Support::AutomationHelper
 

@@ -8,7 +8,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Provisioning::StateMachines::
   let(:orchestration_stack)   { FactoryGirl.create(:orchestration_stack_amazon, :name => "name", :outputs => [output]) }
 
   let(:miq_request_task) do
-    FactoryGirl.create(:miq_request_task,
+    FactoryGirl.create(:service_template_provision_task,
                        :destination => service_orchestration,
                        :miq_request => request)
   end
