@@ -14,16 +14,37 @@ module ManageIQ
               end
 
               def main
-                validate_root_args %w(vm dialog_name dialog_provider dialog_cluster dialog_storage dialog_sparse)
+                validate_root_args(%w(vm dialog_provider dialog_cluster dialog_storage dialog_sparse))
+                if @handle.root['dialog_tag_category'].present? && @handle.root['dialog_tag_name'].present?
+                  tag = "/#{@handle.root['dialog_tag_category']}/#{@handle.root['dialog_tag_name']}"
+                  tagged_vms = @handle.vmdb('ManageIQ_Providers_Vmware_InfraManager_Vm')
+                                      .find_tagged_with(:all => tag, :ns => '/managed')
+                  tagged_vms.each do |vm|
+                    create_request(vm, '')
+                  end
+                else
+                  create_request(@handle.root['vm'], @handle.root['dialog_name'])
+                end
+              end
 
+              def validate_root_args(arg_names)
+                arg_names.each do |name|
+                  next if @handle.root[name].present?
+                  msg = "Error, required root attribute: #{name} not found"
+                  @handle.log(:error, msg)
+                  raise msg
+                end
+              end
+
+              def create_request(vm, target_name)
                 options = {
                   :namespace     => 'Infrastructure/VM/Transform/StateMachines',
                   :class_name    => 'VmImport',
                   :instance_name => 'default',
                   :message       => 'create',
                   :attrs         => {
-                    'Vm::vm'      => @handle.root['vm'].id,
-                    'name'        => @handle.root['dialog_name'],
+                    'Vm::vm'      => vm.id,
+                    'name'        => target_name.present? ? target_name : vm.name,
                     'provider_id' => @handle.root['dialog_provider'],
                     'cluster_id'  => @handle.root['dialog_cluster'],
                     'storage_id'  => @handle.root['dialog_storage'],
@@ -35,15 +56,6 @@ module ManageIQ
 
                 auto_approve = true
                 @handle.execute('create_automation_request', options, @handle.root['user'].userid, auto_approve)
-              end
-
-              def validate_root_args(arg_names)
-                arg_names.each do |name|
-                  next if @handle.root[name].present?
-                  msg = "Error, required root attribute: #{name} not found"
-                  @handle.log(:error, msg)
-                  raise msg
-                end
               end
             end
           end

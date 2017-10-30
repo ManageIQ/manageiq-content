@@ -10,8 +10,12 @@ module ManageIQ
               end
 
               def main
-                os = @handle.root['vm'].operating_system
-                is_windows = os.try(:product_name) =~ /windows/i
+                if !@handle.root['vm'].nil?
+                  os = @handle.root['vm'].operating_system
+                  is_windows = os.try(:product_name) =~ /windows/i
+                else
+                  is_windows = false
+                end
                 checkbox_values = {
                   'value'     => is_windows ? 't' : 'f',
                   'read_only' => false,
