@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+## Unreleased as of Sprint 72 Ending 2017-10-30
+
+### Added
+- Auto approval for instance resize operation. [(#205)](https://github.com/ManageIQ/manageiq-content/pull/205)
+- Nuage events callbacks for targeted refresh [(#204)](https://github.com/ManageIQ/manageiq-content/pull/204)
+- Add policy event triggers for Hawkular [(#201)](https://github.com/ManageIQ/manageiq-content/pull/201)
+- v2v: Extend 'VM Transform' dialog to select VMs by tag [(#200)](https://github.com/ManageIQ/manageiq-content/pull/200)
+- Do targeted refresh in Stack check provisioned [(#182)](https://github.com/ManageIQ/manageiq-content/pull/182)
+
 ## Unreleased as of Sprint 71 Ending 2017-10-16
 
 ### Fixed
