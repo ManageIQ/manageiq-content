@@ -6,6 +6,9 @@ sudo: false
 cache: bundler
 addons:
   postgresql: '9.4'
+before_install:
+- rvm @global do gem uninstall bundler -a -x
+- rvm @global do gem install bundler -v 1.15.4
 bundler_args: --no-deployment
 before_script: bundle exec rake spec:setup
 install: bin/setup
