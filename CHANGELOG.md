@@ -14,87 +14,37 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - v2v: Extend 'VM Transform' dialog to select VMs by tag [(#200)](https://github.com/ManageIQ/manageiq-content/pull/200)
 - Do targeted refresh in Stack check provisioned [(#182)](https://github.com/ManageIQ/manageiq-content/pull/182)
 
-## Unreleased as of Sprint 71 Ending 2017-10-16
-
-### Fixed
-- Added active provisions to quota count. [(#196)](https://github.com/ManageIQ/manageiq-content/pull/196)
-- Fixed calculation for Ansible playbook service max TTL. [(#193)](https://github.com/ManageIQ/manageiq-content/pull/193)
-
-## Unreleased Sprint 70 Ending 2017-10-02
+## Gaprindashvili Beta1
 
 ### Added
 - Do targeted refresh based on Openstack events. [(#184)](https://github.com/ManageIQ/manageiq-content/pull/184)
 - Add basic events handlers for AWS [(#183)](https://github.com/ManageIQ/manageiq-content/pull/183)
-
-### Fixed
-- Fix VM Migrate complete email when To field is nil. [(#177)](https://github.com/ManageIQ/manageiq-content/pull/177)
-- Fixed an issue when trying to retire a service that is already in the process of being retired. [(#189)](https://github.com/ManageIQ/manageiq-content/pull/189)
-
-## Unreleased Sprint 69 Ending 2017-09-18
-
-### Added
-- Events
-  - Target template related actions [(#153)](https://github.com/ManageIQ/manageiq-content/pull/153)
-
-## Unreleased Sprint 68 Ending 2017-09-04
-
-### Added
+- Target template related actions [(#153)](https://github.com/ManageIQ/manageiq-content/pull/153)
 - Do targeted refresh based on AWS events [(#178)](https://github.com/ManageIQ/manageiq-content/pull/178)
 - Record the name of the actual VM to simplify debugging [(#175)](https://github.com/ManageIQ/manageiq-content/pull/175)
 - Pre-check install_drivers checkbox for windows VMs [(#170)](https://github.com/ManageIQ/manageiq-content/pull/170)
-
-## Unreleased Sprint 67 Ending 2017-08-21
-
-### Added
 - v2v: Rephrase ISO driver selection [(#169)](https://github.com/ManageIQ/manageiq-content/pull/169)
 - Support TTL (Time To Live) value for services. [(#162)](https://github.com/ManageIQ/manageiq-content/pull/162)
-
-## Unreleased Sprint 66 Ending 2017-08-07
-
-### Added
 - AWS DetachVolume event switchboard setting. [(#164)](https://github.com/ManageIQ/manageiq-content/pull/164)
 - New refresh method callable from the automate [(#159)](https://github.com/ManageIQ/manageiq-content/pull/159)
 - Fix message when import fails [(#161)](https://github.com/ManageIQ/manageiq-content/pull/161)
 - Support TTL (Time To Live) value for services. [(#148)](https://github.com/ManageIQ/manageiq-content/pull/148)
+- v2v: Support virtio-win drivers ISO [(#147)](https://github.com/ManageIQ/manageiq-content/pull/147)
+- Targeted refresh enhacements for VM import\rename\migration events [(#119)](https://github.com/ManageIQ/manageiq-content/pull/119)
 
 ### Fixed
+- Added active provisions to quota count. [(#196)](https://github.com/ManageIQ/manageiq-content/pull/196)
+- Fixed calculation for Ansible playbook service max TTL. [(#193)](https://github.com/ManageIQ/manageiq-content/pull/193)
+- Fix VM Migrate complete email when To field is nil. [(#177)](https://github.com/ManageIQ/manageiq-content/pull/177)
+- Fixed an issue when trying to retire a service that is already in the process of being retired. [(#189)](https://github.com/ManageIQ/manageiq-content/pull/189)
 - Changed ae_retry_limit = 1.minute to ae_retry_interval = 1.minute. [(#151)](https://github.com/ManageIQ/manageiq-content/pull/151)
 - Changes made in Wait_for_ip and Wait_for_completion methods in [(#152)](https://github.com/ManageIQ/manageiq-content/pull/152)
 - v2v: Handle IMPORTEXPORT_STARTING_IMPORT_VM event [(#149)](https://github.com/ManageIQ/manageiq-content/pull/149)
 - Set retry interval to 1 minute for generic service state-machine. [(#163)](https://github.com/ManageIQ/manageiq-content/pull/163)
-
-## Unreleased Sprint 65 Ending 2017-07-24
-
-### Added
-- v2v: Support virtio-win drivers ISO [(#147)](https://github.com/ManageIQ/manageiq-content/pull/147)
-- Host removal [(#146)](https://github.com/ManageIQ/manageiq-content/pull/146)
-- Host install [(#145)](https://github.com/ManageIQ/manageiq-content/pull/145)
-- Host update [(#144)](https://github.com/ManageIQ/manageiq-content/pull/144)
-
-### Fixed
 - v2v: Fix filtering of drivers ISO to display [(#143)](https://github.com/ManageIQ/manageiq-content/pull/143)
-
-## Unreleased Sprint 64 Ending 2017-07-10
-
-### Fixed
 - Fixed quota calculations for multiple vms in requested method. [(#128)](https://github.com/ManageIQ/manageiq-content/pull/128)
-
-## Unreleased Sprint 63 Ending 2017-06-19
-
-### Added
 - Add Available_Projects method for dynamic dropdown in container template service dialog [(#127)](https://github.com/ManageIQ/manageiq-content/pull/127)
-
-## Unreleased Sprint 62 Ending 2017-06-05
-
-### Added
-- Targeted refresh enhacements for VM import\rename\migration events [(#119)](https://github.com/ManageIQ/manageiq-content/pull/119)
-
-### Fixed
 - Require just rails/engine [(#120)](https://github.com/ManageIQ/manageiq-content/pull/120)
-
-## Unreleased Sprint 61 Ending 2017-05-22
-
-### Fixed
 - Support embedded_ansible to fetch credentials from provider [(#112)](https://github.com/ManageIQ/manageiq-content/pull/112)
 
 ## Fine-3
