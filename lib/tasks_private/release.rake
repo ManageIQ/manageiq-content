@@ -27,7 +27,7 @@ task :release do
   File.write(ae_file, content.to_yaml)
 
   # Create the commit and tag
-  exit $?.exitstatus unless system("git add #{version_file}")
+  exit $?.exitstatus unless system("git add #{ae_file}")
   exit $?.exitstatus unless system("git commit -m 'Release #{version}'")
   exit $?.exitstatus unless system("git tag #{version}")
 
