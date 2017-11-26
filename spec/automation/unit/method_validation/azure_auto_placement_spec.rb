@@ -15,7 +15,7 @@ describe "azure best fit" do
      :placement_auto => [true, 1],
      :instance_type  => [m2_small_flavor.id, m2_small_flavor.name]}
   end
-  let(:resource_group)    { FactoryGirl.create(:resource_group, :ems_id => ems.id) }
+  let(:resource_group)    { FactoryGirl.create(:azure_resource_group, :ems_id => ems.id) }
   let(:user)              { FactoryGirl.create(:user_with_group) }
   let(:vm_template)       { FactoryGirl.create(:template_azure, :ext_management_system => ems) }
   let(:ws) do
