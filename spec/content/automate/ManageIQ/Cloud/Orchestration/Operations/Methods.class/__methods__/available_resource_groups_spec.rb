@@ -25,8 +25,8 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableResourec
 
   shared_examples_for "#having all of the resource groups" do
     let(:default_desc) { "<select>" }
-    let(:rgroup1) { FactoryGirl.create(:resource_group) }
-    let(:rgroup2) { FactoryGirl.create(:resource_group) }
+    let(:rgroup1) { FactoryGirl.create(:azure_resource_group) }
+    let(:rgroup2) { FactoryGirl.create(:azure_resource_group) }
     let(:ems) do
       FactoryGirl.create(:ems_azure, :resource_groups => [rgroup1, rgroup2])
     end

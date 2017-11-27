@@ -4,7 +4,7 @@ describe "parse_automation_request" do
 
   it "for miq_provision request" do
     ws = MiqAeEngine.instantiate("#{inst}?request=vm_provision", user)
-    expect(ws.root).to have_attributes(
+    expect(ws.root.attributes).to include(
       "target_component" => "VM",
       "target_class"     => "Lifecycle",
       "target_instance"  => "Provisioning")
@@ -12,7 +12,7 @@ describe "parse_automation_request" do
 
   it "for vm_retired request" do
     ws = MiqAeEngine.instantiate("#{inst}?request=vm_retired", user)
-    expect(ws.root).to have_attributes(
+    expect(ws.root.attributes).to include(
       "target_component" => "VM",
       "target_class"     => "Lifecycle",
       "target_instance"  => "Retirement")
@@ -20,7 +20,7 @@ describe "parse_automation_request" do
 
   it "for vm_migrate request" do
     ws = MiqAeEngine.instantiate("#{inst}?request=vm_migrate", user)
-    expect(ws.root).to have_attributes(
+    expect(ws.root.attributes).to include(
       "target_component" => "VM",
       "target_class"     => "Lifecycle",
       "target_instance"  => "Migrate")
@@ -28,7 +28,7 @@ describe "parse_automation_request" do
 
   it "for host_provision request" do
     ws = MiqAeEngine.instantiate("#{inst}?request=host_provision", user)
-    expect(ws.root).to have_attributes(
+    expect(ws.root.attributes).to include(
       "target_component" => "Host",
       "target_class"     => "Lifecycle",
       "target_instance"  => "Provisioning")
@@ -36,7 +36,7 @@ describe "parse_automation_request" do
 
   it "for configured_system_provision request" do
     ws = MiqAeEngine.instantiate("#{inst}?request=configured_system_provision", user)
-    expect(ws.root).to have_attributes(
+    expect(ws.root.attributes).to include(
       "target_component"     => "Configured_System",
       "target_class"         => "Lifecycle",
       "target_instance"      => "Provisioning",
