@@ -13,7 +13,7 @@ module ManageIQ
                 values_hash = {}
                 values_hash[nil] = '-- select target infrastructure provider from list --'
 
-                managers = @handle.vmdb('ManageIQ_Providers_Redhat_InfraManager').all.select(&:validate_import_vm)
+                managers = @handle.vmdb('ManageIQ_Providers_Redhat_InfraManager').all.select(&:supports_vm_import?)
                 managers.each do |manager|
                   values_hash[manager.id] = manager.name
                 end
