@@ -8,5 +8,7 @@ object:
     inherits: 
     description: A virtual machine was deleted.
   fields:
+  - rel3:
+      value: "/System/event_handlers/event_action_policy?target=src_vm&policy_event=vm_destroy&param="
   - rel4:
       value: "/System/event_handlers/event_action_refresh?target=ems"
