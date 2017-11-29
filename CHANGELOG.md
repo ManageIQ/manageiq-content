@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+## Gaprindashvili Beta2
+
+### Fixed
+- Add more aws event handlers [(#217)](https://github.com/ManageIQ/manageiq-content/pull/217)
+
 ## Gaprindashvili Beta1
 
 ### Added
