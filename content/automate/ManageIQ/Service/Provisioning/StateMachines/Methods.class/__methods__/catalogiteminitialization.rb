@@ -40,7 +40,7 @@ end
 def override_service_name(dialog_options_hash)
   log_and_update_message(:info, "Processing override_service_name...", true)
   new_service_name = dialog_options_hash.fetch(:service_name, nil)
-  new_service_name = "#{@service.name}-#{Time.now.strftime('%Y%m%d-%H%M%S')}" if new_service_name.blank?
+  new_service_name = "#{@service.name}-#{Time.zone.now.strftime('%Y%m%d-%H%M%S')}" if new_service_name.blank?
 
   log_and_update_message(:info, "Service name: #{new_service_name}")
   @service.name = new_service_name
@@ -55,6 +55,24 @@ def override_service_description(dialog_options_hash)
   log_and_update_message(:info, "Service description #{new_service_description}")
   @service.description = new_service_description
   log_and_update_message(:info, "Processing override_service_description...Complete", true)
+end
+
+def override_service_retirement_days(dialog_options_hash)
+  new_service_retirement_days = dialog_options_hash.fetch(:service_retirement_days, nil)
+  return if new_service_retirement_days.blank?
+
+  log_and_update_message(:info, "Processing override_service_retirement_days: #{new_service_retirement_days}", true)
+  @service.extend_retires_on(new_service_retirement_days.to_i)
+  log_and_update_message(:info, "Processing override_service_retirement_days...Complete", true)
+end
+
+def override_service_retirement_warn_days(dialog_options_hash)
+  new_service_retirement_warn_days = dialog_options_hash.fetch(:service_retirement_warn_days, nil)
+  return if new_service_retirement_warn_days.blank?
+
+  log_and_update_message(:info, "Processing service_retirement_warn_days: #{new_service_retirement_warn_days}", true)
+  @service.retirement_warn = new_service_retirement_warn_days.to_i
+  log_and_update_message(:info, "Processing override_service_retirement_warn_days...Complete", true)
 end
 
 def tag_service(dialog_tags_hash)
@@ -102,27 +120,25 @@ def set_all_vm_name_attrs(prov, new_vm_name)
 end
 
 def service_item_dialog_values(dialogs_options_hash)
-  merged_options_hash = Hash.new { |h, k| h[k] = {} }
   provision_index = determine_provision_index
 
-  if dialogs_options_hash[0].nil?
-    merged_options_hash = dialogs_options_hash[provision_index] || {}
-  else
-    merged_options_hash = dialogs_options_hash[0].merge(dialogs_options_hash[provision_index] || {})
-  end
+  merged_options_hash = if dialogs_options_hash[0].nil?
+                          dialogs_options_hash[provision_index] || {}
+                        else
+                          dialogs_options_hash[0].merge(dialogs_options_hash[provision_index] || {})
+                        end
   merged_options_hash
 end
 
 def service_item_tag_values(dialogs_tags_hash)
-  merged_tags_hash         = Hash.new { |h, k| h[k] = {} }
   provision_index = determine_provision_index
 
   # merge dialog_tag_0 stuff with current build
-  if dialogs_tags_hash[0].nil?
-    merged_tags_hash = dialogs_tags_hash[provision_index] || {}
-  else
-    merged_tags_hash = dialogs_tags_hash[0].merge(dialogs_tags_hash[provision_index] || {})
-  end
+  merged_tags_hash = if dialogs_tags_hash[0].nil?
+                       dialogs_tags_hash[provision_index] || {}
+                     else
+                       dialogs_tags_hash[0].merge(dialogs_tags_hash[provision_index] || {})
+                     end
   merged_tags_hash
 end
 
@@ -247,6 +263,8 @@ begin
   unless dialog_options_hash.blank?
     override_service_name(dialog_options_hash)
     override_service_description(dialog_options_hash)
+    override_service_retirement_days(dialog_options_hash)
+    override_service_retirement_warn_days(dialog_options_hash)
   end
 
   unless dialog_tags_hash.blank?
