@@ -178,7 +178,7 @@ object:
       datatype: string
       priority: 9
       owner: 
-      default_value: "#/Cloud/VM/Retirement/StateMachines/Methods/PreDeleteFromProvider"
+      default_value: 
       substitute: true
       message: create
       visibility: 
