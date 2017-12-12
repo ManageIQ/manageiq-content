@@ -5,7 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+## Unreleased as of Sprint 75 Ending 2017-12-11
+
+### Fixed
+- Force full refresh for router based events [(#224)](https://github.com/ManageIQ/manageiq-content/pull/224)
+
+### Removed
+- Removed the schema values for PreDeleteFromProvider. [(#226)](https://github.com/ManageIQ/manageiq-content/pull/226)
+
 ## Unreleased as of Sprint 74 Ending 2017-11-27
+
+### Fixed
+- Add more aws event handlers [(#217)](https://github.com/ManageIQ/manageiq-content/pull/217)
+
+## Gaprindashvili Beta2
 
 ### Fixed
 - Add more aws event handlers [(#217)](https://github.com/ManageIQ/manageiq-content/pull/217)
@@ -76,7 +89,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ## Fine-2
 
 ### Added
-- Order Ansible Playbook from a Custom Button using a Method. [(#113)(https://github.com/ManageIQ/manageiq-content/pull/113)
+- Order Ansible Playbook from a Custom Button using a Method. [(#113)](https://github.com/ManageIQ/manageiq-content/pull/113)
 
 ## Fine-1
 
