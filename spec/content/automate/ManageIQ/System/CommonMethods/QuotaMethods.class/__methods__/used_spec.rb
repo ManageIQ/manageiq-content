@@ -71,12 +71,60 @@ describe ManageIQ::Automate::System::CommonMethods::QuotaMethods::Used do
     it_behaves_like "used"
   end
 
-  context "returns error " do
-    let(:quota_source_type) { nil }
-    let(:quota_source) { nil }
-    let(:errormsg) { 'ERROR - quota_source not found' }
+  context "Owner email" do
+    let(:quota_source) { MiqAeMethodService::MiqAeServiceUser.find(@user.id) }
+    let(:quota_source_type) { 'user' }
+    let(:active_method) { 'active_provisions_by_owner'.to_sym }
+    let(:owner_email) { nil }
+    let(:requester_email) { 'requester@miq.com' }
 
-    it "when no quota source" do
+    shared_examples_for "used user quota" do
+      it "check" do
+        @miq_provision_request.update(:options => @miq_provision_request.options.merge(:owner_email => owner_email))
+        @user.update(:email => requester_email)
+
+        expect(svc_miq_request).to receive(:check_quota).with(active_method).and_return(active_counts_hash)
+        described_class.new(ae_service).main
+        expect(ae_service.root['quota_used']).to include(result_counts_hash)
+      end
+    end
+
+    context "Requester email only returns ok " do
+      it_behaves_like "used user quota"
+    end
+
+    context "Owner email only returns ok " do
+      let(:requester_email) { nil }
+      let(:owner_email) { 'owner@miq.com' }
+
+      it_behaves_like "used user quota"
+    end
+
+    context "Requester and Owner email returns ok " do
+      let(:owner_email) { 'owner@miq.com' }
+
+      it_behaves_like "used user quota"
+    end
+  end
+
+  context "returns error " do
+    let(:quota_source) { MiqAeMethodService::MiqAeServiceUser.find(@user.id) }
+    let(:quota_source_type) { 'user' }
+    let(:errormsg) { 'ERROR - Owner email not specified for User Quota' }
+
+    it "when no owner or requester email" do
+      @miq_provision_request.update(:options => @miq_provision_request.options.merge(:owner_email => nil))
+
+      expect { described_class.new(ae_service).main }.to raise_error(errormsg)
+    end
+  end
+
+  context "returns error " do
+    let(:quota_source) { MiqAeMethodService::MiqAeServiceUser.find(@user.id) }
+    let(:quota_source_type) { nil }
+    let(:errormsg) { 'ERROR - quota_source_type not found' }
+
+    it "when no quota source type" do
       expect { described_class.new(ae_service).main }.to raise_error(errormsg)
     end
   end
