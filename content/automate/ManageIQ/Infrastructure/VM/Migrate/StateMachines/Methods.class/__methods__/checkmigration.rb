@@ -37,6 +37,7 @@ module ManageIQ
                   reason = reason[7..-1] if reason[0..6] == 'Error: '
                   @handle.root['ae_reason'] = reason
                 when 'retry'
+                  @handle.root['ae_retry_interval'] = 1.minute
                   @handle.root['ae_result'] = 'retry'
                 when 'ok'
                   # Bump State
