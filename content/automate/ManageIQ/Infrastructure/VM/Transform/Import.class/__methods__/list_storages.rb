@@ -10,25 +10,29 @@ module ManageIQ
               end
 
               def main
+                multi_vm = @handle.root['vm'].nil?
+
                 values_hash = {}
                 values_hash[nil] = '-- select storage from list --'
 
-                provider_id = @handle.root['dialog_provider']
-                @handle.log(:info, "Selected provider: #{provider_id}")
-                if provider_id.present? && provider_id != '!'
-                  provider = @handle.vmdb(:ext_management_system, provider_id)
-                  if provider.nil?
-                    values_hash[nil] = 'None'
-                  else
-                    provider.storages.each do |storage|
-                      values_hash[storage.id] = storage.name
+                unless multi_vm
+                  provider_id = @handle.root['dialog_provider']
+                  if provider_id.present? && provider_id != '!'
+                    provider = @handle.vmdb(:ext_management_system, provider_id)
+                    if provider.nil?
+                      values_hash[nil] = 'None'
+                    else
+                      provider.storages.each do |storage|
+                        values_hash[storage.id] = storage.name
+                      end
                     end
                   end
                 end
                 list_values = {
                   'sort_by'   => :description,
                   'data_type' => :string,
-                  'required'  => true,
+                  'required'  => !multi_vm,
+                  'visible'   => !multi_vm,
                   'values'    => values_hash
                 }
                 list_values.each { |key, value| @handle.object[key] = value }
