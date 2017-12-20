@@ -22,7 +22,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListStorages
 
     expect(ae_service.object['sort_by']).to eq(:description)
     expect(ae_service.object['data_type']).to eq(:string)
-    expect(ae_service.object['required']).to eq(true)
+    expect(ae_service.object['required']).to eq(false)
 
     storages = { nil => '-- select storage from list --' }
     provider.storages.each { |storage| storages[storage.id] = storage.name }
