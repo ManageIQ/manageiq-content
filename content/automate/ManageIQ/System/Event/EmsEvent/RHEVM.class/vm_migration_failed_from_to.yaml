@@ -3,14 +3,12 @@ object_type: instance
 version: 1.0
 object:
   attributes:
-    display_name: 
-    name: VM_MIGRATION_DONE
-    inherits: 
-    description: 
+    display_name:
+    name: VM_MIGRATION_FAILED_FROM_TO
+    inherits:
+    description:
   fields:
   - meth4:
       value: update_migration_status
   - rel5:
       value: "/System/event_handlers/event_action_refresh?target=src_vm"
-  - rel6:
-      value: "/System/event_handlers/event_action_policy?target=src_vm&policy_event=vm_migrate&param="
