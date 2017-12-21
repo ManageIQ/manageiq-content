@@ -4,11 +4,11 @@ version: 1.0
 object:
   attributes:
     display_name: 
-    name: POD_CONTAINERUNHEALTHY
+    name: POD_KILLING
     inherits: 
     description: 
   fields:
   - rel4:
       value: "/System/event_handlers/event_action_refresh?target=ems"
   - rel5:
-      value: "/System/event_handlers/event_action_policy?target=container_group&policy_event=containergroup_containerunhealthy&param="
+      value: "/System/event_handlers/event_action_policy?target=container_group&policy_event=containergroup_killing&param="
