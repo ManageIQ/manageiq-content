@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+## Unreleased as of Sprint 76 Ending 2018-01-01
+
+### Added
+- v2v: Storage mapping for mass migration [(#215)](https://github.com/ManageIQ/manageiq-content/pull/215)
+
+### Fixed
+- Added a retry_interval to VM Migrate state machine. [(#232)](https://github.com/ManageIQ/manageiq-content/pull/232)
+- Check for both owner email and requester email for user quota. [(#230)](https://github.com/ManageIQ/manageiq-content/pull/230)
+- Make container events belong to their container groups [(#225)](https://github.com/ManageIQ/manageiq-content/pull/225)
+
 ## Unreleased as of Sprint 75 Ending 2017-12-11
 
 ### Fixed
