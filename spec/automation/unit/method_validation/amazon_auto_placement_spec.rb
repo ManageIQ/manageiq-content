@@ -2,6 +2,7 @@ describe "AMAZON best fit" do
 
   let(:user) { FactoryGirl.create(:user_with_group) }
   let(:ws) do
+    allow(User).to receive_messages(:server_timezone => "UTC")
     MiqAeEngine.instantiate("/System/Request/Call_Instance_With_Message?" \
                             "namespace=Cloud/VM/Provisioning&class=Placement" \
                             "&instance=default&message=amazon&" \
