@@ -1,11 +1,16 @@
 require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListStorages do
-  let(:provider) { FactoryGirl.create(:ems_redhat, :with_storages) }
+  let(:provider) do
+    FactoryGirl.create(:ems_redhat, :hosts => [FactoryGirl.create(:host_redhat, :storage_redhat, :storage_count => 3)])
+  end
+
+  let(:vm) { FactoryGirl.create(:vm) }
 
   let(:root_object) do
     Spec::Support::MiqAeMockObject.new(
-      'dialog_provider' => provider.id.to_s
+      'dialog_provider' => provider.id.to_s,
+      'vm'              => vm
     )
   end
 
@@ -17,16 +22,19 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListStorages
     end
   end
 
-  it 'should list infra providers supporting VM import' do
+  it 'should list data storages' do
     described_class.new(ae_service).main
 
     expect(ae_service.object['sort_by']).to eq(:description)
     expect(ae_service.object['data_type']).to eq(:string)
-    expect(ae_service.object['required']).to eq(false)
+    expect(ae_service.object['required']).to eq(true)
 
     storages = { nil => '-- select storage from list --' }
-    provider.storages.each { |storage| storages[storage.id] = storage.name }
+    provider.storages.each do |storage|
+      storages[storage.id] = storage.name if storage.storage_domain_type == "data"
+    end
 
     expect(ae_service.object['values']).to eq(storages)
+    expect(ae_service.object['values'].length).to eq(provider.storages.length) # -1 "iso" item and +1 nil item
   end
 end
