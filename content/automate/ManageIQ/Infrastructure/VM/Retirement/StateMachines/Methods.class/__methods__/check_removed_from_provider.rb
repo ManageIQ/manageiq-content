@@ -27,7 +27,11 @@ module ManageIQ
               def check_removed_from_provider(vm)
                 @handle.root['ae_result'] = 'ok'
                 if vm.ext_management_system && @handle.get_state_var('vm_removed_from_provider')
-                  vm.refresh
+                  if vm.respond_to?(:exists_on_provider?)
+                    vm.exists_on_provider? ? vm.refresh : return
+                  else
+                    vm.refresh
+                  end
                   @handle.root['ae_result'] = 'retry'
                   @handle.root['ae_retry_interval'] = '60.seconds'
                 end
