@@ -23,7 +23,7 @@ module ManageIQ
                       values_hash[nil] = 'None'
                     else
                       provider.storages.each do |storage|
-                        values_hash[storage.id] = storage.name
+                        values_hash[storage.id] = storage.name if storage.storage_domain_type == "data"
                       end
                     end
                   end
