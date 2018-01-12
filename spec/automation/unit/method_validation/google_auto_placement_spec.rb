@@ -31,7 +31,7 @@ describe "GOOGLE best fit" do
 
   it "provision task object auto placement for cloud network" do
     MiqServer.seed
-    cloud_subnet
+    availability_zone.cloud_subnets << cloud_subnet
     ws.root
 
     expect(miq_provision.reload.options).to include(
