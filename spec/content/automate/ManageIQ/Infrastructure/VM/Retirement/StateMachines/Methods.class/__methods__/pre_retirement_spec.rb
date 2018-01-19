@@ -71,7 +71,6 @@ describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::PreR
   end
   context "exceptions" do
     let(:root_hash) { {} }
-    let(:svc_model_service) { nil }
     shared_examples_for "#ae_result nil" do
       it "values" do
         described_class.new(ae_service).main
@@ -85,9 +84,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::PreR
     end
 
     context "no ems" do
-      let(:vm) do
-        FactoryGirl.create(:vm_microsoft, :raw_power_state => "PowerOff")
-      end
+      let(:ems) { nil }
       it_behaves_like "#ae_result nil"
     end
   end
