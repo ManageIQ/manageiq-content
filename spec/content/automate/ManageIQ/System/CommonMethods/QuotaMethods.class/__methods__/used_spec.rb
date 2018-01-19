@@ -15,10 +15,6 @@ describe ManageIQ::Automate::System::CommonMethods::QuotaMethods::Used do
 
   let(:svc_miq_request) { MiqAeMethodService::MiqAeServiceMiqRequest.find(@miq_provision_request.id) }
 
-  let(:counts_hash) do
-    {:storage => 1_000_000, :cpu => 0, :vms => 1, :memory => 1_073_741_824}
-  end
-
   let(:active_counts_hash) do
     {:storage => 2_000_000, :cpu => 8, :count => 9, :memory => 6_000_000_000}
   end
