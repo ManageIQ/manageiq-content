@@ -9,6 +9,4 @@ object:
     description: 
   fields:
   - rel4:
-      value: "/System/event_handlers/event_action_refresh_sync?target=src_vm"
-  - rel5:
-      value: "/System/event_handlers/event_action_policy?target=src_vm&policy_event=vm_reconfigure&param="
+      value: "/System/Event/StateMachines/Refresh/default?refresh_target=src_vm&policy_event=vm_reconfigure&policy_target=src_vm"
