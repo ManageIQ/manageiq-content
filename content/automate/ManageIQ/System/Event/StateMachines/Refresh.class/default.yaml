@@ -1,0 +1,16 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: default
+    inherits: 
+    description: 
+  fields:
+  - refresh:
+      value: METHOD::target_refresh
+  - check_refreshed:
+      value: METHOD::check_refreshed
+  - policy:
+      value: "/System/event_handlers/event_action_policy?target=${#policy_target}&policy_event=${#policy_event}&param="
