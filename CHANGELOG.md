@@ -5,54 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-## Unreleased as of Sprint 77 Ending 2018-01-15
-
-### Added
-- Auto approval for Cloud Vm reconfigure. [(#236)](https://github.com/ManageIQ/manageiq-content/pull/236)
-
-### Fixed
-- Refresh template if sealing failed [(#233)](https://github.com/ManageIQ/manageiq-content/pull/233)
-- Only data storage domains in VM transform dialog [(#229)](https://github.com/ManageIQ/manageiq-content/pull/229)
-- Add policy resolution call to vm_destroy for providers. [(#223)](https://github.com/ManageIQ/manageiq-content/pull/223)
-
-## Unreleased as of Sprint 76 Ending 2018-01-01
-
-### Added
-- v2v: Storage mapping for mass migration [(#215)](https://github.com/ManageIQ/manageiq-content/pull/215)
-
-### Fixed
-- Added a retry_interval to VM Migrate state machine. [(#232)](https://github.com/ManageIQ/manageiq-content/pull/232)
-- Check for both owner email and requester email for user quota. [(#230)](https://github.com/ManageIQ/manageiq-content/pull/230)
-- Make container events belong to their container groups [(#225)](https://github.com/ManageIQ/manageiq-content/pull/225)
-
-## Unreleased as of Sprint 75 Ending 2017-12-11
-
-### Fixed
-- Force full refresh for router based events [(#224)](https://github.com/ManageIQ/manageiq-content/pull/224)
-
-### Removed
-- Removed the schema values for PreDeleteFromProvider. [(#226)](https://github.com/ManageIQ/manageiq-content/pull/226)
-
-## Unreleased as of Sprint 74 Ending 2017-11-27
-
-### Fixed
-- Add more aws event handlers [(#217)](https://github.com/ManageIQ/manageiq-content/pull/217)
-
-## Gaprindashvili Beta2
-
-### Fixed
-- Add more aws event handlers [(#217)](https://github.com/ManageIQ/manageiq-content/pull/217)
-
-## Unreleased as of Sprint 72 Ending 2017-10-30
-
-### Added
-- Auto approval for instance resize operation. [(#205)](https://github.com/ManageIQ/manageiq-content/pull/205)
-- Nuage events callbacks for targeted refresh [(#204)](https://github.com/ManageIQ/manageiq-content/pull/204)
-- Add policy event triggers for Hawkular [(#201)](https://github.com/ManageIQ/manageiq-content/pull/201)
-- v2v: Extend 'VM Transform' dialog to select VMs by tag [(#200)](https://github.com/ManageIQ/manageiq-content/pull/200)
-- Do targeted refresh in Stack check provisioned [(#182)](https://github.com/ManageIQ/manageiq-content/pull/182)
-
-## Gaprindashvili Beta1
+## Gaprindashvili-1 - Released 2018-01-31
 
 ### Added
 - Do targeted refresh based on Openstack events. [(#184)](https://github.com/ManageIQ/manageiq-content/pull/184)
@@ -69,8 +22,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Support TTL (Time To Live) value for services. [(#148)](https://github.com/ManageIQ/manageiq-content/pull/148)
 - v2v: Support virtio-win drivers ISO [(#147)](https://github.com/ManageIQ/manageiq-content/pull/147)
 - Targeted refresh enhacements for VM import\rename\migration events [(#119)](https://github.com/ManageIQ/manageiq-content/pull/119)
+- v2v: Storage mapping for mass migration [(#215)](https://github.com/ManageIQ/manageiq-content/pull/215)
+- Auto approval for Cloud Vm reconfigure [(#236)](https://github.com/ManageIQ/manageiq-content/pull/236)
 
 ### Fixed
+- Force full refresh for router based events [(#224)](https://github.com/ManageIQ/manageiq-content/pull/224)
+- Add more aws event handlers [(#217)](https://github.com/ManageIQ/manageiq-content/pull/217)
 - Added active provisions to quota count. [(#196)](https://github.com/ManageIQ/manageiq-content/pull/196)
 - Fixed calculation for Ansible playbook service max TTL. [(#193)](https://github.com/ManageIQ/manageiq-content/pull/193)
 - Fix VM Migrate complete email when To field is nil. [(#177)](https://github.com/ManageIQ/manageiq-content/pull/177)
@@ -84,6 +41,36 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Add Available_Projects method for dynamic dropdown in container template service dialog [(#127)](https://github.com/ManageIQ/manageiq-content/pull/127)
 - Require just rails/engine [(#120)](https://github.com/ManageIQ/manageiq-content/pull/120)
 - Support embedded_ansible to fetch credentials from provider [(#112)](https://github.com/ManageIQ/manageiq-content/pull/112)
+- Make container events belong to their container groups [(#225)](https://github.com/ManageIQ/manageiq-content/pull/225)
+- Check for both owner email and requester email for user quota [(#230)](https://github.com/ManageIQ/manageiq-content/pull/230)
+- Added a retry_interval to VM Migrate state machine [(#232)](https://github.com/ManageIQ/manageiq-content/pull/232)
+- Refresh template if sealing failed [(#233)](https://github.com/ManageIQ/manageiq-content/pull/233)
+
+## Unreleased as of Sprint 78 Ending 2018-01-29
+
+### Fixed
+- Add event state machine for refresh. [(#243)](https://github.com/ManageIQ/manageiq-content/pull/243)
+
+## Unreleased as of Sprint 77 Ending 2018-01-15
+
+### Added
+- Auto approval for Cloud Vm reconfigure. [(#236)](https://github.com/ManageIQ/manageiq-content/pull/236)
+
+### Fixed
+- Only data storage domains in VM transform dialog [(#229)](https://github.com/ManageIQ/manageiq-content/pull/229)
+- Add policy resolution call to vm_destroy for providers. [(#223)](https://github.com/ManageIQ/manageiq-content/pull/223)
+
+## Unreleased as of Sprint 75 Ending 2017-12-11
+
+### Removed
+- Removed the schema values for PreDeleteFromProvider. [(#226)](https://github.com/ManageIQ/manageiq-content/pull/226)
+
+## Unreleased as of Sprint 72 Ending 2017-10-30
+
+### Added
+- Nuage events callbacks for targeted refresh [(#204)](https://github.com/ManageIQ/manageiq-content/pull/204)
+- Add policy event triggers for Hawkular [(#201)](https://github.com/ManageIQ/manageiq-content/pull/201)
+- v2v: Extend 'VM Transform' dialog to select VMs by tag [(#200)](https://github.com/ManageIQ/manageiq-content/pull/200)
 
 ## Fine-3
 
@@ -141,3 +128,5 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Disabled DeleteFromVMDB in 2 places [(#55)](https://github.com/ManageIQ/manageiq-content/pull/55)
 - Fixed typo in check_ssh method [(#66)](https://github.com/ManageIQ/manageiq-content/pull/66)
 - Generic State Machine provision instance fix [(#54)](https://github.com/ManageIQ/manageiq-content/pull/54)
+
+## Initial changelog added
