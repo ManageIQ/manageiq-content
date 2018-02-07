@@ -4,11 +4,11 @@ version: 1.0
 object:
   attributes:
     display_name: 
-    name: MigrationPlanProvisionRequest_created
+    name: ServiceTemplateTransformationPlanRequest_created
     inherits: 
     description: 
   fields:
   - guard:
       value: "${/#miq_request.process}"
   - rel6:
-      value: "/MigrationPlan/Provisioning/StateMachines/ProvisionRequestApproval/Default"
+      value: "/Transformation/StateMachines/TransformationPlanRequestApproval/Default"

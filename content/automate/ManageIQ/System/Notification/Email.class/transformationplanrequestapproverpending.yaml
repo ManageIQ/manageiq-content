@@ -1,0 +1,21 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: TransformationPlanRequestApproverPending
+    inherits: 
+    description: 
+  fields:
+  - owner:
+      value: "${/#miq_request.requester}"
+  - to:
+      value: "${/#miq_request.get_option(:owner_email)} || ${/#miq_request.requester.email}"
+  - subject:
+      value: Request ID ${/#miq_request.id} - Transformation Plan Request from <${/#miq_request.requester.email}>
+        is Pending Approval.
+  - body:
+      value: 'Approver,<br><br>A Transformation Plan Request received from ${/#miq_request.requester.email}
+        is Pending.<br><br>For more information you can go to: <a href=''http://${/#miq_server.ipaddress}:3000/miq_request/show/${/#miq_request.id}''>http://${/#miq_server.ipaddress}:3000/miq_request/show/${/#miq_request.id}</a><br><br>
+        Thank you<br> ${#signature}'
