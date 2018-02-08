@@ -1,0 +1,14 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: ServiceTemplateTransformationPlanRequest_created
+    inherits: 
+    description: 
+  fields:
+  - guard:
+      value: "${/#miq_request.process}"
+  - rel6:
+      value: "/Transformation/StateMachines/TransformationPlanRequestApproval/Default"
