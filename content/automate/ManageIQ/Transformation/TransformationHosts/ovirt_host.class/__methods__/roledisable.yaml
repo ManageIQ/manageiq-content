@@ -1,0 +1,14 @@
+---
+object_type: method
+version: 1.0
+object:
+  attributes:
+    name: RoleDisable
+    display_name: ''
+    description: 
+    scope: instance
+    language: ruby
+    location: playbook
+    data: 
+    options: {}
+  inputs: []

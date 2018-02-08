@@ -1,0 +1,154 @@
+---
+object_type: method
+version: 1.0
+object:
+  attributes:
+    name: RoleEnable
+    display_name: ''
+    description: 
+    scope: instance
+    language: ruby
+    location: playbook
+    data: 
+    options: {}
+  inputs:
+  - field:
+      aetype: 
+      name: v2v_content_server
+      display_name: 
+      datatype: string
+      priority: 0
+      owner: 
+      default_value: bastion.v2v.example.com
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: 
+      name: v2v_vddk_package_url
+      display_name: 
+      datatype: string
+      priority: 1
+      owner: 
+      default_value: http://bastion.v2v.example.com/vddk/VMware-vix-disklib-6.5.2-6195444.x86_64.tar.gz
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: 
+      name: v2v_vddk_package_name
+      display_name: 
+      datatype: string
+      priority: 2
+      owner: 
+      default_value: VMware-vix-disklib-6.5.2-6195444.x86_64.tar.gz
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: 
+      name: v2v_repo_rpms_url
+      display_name: 
+      datatype: string
+      priority: 3
+      owner: 
+      default_value: http://bastion.v2v.example.com/rpms/v2v-nbdkit-rpms
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: 
+      name: v2v_repo_rpms_name
+      display_name: 
+      datatype: string
+      priority: 4
+      owner: 
+      default_value: v2v-nbdkit-rpms
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: 
+      name: v2v_repo_srpms_url
+      display_name: 
+      datatype: string
+      priority: 5
+      owner: 
+      default_value: http://bastion.v2v.example.com/rpms/v2v-nbdkit-src-rpms
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: 
+      name: v2v_repo_srpms_name
+      display_name: 
+      datatype: string
+      priority: 6
+      owner: 
+      default_value: v2v-nbdkit-src-rpms
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 

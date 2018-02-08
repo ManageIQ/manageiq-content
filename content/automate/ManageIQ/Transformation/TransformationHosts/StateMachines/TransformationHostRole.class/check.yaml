@@ -1,0 +1,15 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: Check
+    inherits: 
+    description: 
+  fields:
+  - State1:
+      value: "/Transformation/TransformationHost/${#transformation_host_type}/RoleCheck"
+      on_error: "/Transformation/TransformationHost/${#transformation_host_type}/MarkAsDisabled"
+  - State2:
+      value: "/Transformation/TransformationHost/${#transformation_host_type}/MarkAsEnabled"
