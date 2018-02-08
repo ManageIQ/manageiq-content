@@ -10,7 +10,7 @@ object:
   fields:
   - subject:
       value: Request ID ${/#miq_request.id} - Service Request from <${/#miq_request.requester.email}>
-        Failed Auto-Approval.
+        Pending Approval.
   - body:
       value: 'Approver,<br><br>A Service Request received from ${/#miq_request.requester.email}
         is Pending.<br><br>For more information you can go to: <a href=''http://${/#miq_server.ipaddress}:3000/miq_request/show/${/#miq_request.id}''>http://${/#miq_server.ipaddress}:3000/miq_request/show/${/#miq_request.id}</a><br><br>

@@ -10,7 +10,7 @@ object:
   fields:
   - subject:
       value: Request ID ${/#miq_request.id} - Virtual Machine Request from <${/#miq_request.requester.email}>
-        Failed Auto-Approval.
+        Pending Approval.
   - body:
       value: 'Approver, <br><br>A Virtual Machine Request received from ${/#miq_request.requester.email}
         is Pending.<br><br>${/#miq_request.resource.message}.<br><br>Approvers notes:
