@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Added
 - Automation for transformation plan [(#244)](https://github.com/ManageIQ/manageiq-content/pull/244)
+- New email consolidated namespace and class. [(#246)](https://github.com/ManageIQ/manageiq-content/pull/246)
 
 ## Gaprindashvili-1 - Released 2018-01-31
 
