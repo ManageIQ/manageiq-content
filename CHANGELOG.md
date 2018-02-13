@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+##  Unreleased as of Sprint 79 Ending 2018-02-12
+
+### Added
+- Automation for transformation plan [(#244)](https://github.com/ManageIQ/manageiq-content/pull/244)
+
 ## Gaprindashvili-1 - Released 2018-01-31
 
 ### Added
@@ -45,25 +50,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Check for both owner email and requester email for user quota [(#230)](https://github.com/ManageIQ/manageiq-content/pull/230)
 - Added a retry_interval to VM Migrate state machine [(#232)](https://github.com/ManageIQ/manageiq-content/pull/232)
 - Refresh template if sealing failed [(#233)](https://github.com/ManageIQ/manageiq-content/pull/233)
+- Only data storage domains in VM transform dialog [(#229)](https://github.com/ManageIQ/manageiq-content/pull/229)
+- Add policy resolution call to vm_destroy for providers. [(#223)](https://github.com/ManageIQ/manageiq-content/pull/223)
+
+### Removed
+- Removed the schema values for PreDeleteFromProvider. [(#226)](https://github.com/ManageIQ/manageiq-content/pull/226)
 
 ## Unreleased as of Sprint 78 Ending 2018-01-29
 
 ### Fixed
 - Add event state machine for refresh. [(#243)](https://github.com/ManageIQ/manageiq-content/pull/243)
-
-## Unreleased as of Sprint 77 Ending 2018-01-15
-
-### Added
-- Auto approval for Cloud Vm reconfigure. [(#236)](https://github.com/ManageIQ/manageiq-content/pull/236)
-
-### Fixed
-- Only data storage domains in VM transform dialog [(#229)](https://github.com/ManageIQ/manageiq-content/pull/229)
-- Add policy resolution call to vm_destroy for providers. [(#223)](https://github.com/ManageIQ/manageiq-content/pull/223)
-
-## Unreleased as of Sprint 75 Ending 2017-12-11
-
-### Removed
-- Removed the schema values for PreDeleteFromProvider. [(#226)](https://github.com/ManageIQ/manageiq-content/pull/226)
 
 ## Unreleased as of Sprint 72 Ending 2017-10-30
 
