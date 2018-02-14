@@ -9,7 +9,7 @@ object:
     description: 
   fields:
   - State1:
-      value: "/Transformation/TransformationHost/${#transformation_host_type}/RoleCheck"
-      on_error: "/Transformation/TransformationHost/${#transformation_host_type}/MarkAsDisabled"
+      value: "/Transformation/TransformationHosts/${#transformation_host_type}/RoleCheck"
+      on_error: "/Transformation/TransformationHosts/${#transformation_host_type}.MarkAsDisabled"
   - State2:
-      value: "/Transformation/TransformationHost/${#transformation_host_type}/MarkAsEnabled"
+      value: "/Transformation/TransformationHosts/${#transformation_host_type}.MarkAsEnabled"
