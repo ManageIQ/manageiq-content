@@ -1,0 +1,22 @@
+---
+object_type: method
+version: 1.0
+object:
+  attributes:
+    name: RoleDisable
+    display_name: ''
+    description: 
+    scope: instance
+    language: ruby
+    location: playbook
+    data: 
+    options:
+      :repository_id: '1'
+      :playbook_id: '2'
+      :credential_id: '11'
+      :verbosity: ''
+      :execution_ttl: '10'
+      :hosts: "${/#host.name}"
+      :log_output: on_error
+      :become_enabled: true
+  inputs: []
