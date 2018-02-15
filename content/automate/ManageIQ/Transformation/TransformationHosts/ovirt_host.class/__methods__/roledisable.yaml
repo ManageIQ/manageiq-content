@@ -10,5 +10,13 @@ object:
     language: ruby
     location: playbook
     data: 
-    options: {}
+    options:
+      :repository_id: '1'
+      :playbook_id: '2'
+      :credential_id: '11'
+      :verbosity: ''
+      :execution_ttl: '10'
+      :hosts: "${/#host.name}"
+      :log_output: on_error
+      :become_enabled: true
   inputs: []

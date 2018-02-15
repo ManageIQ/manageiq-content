@@ -10,7 +10,15 @@ object:
     language: ruby
     location: playbook
     data: 
-    options: {}
+    options:
+      :repository_id: '1'
+      :playbook_id: '3'
+      :credential_id: '11'
+      :verbosity: ''
+      :execution_ttl: '20'
+      :hosts: "${/#host.name}"
+      :log_output: on_error
+      :become_enabled: true
   inputs:
   - field:
       aetype: 
@@ -19,7 +27,7 @@ object:
       datatype: string
       priority: 0
       owner: 
-      default_value: bastion.v2v.example.com
+      default_value: 
       substitute: true
       message: create
       visibility: 
@@ -39,7 +47,7 @@ object:
       datatype: string
       priority: 1
       owner: 
-      default_value: http://bastion.v2v.example.com/vddk/VMware-vix-disklib-6.5.2-6195444.x86_64.tar.gz
+      default_value: 
       substitute: true
       message: create
       visibility: 
@@ -59,7 +67,7 @@ object:
       datatype: string
       priority: 2
       owner: 
-      default_value: VMware-vix-disklib-6.5.2-6195444.x86_64.tar.gz
+      default_value: 
       substitute: true
       message: create
       visibility: 
@@ -79,7 +87,7 @@ object:
       datatype: string
       priority: 3
       owner: 
-      default_value: http://bastion.v2v.example.com/rpms/v2v-nbdkit-rpms
+      default_value: 
       substitute: true
       message: create
       visibility: 
@@ -99,7 +107,7 @@ object:
       datatype: string
       priority: 4
       owner: 
-      default_value: v2v-nbdkit-rpms
+      default_value: 
       substitute: true
       message: create
       visibility: 
@@ -119,7 +127,7 @@ object:
       datatype: string
       priority: 5
       owner: 
-      default_value: http://bastion.v2v.example.com/rpms/v2v-nbdkit-src-rpms
+      default_value: 
       substitute: true
       message: create
       visibility: 
@@ -139,7 +147,7 @@ object:
       datatype: string
       priority: 6
       owner: 
-      default_value: v2v-nbdkit-src-rpms
+      default_value: 
       substitute: true
       message: create
       visibility: 

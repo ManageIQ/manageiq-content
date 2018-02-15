@@ -22,5 +22,5 @@ module Transformation
 end
 
 if $PROGRAM_NAME == __FILE__
-  Transformation::TransformationHosts:OVirtHost::TagAsDisabled.new.main
+  Transformation::TransformationHosts::OVirtHost::TagAsDisabled.new.main
 end
