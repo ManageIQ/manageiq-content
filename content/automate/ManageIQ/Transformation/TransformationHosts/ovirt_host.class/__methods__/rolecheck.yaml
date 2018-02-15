@@ -1,0 +1,42 @@
+---
+object_type: method
+version: 1.0
+object:
+  attributes:
+    name: RoleCheck
+    display_name: ''
+    description: 
+    scope: instance
+    language: ruby
+    location: playbook
+    data: 
+    options:
+      :repository_id: '1'
+      :playbook_id: '1'
+      :credential_id: '11'
+      :verbosity: '0'
+      :execution_ttl: '5'
+      :hosts: "${/#host.name}"
+      :log_output: on_error
+      :become_enabled: true
+  inputs:
+  - field:
+      aetype: 
+      name: v2v_manageiq_conversion_host_check
+      display_name: 
+      datatype: string
+      priority: 0
+      owner: 
+      default_value: 'true'
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 

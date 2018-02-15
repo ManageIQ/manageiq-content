@@ -1,0 +1,14 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: Enable
+    inherits: 
+    description: 
+  fields:
+  - State1:
+      value: "/Transformation/TransformationHost/${#transformation_host_type}/RoleEnable"
+  - State2:
+      value: "/Transformation/TransformationHost/StateMachines/TransformationHostRole/Check"
