@@ -17,17 +17,17 @@ describe ManageIQ::Automate::System::Request::Sample do
   end
 
   let(:vm) { FactoryGirl.create(:vm, :name => 'fred') }
-  # Since Automate methods only work with Service Model objects we have to wrap it 
+  # Since Automate methods only work with Service Model objects we have to wrap it
   # in the MiqAeMethodService
   let(:svc_vm) { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }
 
   context "with vm object" do
     let(:attributes) do
-      { 'var1'     => 'A',
-        'vm'       => svc_vm }
+      { 'var1' => 'A',
+        'vm'   => svc_vm }
     end
 
-    it "calls vm start" do
+    it "#vm start" do
       obj = described_class.new(ae_service)
       # This is optional so that we dont have to the run the embedded method spec
       # This is a stub and returns canned responses with no computational overhead
@@ -37,6 +37,20 @@ describe ManageIQ::Automate::System::Request::Sample do
       expect(svc_vm).to receive(:start)
 
       obj.vm_start
+    end
+
+    it "#vm_start_ex" do
+      obj = described_class.new(ae_service)
+      # This creates a dummy instance that can be used to stub out methods
+      util_obj = instance_double("ManageIQ::Automate::System::CommonMethods::StateMachineMethods::Utility")
+      # When the caller creates a new instance we send back the dummy instance
+      allow(ManageIQ::Automate::System::CommonMethods::StateMachineMethods::Utility).to receive(:new).with(vm.name).and_return(util_obj)
+      # When that instance calls normalize we stub it and pass back a canned response
+      allow(util_obj).to receive(:normalize).with(no_args).and_return("blah")
+
+      expect(svc_vm).to receive(:start)
+
+      obj.vm_start_ex
     end
   end
 end
