@@ -2,7 +2,7 @@ module Transformation
   module StateMachines
     module VMTransformation
       class UpdateStatus
-        def initialize(handle=$evm)
+        def initialize(handle = $evm)
           @handle = handle
         end
 
@@ -11,8 +11,8 @@ module Transformation
         # more than one active states: one per level of nesting. The real
         # active state is the one with the deepest ancestry.
         def current_state(states)
-          active_states = states.select { |k,v| v['status'] == 'active' }.keys
-          states_depth = active_states.map{ |state| state.split('/').length }
+          active_states = states.select { |_, v| v['status'] == 'active' }.keys
+          states_depth = active_states.map { |state| state.split('/').length }
           active_states[states_depth.index(states_depth.max)]
         end
 
@@ -20,14 +20,13 @@ module Transformation
         # and weight them, to finally weight the result with the current state
         # weight.
         def reconcile_children_percent(path, states)
-          children = states.select { |k,v| not k.gsub(/^#{path}\//, '').include?('/') }
+          children = states.reject { |k, _| k.gsub(/^#{path}\//, '').include?('/') }
           if children.empty?
             percent = states[path]['percent'].to_f * states[path]['weight'].to_f / 100.to_f
           else
             percent = 0
-            children.keys.each { |child| percent += reconcile_children_percent(child, states).to_f * children[child]['weight'].to_f / 100.to_f }
+            children.each_key { |child| percent += reconcile_children_percent(child, states).to_f * children[child]['weight'].to_f / 100.to_f }
           end
-          return percent
         end
 
         def main
@@ -57,7 +56,10 @@ module Transformation
               state_hash ||= { 'status' => 'active', 'weight' => state_weight, 'description' => state_description, 'message' => state_description }
               # Add the start date and set percentage to 0 if entering the
               # state for the first time (retries count == 0)
-              state_hash.merge!({'started_on' => Time.now, 'percent' => 0}) if @handle.root['ae_state_retries'].to_i.zero?
+              if @handle.root['ae_state_retries'].to_i.zero?
+                state_hash['started_on'] = Time.now.utc
+                state_hash['percent'] = 0
+              end
             when 'on_exit'
               # If the state is retrying, we leave the status to 'active' and
               # update the percentage. If the method provides progress info,
@@ -65,7 +67,7 @@ module Transformation
               # max retries. We also merge the potential message from method.
               if @handle.root['ae_result'] == 'retry'
                 if state_progress.nil?
-                  state_hash['message'] = "#{state_name} is not finished yet, retrying in #{@handle.root['ae_retry_interval'].to_s} seconds."
+                  state_hash['message'] = "#{state_name} is not finished yet, retrying in #{@handle.root['ae_retry_interval']} seconds."
                   state_hash['percent'] = @handle.root['ae_state_retries'].to_f / @handle.root['ae_max_retries'].to_f * 100.to_f
                 else
                   state_hash.merge!(state_progress)
@@ -74,19 +76,21 @@ module Transformation
               # set percentage to 100 and status to 'finished'. We also merge
               # the potential message from method.
               else
-                state_hash.merge!({ 'status' => 'finished', 'percent' => 100 })
+                state_hash['status'] = 'finished'
+                state_hash['percent'] = 100
                 state_hash['message'] = state_progress.nil? ? "#{state_name} is finished, moving on." : state_progress['message']
               end
               # Then, we set the update time to now, which is also finish time
               # when the state is finished.
-              state_hash['updated_on'] = Time.now
+              state_hash['updated_on'] = Time.now.utc
             when 'on_error'
               # The state has failed and we consider it as finished and 100%.
               # We also merge the potential message from method and set the
               # update time.
-              state_hash.merge!({ 'status' => 'finished', 'percent' => 100 })
+              state_hash['status'] = 'finished'
+              state_hash['percent'] = 100
               state_hash['message'] = state_progress.nil? ? "#{state_name} has failed, moving on." : state_progress['message']
-              state_hash['updated_on'] = Time.now
+              state_hash['updated_on'] = Time.now.utc
             end
 
             # We record the state hash in the task progress
