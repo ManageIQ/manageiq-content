@@ -18,9 +18,13 @@ def process_comma_separated_object_array(sequence_id, option_key, value, hash)
   return if value.nil?
   options_value_array = []
   value.split(",").each do |entry|
+    next if entry.blank?
     vmdb_obj = vmdb_object_from_array_entry(entry)
-    next if vmdb_obj.nil?
-    options_value_array << (vmdb_obj.respond_to?(:name) ? vmdb_obj.name : "#{vmdb_obj.class.name}::#{vmdb_obj.id}")
+    options_value_array << if vmdb_obj.nil?
+                             entry
+                           else
+                             (vmdb_obj.respond_to?(:name) ? vmdb_obj.name : "#{vmdb_obj.class.name}::#{vmdb_obj.id}")
+                           end
   end
   hash[sequence_id][option_key] = options_value_array
 end
@@ -75,6 +79,13 @@ def generic_dialog_value(dialog_key, dialog_value, options_hash)
   true
 end
 
+def generic_dialog_array_value(dialog_key, dialog_value, options_hash)
+  return false unless /^array::(?<generic_dialog_key>dialog_(?<option_key>.*))/i =~ dialog_key
+  process_comma_separated_object_array(0, option_key.to_sym, dialog_value, options_hash)
+  process_comma_separated_object_array(0, generic_dialog_key.to_sym, dialog_value, options_hash)
+  true
+end
+
 def set_dialog_value(key, value, options_hash, tags_hash)
   option_hash_value(key, value, options_hash) ||
     option_array_value(key, value, options_hash) ||
@@ -82,6 +93,7 @@ def set_dialog_value(key, value, options_hash, tags_hash)
     tag_hash_value(key, value, tags_hash) ||
     tag_array_value(key, value, tags_hash) ||
     generic_dialog_value(key, value, options_hash) ||
+    generic_dialog_array_value(key, value, options_hash) ||
     generic_password_value(key, value, options_hash)
 end
 
