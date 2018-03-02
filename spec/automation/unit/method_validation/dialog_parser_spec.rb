@@ -26,6 +26,16 @@ describe "DialogParser Automate Method" do
     @dept_array = Classification.find_by_description('Department').children.collect(&:name)
   end
 
+  def create_vms
+    @vm_array_name = "Array::dialog_vm_array"
+    @vm_id_array   = []
+    @vm_name_array = []
+    [FactoryGirl.create(:vm), FactoryGirl.create(:vm)].each do |vm|
+      @vm_id_array << "Vm::#{vm.id}"
+      @vm_name_array << vm.name
+    end
+  end
+
   def setup_and_run_method(dialog_hash)
     @root_stp.options = @root_stp.options.merge(:dialog => dialog_hash)
     @root_stp.save
@@ -43,16 +53,24 @@ describe "DialogParser Automate Method" do
 
   context "parser" do
     it "with options tags and arrays" do
+      array_key = "Array::dialog_str_array"
+      array_value = %w(1 2 3)
       create_tags
+      create_vms
       dialog_hash = {'dialog_option_1_numero' => 'one', 'dialog_option_2_numero' => 'two',
                      'dialog_option_3_numero' => 'three', 'dialog_option_0_numero' => 'zero',
                      'dialog_tag_0_location' => 'NYC', 'dialog_tag_1_location' => 'BOM',
-                     'dialog_tag_2_location' => 'EWR', @array_name => @dept_ids}
+                     'dialog_tag_2_location' => 'EWR', @array_name => @dept_ids,
+                     array_key               => array_value.join(","),
+                     @vm_array_name          => @vm_id_array.join(",")}
 
       parsed_dialog_options_hash = {1 => {:numero => "one"},
                                     2 => {:numero => "two"},
                                     3 => {:numero => "three"},
-                                    0 => {:numero => "zero"}}
+                                    0 => {:numero => "zero", :str_array => array_value,
+                                          :dialog_str_array => array_value,
+                                          :dialog_vm_array  => @vm_name_array,
+                                          :vm_array         => @vm_name_array}}
       parsed_dialog_tags_hash = {0 => {:location => "NYC"},
                                  1 => {:location => "BOM"},
                                  2 => {:location => "EWR"}}
@@ -60,7 +78,6 @@ describe "DialogParser Automate Method" do
       setup_and_run_method(dialog_hash)
       pdo = load_options
       pdt = load_tags
-
       depts = pdt[0].delete(:department)
       expect(pdo).to eql(parsed_dialog_options_hash)
       expect(pdt).to eql(parsed_dialog_tags_hash)
