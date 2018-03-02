@@ -1,15 +1,39 @@
 #
 # Description: This method checks to see if the VM has been removed from the provider
 #
+module ManageIQ
+  module Automate
+    module Cloud
+      module VM
+        module Retirement
+          module StateMachines
+            module Methods
+              class CheckRemovedFromProvider
+                def initialize(handle = $evm)
+                  @handle = handle
+                end
 
-vm = $evm.root['vm']
+                def main
+                  vm = @handle.root['vm']
+                  @handle.root['ae_result'] = 'ok'
 
-$evm.root['ae_result'] = 'ok'
-
-if vm && $evm.get_state_var('vm_removed_from_provider')
-  if vm.ext_management_system
-    vm.refresh
-    $evm.root['ae_result']     = 'retry'
-    $evm.root['ae_retry_interval'] = '1.minute'
+                  if vm && @handle.get_state_var('vm_removed_from_provider')
+                    if vm.ext_management_system
+                      vm.refresh
+                      @handle.root['ae_result']         = 'retry'
+                      @handle.root['ae_retry_interval'] = '1.minute'
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
   end
+end
+
+if $PROGRAM_NAME == __FILE__
+  ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::CheckRemovedFromProvider.new.main
 end
