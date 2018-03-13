@@ -6,6 +6,7 @@
 server = $evm.root['miq_server']
 
 service = $evm.root['service']
+task = "service_retire_task"
 
 # Get State Machine
 state = $evm.current_object.class_name
@@ -28,6 +29,11 @@ updated_message += "Service [#{service.name}] " if service
 updated_message += "Step [#{step}] "
 updated_message += "Status [#{status}] "
 updated_message += "Current Retry Number [#{$evm.root['ae_state_retries']}]" if $evm.root['ae_result'] == 'retry'
+
+if task
+  task.miq_request.user_message = updated_message
+  task.message = status
+end
 
 # Update Status for on_error for all states other than the first state which is start retirement
 # in the retirement state machine.
