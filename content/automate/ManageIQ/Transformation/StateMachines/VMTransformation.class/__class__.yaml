@@ -26,10 +26,10 @@ object:
       scope: 
       description: 
       condition: 
-      on_entry: update_status(state_description => "_", state_weight => 0)
-      on_exit: update_status(state_description => "_", state_weight => 0)
-      on_error: update_status(state_description => "_", state_weight => 0)
-      max_retries: '100'
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
       max_time: 
   - field:
       aetype: state
@@ -46,10 +46,10 @@ object:
       scope: 
       description: 
       condition: 
-      on_entry: update_status(state_description => "_", state_weight => 0)
-      on_exit: update_status(state_description => "_", state_weight => 0)
-      on_error: update_status(state_description => "_", state_weight => 0)
-      max_retries: '100'
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
       max_time: 
   - field:
       aetype: state
@@ -66,10 +66,10 @@ object:
       scope: 
       description: 
       condition: 
-      on_entry: update_status(state_description => "_", state_weight => 0)
-      on_exit: update_status(state_description => "_", state_weight => 0)
-      on_error: update_status(state_description => "_", state_weight => 0)
-      max_retries: '100'
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
       max_time: 
   - field:
       aetype: state
@@ -86,10 +86,10 @@ object:
       scope: 
       description: 
       condition: 
-      on_entry: update_status(state_description => "_", state_weight => 0)
-      on_exit: update_status(state_description => "_", state_weight => 0)
-      on_error: update_status(state_description => "_", state_weight => 0)
-      max_retries: '100'
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
       max_time: 
   - field:
       aetype: state
@@ -106,10 +106,10 @@ object:
       scope: 
       description: 
       condition: 
-      on_entry: update_status(state_description => "_", state_weight => 0)
-      on_exit: update_status(state_description => "_", state_weight => 0)
-      on_error: update_status(state_description => "_", state_weight => 0)
-      max_retries: '100'
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
       max_time: 
   - field:
       aetype: state
@@ -126,10 +126,10 @@ object:
       scope: 
       description: 
       condition: 
-      on_entry: update_status(state_description => "_", state_weight => 0)
-      on_exit: update_status(state_description => "_", state_weight => 0)
-      on_error: update_status(state_description => "_", state_weight => 0)
-      max_retries: '100'
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
       max_time: 
   - field:
       aetype: state
@@ -146,10 +146,10 @@ object:
       scope: 
       description: 
       condition: 
-      on_entry: update_status(state_description => "_", state_weight => 0)
-      on_exit: update_status(state_description => "_", state_weight => 0)
-      on_error: update_status(state_description => "_", state_weight => 0)
-      max_retries: '100'
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
       max_time: 
   - field:
       aetype: state
@@ -166,10 +166,10 @@ object:
       scope: 
       description: 
       condition: 
-      on_entry: update_status(state_description => "_", state_weight => 0)
-      on_exit: update_status(state_description => "_", state_weight => 0)
-      on_error: update_status(state_description => "_", state_weight => 0)
-      max_retries: '100'
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
       max_time: 
   - field:
       aetype: state
@@ -186,10 +186,10 @@ object:
       scope: 
       description: 
       condition: 
-      on_entry: update_status(state_description => "_", state_weight => 0)
-      on_exit: update_status(state_description => "_", state_weight => 0)
-      on_error: update_status(state_description => "_", state_weight => 0)
-      max_retries: '100'
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
       max_time: 
   - field:
       aetype: state
@@ -206,10 +206,10 @@ object:
       scope: 
       description: 
       condition: 
-      on_entry: update_status(state_description => "_", state_weight => 0)
-      on_exit: update_status(state_description => "_", state_weight => 0)
-      on_error: update_status(state_description => "_", state_weight => 0)
-      max_retries: '100'
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
       max_time: 
   - field:
       aetype: state
@@ -226,10 +226,10 @@ object:
       scope: 
       description: 
       condition: 
-      on_entry: update_status(state_description => "_", state_weight => 0)
-      on_exit: update_status(state_description => "_", state_weight => 0)
-      on_error: update_status(state_description => "_", state_weight => 0)
-      max_retries: '100'
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
       max_time: 
   - field:
       aetype: state
@@ -246,8 +246,8 @@ object:
       scope: 
       description: 
       condition: 
-      on_entry: update_status(state_description => "_", state_weight => 0)
-      on_exit: update_status(state_description => "_", state_weight => 0)
-      on_error: update_status(state_description => "_", state_weight => 0)
-      max_retries: '100'
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
       max_time: 

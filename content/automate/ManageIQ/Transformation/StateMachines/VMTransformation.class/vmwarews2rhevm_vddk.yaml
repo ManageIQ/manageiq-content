@@ -10,37 +10,22 @@ object:
   fields:
   - State1:
       value: "/Transformation/TransformationHosts/${state_var#transformation_host_type}/VMTransform_${state_var#source_ems_type}2${state_var#destination_ems_type}_${state_var#transformation_method}"
-      on_entry: update_status(state_description => "Initiate Disks Transformation",
-        state_weight => 1)
-      on_exit: update_status(state_description => "Initiate Disks Transformation",
-        state_weight => 1)
-      on_error: update_status(state_description => "Initiate Disks Transformation",
-        state_weight => 1)
+      on_entry: update_status(state_description => "Convert disks", state_weight
+        => 1)
+      on_exit: update_status(state_description => "Convert disks", state_weight
+        => 1)
+      on_error: update_status(state_description => "Convert disks", state_weight
+        => 1)
   - State2:
       value: "/Transformation/TransformationHosts/${state_var#transformation_host_type}/VMCheckTransformed_${state_var#source_ems_type}2${state_var#destination_ems_type}_${state_var#transformation_method}"
-      on_entry: update_status(state_description => "Transform Disks", state_weight
-        => 80)
-      on_exit: update_status(state_description => "Transform Disks", state_weight
-        => 80)
-      on_error: update_status(state_description => "Transform Disks", state_weight
-        => 80)
+      on_entry: update_status(state_description => "Convert disks", state_weight
+        => 70)
+      on_exit: update_status(state_description => "Convert disks", state_weight
+        => 70)
+      on_error: update_status(state_description => "Convert disks", state_weight
+        => 70)
+      max_retries: 1500
   - State3:
-      value: "#/Transformation/TransformationHosts/${state_var#transformation_host_type}/VMSysprep_${state_var#source_ems_type}2${state_var#destination_ems_type}_${state_var#transformation_method}"
-      on_entry: update_status(state_description => "Initiate Disks Sysprep", state_weight
-        => 1)
-      on_exit: update_status(state_description => "Initiate Disks Sysprep", state_weight
-        => 1)
-      on_error: update_status(state_description => "Initiate Disks Sysprep", state_weight
-        => 1)
-  - State4:
-      value: "#/Transformation/TransformationHosts/${state_var#transformation_host_type}/VMCheckSyspreped_${state_var#source_ems_type}2${state_var#destination_ems_type}_${state_var#transformation_method}"
-      on_entry: update_status(state_description => "Sysprep Disks", state_weight =>
-        5)
-      on_exit: update_status(state_description => "Sysprep Disks", state_weight =>
-        5)
-      on_error: update_status(state_description => "Sysprep Disks", state_weight =>
-        5)
-  - State5:
       value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/Import"
       on_entry: update_status(state_description => "Import VM to destination storage",
         state_weight => 1)
@@ -48,15 +33,16 @@ object:
         state_weight => 1)
       on_error: update_status(state_description => "Import VM to destination storage",
         state_weight => 1)
-  - State6:
+  - State4:
       value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/Discover"
-      on_entry: update_status(state_description => "Discovering imported VM", state_weight
-        => 5)
-      on_exit: update_status(state_description => "Discovering imported VM", state_weight
-        => 5)
-      on_error: update_status(state_description => "Discovering imported VM", state_weight
-        => 5)
-  - State7:
+      on_entry: update_status(state_description => "Import VM to destination storage",
+        state_weight => 18)
+      on_exit: update_status(state_description => "Import VM to destination storage",
+        state_weight => 18)
+      on_error: update_status(state_description => "Import VM to destination storage",
+        state_weight => 18)
+      max_retries: 400
+  - State5:
       value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/SetDescription"
       on_entry: update_status(state_description => "Update description of imported
         VM", state_weight => 1)
@@ -64,7 +50,7 @@ object:
         VM", state_weight => 1)
       on_error: update_status(state_description => "Update description of imported
         VM", state_weight => 1)
-  - State8:
+  - State6:
       value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/EnableVirtIOSCSI"
       on_entry: update_status(state_description => "Enable Virtio SCSI for imported
         VM", state_weight => 1)
@@ -72,7 +58,7 @@ object:
         VM", state_weight => 1)
       on_error: update_status(state_description => "Enable Virtio SCSI for imported
         VM", state_weight => 1)
-  - State9:
+  - State7:
       value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/RewireNetworks"
       on_entry: update_status(state_description => "Set networks for imported VM",
         state_weight => 1)
@@ -80,7 +66,7 @@ object:
         state_weight => 1)
       on_error: update_status(state_description => "Set networks for imported VM",
         state_weight => 1)
-  - State10:
+  - State8:
       value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/PowerOn"
       on_entry: update_status(state_description => "Power on imported VM", state_weight
         => 1)
@@ -88,19 +74,20 @@ object:
         => 1)
       on_error: update_status(state_description => "Power on imported VM", state_weight
         => 1)
-  - State11:
+  - State9:
       value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/CheckPoweredOn"
-      on_entry: update_status(state_description => "Wait for imported VM to be powered
-        on", state_weight => 2)
-      on_exit: update_status(state_description => "Wait for imported VM to be powered
-        on", state_weight => 2)
-      on_error: update_status(state_description => "Wait for imported VM to be powered
-        on", state_weight => 2)
-  - State12:
+      on_entry: update_status(state_description => "Power on imported VM", state_weight
+        => 5)
+      on_exit: update_status(state_description => "Power on imported VM", state_weight
+        => 5)
+      on_error: update_status(state_description => "Power on imported VM", state_weight
+        => 5)
+      max_retries: 200
+  - State10:
       value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/DeleteFromExportDomain"
-      on_entry: update_status(state_description => "Delete intermediate VM", state_weight
-        => 1)
-      on_exit: update_status(state_description => "Delete intermediate VM", state_weight
-        => 1)
-      on_error: update_status(state_description => "Delete intermediate VM", state_weight
-        => 1)
+      on_entry: update_status(state_description => "Cleanup temporary assets",
+        state_weight => 1)
+      on_exit: update_status(state_description => "Cleanup temporary assets",
+        state_weight => 1)
+      on_error: update_status(state_description => "Cleanup temporary assets",
+        state_weight => 1)
