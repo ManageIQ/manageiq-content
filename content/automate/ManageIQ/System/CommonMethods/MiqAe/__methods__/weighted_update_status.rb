@@ -26,7 +26,7 @@ module ManageIQ
               return states[path]['percent'] if direct_children.empty?
               percent = 0
               direct_children.each_key { |dc_path| percent += reconcile_states_percent(dc_path, states).to_f * states[dc_path]['weight'].to_f / 100.0 }
-              return percent
+              percent
             end
 
             def on_entry(state_hash, _, _, state_weight, state_description)
@@ -38,7 +38,7 @@ module ManageIQ
                 state_hash['started_on'] = Time.now.utc
                 state_hash['percent'] = 0.0
               end
-              return state_hash
+              state_hash
             end
 
             def on_exit(state_hash, state_progress, state_name, _, _)
@@ -65,7 +65,7 @@ module ManageIQ
               # Then, we set the update time to now, which is also finish time
               # when the state is finished.
               state_hash['updated_on'] = Time.now.utc
-              return state_hash
+              state_hash
             end
 
             def on_error(state_hash, state_progress, state_name, _, _)
@@ -75,7 +75,7 @@ module ManageIQ
               # We merge the potential message from method and set the update time.
               state_hash['message'] = state_progress.nil? ? "#{state_name} has failed." : state_progress['message']
               state_hash['updated_on'] = Time.now.utc
-              return state_hash
+              state_hash
             end
 
             def main
