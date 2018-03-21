@@ -1,0 +1,55 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: Transformation
+    inherits: 
+    description: 
+  fields:
+  - State1:
+      value: "/Transformation/Common/AssessTransformation"
+      on_entry: update_status(state_description => "Assess Migration", state_weight
+        => 1)
+      on_exit: update_status(state_description => "Assess Migration", state_weight
+        => 1)
+      on_error: update_status(state_description => "Assess Migration", state_weight
+        => 1)
+  - State2:
+      value: "/Transformation/Infrastructure/VM/${state_var#source_ems_type}/CollapseSnapshots"
+      on_entry: update_status(state_description => "Collapse Snapshots", state_weight
+        => 1)
+      on_exit: update_status(state_description => "Collapse Snapshots", state_weight
+        => 1)
+      on_error: update_status(state_description => "Collapse Snapshots", state_weight
+        => 1)
+  - State3:
+      value: "/Transformation/Infrastructure/VM/Common/PowerOff"
+      on_entry: update_status(state_description => "Power off", state_weight => 1)
+      on_exit: update_status(state_description => "Power off", state_weight => 1)
+      on_error: update_status(state_description => "Power off", state_weight => 1)
+  - State4:
+      value: "/Transformation/Common/AcquireTransformationHost"
+      on_entry: update_status(state_description => "Acquire Transformation Host",
+        state_weight => 1)
+      on_exit: update_status(state_description => "Acquire Transformation Host", state_weight
+        => 1)
+      on_error: update_status(state_description => "Acquire Transformation Host",
+        state_weight => 1)
+  - State5:
+      value: "/Transformation/StateMachines/VMTransformation/${state_var#transformation_type}_${state_var#transformation_method}?state_ancestry=${#state_ancestry}/${#ae_state}"
+      on_entry: update_status(state_description => "Transform VM", state_weight =>
+        95)
+      on_exit: update_status(state_description => "Transform VM", state_weight =>
+        95)
+      on_error: update_status(state_description => "Transform VM", state_weight =>
+        95)
+  - State6:
+      value: "/Transformation/Infrastructure/VM/${state_var#source_ems_type}/SetMigrated"
+      on_entry: update_status(state_description => "Mark source as migrated", state_weight
+        => 1)
+      on_exit: update_status(state_description => "Mark source as migrated", state_weight
+        => 1)
+      on_error: update_status(state_description => "Mark source as migrated", state_weight
+        => 1)
