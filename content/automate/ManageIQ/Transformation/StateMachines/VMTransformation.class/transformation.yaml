@@ -10,46 +10,49 @@ object:
   fields:
   - State1:
       value: "/Transformation/Common/AssessTransformation"
-      on_entry: update_status(state_description => "Assess Migration", state_weight
-        => 1)
-      on_exit: update_status(state_description => "Assess Migration", state_weight
-        => 1)
-      on_error: update_status(state_description => "Assess Migration", state_weight
-        => 1)
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Assess Migration")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Assess Migration")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Assess Migration")
   - State2:
       value: "/Transformation/Infrastructure/VM/${state_var#source_ems_type}/CollapseSnapshots"
-      on_entry: update_status(state_description => "Collapse Snapshots", state_weight
-        => 1)
-      on_exit: update_status(state_description => "Collapse Snapshots", state_weight
-        => 1)
-      on_error: update_status(state_description => "Collapse Snapshots", state_weight
-        => 1)
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Collapse Snapshots")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Collapse Snapshots")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Collapse Snapshots")
   - State3:
       value: "/Transformation/Infrastructure/VM/Common/PowerOff"
-      on_entry: update_status(state_description => "Power off", state_weight => 1)
-      on_exit: update_status(state_description => "Power off", state_weight => 1)
-      on_error: update_status(state_description => "Power off", state_weight => 1)
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Power off")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Power off")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Power off")
   - State4:
       value: "/Transformation/Common/AcquireTransformationHost"
-      on_entry: update_status(state_description => "Acquire Transformation Host",
-        state_weight => 1)
-      on_exit: update_status(state_description => "Acquire Transformation Host", state_weight
-        => 1)
-      on_error: update_status(state_description => "Acquire Transformation Host",
-        state_weight => 1)
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Acquire Transformation Host")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Acquire Transformation Host")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Acquire Transformation Host")
   - State5:
       value: "/Transformation/StateMachines/VMTransformation/${state_var#transformation_type}_${state_var#transformation_method}?state_ancestry=${#state_ancestry}/${#ae_state}"
-      on_entry: update_status(state_description => "Transform VM", state_weight =>
-        95)
-      on_exit: update_status(state_description => "Transform VM", state_weight =>
-        95)
-      on_error: update_status(state_description => "Transform VM", state_weight =>
-        95)
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 95, description
+        => "Transform VM")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 95, description
+        => "Transform VM")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 95, description
+        => "Transform VM")
   - State6:
       value: "/Transformation/Infrastructure/VM/${state_var#source_ems_type}/SetMigrated"
-      on_entry: update_status(state_description => "Mark source as migrated", state_weight
-        => 1)
-      on_exit: update_status(state_description => "Mark source as migrated", state_weight
-        => 1)
-      on_error: update_status(state_description => "Mark source as migrated", state_weight
-        => 1)
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Mark source as migrated")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Mark source as migrated")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Mark source as migrated")
