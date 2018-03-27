@@ -1,47 +1,52 @@
-#
-# Description: This method updates the retirement status.
-#
+module ManageIQ
+  module Automate
+    module Service
+      module Retirement
+        module StateMachines
+          module ServiceRetirement
+            class UpdateServiceRetirementStatus
+              def initialize(handle = $evm)
+                @handle = handle
+              end
 
-# Get variables from Server object
-server = $evm.root['miq_server']
+              def main
+                task = @handle.root['service_retire_task']
 
-service = $evm.root['service']
+                updated_message = update_status_message(task, @handle.inputs['status'])
 
-# Get State Machine
-state = $evm.current_object.class_name
+                if @handle.root['ae_result'] == "error"
+                  @handle.create_notification(:level   => "error",
+                                              :subject => task.miq_request,
+                                              :message => "Service Retire Error: #{updated_message}")
+                  @handle.log(:error, "Service Retire Error: #{updated_message}")
+                end
+              end
 
-# Get current step
-step = $evm.root['ae_state']
+              private
 
-# Get status from input field status
-status = $evm.inputs['status']
+              def update_status_message(task, status)
+                updated_message  = "Server [#{@handle.root['miq_server'].name}] "
+                updated_message += "Step [#{@handle.root['ae_state']}] "
+                updated_message += "Status [#{status}] "
+                updated_message += "Message [#{task.message}] "
+                updated_message += "Current Retry Number [#{@handle.root['ae_state_retries']}]"\
+                                    if @handle.root['ae_result'] == 'retry'
+                if task
+                  task.miq_request.user_message = updated_message
+                  task.message = status
 
-# Get status_state ['on_entry', 'on_exit', 'on_error']
-status_state = $evm.root['ae_status_state']
-
-$evm.log("info", "Server:<#{server.name}> Ae_Result:<#{$evm.root['ae_result']}> State:<#{state}> Step:<#{step}>")
-$evm.log("info", "Status_State:<#{status_state}> Status:<#{status}>")
-
-# Update Status Message
-updated_message  = "Server [#{server.name}] "
-updated_message += "Service [#{service.name}] " if service
-updated_message += "Step [#{step}] "
-updated_message += "Status [#{status}] "
-updated_message += "Current Retry Number [#{$evm.root['ae_state_retries']}]" if $evm.root['ae_result'] == 'retry'
-
-# Update Status for on_error for all states other than the first state which is start retirement
-# in the retirement state machine.
-if $evm.root['ae_result'] == 'error'
-  if step.downcase == 'startretirement'
-    msg = 'Cannot continue because Service is '
-    msg += service ? "#{service.retirement_state}." : 'nil.'
-    $evm.log('info', msg)
-    updated_message += msg
-    $evm.create_notification(:level => 'warning', :message => "Service Retirement Warning: #{updated_message}")
-    $evm.log(:warn, "Service Retirement Warning: #{updated_message}")
-  else
-    $evm.create_notification(:level => 'error', :message => "Service Retirement Error: #{updated_message}")
-    $evm.log(:error, "Service Retirement Error: #{updated_message}")
-    service.retirement_state = 'error' if service
+                  updated_message
+                end
+              end
+            end
+          end
+        end
+      end
+    end
   end
+end
+
+if $PROGRAM_NAME == __FILE__
+  ManageIQ::Automate::Service::Retirement::StateMachines::
+    ServiceRetirement::UpdateServiceRetirementStatus.new.main
 end
