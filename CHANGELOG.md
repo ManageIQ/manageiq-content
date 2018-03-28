@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+##  Unreleased as of Sprint 82 Ending 2018-03-26
+
+### Added
+- Add Azure events for targeted refresh [(#261)](https://github.com/ManageIQ/manageiq-content/pull/261)
+- Add VM Transformation state machine [(#252)](https://github.com/ManageIQ/manageiq-content/pull/252)
+
+### Fixed
+- Modify on {entry exit error} path to use WeightedUpdateStatus [(#265)](https://github.com/ManageIQ/manageiq-content/pull/265)
+
 ##  Unreleased as of Sprint 81 Ending 2018-03-12
 
 ### Added
