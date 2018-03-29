@@ -1,48 +1,64 @@
-#
-# Description: This method updates the vm retirement status.
-# Required inputs: status
-#
+module ManageIQ
+  module Automate
+    module Infrastructure
+      module VM
+        module Retirement
+          module StateMachines
+            module VMRetirement
+              class UpdateRetirementStatus
+                def initialize(handle = $evm)
+                  @handle = handle
+                end
 
-# Get variables from Server object
-server = $evm.root['miq_server']
+                def main
+                  vm = @handle.root['vm']
 
-# Get State Machine
-state = $evm.current_object.class_name
+                  updated_message = update_status_message(vm, @handle.inputs['status'])
 
-# Get current step
-step = $evm.root['ae_state']
+                  if @handle.root['ae_result'] == "error"
+                    @handle.create_notification(:level   => "error",
+                                                :subject => "vm",
+                                                :message => "VM Retirement Error: #{updated_message}")
+                    @handle.log(:error, "VM Retirement Error: #{updated_message}")
+                  end
+                end
 
-# Get status from input field status
-status = $evm.inputs['status']
+                private
 
-# Get status_state ['on_entry', 'on_exit', 'on_error']
-status_state = $evm.root['ae_status_state']
+                def update_status_message(vm, status)
+                  updated_message  = "Server [#{@handle.root['miq_server'].name}] "
+                  updated_message += "Step [#{@handle.root['ae_state']}] "
+                  updated_message += "Status [#{status}] "
+                  updated_message += "Current Retry Number [#{@handle.root['ae_state_retries']}]" if @handle.root['ae_result'] == 'retry'
 
-vm = $evm.root['vm']
+                  if @handle.root['ae_result'] == 'error'
+                    if @handle.root['ae_state'].downcase == 'startretirement'
+                      msg = 'Cannot continue because VM is '
+                      msg += vm ? "#{vm.retirement_state}." : 'nil.'
+                      @handle.log('info', msg)
+                      updated_message += msg
+                    elsif vm
+                      vm.retirement_state = 'error'
+                    end
+                  end
 
-$evm.log("info", "Server:<#{server.name}> Ae_Result:<#{$evm.root['ae_result']}> State:<#{state}> Step:<#{step}>")
-$evm.log("info", "Status_State:<#{status_state}> Status:<#{status}>")
+                  if @handle.root['vm_retire_task']
+                    task = @handle.root['vm_retire_task']
+                    task.miq_request.user_message = updated_message
+                    task.message = status
 
-# Update Status Message
-updated_message  = "Server [#{server.name}] "
-updated_message += "VM [#{vm.name}] " if vm
-updated_message += "Step [#{step}] "
-updated_message += "Status [#{status}] "
-updated_message += "Current Retry Number [#{$evm.root['ae_state_retries']}]" if $evm.root['ae_result'] == 'retry'
-
-# Update Status for on_error for all states other than the first state which is startretirement
-# in the retirement state machine.
-if $evm.root['ae_result'] == 'error'
-  if step.downcase == 'startretirement'
-    msg = 'Cannot continue because VM is '
-    msg += vm ? "#{vm.retirement_state}." : 'nil.'
-    $evm.log('info', msg)
-    updated_message += msg
-    $evm.create_notification(:level => 'warning', :message => "VM Retirement Warning: #{updated_message}")
-    $evm.log(:warn, "VM Retirement Warning: #{updated_message}")
-  else
-    $evm.create_notification(:level => 'error', :message => "VM Retirement Error: #{updated_message}")
-    $evm.log(:error, "VM Retirement Error: #{updated_message}")
-    vm.retirement_state = 'error' if vm
+                    updated_message
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
   end
+end
+
+if $PROGRAM_NAME == __FILE__
+  ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::VMRetirement::UpdateRetirementStatus.new.main
 end
