@@ -8,5 +8,7 @@ object:
     inherits: 
     description: 
   fields:
-  - relationship4:
-      value: "/Service/Retirement/StateMachines/ServiceRetirement/Default"
+  - relationship1:
+      value: "/Service/Retirement/StateMachines/Methods/GetRetirementEntryPoint"
+  - relationship2:
+      value: "${/#retirement_entry_point}?service_id=${process#service_id}"
