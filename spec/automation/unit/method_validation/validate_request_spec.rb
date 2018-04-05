@@ -6,6 +6,10 @@ describe "Auto Approval Request Validation" do
   end
   let(:args) { "status=fred&MiqProvisionRequest::miq_request=#{@miq_provision_request.id}" }
 
+  let(:large_flavor) do
+    FactoryGirl.create(:flavor_google, :ems_id => @ems.id, :cloud_subnet_required => false,
+                                             :cpus => 4, :cpu_cores => 1, :memory => 2_048_000)
+  end
   before do
     setup_model("google")
     add_call_method
@@ -24,14 +28,16 @@ describe "Auto Approval Request Validation" do
   end
 
   it "exceed memory" do
+    @miq_provision_request.update_attributes(:options => @miq_provision_request.options.merge(:instance_type => [large_flavor.id, large_flavor.name]))
     @value = "max_memory=1"
-    msg = "Request was not auto-approved for the following reasons: (Requested Memory 1 KB limit is 1) "
+    msg = "Request was not auto-approved for the following reasons: (Requested Memory 1.95 MB limit is 1 MB) "
     expect(ws.root["reason"]).to eq(msg)
     expect(ws.root["ae_result"]).to eq("error")
   end
 
   it "not exceed memory" do
-    @value = "max_memory=2048"
+    @miq_provision_request.update_attributes(:options => @miq_provision_request.options.merge(:instance_type => [large_flavor.id, large_flavor.name]))
+    @value = "max_memory=2"
     expect(ws.root["ae_result"]).to be_nil
   end
 

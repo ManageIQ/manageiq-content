@@ -126,7 +126,8 @@ max_memory = nil
 # Use value from model unless specified above
 max_memory ||= $evm.object['max_memory']
 unless max_memory.nil?
-  $evm.log("info", "Auto-Approval Threshold(Model):<max_memory=#{max_memory}> detected")
+  max_memory = max_memory.to_i.megabytes
+  $evm.log("info", "Auto-Approval Threshold(Model):<max_memory=#{max_memory.to_s(:human_size)}> detected")
 end
 
 # Reset to nil if value is zero
@@ -136,7 +137,8 @@ max_memory = nil if max_memory == '0'
 prov_max_memory = template.tags(:prov_max_memory).first
 # If template is tagged then override
 unless prov_max_memory.nil?
-  $evm.log("info", "Auto-Approval Threshold(Tag):<prov_max_memory=#{prov_max_memory}> from template:<#{template.name}> detected")
+  prov_max_memory = prov_max_memory.to_i.megabytes
+  $evm.log("info", "Auto-Approval Threshold(Tag):<prov_max_memory=#{prov_max_memory.to_s(:human_size)}> from template:<#{template.name}> detected")
   max_memory = prov_max_memory.to_i
 end
 
@@ -145,9 +147,9 @@ unless max_memory.blank?
   desired_mem = requested_memory(prov_resource, desired_nvms)
   if desired_mem && (desired_mem.to_i > max_memory.to_i)
     $evm.log("info", "Auto-Approval Threshold(Warning): Number of vRAM requested: \
-    <#{desired_mem.to_s(:human_size)}> exceeds:<#{max_memory}>")
+    <#{desired_mem.to_s(:human_size)}> exceeds:<#{max_memory.to_s(:human_size)}>")
     approval_req = true
-    reason2 = "Requested Memory #{desired_mem.to_s(:human_size)} limit is #{max_memory}"
+    reason2 = "Requested Memory #{desired_mem.to_s(:human_size)} limit is #{max_memory.to_s(:human_size)}"
   end
 end
 
