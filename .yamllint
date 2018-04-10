@@ -1,0 +1,14 @@
+---
+ignore: |
+  /vendor/**
+
+extends: relaxed
+
+rules:
+  indentation:
+    indent-sequences: false
+  # TODO: get this down to 120
+  line-length:
+    max: 250
+  # TODO: enable this
+  trailing-spaces: disable
