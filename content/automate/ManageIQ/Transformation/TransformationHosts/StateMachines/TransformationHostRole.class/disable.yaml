@@ -9,6 +9,6 @@ object:
     description: 
   fields:
   - State1:
-      value: "/Transformation/TransformationHost/${#transformation_host_type}/RoleDisable"
+      value: "/Transformation/TransformationHosts/${#transformation_host_type}/RoleDisable"
   - State2:
-      value: "/Transformation/TransformationHost/StateMachines/TransformationHostRole/Check"
+      value: "/Transformation/TransformationHosts/StateMachines/TransformationHostRole/Check"
