@@ -1,0 +1,6 @@
+---
+- name: "Initialize the Workspace"
+  manageiq_automate:
+    initialize_workspace: 
+      auto_commit: "{{ auto_commit }}"
+  register: workspace
