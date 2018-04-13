@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+##  Unreleased as of Sprint 83 Ending 2018-04-09
+
+### Added
+- Add changes for service vm retire request approval [(#272)](https://github.com/ManageIQ/manageiq-content/pull/272)
+- Add task status update to retirement status [(#262)](https://github.com/ManageIQ/manageiq-content/pull/262)
+
 ##  Unreleased as of Sprint 82 Ending 2018-03-26
 
 ### Added
