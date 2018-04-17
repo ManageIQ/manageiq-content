@@ -115,7 +115,7 @@ describe "Quota Validation" do
 
   context "vmware service item with dialog override number_of_vms = 5" do
     let(:result_counts_hash) do
-      {:storage => 512.megabytes, :cpu => 4, :vms => 5, :memory => 1.gigabytes}
+      {:storage => 2560.megabytes, :cpu => 20, :vms => 5, :memory => 5.gigabytes}
     end
     let(:result_dialog) do
       {"dialog_option_0_number_of_vms" => "5"}
@@ -129,6 +129,16 @@ describe "Quota Validation" do
     end
     let(:result_dialog) do
       {"dialog_option_0_storage" => "2147483648"}
+    end
+    it_behaves_like "requested"
+  end
+
+  context "vmware service item with dialog override number_of_vms = 5, sockets = 3 and cores = 4 = 12" do
+    let(:result_counts_hash) do
+      {:storage => 2560.megabytes, :cpu => 60, :vms => 5, :memory => 5.gigabytes}
+    end
+    let(:result_dialog) do
+      {"dialog_option_0_number_of_vms" => "5", "dialog_option_0_number_of_sockets" => "3", "dialog_option_0_cores_per_socket" => "4"}
     end
     it_behaves_like "requested"
   end
@@ -196,7 +206,7 @@ describe "Quota Validation" do
       :disk_add => [{"disk_size_in_mb" => "10", "persistent" => true, "thin_provisioned" => true,\
       "dependent" => true, "bootable" => false}]})
       ws = run_automate_method(reconfigure_attrs)
-      check_results(ws.root['quota_requested'], 10.megabytes, 2, 0, 4096.megabytes)
+      check_results(ws.root['quota_requested'], 10.megabytes, 2, 1, 4096.megabytes)
     end
 
     it "minus 1 cpu and minus 2048 memory" do
@@ -204,7 +214,7 @@ describe "Quota Validation" do
       @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :cores_per_socket => 1,\
       :number_of_sockets => 1, :number_of_cpus => 1, :vm_memory => 2048, :request_type => :vm_reconfigure})
       ws = run_automate_method(reconfigure_attrs)
-      check_results(ws.root['quota_requested'], 0, -1, 0, -2048.megabytes)
+      check_results(ws.root['quota_requested'], 0, -1, 1, -2048.megabytes)
     end
 
     it "no change" do
@@ -212,7 +222,7 @@ describe "Quota Validation" do
       @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :cores_per_socket => 2,\
       :number_of_sockets => 1, :number_of_cpus => 2, :vm_memory => 4096, :request_type => :vm_reconfigure})
       ws = run_automate_method(reconfigure_attrs)
-      check_results(ws.root['quota_requested'], 0, 0, 0, 0.megabytes)
+      check_results(ws.root['quota_requested'], 0, 0, 1, 0.megabytes)
     end
   end
 end

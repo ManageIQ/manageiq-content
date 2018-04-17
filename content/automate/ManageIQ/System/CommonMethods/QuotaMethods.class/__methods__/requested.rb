@@ -13,10 +13,12 @@ def cloud?(prov_type)
 end
 
 def calculate_requested(options_hash = {})
-  {:storage => get_total_requested(options_hash, :storage),
-   :memory  => get_total_requested(options_hash, :vm_memory),
-   :cpu     => get_total_requested(options_hash, :number_of_cpus),
-   :vms     => get_total_requested(options_hash, :number_of_vms)}
+  total_vms = get_total_requested(options_hash, :number_of_vms)
+  total_vms = 1 if total_vms.zero?
+  {:vms     => total_vms,
+   :storage => get_total_requested(options_hash, :storage) * total_vms,
+   :memory  => get_total_requested(options_hash, :vm_memory) * total_vms,
+   :cpu     => get_total_requested(options_hash, :number_of_cpus) * total_vms}
 end
 
 def get_total_requested(options_hash, prov_option)
@@ -91,7 +93,6 @@ def vm_prov_option_value(prov_option, options_array = [])
                :number_of_vms => get_option_value(@miq_request, :number_of_vms),
                :cloud         => vm_provision_cloud?}
   # number_of_vms doesn't exist for VmReconfigureRequest
-  args_hash[:number_of_vms] = 1 if @reconfigure_request
 
   case prov_option
   when :vm_memory
@@ -109,8 +110,7 @@ end
 def requested_memory(args_hash, vendor)
   memory = get_option_value(args_hash[:resource], :vm_memory)
   memory = memory.megabytes if %w(amazon openstack google).exclude?(vendor)
-  args_hash[:prov_value] = args_hash[:number_of_vms] * memory
-
+  args_hash[:prov_value] = memory
   if @reconfigure_request && args_hash[:resource].options[:vm_memory]
     # Account for the VM's existing memory
     args_hash[:prov_value] = args_hash[:prov_value].to_i - @vm.hardware.memory_mb.to_i.megabytes
@@ -126,7 +126,7 @@ def requested_number_of_cpus(args_hash)
   cpu_in_request = get_option_value(args_hash[:resource], :number_of_sockets) *
                    get_option_value(args_hash[:resource], :cores_per_socket)
   cpu_in_request = get_option_value(args_hash[:resource], args_hash[:number_of_cpus]) if cpu_in_request.zero?
-  args_hash[:prov_value] = args_hash[:number_of_vms] * cpu_in_request
+  args_hash[:prov_value] = cpu_in_request
 
   if @reconfigure_request && args_hash[:resource].options[:number_of_sockets]
     # Account for the VM's existing CPUs
@@ -169,7 +169,7 @@ def requested_storage(args_hash)
     end
   else
     vm_size = args_hash[:resource].vm_template.provisioned_storage
-    args_hash[:prov_value] = args_hash[:number_of_vms] * vm_size
+    args_hash[:prov_value] = vm_size
   end
 
   if @reconfigure_request
@@ -197,7 +197,7 @@ def collect_dialog_totals(prov_option, options_hash)
   dialog_values(prov_option, options_hash, dialog_array = [])
   total = collect_totals(dialog_array)
   if prov_option == :number_of_cpus
-    options_hash.each do |_sequence_id, options|
+    options_hash.each_value do |options|
       if options.keys.include?(:number_of_sockets) || options.keys.include?(:cores_per_socket)
         $evm.log(:info, "Recalculating number of cpus based on dialog overrides")
         total = recalculate_number_of_cpus(service_resource, options[:number_of_sockets].to_i, options[:cores_per_socket].to_i)
@@ -226,7 +226,7 @@ def recalculate_number_of_cpus(resource, override_number_of_sockets, override_co
   elsif override_cores_per_socket.positive?
     cpu_in_request = get_option_value(resource, :number_of_sockets) * override_cores_per_socket
   end
-  cpu_in_request * get_option_value(resource, :number_of_vms) if cpu_in_request.to_i.positive?
+  cpu_in_request if cpu_in_request.to_i.positive?
 end
 
 def dialog_values(prov_option, options_hash, dialog_array)
@@ -265,7 +265,7 @@ def cloud_storage(args_hash)
 
   storage += cloud_volume_storage(args_hash)
   $evm.log(:info, "Retrieving cloud storage #{storage}")
-  default_option((storage * args_hash[:number_of_vms]), args_hash[:options_array])
+  default_option(storage, args_hash[:options_array])
 end
 
 def cloud_volume_storage(args_hash)
@@ -282,13 +282,13 @@ end
 def cloud_number_of_cpus(args_hash)
   flavor = args_hash[:flavor]
   $evm.log(:info, "Retrieving cloud flavor #{flavor.name} cpus => #{flavor.cpus}")
-  default_option((flavor.cpus * args_hash[:number_of_vms]), args_hash[:options_array])
+  default_option(flavor.cpus, args_hash[:options_array])
 end
 
 def cloud_vm_memory(args_hash)
   flavor = args_hash[:flavor]
   $evm.log(:info, "Retrieving flavor #{flavor.name} memory => #{flavor.memory}")
-  default_option((flavor.memory * args_hash[:number_of_vms]), args_hash[:options_array])
+  default_option(flavor.memory, args_hash[:options_array])
 end
 
 def cloud_value(args_hash)
