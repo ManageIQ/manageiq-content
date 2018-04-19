@@ -28,7 +28,7 @@ module ManageIQ
                 updated_message  = "Server [#{@handle.root['miq_server'].name}] "
                 updated_message += "Step [#{@handle.root['ae_state']}] "
                 updated_message += "Status [#{status}] "
-                updated_message += "Message [#{task.message}] "
+                updated_message += "Message [#{task.message}] " if task
                 updated_message += "Current Retry Number [#{@handle.root['ae_state_retries']}]"\
                                     if @handle.root['ae_result'] == 'retry'
                 if task
