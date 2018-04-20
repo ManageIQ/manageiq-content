@@ -1,30 +1,64 @@
 #
 # Description: This method sets the retirement_state to retiring
 #
+module ManageIQ
+  module Automate
+    module Cloud
+      module VM
+        module Retirement
+          module StateMachines
+            module Methods
+              class StartRetirement
+                def initialize(handle = $evm)
+                  @handle = handle
+                end
 
-$evm.log("info", "Listing Root Object Attributes:")
-$evm.root.attributes.sort.each { |k, v| $evm.log("info", "\t#{k}: #{v}") }
-$evm.log("info", "===========================================")
+                def main
+                  log_info
+                  @vm = @handle.root['vm']
+                  vm_validation
+                  start_retirement
+                end
 
-vm = $evm.root['vm']
-if vm.nil?
-  $evm.log('error', "VM Object not found")
-  exit MIQ_ABORT
+                private
+
+                def log_info
+                  @handle.log("info", "Listing Root Object Attributes:")
+                  @handle.root.attributes.sort.each { |k, v| @handle.log("info", "\t#{k}: #{v}") }
+                  @handle.log("info", "===========================================")
+                end
+
+                def vm_validation
+                  if @vm.nil?
+                    raise 'VM Object not found'
+                  end
+
+                  if @vm.retired?
+                    raise 'VM is already retired'
+                  end
+
+                  if @vm.retiring?
+                    raise 'VM is already in the process of being retired'
+                  end
+                end
+
+                def start_retirement
+                  @handle.log('info', "VM before start_retirement: #{@vm.inspect} ")
+                  @handle.create_notification(:type => :vm_retiring, :subject => @vm)
+
+                  @vm.start_retirement
+
+                  @handle.log('info', "VM after start_retirement: #{@vm.inspect} ")
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
 end
 
-if vm.retired?
-  $evm.log('error', "VM is already retired. Aborting current State Machine.")
-  exit MIQ_ABORT
+if $PROGRAM_NAME == __FILE__
+  ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::StartRetirement.new.main
 end
-
-if vm.retiring?
-  $evm.log('error', "VM is in the process of being retired. Aborting current State Machine.")
-  exit MIQ_ABORT
-end
-
-$evm.log('info', "VM before start_retirement: #{vm.inspect} ")
-$evm.create_notification(:type => :vm_retiring, :subject => vm)
-
-vm.start_retirement
-
-$evm.log('info', "VM after start_retirement: #{vm.inspect} ")
