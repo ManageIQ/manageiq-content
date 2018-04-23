@@ -34,6 +34,7 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::Star
     allow(ae_service).to receive(:create_notification)
     expect(ae_service).to receive(:create_notification).with(:type => :vm_retiring, :subject => svc_vm)
     expect(svc_vm).to receive(:start_retirement)
+    svc_vm.retirement_state = 'initializing'
     expect { described_class.new(ae_service).main }.to_not raise_error
   end
 end
