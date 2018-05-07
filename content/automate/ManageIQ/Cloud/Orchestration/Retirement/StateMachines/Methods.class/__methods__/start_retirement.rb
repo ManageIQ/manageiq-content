@@ -22,6 +22,11 @@ if stack.retiring?
   exit MIQ_ABORT
 end
 
+unless stack.retirement_initialized?
+  $evm.log('error', "Stack has not been initialized for retirement. Aborting current State Machine.")
+  exit MIQ_ABORT
+end
+
 $evm.log('info', "Stack before start_retirement: #{stack.inspect} ")
 $evm.create_notification(:type => :vm_retiring, :subject => stack)
 

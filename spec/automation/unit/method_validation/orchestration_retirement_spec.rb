@@ -17,8 +17,13 @@ describe "Orchestration retirement state machine Methods Validation" do
     let(:method_name) { "StartRetirement" }
 
     it "starts a retirement request" do
+      stack.update_attributes(:retirement_state => 'initializing')
       ws
       expect(OrchestrationStack.where(:id => stack.id).first.retirement_state).to eq('retiring')
+    end
+
+    it "aborts if not initialized" do
+      expect { ws }.to raise_error(MiqAeException::AbortInstantiation, 'Method exited with rc=MIQ_ABORT')
     end
 
     it "aborts if stack is already retired" do

@@ -40,6 +40,10 @@ module ManageIQ
                   if @vm.retiring?
                     raise 'VM is already in the process of being retired'
                   end
+
+                  unless @vm.retirement_initialized?
+                    raise 'VM has not been initialized for retirement. Aborting current State Machine.'
+                  end
                 end
 
                 def start_retirement
