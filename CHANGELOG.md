@@ -5,7 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-## Gaprindashvili-1
+## Gaprindashvili-3
+
+### Added
+- Add azure event handlers for targeted refresh [(#260)](https://github.com/ManageIQ/manageiq-content/pull/260)
+- Add Azure events for targeted refresh [(#261)](https://github.com/ManageIQ/manageiq-content/pull/261)
+- Add in the miq. automate and vmdb roles [(#254)](https://github.com/ManageIQ/manageiq-content/pull/254)
+
+### Fixed
+- Add event state machine for refresh. [(#243)](https://github.com/ManageIQ/manageiq-content/pull/243)
+
+## Gaprindashvili-1 - Released 2018-01-31
 
 ### Added
 - Do targeted refresh based on Openstack events. [(#184)](https://github.com/ManageIQ/manageiq-content/pull/184)
