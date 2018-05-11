@@ -14,5 +14,5 @@ object:
       value: Request ID ${/#miq_request.id} - Your Instance Request is Pending.
   - body:
       value: 'Hello,<br><br>Please review your Instance Request and wait for approval
-        from an Administrator.<br><br>To view this Request go to: <a href=''http://${/#miq_server.ipaddress}:3000/miq_request/show/${/#miq_request.id}''>http://${/#miq_server.ipaddress}:3000/miq_request/show/${/#miq_request.id}</a><br><br>
+        from an Administrator.<br><br>To view this Request go to: <a href=''https://${/#miq_server.ipaddress}:3000/miq_request/show/${/#miq_request.id}''>https://${/#miq_server.ipaddress}:3000/miq_request/show/${/#miq_request.id}</a><br><br>
         Thank you<br> ${#signature}'

@@ -14,5 +14,5 @@ object:
   - body:
       value: 'Approver, <br><br>An Instance Request received from ${/#miq_request.requester.email}
         was Approved.<br><br>Approvers reason: ${/#miq_request.reason}<br><br>To view
-        this Request go to: <a href=''http://${/#miq_server.ipaddress}:3000/miq_request/show/${/#miq_request.id}''>http://${/#miq_server.ipaddress}:3000/miq_request/show/${/#miq_request.id}</a><br><br>
+        this Request go to: <a href=''https://${/#miq_server.ipaddress}:3000/miq_request/show/${/#miq_request.id}''>https://${/#miq_server.ipaddress}:3000/miq_request/show/${/#miq_request.id}</a><br><br>
         Thank you,<br> ${#signature}'
