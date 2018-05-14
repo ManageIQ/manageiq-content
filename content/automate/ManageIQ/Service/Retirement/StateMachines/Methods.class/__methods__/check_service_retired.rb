@@ -10,33 +10,33 @@ module ManageIQ
               end
 
               def main
-                service
-
                 @handle.log('info', "Checking if all service resources have been retired.")
-                result = 'ok'
-                service.service_resources.each do |sr|
-                  next if sr.resource.nil?
-                  next if sr.resource_type == "Service" && @handle.vmdb(:service).find(sr[:resource_id]).has_parent
-                  next unless sr.resource.respond_to?(:retired?)
-                  result = check_service_resource_retirement(sr)
-                end
-
-                @handle.log('info', "Service: #{service.name} Resource retirement check returned <#{result}>")
-                result(result)
+                check_all_service_resources
               end
 
               private
 
               def service
-                @handle.root["service"].tap do |service|
-                  if service.nil?
-                    @handle.log(:error, 'Service is nil')
-                    raise 'Service not found'
+                @service ||= @handle.root['service'].tap do |obj|
+                  if obj.nil?
+                    @handle.log(:error, 'Service object not provided')
+                    raise 'Service object has not been provided'
                   end
                 end
               end
 
+              def check_all_service_resources
+                if all_service_resources_done?
+                  @handle.root['ae_result'] = 'ok'
+                else
+                  @handle.log('info', "Service: #{service.name} resource is not retired, setting retry.")
+                  @handle.root['ae_result'] = 'retry'
+                  @handle.root['ae_retry_interval'] = '1.minute'
+                end
+              end
+
               def check_service_resource_retirement(sr)
+                return 'ignore' unless process?(sr)
                 @handle.log('info', "Checking if service resource for service: #{service.name} resource ID: #{sr.id} is retired")
                 if sr.resource.retired?
                   @handle.log('info', "resource: #{sr.resource.name} is already retired.")
@@ -47,16 +47,14 @@ module ManageIQ
                 end
               end
 
-              def result(param)
-                case param
-                when 'retry'
-                  @handle.log('info', "Service: #{service.name} resource is not retired, setting retry.")
-                  @handle.root['ae_result']         = 'retry'
-                  @handle.root['ae_retry_interval'] = '1.minute'
-                when 'ok'
-                  @handle.log('info', "All resources are retired for service: #{service.name}. ")
-                  @handle.root['ae_result'] = 'ok'
-                end
+              def process?(sr)
+                return false if sr.resource.nil?
+                return false if sr.resource_type == "Service" && @handle.vmdb(:service).find(sr[:resource_id]).has_parent
+                sr.resource.respond_to?(:retired?)
+              end
+
+              def all_service_resources_done?
+                service.service_resources.all? { |sr| %w(ok ignore).include?(check_service_resource_retirement(sr)) }
               end
             end
           end
@@ -66,6 +64,6 @@ module ManageIQ
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   ManageIQ::Automate::Service::Retirement::StateMachines::Methods::CheckServiceRetired.new.main
 end
