@@ -35,7 +35,7 @@ end
 def approver_text(appliance, msg, requester_email)
   body = "Approver, "
   body += approver_denied_text(requester_email, msg, reason)
-  body += "<br><br>For more information you can go to:"
+  body += "<br><br>For more information you can go to: "
   body += approver_href(appliance)
   body += "<br><br> Thank you,"
   body += "<br> #{signature}"
