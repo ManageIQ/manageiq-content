@@ -66,7 +66,7 @@ def requester_text(appliance, msg)
   body = "Hello, "
   body += "<br>#{msg}."
   body += "<br><br>Approvers notes: #{reason}"
-  body += "<br><br>For more information you can go to:"
+  body += "<br><br>For more information you can go to: "
   body += requester_href(appliance)
   body += "<br><br> Thank you,"
   body += "<br> #{signature}"
