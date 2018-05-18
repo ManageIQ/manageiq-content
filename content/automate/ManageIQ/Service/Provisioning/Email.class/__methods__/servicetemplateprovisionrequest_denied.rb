@@ -23,7 +23,6 @@ end
 def approver_href(appliance)
   body = "<a href='https://#{appliance}/miq_request/show/#{@miq_request.id}'"
   body += ">https://#{appliance}/miq_request/show/#{@miq_request.id}</a>"
-  body
 end
 
 def approver_denied_text(requester_email, msg, reason)
