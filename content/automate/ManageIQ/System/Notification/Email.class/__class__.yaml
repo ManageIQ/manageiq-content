@@ -12,11 +12,52 @@ object:
     owner: 
   schema:
   - field:
+      aetype: assertion
+      name: sendmail
+      display_name: 
+      datatype: boolean
+      priority: 1
+      owner: 
+      default_value: 'true'
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: By default the email is enabled, to disable a specific email set
+        this attribute to false
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: relationship
+      name: configuration
+      display_name: 
+      datatype: string
+      priority: 2
+      owner: 
+      default_value: "/Configuration/Email/Default"
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
       aetype: method
       name: pre1
       display_name: 
       datatype: string
-      priority: 1
+      priority: 3
       owner: 
       default_value: 
       substitute: true
@@ -36,9 +77,9 @@ object:
       name: approver
       display_name: 
       datatype: string
-      priority: 2
+      priority: 4
       owner: 
-      default_value: evmadmin@example.com
+      default_value: "${/Configuration/Email/Default#approver}"
       substitute: true
       message: create
       visibility: 
@@ -54,46 +95,6 @@ object:
   - field:
       aetype: attribute
       name: owner
-      display_name: 
-      datatype: string
-      priority: 3
-      owner: 
-      default_value: "${#vm.evm_owner_id}"
-      substitute: true
-      message: create
-      visibility: 
-      collect: 
-      scope: 
-      description: 
-      condition: 
-      on_entry: 
-      on_exit: 
-      on_error: 
-      max_retries: 
-      max_time: 
-  - field:
-      aetype: attribute
-      name: to
-      display_name: 
-      datatype: null coalescing
-      priority: 4
-      owner: 
-      default_value: evmadmin@example.com
-      substitute: true
-      message: create
-      visibility: 
-      collect: 
-      scope: 
-      description: 
-      condition: 
-      on_entry: 
-      on_exit: 
-      on_error: 
-      max_retries: 
-      max_time: 
-  - field:
-      aetype: attribute
-      name: cc
       display_name: 
       datatype: string
       priority: 5
@@ -113,12 +114,52 @@ object:
       max_time: 
   - field:
       aetype: attribute
-      name: bcc
+      name: to
       display_name: 
-      datatype: string
+      datatype: null coalescing
       priority: 6
       owner: 
-      default_value: 
+      default_value: "${/Configuration/Email/Default#default_recipient}"
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: attribute
+      name: cc
+      display_name: 
+      datatype: array
+      priority: 7
+      owner: 
+      default_value: "${/Configuration/Email/Default#cc}"
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: attribute
+      name: bcc
+      display_name: 
+      datatype: array
+      priority: 8
+      owner: 
+      default_value: "${/Configuration/Email/Default#bcc}"
       substitute: true
       message: create
       visibility: 
@@ -136,9 +177,9 @@ object:
       name: from
       display_name: 
       datatype: string
-      priority: 7
+      priority: 9
       owner: 
-      default_value: evmadmin@example.com
+      default_value: "${/Configuration/Email/Default#from}"
       substitute: true
       message: create
       visibility: 
@@ -156,9 +197,9 @@ object:
       name: signature
       display_name: 
       datatype: string
-      priority: 8
+      priority: 10
       owner: 
-      default_value: Virtualization Infrastructure Team
+      default_value: "${/Configuration/Email/Default#signature}"
       substitute: true
       message: create
       visibility: 
@@ -176,7 +217,7 @@ object:
       name: subject
       display_name: 
       datatype: string
-      priority: 9
+      priority: 11
       owner: 
       default_value: 
       substitute: true
@@ -196,7 +237,7 @@ object:
       name: body
       display_name: 
       datatype: string
-      priority: 10
+      priority: 12
       owner: 
       default_value: 
       substitute: true
@@ -216,7 +257,7 @@ object:
       name: customize
       display_name: 
       datatype: string
-      priority: 11
+      priority: 13
       owner: 
       default_value: 
       substitute: true
@@ -233,12 +274,32 @@ object:
       max_time: 
   - field:
       aetype: method
-      name: sendmail
+      name: post1
       display_name: 
       datatype: string
-      priority: 12
+      priority: 14
       owner: 
-      default_value: send_email
+      default_value: 
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: method
+      name: mail_method
+      display_name: 
+      datatype: string
+      priority: 15
+      owner: 
+      default_value: "${/Configuration/Email/Default#email_method}"
       substitute: true
       message: create
       visibility: 
