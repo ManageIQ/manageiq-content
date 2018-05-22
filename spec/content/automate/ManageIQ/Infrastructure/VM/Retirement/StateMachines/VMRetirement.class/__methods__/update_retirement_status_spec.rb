@@ -19,6 +19,8 @@ VMRetirement::UpdateRetirementStatus do
   let(:svc_model_miq_server) { MiqAeMethodService::MiqAeServiceMiqServer.find(miq_server.id) }
   let(:svc_model_vm) { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }
 
+  it_behaves_like "automate_engine_call", domain_file
+
   context "with a stp request object" do
     let(:miq_request_task) do
       FactoryGirl.create(:miq_request_task,
