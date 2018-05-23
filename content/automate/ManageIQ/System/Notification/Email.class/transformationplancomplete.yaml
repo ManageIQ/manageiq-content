@@ -11,6 +11,7 @@ object:
   - owner:
       value: "${/#miq_request.requester}"
   - to:
-      value: "${/#miq_request.get_option(:owner_email)} || ${/#miq_request.requester.email}"
-  - sendmail:
+      value: "${/#miq_request.get_option(:owner_email)} || ${/#miq_request.requester.email}
+        || ${/Configuration/Email/Default#default_recipient}"
+  - mail_method:
       value: "#stop_email"
