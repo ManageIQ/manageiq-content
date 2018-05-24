@@ -1,0 +1,18 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: CloudVmRetired
+    inherits: 
+    description: 
+  fields:
+  - to:
+      value: "${/#vm.owner.email} ||${/#miq_provision.miq_request.get_option(:owner_email)}
+        || ${/#miq_provision.miq_request.requester.email} || ${/Configuration/Email/Default#default_recipient}"
+  - subject:
+      value: 'Your Virtual Machine : ${/#vm} has been retired.'
+  - body:
+      value: 'Hello,<br/><br/>Your Virtual Machine named : ${/#vm} has been retired.<br/><br/>
+        Thank you<br/> ${#signature}'
