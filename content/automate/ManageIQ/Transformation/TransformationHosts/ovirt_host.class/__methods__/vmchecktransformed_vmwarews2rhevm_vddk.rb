@@ -23,7 +23,7 @@ module ManageIQ
 
                 # Retrieve state of virt-v2v
                 result = Transformation::TransformationHosts::OVirtHost::Utils.remote_command(transformation_host, "cat '#{task.get_option(:virtv2v_wrapper)['state_file']}'")
-                raise result[:stderr] unless result[:success] && ! result[:stdout].empty?
+                raise result[:stderr] unless result[:success] && !result[:stdout].empty?
                 virtv2v_state = JSON.parse(result[:stdout])
                 @handle.log(:info, "VirtV2V State: #{virtv2v_state.inspect}")
 

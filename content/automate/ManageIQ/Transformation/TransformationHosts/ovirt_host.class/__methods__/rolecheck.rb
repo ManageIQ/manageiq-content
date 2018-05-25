@@ -3,7 +3,7 @@ module ManageIQ
     module Transformation
       module TransformationHost
         module OVirtHost
-          class RoleCheck        
+          class RoleCheck
             def initialize(handle = $evm)
               @handle = handle
             end

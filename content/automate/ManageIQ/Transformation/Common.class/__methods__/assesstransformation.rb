@@ -6,7 +6,7 @@ module ManageIQ
           SUPPORTED_SOURCE_EMS_TYPES = ['vmwarews'].freeze
           SUPPORTED_DESTINATION_EMS_TYPES = ['rhevm'].freeze
           REQUIRED_CUSTOM_ATTRIBUTES = {
-            'rhevm' => %i[rhv_export_domain_id, rhv_cluster_id, rhv_storage_domain_id]
+            'rhevm' => %i(rhv_export_domain_id rhv_cluster_id rhv_storage_domain_id)
           }.freeze
 
           def initialize(handle = $evm)
@@ -44,7 +44,7 @@ module ManageIQ
                 source_storage = disk.storage
                 destination_storage = task.transformation_destination(disk.storage)
                 raise "[#{source_vm.name}] Disk #{disk.device_name} [#{source_storage.name}] has no mapping. Aborting." if destination_storage.nil?
-                virtv2v_disks << { :path => disk.filename, :size => disk.size, percent: 0, :weight => disk.size / source_vm.allocated_disk_storage * 100 }
+                virtv2v_disks << { :path => disk.filename, :size => disk.size, :percent => 0, :weight => disk.size / source_vm.allocated_disk_storage * 100 }
               end
               @handle.log(:info, "Source VM Disks #{virtv2v_disks}")
               task.set_option(:virtv2v_disks, virtv2v_disks)

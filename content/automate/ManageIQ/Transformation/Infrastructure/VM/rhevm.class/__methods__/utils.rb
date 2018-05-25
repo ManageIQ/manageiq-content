@@ -10,7 +10,6 @@ module ManageIQ
         module VM
           module RedHat
             class Utils
-
               def initialize(ems, handle = $evm)
                 @debug      = true
                 @handle     = handle
@@ -18,11 +17,11 @@ module ManageIQ
                 @connection = connection(@ems)
               end
 
-              def get_export_domain
+              def ems_get_export_domain
                 storage_domains_service.list.select { |domain_service| domain_service.type == OvirtSDK4::StorageDomainType::EXPORT }.first
               end
 
-              def vm_import(vm_name, cluster, storage_domain)          
+              def vm_import(vm_name, cluster, storage_domain)
                 target_domain = storage_domains_service.list(:search => "name=#{storage_domain}").first
                 raise "Can't find storage domain #{storage_domain}" if target_domain.blank?
                 target_cluster = clusters_service.list(:search => "name=#{cluster}").first
@@ -38,13 +37,13 @@ module ManageIQ
 
               def vm_delete_from_export_domain(vm_name)
                 vm = vm_find_in_export_domain(vm_name)
-                raise "Can't find VM #{vm_name} on export domain" if vm.blank?            
+                raise "Can't find VM #{vm_name} on export domain" if vm.blank?
                 @handle.log(:info, "About to remove VM: #{vm_name}")
                 export_domain_vm_service(vm.id).remove
               end
 
               def vm_find_by_name(vm_name)
-                vms_service.list(search: "name=#{vm_name}").first
+                vms_service.list(:search => "name=#{vm_name}").first
               end
 
               def vm_set_description(vm, description)
@@ -101,7 +100,7 @@ module ManageIQ
               def ems_to_service_model(ems)
                 raise "Invalid EMS" if ems.nil?
                 # ems could be a numeric id or the ems object itself
-                unless ems.is_a?(DRb::DRbObject) && /Manager/.match(ems.type.demodulize)
+                unless ems.kind_of?(DRb::DRbObject) && /Manager/.match(ems.type.demodulize)
                   if ems.to_s =~ /^\d{1,13}$/
                     ems = @handle.vmdb(:ems, ems)
                   end
@@ -122,7 +121,7 @@ module ManageIQ
               end
 
               def export_domain_vms_service
-                export_domain = get_export_domain
+                export_domain = ems_get_export_domain
                 raise "No export domain found!" if export_domain.blank?
                 storage_domains_service.storage_domain_service(export_domain.id).vms_service
               end
@@ -164,7 +163,6 @@ module ManageIQ
                 )
                 connection if connection.test(true)
               end
-
             end
           end
         end
@@ -172,4 +170,3 @@ module ManageIQ
     end
   end
 end
-

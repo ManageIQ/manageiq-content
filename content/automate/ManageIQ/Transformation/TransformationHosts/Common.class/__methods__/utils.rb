@@ -21,9 +21,9 @@ module ManageIQ
               ems.hosts.each do |host|
                 next unless host.tagged_with?('v2v_transformation_host', 'true') && host.tagged_with?('v2v_transformation_method', method)
                 thosts << {
-                  :host    => host, 
-                  :runners => { 
-                    :current => get_runners_count_by_host(host), 
+                  :host    => host,
+                  :runners => {
+                    :current => get_runners_count_by_host(host),
                     :maximum => host.custom_get('Max Transformation Runners') || factory_config['transformation_host_max_runners'] || 1
                   }
                 }
