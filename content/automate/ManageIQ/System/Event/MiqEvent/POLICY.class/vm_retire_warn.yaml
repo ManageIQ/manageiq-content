@@ -13,6 +13,6 @@ object:
   - rel4:
       value: "/System/Process/parse_provider_category"
   - rel5:
-      value: "/${/#ae_provider_category}/VM/Retirement/Email/vm_retirement_emails"
+      value: "/System/Notification/Email/${/#ae_provider_category}VmRetireWarn"
   - rel6:
       value: "/System/event_handlers/event_enforce_policy"
