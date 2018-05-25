@@ -13,9 +13,9 @@ module ManageIQ
               command = "sudo -u #{run_as} #{command}" unless run_as.nil?
               success, stdout, stderr, exit_code = true, '', '', nil
               Net::SSH.start(host.name, host.authentication_userid, :password => host.authentication_password) do |ssh|
-                channel = ssh.open_channel do |channel|
-                  channel.request_pty unless run_as.nil?
-                  channel.exec(command) do |ch, exec_success|
+                channel = ssh.open_channel do |chan|
+                  chan.request_pty unless run_as.nil?
+                  chan.exec(command) do |ch, exec_success|
                     if exec_success
                       ch.on_data do |_, data|
                         stdout += data.to_s
@@ -47,8 +47,8 @@ module ManageIQ
               extra_vars.each { |k, v| command += " -e '#{k}=#{v}'" }
               success, stdout, stderr, exit_code = true, '', '', nil
               Net::SSH.start(host.ext_management_system.hostname, 'root') do |ssh|
-                channel = ssh.open_channel do |channel|
-                  channel.exec(command) do |ch, exec_success|
+                channel = ssh.open_channel do |chan|
+                  chan.exec(command) do |ch, exec_success|
                     if exec_success
                       ch.on_data do |_, data|
                         stdout += data.to_s

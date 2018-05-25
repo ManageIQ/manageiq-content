@@ -39,7 +39,7 @@ module ManageIQ
               transformation_hosts(ems, method, factory_config).inject(0) { |sum, thost| sum + thost[:runners][:current] }
             end
 
-            def self.get_transformation_host(ems, method, factory_config, max_runners = nil)
+            def self.get_transformation_host(ems, method, factory_config)
               ems_max_runners = ems.custom_get('Max Transformation Runners') || factory_config['ems_max_runners'] || 1
               ems_cur_runners = get_runners_count_by_ems(ems, method, factory_config)
               transformation_host = ems_cur_runners < ems_max_runners ? eligible_transformation_hosts(ems, method, factory_config).first[:host] : nil

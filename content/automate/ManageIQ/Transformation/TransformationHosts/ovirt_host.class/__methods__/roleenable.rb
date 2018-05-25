@@ -10,7 +10,7 @@ module ManageIQ
 
             def main
               host = @handle.root['host']
-              playbook = "/usr/share/doc/ovirt-ansible-v2v-conversion-host-1.0.0/examples/conversion_host_enable.yml"
+              playbook = "/usr/share/doc/ovirt-ansible-v2v-conversion-host-1.2.0/examples/conversion_host_enable.yml"
               extra_vars = {}
               extra_vars[:v2v_vddk_package_name] = "VMware-vix-disklib-stable.tar.gz"
               extra_vars[:v2v_vddk_package_url] = "http://#{host.ext_management_system.hostname}/vddk/#{extra_vars[:v2v_vddk_package_name]}"

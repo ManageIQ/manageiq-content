@@ -10,7 +10,7 @@ module ManageIQ
 
             def main
               host = @handle.root['host']
-              playbook = "/usr/share/doc/ovirt-ansible-v2v-conversion-host-1.0.0/examples/conversion_host_disable.yml"
+              playbook = "/usr/share/doc/ovirt-ansible-v2v-conversion-host-1.2.0/examples/conversion_host_disable.yml"
               extra_vars = {}
 
               result = Transformation::TransformationHosts::OVirtHost::Utils.ansible_playbook(host, playbook, extra_vars)

@@ -22,7 +22,7 @@ module ManageIQ
               destination_ems = task.transformation_destination(source_cluster).ext_management_system
               raise "Invalid destination EMS type: #{destination_ems.emstype}. Aborting." unless destination_ems.emstype == "rhevm"
 
-              transformation_host = ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils.get_transformation_host(destination_ems, 'vddk', factory_config)
+              transformation_host = ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils.get_transformation_host(destination_ems, @handle.get_state_var(:transformation_method), factory_config)
               if transformation_host.nil?
                 @handle.log(:info, "No transformation host available. Retrying.")
                 @handle.root['ae_result'] = 'retry'
