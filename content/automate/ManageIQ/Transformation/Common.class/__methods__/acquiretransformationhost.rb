@@ -34,7 +34,7 @@ module ManageIQ
                 task.set_option(:transformation_host_name, transformation_host.name)
               end
             rescue Exception => e
-              @handle.set_state_var(:ae_state_progress, { 'message' => e.message })
+              @handle.set_state_var(:ae_state_progress, 'message' => e.message)
               raise
             end
           end

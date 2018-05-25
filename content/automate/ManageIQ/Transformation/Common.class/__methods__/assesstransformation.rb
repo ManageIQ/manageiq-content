@@ -6,7 +6,7 @@ module ManageIQ
           SUPPORTED_SOURCE_EMS_TYPES = ['vmwarews'].freeze
           SUPPORTED_DESTINATION_EMS_TYPES = ['rhevm'].freeze
           REQUIRED_CUSTOM_ATTRIBUTES = {
-            'rhevm' => [:rhv_export_domain_id, :rhv_cluster_id, :rhv_storage_domain_id]
+            'rhevm' => %i[rhv_export_domain_id, rhv_cluster_id, rhv_storage_domain_id]
           }.freeze
 
           def initialize(handle = $evm)
@@ -34,21 +34,21 @@ module ManageIQ
                 source_network = nic.lan
                 destination_network = task.transformation_destination(source_network)
                 raise "[#{source_vm.name}] NIC #{nic.device_name} [#{source_network.name}] has no mapping. Aborting." if destination_network.nil?
-                virtv2v_networks << { source: source_network.name, destination: destination_network.name }
+                virtv2v_networks << { :source => source_network.name, :destination => destination_network.name }
               end
               @handle.log(:info, "Network mappings: #{virtv2v_networks}")
               task.set_option(:virtv2v_networks, virtv2v_networks)
-              
+
               virtv2v_disks = []
               source_vm.hardware.disks.select { |d| d.device_type == 'disk' }.each do |disk|
                 source_storage = disk.storage
                 destination_storage = task.transformation_destination(disk.storage)
                 raise "[#{source_vm.name}] Disk #{disk.device_name} [#{source_storage.name}] has no mapping. Aborting." if destination_storage.nil?
-                virtv2v_disks << { path: disk.filename, size: disk.size, percent: 0, weight: disk.size / source_vm.allocated_disk_storage * 100 }
+                virtv2v_disks << { :path => disk.filename, :size => disk.size, percent: 0, :weight => disk.size / source_vm.allocated_disk_storage * 100 }
               end
               @handle.log(:info, "Source VM Disks #{virtv2v_disks}")
               task.set_option(:virtv2v_disks, virtv2v_disks)
-              
+
               raise "Unsupported source EMS type: #{source_ems.emstype}." unless SUPPORTED_SOURCE_EMS_TYPES.include?(source_ems.emstype)
               @handle.set_state_var(:source_ems_type, source_ems.emstype)
 
@@ -66,7 +66,7 @@ module ManageIQ
 
               factory_config = {
                 'vmtransformation_check_interval' => @handle.object['vmtransformation_check_interval'] || '15.seconds',
-                'vmpoweroff_check_interval' => @handle.object['vmpoweroff_check_interval'] || '30.seconds'
+                'vmpoweroff_check_interval'       => @handle.object['vmpoweroff_check_interval'] || '30.seconds'
               }
               @handle.set_state_var(:factory_config, factory_config)
 
@@ -74,7 +74,7 @@ module ManageIQ
               task.set_option(:collapse_snapshots, true)
               task.set_option(:power_off, true)
             rescue Exception => e
-              @handle.set_state_var(:ae_state_progress, { 'message' => e.message })
+              @handle.set_state_var(:ae_state_progress, 'message' => e.message)
               raise
             end
           end

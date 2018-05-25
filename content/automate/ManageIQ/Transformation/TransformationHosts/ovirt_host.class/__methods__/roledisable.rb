@@ -7,7 +7,7 @@ module ManageIQ
             def initialize(handle = $evm)
               @handle = handle
             end
-            
+
             def main
               host = @handle.root['host']
               playbook = "/usr/share/doc/ovirt-ansible-v2v-conversion-host-1.0.0/examples/conversion_host_disable.yml"

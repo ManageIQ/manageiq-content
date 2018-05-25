@@ -8,7 +8,7 @@ module ManageIQ
               def initialize(handle = $evm)
                 @handle = handle
               end
-              
+
               def main
                 begin
                   task = @handle.root['service_template_transformation_plan_task']
@@ -16,7 +16,7 @@ module ManageIQ
                   destination_ems = destination_vm.ext_management_system
                   ManageIQ::Automate::Transformation::Infrastructure::VM::RedHat::Utils.new(destination_ems).vm_enable_virtio_scsi(destination_vm)
                 rescue Exception => e
-                  @handle.set_state_var(:ae_state_progress, { 'message' => e.message })
+                  @handle.set_state_var(:ae_state_progress, 'message' => e.message)
                   raise
                 end
               end

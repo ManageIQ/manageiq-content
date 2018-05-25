@@ -5,14 +5,14 @@ module ManageIQ
         module OVirtHost
           class VMTransform_vmwarews2rhevm_vddk
             def initialize(handle = $evm)
-              @debug = true
+              @debug = false
               @handle = handle
             end
 
             def main
               begin
                 require 'json'
-              
+
                 factory_config = @handle.get_state_var(:factory_config)
                 raise "No factory config found. Aborting." if factory_config.nil?
 
@@ -26,7 +26,7 @@ module ManageIQ
                 raise "Invalid destination EMS type: #{destination_ems.emstype}. Aborting." unless destination_ems.emstype == "rhevm"
 
                 # Get or create the virt-v2v start timestamp
-                start_timestamp = task.get_option(:virtv2v_started_on) || Time.now.strftime('%Y-%m-%d %H:%M:%S')
+                start_timestamp = task.get_option(:virtv2v_started_on) || Time.now.utc.strftime('%Y-%m-%d %H:%M:%S')
 
                 # Retrieve transformation host
                 transformation_host = @handle.vmdb(:host).find_by(:id => task.get_option(:transformation_host_id))
@@ -37,10 +37,6 @@ module ManageIQ
                 if Transformation::TransformationHosts::Common::Utils.get_runners_count_by_ems(destination_ems, @handle.get_state_var(:transformation_method), factory_config) >= max_runners
                   @handle.log("Too many transformations running: (#{max_runners}). Retrying.")
                 else
-                  # Identify the RHV export domain
-                  export_domain = destination_ems.storages.select { |s| s.storage_domain_type == 'export' }.first
-                  task.set_option(:export_domain_id, export_domain.id)
-
                   # Collect the VMware connection information
                   vmware_uri = "vpx://"
                   vmware_uri += "#{source_ems.authentication_userid.gsub('@', '%40')}@#{source_ems.hostname}/"
@@ -49,40 +45,40 @@ module ManageIQ
 
                   # Collect information about the disks to convert
                   virtv2v_disks = task.get_option(:virtv2v_disks)
-                  virtv2v_disks = [virtv2v_disks] if virtv2v_disks.is_a?(Hash)
+                  virtv2v_disks = [virtv2v_disks] if virtv2v_disks.kind_of?(Hash)
                   source_disks = virtv2v_disks.map { |disk| disk[:path] }
                   @handle.log(:info, "Source VM Disks: #{source_disks}")
 
                   # Collect information about the network mappings
                   virtv2v_networks = task.get_option(:virtv2v_networks)
-                  virtv2v_networks = [virtv2v_networks] if virtv2v_networks.is_a?(Hash)
+                  virtv2v_networks = [virtv2v_networks] if virtv2v_networks.kind_of?(Hash)
                   @handle.log(:info, "Network mappings: #{virtv2v_networks}")
-                  
+
                   wrapper_options = {
-                    vm_name: source_vm.name,
-                    transport_method: 'vddk',
-                    vmware_fingerprint: Transformation::Infrastructure::VM::VMware::Utils.get_vcenter_fingerprint(source_ems),
-                    vmware_uri: vmware_uri,
-                    vmware_password: source_ems.authentication_password,
-#                    rhv_url: "https://#{destination_ems.authentication_userid.gsub('@', '%40')}@#{destination_ems.hostname}/ovirt-engine/api",
-                    rhv_url: "https://#{destination_ems.hostname}/ovirt-engine/api",
-                    rhv_cluster: destination_cluster.name,
-                    rhv_storage: destination_storage.name,
-                    rhv_password: destination_ems.authentication_password,
-                    source_disks: source_disks,
-                    network_mappings: virtv2v_networks
+                    :vm_name            => source_vm.name,
+                    :transport_method   => 'vddk',
+                    :vmware_fingerprint => Transformation::Infrastructure::VM::VMware::Utils.get_vcenter_fingerprint(source_ems),
+                    :vmware_uri         => vmware_uri,
+                    :vmware_password    => source_ems.authentication_password,
+                    :rhv_url            => "https://#{destination_ems.hostname}/ovirt-engine/api",
+                    :rhv_cluster        => destination_cluster.name,
+                    :rhv_storage        => destination_storage.name,
+                    :rhv_password       => destination_ems.authentication_password,
+                    :source_disks       => source_disks,
+                    :network_mappings   => virtv2v_networks
                   }
-                  @handle.log(:info, "JSON Input:\n#{JSON.pretty_generate(wrapper_options)}") if @debug
+                  # WARNING: Enable at your own risk, as it may lead to sensitive data leak
+                  # @handle.log(:info, "JSON Input:\n#{JSON.pretty_generate(wrapper_options)}") if @debug
 
                   @handle.log(:info, "Connecting to #{transformation_host.name} as #{transformation_host.authentication_userid}") if @debug
                   @handle.log(:info, "Executing '/usr/bin/virt-v2v-wrapper.py'")
-                  result = Transformation::TransformationHosts::OVirtHost::Utils.remote_command(transformation_host, "/usr/bin/virt-v2v-wrapper.py", stdin = wrapper_options.to_json)
+                  result = Transformation::TransformationHosts::OVirtHost::Utils.remote_command(transformation_host, "/usr/bin/virt-v2v-wrapper.py", wrapper_options.to_json)
                   raise result[:stderr] unless result[:success]
 
                   # Record the wrapper files path
                   @handle.log(:info, "Command stdout: #{result[:stdout]}") if @debug
                   task.set_option(:virtv2v_wrapper, JSON.parse(result[:stdout]))
-                
+
                   # Record the status in the task object
                   task.set_option(:virtv2v_started_on, start_timestamp)
                   task.set_option(:virtv2v_status, 'active')
@@ -94,7 +90,7 @@ module ManageIQ
                   @handle.root['ae_retry_interval'] = $evm.object['check_convert_interval'] || '1.minutes'
                 end
               rescue Exception => e
-                @handle.set_state_var(:ae_state_progress, { 'message' => e.message })
+                @handle.set_state_var(:ae_state_progress, 'message' => e.message)
                 raise
               end
             end

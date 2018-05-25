@@ -8,7 +8,7 @@ module ManageIQ
               def initialize(handle = $evm)
                 @handle = handle
               end
-              
+
               def main
                 begin
                   task = @handle.root['service_template_transformation_plan_task']
@@ -21,7 +21,7 @@ module ManageIQ
                     @handle.root["ae_retry_interval"] = "15.seconds"
                   end
                 rescue Exception => e
-                  @handle.set_state_var(:ae_state_progress, { 'message' => e.message })
+                  @handle.set_state_var(:ae_state_progress, 'message' => e.message)
                   raise
                 end
               end
