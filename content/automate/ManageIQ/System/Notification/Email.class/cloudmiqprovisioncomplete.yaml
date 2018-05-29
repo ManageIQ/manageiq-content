@@ -13,6 +13,6 @@ object:
         || ${/Configuration/Email/Default#default_recipient}"
   - subject:
       value: 'Request ID ${/#miq_provision.miq_request.id} - Your Instance Request
-        has Completed - Vm Name: <${/#miq_provision.vm.name}>'
+        has Completed - Vm Name : ${/#miq_provision.vm}'
   - customize:
       value: miq_provision_customize_body
