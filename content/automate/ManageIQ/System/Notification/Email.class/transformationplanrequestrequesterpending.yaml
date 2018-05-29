@@ -17,6 +17,7 @@ object:
       value: Request ID ${/#miq_request.id} - Your Transformation Plan Request is
         Pending Approval.
   - body:
-      value: 'Hello,<br><br>Please review your Transformation Plan Request and wait
-        for approval from an Administrator.<br><br>To view this Request go to: <a
-        href=''${/#miq_request.show_url}''>${/#miq_request.show_url}</a>   Thank you,  ${#signature}'
+      value: 'Hello,<br/><br/>Please review your Transformation Plan Request and wait
+        for approval from an Administrator.<br/><br/>To view this Request go to :
+        <a href=${/#miq_request.show_url}>${/#miq_request.show_url}</a><br/><br/>
+        Thank you,<br/> ${#signature}'

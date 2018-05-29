@@ -14,9 +14,9 @@ object:
       value: "${/#miq_request.get_option(:owner_email)} || ${/#miq_request.requester.email}
         || ${/Configuration/Email/Default#default_recipient}"
   - subject:
-      value: Request ID ${/#miq_request.id} - Transformation Plan Request from <${/#miq_request.requester.email}>
+      value: Request ID ${/#miq_request.id} - Transformation Plan Request from ${/#miq_request.requester.email}
         is Pending Approval.
   - body:
-      value: 'Approver,<br><br>A Transformation Plan Request received from ${/#miq_request.requester.email}
-        is Pending.<br><br>For more information you can go to: <a href=''${/#miq_request.show_url}''>${/#miq_request.show_url}</a>   Thank
-        you,  ${#signature}'
+      value: 'Approver,<br/><br/>A Transformation Plan Request received from ${/#miq_request.requester.email}
+        is Pending.<br/><br/>For more information you can go to : <a href=${/#miq_request.show_url}>${/#miq_request.show_url}</a><br/><br/>
+        Thank you,<br/> ${#signature}'
