@@ -44,14 +44,12 @@ module ManageIQ
                   vmware_uri += "?no_verify=1"
 
                   # Collect information about the disks to convert
-                  virtv2v_disks = task.get_option(:virtv2v_disks)
-                  virtv2v_disks = [virtv2v_disks] if virtv2v_disks.kind_of?(Hash)
+                  virtv2v_disks = task[:options][:virtv2v_disks]
                   source_disks = virtv2v_disks.map { |disk| disk[:path] }
                   @handle.log(:info, "Source VM Disks: #{source_disks}")
 
                   # Collect information about the network mappings
-                  virtv2v_networks = task.get_option(:virtv2v_networks)
-                  virtv2v_networks = [virtv2v_networks] if virtv2v_networks.kind_of?(Hash)
+                  virtv2v_networks = task[:options][:virtv2v_networks]
                   @handle.log(:info, "Network mappings: #{virtv2v_networks}")
 
                   wrapper_options = {

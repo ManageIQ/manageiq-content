@@ -28,8 +28,7 @@ module ManageIQ
                 @handle.log(:info, "VirtV2V State: #{virtv2v_state.inspect}")
 
                 # Retrieve disks array
-                virtv2v_disks = task.get_option(:virtv2v_disks)
-                virtv2v_disks = [virtv2v_disks] if virtv2v_disks.kind_of?(Hash)
+                virtv2v_disks = task[:options][:virtv2v_disks]
                 @handle.log(:info, "Disks: #{virtv2v_disks.inspect}")
 
                 if virtv2v_state['finished'].nil?
