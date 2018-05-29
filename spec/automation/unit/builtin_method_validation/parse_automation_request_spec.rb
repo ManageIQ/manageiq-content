@@ -26,14 +26,6 @@ describe "parse_automation_request" do
       "target_instance"  => "Migrate")
   end
 
-  it "for host_provision request" do
-    ws = MiqAeEngine.instantiate("#{inst}?request=host_provision", user)
-    expect(ws.root.attributes).to include(
-      "target_component" => "Host",
-      "target_class"     => "Lifecycle",
-      "target_instance"  => "Provisioning")
-  end
-
   it "for configured_system_provision request" do
     ws = MiqAeEngine.instantiate("#{inst}?request=configured_system_provision", user)
     expect(ws.root.attributes).to include(

@@ -4,9 +4,6 @@ describe "parse_provider_category" do
   let(:migrate_request) { FactoryGirl.create(:vm_migrate_request, :requester => user) }
   let(:user)            { FactoryGirl.create(:user_with_group) }
   let(:inst)            { "/System/Process/parse_provider_category" }
-  let(:miq_host_provision) do
-    FactoryGirl.create(:miq_host_provision, :provision_type => 'host_pxe_install', :state => 'pending', :status => 'Ok')
-  end
 
   let(:infra_miq_request_task) do
     FactoryGirl.create(:miq_request_task, :miq_request => migrate_request, :source => infra_vm)
@@ -91,12 +88,6 @@ describe "parse_provider_category" do
 
     it "for vm_migrate_request" do
       ws = MiqAeEngine.instantiate("#{inst}?MiqRequestTask::vm_migrate_task=#{infra_miq_request_task.id}", user)
-      expect(ws.root["ae_provider_category"]).to eq("infrastructure")
-      expect(prepend_namespace(ws)).to eq("vmware")
-    end
-
-    it "for vm_host_provision" do
-      ws = MiqAeEngine.instantiate("#{inst}?MiqRequestTask::miq_host_provision=#{miq_host_provision.id}", user)
       expect(ws.root["ae_provider_category"]).to eq("infrastructure")
       expect(prepend_namespace(ws)).to eq("vmware")
     end
