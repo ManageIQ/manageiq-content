@@ -14,6 +14,7 @@ object:
   - subject:
       value: Request ID ${/#miq_request.id} - Your Virtual Machine Request is Pending.
   - body:
-      value: 'Hello,<br><br>Please review your Virtual Machine Request and wait for
-        approval from an Administrator.<br><br>To view this Request go to: <a href=${/#miq_request.show_url}>${/#miq_request.show_url}</a><br><br>
-        Thank you,<br> ${#signature}'
+      value: 'Hello,<br/><br/>Please review your Virtual Machine Request and wait
+        for approval from an Administrator.<br/><br/>To view this Request go to :
+        <a href=${/#miq_request.show_url}>${/#miq_request.show_url}</a><br/><br/>
+        Thank you,<br/> ${#signature}'

@@ -15,7 +15,7 @@ object:
       value: Request ID ${/#miq_request.id} - Your Virtual Machine Request was Approved,
         pending Quota Validation.
   - body:
-      value: 'Hello ${/#user.name},<br><br>Your Virtual Machine Request was Approved.
-        If Quota validation is successful you will be notified via email when the
-        host is available.<br><br>To view this Request go to: <a href=${/#miq_request.show_url}>${/#miq_request.show_url}</a><br><br>
-        Thank you,<br> ${#signature}'
+      value: 'Hello,<br/><br/>Your Virtual Machine Request was Approved. If Quota
+        validation is successful you will be notified via email when the host is available.<br/><br/>To
+        view this Request go to : <a href=${/#miq_request.show_url}>${/#miq_request.show_url}</a><br/><br/>
+        Thank you,<br/> ${#signature}'
