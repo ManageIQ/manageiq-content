@@ -17,7 +17,7 @@ object:
       value: Request ID ${/#miq_request.id} - Transformation Plan Request received
         from ${/#miq_request.requester.email} was Approved.
   - body:
-      value: 'Approver,<br><br>Transformation Plan Request received from ${/#miq_request.requester.email}
-        was Approved.<br><br>Approvers reason: ${/#miq_request.reason}<br><br>To view
-        this Request go to: <a href=''${/#miq_request.show_url}''>${/#miq_request.show_url}</a>   Thank
-        you,  ${#signature}'
+      value: 'Approver,<br/><br/>Transformation Plan Request received from ${/#miq_request.requester.email}
+        was Approved.<br/><br/>Approvers reason : ${/#miq_request.reason}<br/><br/>To
+        view this Request go to : <a href=${/#miq_request.show_url}>${/#miq_request.show_url}</a><br/><br/>
+        Thank you,<br/> ${#signature}'
