@@ -21,25 +21,25 @@ module ManageIQ
               signature = @handle.object['signature']
               # VM Provisioned Email Body
               body = "Hello,"
-              body += "<br><br>Your request to provision a Virtual Machine was approved and completed on #{@time}"
-              body += "<br><br>Virtual Machine #{vm['name']}<b> will be available in approximately 15 minutes</b>. "
-              body += "<br><br>For Windows VM access is available via RDP and for Linux VM access is available via putty/ssh, etc."
+              body += "<br/><br/>Your request to provision a Virtual Machine was approved and completed on #{@time}"
+              body += "<br/><br/>Virtual Machine #{vm}<b> will be available in approximately 15 minutes</b>. "
+              body += "<br/><br/>For Windows VM access is available via RDP and for Linux VM access is available via putty/ssh, etc."
               body += " Or you can use the Console Access feature found in the detail view of your VM. "
               if vm['retires_on'].respond_to?('strftime')
-                body += "<br><br>This VM will automatically be retired on #{vm['retires_on'].strftime('%A, %B %d, %Y')},"
+                body += "<br/><br/>This VM will automatically be retired on #{vm['retires_on'].strftime('%A, %B %d, %Y')},"
                 body += " unless you request an extension. "
               end
               if vm.retirement_warn
-                body += " You will receive a warning #{vm.retirement_warn} days before #{vm['name']} "
+                body += " You will receive a warning #{vm.retirement_warn} days before #{vm} "
                 body += "set retirement date."
               end
               body += " As the designated owner you will receive expiration warnings at this email address: #{to}"
-              body += "<br><br>If you are not already logged in, you can access and manage your Virtual Machine here "
+              body += "<br/><br/>If you are not already logged in, you can access and manage your Virtual Machine here "
               body += "<a href=#{vm_href}>"
               body += "#{vm_href}</a>"
-              body += "<br><br> If you have any issues with your new virtual machine please contact Support."
-              body += "<br><br> Thank you,"
-              body += "<br> #{signature}"
+              body += "<br/><br/> If you have any issues with your new virtual machine please contact Support."
+              body += "<br/><br/> Thank you,"
+              body += "<br/> #{signature}"
               @handle.object['body'] = body
             end
 
