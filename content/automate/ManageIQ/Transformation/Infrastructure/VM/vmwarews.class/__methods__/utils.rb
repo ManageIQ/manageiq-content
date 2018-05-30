@@ -57,7 +57,6 @@ module ManageIQ
                 end
                 true
               end
-
             end
           end
         end
