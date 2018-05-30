@@ -42,7 +42,7 @@ object:
       on_exit: update_status(status => 'Processed Postprocess')
       on_error: update_status(status => 'Error Processing Postprocess')
   - email:
-      value: "/Service/Provisioning/Email/ServiceProvision_complete?event=service_provisioned"
+      value: "/System/Notification/Email/ServiceGenericLifecycleProvisionComplete?event=service_provisioned"
       on_entry: update_status(status => 'Emailing Owner')
       on_exit: update_status(status => 'Emailed Owner')
       on_error: update_status(status => 'Error Emailing Owner')
