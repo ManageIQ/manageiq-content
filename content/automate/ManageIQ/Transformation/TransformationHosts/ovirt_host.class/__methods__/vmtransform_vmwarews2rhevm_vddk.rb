@@ -63,7 +63,8 @@ module ManageIQ
                     :rhv_storage        => destination_storage.name,
                     :rhv_password       => destination_ems.authentication_password,
                     :source_disks       => source_disks,
-                    :network_mappings   => virtv2v_networks
+                    :network_mappings   => virtv2v_networks,
+                    :install_drivers    => true
                   }
                   # WARNING: Enable at your own risk, as it may lead to sensitive data leak
                   # @handle.log(:info, "JSON Input:\n#{JSON.pretty_generate(wrapper_options)}") if @debug
