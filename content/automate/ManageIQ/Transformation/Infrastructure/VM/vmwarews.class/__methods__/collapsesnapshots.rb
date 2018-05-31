@@ -10,23 +10,21 @@ module ManageIQ
               end
 
               def main
-                begin
-                  task = @handle.root['service_template_transformation_plan_task']
-                  source_vm = task.source
+                task = @handle.root['service_template_transformation_plan_task']
+                source_vm = task.source
 
-                  if source_vm.snapshots.empty?
-                    @handle.log(:info, "VM '#{source_vm.name}' has no snapshot. Nothing to do.")
-                  elsif task.get_option(:collapse_snapshots)
-                    @handle.log(:info, "VM '#{source_vm.name}' has snapshots and we need to collapse them.")
-                    @handle.log(:info, "Collapsing snapshots for #{source_vm.name}")
-                    source_vm.remove_all_snapshots
-                  else
-                    raise "VM '#{source_vm.name}' has snapshots, but we are not allowed to collapse them. Exiting."
-                  end
-                rescue Exception => e
-                  @handle.set_state_var(:ae_state_progress, 'message' => e.message)
-                  raise
+                if source_vm.snapshots.empty?
+                  @handle.log(:info, "VM '#{source_vm.name}' has no snapshot. Nothing to do.")
+                elsif task.get_option(:collapse_snapshots)
+                  @handle.log(:info, "VM '#{source_vm.name}' has snapshots and we need to collapse them.")
+                  @handle.log(:info, "Collapsing snapshots for #{source_vm.name}")
+                  source_vm.remove_all_snapshots
+                else
+                  raise "VM '#{source_vm.name}' has snapshots, but we are not allowed to collapse them. Exiting."
                 end
+              rescue => e
+                @handle.set_state_var(:ae_state_progress, 'message' => e.message)
+                raise
               end
             end
           end

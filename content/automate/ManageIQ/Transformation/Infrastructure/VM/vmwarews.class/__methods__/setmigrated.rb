@@ -25,22 +25,20 @@ module ManageIQ
               end
 
               def main
-                begin
-                  exit MIQ_OK
-                  task = @handle.root['service_template_transformation_plan_task']
-                  source_vm = task.source
-                  new_name = "#{source_vm.name}_migrated"
+                exit MIQ_OK
+                task = @handle.root['service_template_transformation_plan_task']
+                source_vm = task.source
+                new_name = "#{source_vm.name}_migrated"
 
-                  name_collisions = check_name_collisions(new_name)
-                  raise "ERROR: #{new_name} already exists #{name_collisions}." if name_collisions.present?
+                name_collisions = check_name_collisions(new_name)
+                raise "ERROR: #{new_name} already exists #{name_collisions}." if name_collisions.present?
 
-                  @handle.log(:info, "Renaming VM #{source_vm.name} to #{new_name}")
-                  result = ManageIQ::Automate::Transformation::Infrastructure::VM::VMware::Utils.vm_rename(source_vm, new_name)
-                  raise "VM rename for #{source_vm.name} to #{new_name} failed" unless result
-                rescue Exception => e
-                  @handle.set_state_var(:ae_state_progress, 'message' => e.message)
-                  raise
-                end
+                @handle.log(:info, "Renaming VM #{source_vm.name} to #{new_name}")
+                result = ManageIQ::Automate::Transformation::Infrastructure::VM::VMware::Utils.vm_rename(source_vm, new_name)
+                raise "VM rename for #{source_vm.name} to #{new_name} failed" unless result
+              rescue => e
+                @handle.set_state_var(:ae_state_progress, 'message' => e.message)
+                raise
               end
             end
           end
