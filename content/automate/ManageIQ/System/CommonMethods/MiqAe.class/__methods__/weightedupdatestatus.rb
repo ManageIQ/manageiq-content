@@ -42,7 +42,6 @@ module ManageIQ
             end
 
             def on_exit(state_hash, state_progress, state_name, _, _)
-              @handle.log(:info, "State Progress: #{state_progress.inspect}")
               # If the state is retrying, we leave the status to 'active'.
               if @handle.root['ae_result'] == 'retry'
                 # If the method provides progress info, it is merged, otherwise we set
@@ -68,12 +67,12 @@ module ManageIQ
               state_hash
             end
 
-            def on_error(state_hash, state_progress, state_name, _, _)
+            def on_error(state_hash, state_progress, _, _, state_description)
               # The state has failed, so we consider it as finished and 100%.
               state_hash['status'] = 'failed'
               state_hash['percent'] = 100.0
               # We merge the potential message from method and set the update time.
-              state_hash['message'] = state_progress.nil? ? "#{state_name} has failed." : state_progress['message']
+              state_hash['message'] = state_progress.nil? ? "Failed to #{state_description}." : state_progress['message']
               state_hash['updated_on'] = Time.now.utc
               state_hash
             end
@@ -106,7 +105,6 @@ module ManageIQ
 
                   # We record the state hash in the task progress
                   progress['states']["#{state_ancestry}/#{state_name}"] = state_hash
-                  @handle.log(:info, "Progress: #{progress}")
                   # If we enter the state, we update the task progress with current
                   # state and description.
                   if @handle.root['ae_status_state'] == 'on_entry'
@@ -121,7 +119,12 @@ module ManageIQ
                   @handle.set_state_var('ae_state_progress', nil)
                   # We record the progress as a task option.
                   task.update_transformation_progress(progress)
-                  @handle.log(:info, "Task: #{task.get_option(:progress)}")
+                  # We set the task message.
+                  if @handle.root['ae_state_step'] == 'on_error'
+                    task.message = 'Failed'
+                  else
+                    task.message = @handle.inputs['task_message'] unless @handle.inputs['task_message'] == '_'
+                  end
                 end
               end
             end
