@@ -43,14 +43,6 @@ object:
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Update description of VM", task_message => "Migrating")
   - State5:
-      value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/EnableVirtIOSCSI"
-      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
-        => "Enable Virtio-SCSI for VM", task_message => "Migrating")
-      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
-        => "Enable Virtio-SCSI for VM", task_message => "Migrating")
-      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
-        => "Enable Virtio-SCSI for VM", task_message => "Migrating")
-  - State6:
       value: "/Transformation/Infrastructure/VM/Common/PowerOn"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Power-on VM", task_message => "Migrating")
@@ -58,7 +50,7 @@ object:
         => "Power-on VM", task_message => "Migrating")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Power-on VM", task_message => "Migrating")
-  - State7:
+  - State6:
       value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/CheckPoweredOn"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 7, description
         => "Power-on VM", task_message => "Migrating")

@@ -44,7 +44,7 @@ module ManageIQ
                 source_storage = disk.storage
                 destination_storage = task.transformation_destination(disk.storage)
                 raise "[#{source_vm.name}] Disk #{disk.device_name} [#{source_storage.name}] has no mapping. Aborting." if destination_storage.nil?
-                virtv2v_disks << { :path => disk.filename, :size => disk.size, :percent => 0, :weight => disk.size / source_vm.allocated_disk_storage * 100 }
+                virtv2v_disks << { :path => disk.filename, :size => disk.size, :percent => 0, :weight => disk.size.to_f / source_vm.allocated_disk_storage.to_f * 100 }
               end
               @handle.log(:info, "Source VM Disks #{virtv2v_disks}")
               task.set_option(:virtv2v_disks, virtv2v_disks)

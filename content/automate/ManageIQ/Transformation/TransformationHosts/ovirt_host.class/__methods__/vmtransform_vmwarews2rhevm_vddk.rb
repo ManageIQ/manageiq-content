@@ -66,13 +66,14 @@ module ManageIQ
                     :network_mappings   => virtv2v_networks,
                     :install_drivers    => true
                   }
+
                   # WARNING: Enable at your own risk, as it may lead to sensitive data leak
                   # @handle.log(:info, "JSON Input:\n#{JSON.pretty_generate(wrapper_options)}") if @debug
 
                   @handle.log(:info, "Connecting to #{transformation_host.name} as #{transformation_host.authentication_userid}") if @debug
                   @handle.log(:info, "Executing '/usr/bin/virt-v2v-wrapper.py'")
                   result = Transformation::TransformationHosts::OVirtHost::Utils.remote_command(transformation_host, "/usr/bin/virt-v2v-wrapper.py", wrapper_options.to_json)
-                  raise result[:stderr] unless result[:success]
+                  raise result[:stderr] unless result[:rc].zero?
 
                   # Record the wrapper files path
                   @handle.log(:info, "Command stdout: #{result[:stdout]}") if @debug
