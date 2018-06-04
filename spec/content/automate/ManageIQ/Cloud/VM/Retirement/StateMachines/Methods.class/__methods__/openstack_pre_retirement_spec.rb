@@ -20,27 +20,27 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::Open
     described_class.new(ae_service).main
   end
 
-  context "Doesn't call suspend for " do
-    shared_examples_for 'Not calling suspend' do
+  context 'Doesn\'t call suspend ' do
+    shared_examples_for 'No suspend' do
       it 'call check' do
         expect(svc_vm).not_to receive(:suspend)
         described_class.new(ae_service).main
       end
     end
 
-    context 'poweredOff vm' do
+    context 'for poweredOff vm' do
       let(:vm) { FactoryGirl.create(:vm_vmware, :ems_id => ems.id, :raw_power_state => 'poweredOff') }
-      it_behaves_like 'Not calling suspend'
+      it_behaves_like 'No suspend'
     end
 
-    context 'nil vm' do
+    context 'for nil vm' do
       let(:root_hash) { {} }
-      it_behaves_like 'Not calling suspend'
+      it_behaves_like 'No suspend'
     end
 
-    context 'nil ems' do
+    context 'for nil ems' do
       let(:vm) { FactoryGirl.create(:vm_vmware) }
-      it_behaves_like 'Not calling suspend'
+      it_behaves_like 'No suspend'
     end
   end
 end

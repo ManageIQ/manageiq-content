@@ -17,8 +17,10 @@ module ManageIQ
                   vm = @handle.root['vm']
                   unless vm.nil? || vm.attributes['power_state'] == 'off'
                     ems = vm.ext_management_system
-                    @handle.log('info', "Suspending Openstack Instance <#{vm.name}> in EMS <#{ems.try(:name)}")
-                    vm.suspend if ems
+                    if ems
+                      @handle.log('info', "Suspending Openstack Instance <#{vm.name}> in EMS <#{ems.try(:name)}")
+                      vm.suspend
+                    end
                   end
                 end
               end
