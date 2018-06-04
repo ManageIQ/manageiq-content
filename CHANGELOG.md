@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+## Gaprindashvili-3 - Released 2018-05-15
+
+### Added
+- Add azure event handlers for targeted refresh [(#260)](https://github.com/ManageIQ/manageiq-content/pull/260)
+- Add Azure events for targeted refresh [(#261)](https://github.com/ManageIQ/manageiq-content/pull/261)
+- Add in the miq. automate and vmdb roles [(#254)](https://github.com/ManageIQ/manageiq-content/pull/254)
+
+### Fixed
+- Add event state machine for refresh. [(#243)](https://github.com/ManageIQ/manageiq-content/pull/243)
+
 ##  Unreleased as of Sprint 85 Ending 2018-05-07
 
 ### Added
@@ -22,16 +32,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ##  Unreleased as of Sprint 82 Ending 2018-03-26
 
 ### Added
-- Add Azure events for targeted refresh [(#261)](https://github.com/ManageIQ/manageiq-content/pull/261)
 - Add VM Transformation state machine [(#252)](https://github.com/ManageIQ/manageiq-content/pull/252)
 
 ### Fixed
 - Modify on {entry exit error} path to use WeightedUpdateStatus [(#265)](https://github.com/ManageIQ/manageiq-content/pull/265)
 
-##  Unreleased as of Sprint 81 Ending 2018-03-12
-
-### Added
-- Add azure event handlers for targeted refresh [(#260)](https://github.com/ManageIQ/manageiq-content/pull/260)
 
 ##  Unreleased as of Sprint 79 Ending 2018-02-12
 
@@ -84,11 +89,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Removed
 - Removed the schema values for PreDeleteFromProvider. [(#226)](https://github.com/ManageIQ/manageiq-content/pull/226)
-
-## Unreleased as of Sprint 78 Ending 2018-01-29
-
-### Fixed
-- Add event state machine for refresh. [(#243)](https://github.com/ManageIQ/manageiq-content/pull/243)
 
 ## Unreleased as of Sprint 72 Ending 2017-10-30
 
