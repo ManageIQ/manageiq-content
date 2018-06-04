@@ -1,0 +1,18 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: InfrastructureMiqProvisionComplete
+    inherits: 
+    description: 
+  fields:
+  - to:
+      value: "${/#miq_provision.miq_request.get_option(:owner_email)} || ${/#miq_provision.miq_request.requester.email}
+        || ${/Configuration/Email/Default#default_recipient}"
+  - subject:
+      value: 'Request ID ${/#miq_provision.miq_request.id} - Your Virtual Machine
+        Request has Completed - Vm Name : ${/#miq_provision.vm}'
+  - customize:
+      value: miq_provision_customize_body

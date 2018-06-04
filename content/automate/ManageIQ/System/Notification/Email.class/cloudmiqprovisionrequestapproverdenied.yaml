@@ -1,0 +1,19 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: CloudMiqProvisionRequestApproverDenied
+    inherits: 
+    description: 
+  fields:
+  - subject:
+      value: Request ID ${/#miq_request.id} - Instance Request from ${/#miq_request.requester.email}
+        was Denied.
+  - body:
+      value: 'Approver, <br/><br/>An Instance Request received from ${/#miq_request.requester.email}
+        was Denied.<br/><br/>${/#miq_request.resource.message}.<br/><br/>Approvers
+        notes : ${/#miq_request.reason}<br/><br/>For more information you can go to
+        : <a href=${/#miq_request.show_url}>${/#miq_request.show_url}</a><br/><br/>
+        Thank you<br/> ${#signature}'

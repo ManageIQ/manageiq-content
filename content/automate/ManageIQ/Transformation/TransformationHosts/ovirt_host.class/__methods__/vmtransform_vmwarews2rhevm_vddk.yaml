@@ -1,0 +1,17 @@
+---
+object_type: method
+version: 1.0
+object:
+  attributes:
+    name: VMTransform_vmwarews2rhevm_vddk
+    display_name: 
+    description: 
+    scope: instance
+    language: ruby
+    location: inline
+    embedded_methods:
+    - "/Transformation/TransformationHosts/Common/Utils"
+    - "/Transformation/TransformationHosts/ovirt_host/Utils"
+    - "/Transformation/Infrastructure/VM/vmwarews/Utils"
+    options: {}
+  inputs: []

@@ -13,7 +13,12 @@ def require_domain_file
   require file_name
 end
 
+def domain_file
+  caller_locations(1..1).first.path.sub("spec/", "").sub("_spec.rb", ".rb")
+end
+
 Dir[ManageIQ::AutomationEngine::Engine.root.join("spec/support/**/*.rb")].each { |f| require f }
+Dir[ManageIQ::Content::Engine.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
   config.include Spec::Support::AutomationHelper
