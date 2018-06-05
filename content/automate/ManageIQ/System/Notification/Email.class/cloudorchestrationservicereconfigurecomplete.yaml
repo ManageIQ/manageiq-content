@@ -1,0 +1,21 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: CloudOrchestrationServiceReconfigureComplete
+    inherits: 
+    description: 
+  fields:
+  - to:
+      value: "${/#miq_provision.miq_request.get_option(:owner_email)} || ${/#miq_provision.miq_request.requester.email}
+        || ${/Configuration/Email/Default#default_recipient}"
+  - subject:
+      value: Request ID ${/#miq_request.id} - Your Service Reconfigure Request has
+        Completed.
+  - body:
+      value: Hello,<br/><br/>Your Service Reconfigure Request has Completed.<br/><br/>
+        Thank you<br/> ${#signature}
+  - mail_method:
+      value: "#stop_email"
