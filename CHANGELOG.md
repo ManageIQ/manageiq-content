@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+##  Unreleased as of Sprint 87 Ending 2018-06-04
+
+### Added
+- Email instances for Service provisioning. [(#313)](https://github.com/ManageIQ/manageiq-content/pull/313)
+- Email instances for Automation/Management/AnsibleTower provisioning. [(#310)](https://github.com/ManageIQ/manageiq-content/pull/310)
+- Email instances for Host provisioning. [(#309)](https://github.com/ManageIQ/manageiq-content/pull/309)
+- Email instances for /Infrastructure/Configured_System provisioning. [(#308)](https://github.com/ManageIQ/manageiq-content/pull/308)
+- Updated existing V2v instances in Configuration/Email. [(#307)](https://github.com/ManageIQ/manageiq-content/pull/307)
+- Updated Email instances for Cloud VM provisioning. [(#306)](https://github.com/ManageIQ/manageiq-content/pull/306)
+- Updated Email instances for Infra VM provisioning. [(#305)](https://github.com/ManageIQ/manageiq-content/pull/305)
+- Email instances for Cloud and Infrastructure retirement. [(#304)](https://github.com/ManageIQ/manageiq-content/pull/304)
+- Email instances for Infra VM provisioning. [(#303)](https://github.com/ManageIQ/manageiq-content/pull/303)
+- Email instances for Cloud VM provisioning. [(#302)](https://github.com/ManageIQ/manageiq-content/pull/302)
+- Add V2V for VMware to oVirt / RHV [(#301)](https://github.com/ManageIQ/manageiq-content/pull/301)
+- Updated Configuration/Email class and existing V2v instances. [(#300)](https://github.com/ManageIQ/manageiq-content/pull/300)
+- Created new namespace for Configuration/Email. [(#299)](https://github.com/ManageIQ/manageiq-content/pull/299)
+
+### Fixed
+- Fix System/CommonMethods/MiqAe directory name [(#312)](https://github.com/ManageIQ/manageiq-content/pull/312)
+
 ## Gaprindashvili-3 - Released 2018-05-15
 
 ### Added
