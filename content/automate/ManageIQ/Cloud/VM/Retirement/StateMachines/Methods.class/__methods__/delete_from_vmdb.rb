@@ -1,11 +1,36 @@
 #
 # Description: This method removes the VM from the VMDB database
 #
+module ManageIQ
+  module Automate
+    module Cloud
+      module VM
+        module Retirement
+          module StateMachines
+            module Methods
+              class DeleteFromVmdb
+                def initialize(handle = $evm)
+                  @handle = handle
+                end
 
-vm = $evm.root['vm']
+                def main
+                  vm = @handle.root['vm']
 
-if vm && $evm.get_state_var('vm_removed_from_provider')
-  $evm.log('info', "Removing VM <#{vm.name}> from VMDB")
-  vm.remove_from_vmdb
-  $evm.root['vm'] = nil
+                  if vm && @handle.get_state_var('vm_removed_from_provider')
+                    @handle.log('info', "Removing VM <#{vm.name}> from VMDB")
+                    vm.remove_from_vmdb
+                    @handle.root['vm'] = nil
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+if $PROGRAM_NAME == __FILE__
+  ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::DeleteFromVmdb.new.main
 end
