@@ -24,8 +24,7 @@ module ManageIQ
                 name_collisions_summary
               end
 
-              def main
-                exit MIQ_OK
+              def rename_migrated_vm
                 task = @handle.root['service_template_transformation_plan_task']
                 source_vm = task.source
                 new_name = "#{source_vm.name}_migrated"
@@ -36,6 +35,11 @@ module ManageIQ
                 @handle.log(:info, "Renaming VM #{source_vm.name} to #{new_name}")
                 result = ManageIQ::Automate::Transformation::Infrastructure::VM::VMware::Utils.vm_rename(source_vm, new_name)
                 raise "VM rename for #{source_vm.name} to #{new_name} failed" unless result
+              end
+
+              def main
+                task = @handle.root['service_template_transformation_plan_task']
+                task.mark_vm_migrated
               rescue => e
                 @handle.set_state_var(:ae_state_progress, 'message' => e.message)
                 raise
