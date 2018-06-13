@@ -1,33 +1,70 @@
 #
 # Description: This method removes the Instance from the provider
 #
+# ManageIQ/Cloud/VM/Retirement/StateMachines/Methods.class/__methods__/remove_from_provider.rb
+module ManageIQ
+  module Automate
+    module Cloud
+      module VM
+        module Retirement
+          module StateMachines
+            module Methods
+              class RemoveFromProvider
+                def initialize(handle = $evm)
+                  @handle = handle
+                end
 
-# Get vm from root object
-vm = $evm.root['vm']
-category = "lifecycle"
-tag = "retire_full"
+                def main
+                  # Get vm from root object
+                  @vm = @handle.root['vm']
 
-removal_type = $evm.inputs['removal_type'].downcase
-$evm.set_state_var('vm_removed_from_provider', false)
-ems = vm.ext_management_system if vm
+                  @handle.set_state_var('vm_removed_from_provider', false)
+                  @ems = @vm.ext_management_system if @vm
 
-if vm.nil? || ems.nil?
-  $evm.log('info', "Skipping remove from provider for Instance:<#{vm.try(:name)}> on provider:<#{ems.try(:name)}>")
-  exit MIQ_OK
+                  if @vm && @ems
+                    remove_vm
+                  else
+                    @handle.log('info', "Skipping remove from provider for Instance:<#{@vm.try(:name)}> on provider:<#{@ems.try(:name)}>")
+                  end
+                end
+
+                private
+
+                def remove_vm
+                  category = "lifecycle"
+                  tag = "retire_full"
+
+                  case @handle.inputs['removal_type'].try(:downcase)
+                  when "remove_from_disk"
+                    remove_from_disk if @vm.miq_provision || @vm.tagged_with?(category, tag)
+                  when "unregister"
+                    unregister
+                  else
+                    @handle.log('info', "Unknown retirement type for VM:<#{@vm.name}> from provider:<#{@ems.name}>")
+                    raise 'Unknown retirement type'
+                  end
+                end
+
+                def remove_from_disk
+                  @handle.log('info', "Removing Instance:<#{@vm.name}> from provider:<#{@ems.name}>")
+                  @vm.remove_from_disk(false)
+                  @handle.set_state_var('vm_removed_from_provider', true)
+                end
+
+                def unregister
+                  @handle.log('info', "Unregistering Instance:<#{@vm.name}> from provider:<#{@ems.name}>")
+                  @vm.unregister
+                  @handle.set_state_var('vm_removed_from_provider', true)
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
 end
 
-case removal_type
-when "remove_from_disk"
-  if vm.miq_provision || vm.tagged_with?(category, tag)
-    $evm.log('info', "Removing Instance:<#{vm.name}> from provider:<#{ems.name}>")
-    vm.remove_from_disk(false)
-    $evm.set_state_var('vm_removed_from_provider', true)
-  end
-when "unregister"
-  $evm.log('info', "Unregistering Instance:<#{vm.name}> from provider:<#{ems.name}>")
-  vm.unregister
-  $evm.set_state_var('vm_removed_from_provider', true)
-else
-  $evm.log('info', "Unknown retirement type for VM:<#{vm.name}> from provider:<#{ems.name}>")
-  exit MIQ_ABORT
+if $PROGRAM_NAME == __FILE__
+  ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::RemoveFromProvider.new.main
 end
