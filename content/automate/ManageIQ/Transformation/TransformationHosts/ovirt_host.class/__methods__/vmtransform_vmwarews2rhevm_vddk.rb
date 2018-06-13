@@ -51,18 +51,19 @@ module ManageIQ
                 virtv2v_networks = task[:options][:virtv2v_networks]
 
                 wrapper_options = {
-                  :vm_name            => source_vm.name,
-                  :transport_method   => 'vddk',
-                  :vmware_fingerprint => Transformation::Infrastructure::VM::VMware::Utils.get_vcenter_fingerprint(source_ems),
-                  :vmware_uri         => vmware_uri,
-                  :vmware_password    => source_ems.authentication_password,
-                  :rhv_url            => "https://#{destination_ems.hostname}/ovirt-engine/api",
-                  :rhv_cluster        => destination_cluster.name,
-                  :rhv_storage        => destination_storage.name,
-                  :rhv_password       => destination_ems.authentication_password,
-                  :source_disks       => source_disks,
-                  :network_mappings   => virtv2v_networks,
-                  :install_drivers    => true
+                  :vm_name             => source_vm.name,
+                  :transport_method    => 'vddk',
+                  :vmware_fingerprint  => Transformation::Infrastructure::VM::VMware::Utils.get_vcenter_fingerprint(source_ems),
+                  :vmware_uri          => vmware_uri,
+                  :vmware_password     => source_ems.authentication_password,
+                  :rhv_url             => "https://#{destination_ems.hostname}/ovirt-engine/api",
+                  :rhv_cluster         => destination_cluster.name,
+                  :rhv_storage         => destination_storage.name,
+                  :rhv_password        => destination_ems.authentication_password,
+                  :source_disks        => source_disks,
+                  :network_mappings    => virtv2v_networks,
+                  :install_drivers     => true,
+                  :insecure_connection => true
                 }
 
                 # WARNING: Enable at your own risk, as it may lead to sensitive data leak
