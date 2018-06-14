@@ -22,11 +22,6 @@ if vm.retiring?
   exit MIQ_ABORT
 end
 
-unless vm.retirement_initialized?
-  $evm.log('error', "VM has not been initialized for retirement. Aborting current State Machine.")
-  exit MIQ_ABORT
-end
-
 $evm.log('info', "VM before start_retirement: #{vm.inspect} ")
 
 $evm.create_notification(:type => :vm_retiring, :subject => vm)
