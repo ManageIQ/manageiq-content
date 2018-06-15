@@ -82,7 +82,8 @@ def vm_provision_cloud?
 end
 
 def flavor_obj(id)
-  vmdb_object('flavor', id)
+  @flavor_id ||= id
+  vmdb_object('flavor', @flavor_id)
 end
 
 def vm_prov_option_value(prov_option, options_array = [])
@@ -263,7 +264,7 @@ def cloud_storage(args_hash)
               flavor.root_disk_size.to_i + flavor.ephemeral_disk_size.to_i + flavor.swap_disk_size.to_i
             end
 
-  storage += cloud_volume_storage(args_hash)
+  storage += cloud_volume_storage(args_hash) if @reconfigure_request
   $evm.log(:info, "Retrieving cloud storage #{storage}")
   default_option(storage, args_hash[:options_array])
 end
@@ -331,6 +332,10 @@ def get_dialog_options_hash(dialog_options)
   dialog_options.each do |k, v|
     if /^dialog_option_(?<sequence_id>\d*)_(?<option_key>.*)/i =~ k
       set_hash_value(sequence_id, option_key.downcase.to_sym, v, options_hash)
+      if $2 == 'instance_type'
+        @flavor_id = v
+        $evm.log(:info, "Recalculating cloud flavor based on dialog overrides")
+      end
     else
       set_hash_value(0, k.downcase.to_sym, v, options_hash)
     end

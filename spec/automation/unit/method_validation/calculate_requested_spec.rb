@@ -155,6 +155,37 @@ describe "Quota Validation" do
     end
   end
 
+  context "google service item flavor override" do
+    let(:large_flavor) do
+      FactoryGirl.create(:flavor_google, :ems_id => @ems.id, :cloud_subnet_required => false,
+                         :cpus => 6, :cpu_cores => 2, :memory => 4026)
+    end
+
+    let(:result_dialog) do
+      {"dialog_option_0_instance_type" => large_flavor.id}
+    end
+
+    it "calculate_requested" do
+      setup_model("google")
+      build_google_service_item
+
+      @service_request.options[:dialog] = result_dialog
+      @service_request.save
+      expect(@service_request.options[:dialog]).to include(result_dialog)
+      ws = run_automate_method(service_attrs)
+      check_results(ws.root['quota_requested'], 10.gigabytes, 6, 1, 4026)
+    end
+  end
+
+  context "google service item" do
+    it "calculate_requested" do
+      setup_model("google")
+      build_google_service_item
+      ws = run_automate_method(service_attrs)
+      check_results(ws.root['quota_requested'], 10.gigabytes, 1, 1, 1024)
+    end
+  end
+
   context "VM provisioning quota" do
     it "vmware calculate_requested" do
       setup_model("vmware")
@@ -184,17 +215,6 @@ describe "Quota Validation" do
       @miq_provision_request.save
       ws = run_automate_method(vm_attrs)
       check_results(ws.root['quota_requested'], 30.gigabytes, 12, 3, 3.kilobytes)
-    end
-  end
-
-  context "VM Cloud provisioning with cloud volumes" do
-    it "google calculate_requested number of vms 3, cloud volumes 3 gig " do
-      setup_model("google")
-      @miq_provision_request.options[:volumes] = [{:name => "Fred", :size => '1'}, {:name => "Wilma", :size => '2'}]
-      @miq_provision_request.options[:number_of_vms] = 3
-      @miq_provision_request.save
-      ws = run_automate_method(vm_attrs)
-      check_results(ws.root['quota_requested'], 39.gigabytes, 12, 3, 3.kilobytes)
     end
   end
 
