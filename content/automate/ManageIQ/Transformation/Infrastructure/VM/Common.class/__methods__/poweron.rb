@@ -11,8 +11,10 @@ module ManageIQ
 
               def main
                 task = @handle.root['service_template_transformation_plan_task']
-                destination_vm = @handle.vmdb(:vm).find_by(:id => task.get_option(:destination_vm_id))
-                destination_vm.start
+                if task.get_ption(:source_vm_power_state) == 'on'
+                  destination_vm = @handle.vmdb(:vm).find_by(:id => task.get_option(:destination_vm_id))
+                  destination_vm.start
+                end
               rescue => e
                 @handle.set_state_var(:ae_state_progress, 'message' => e.message)
                 raise
