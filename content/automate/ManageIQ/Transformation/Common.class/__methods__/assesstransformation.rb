@@ -69,6 +69,9 @@ module ManageIQ
             }
             @handle.set_state_var(:factory_config, factory_config)
 
+            # Store source VM power state, as we will power it off
+            task.set_option(:source_vm_power_state, source_vm.power_state)
+
             # Force VM shutdown and snapshots collapse by default
             task.set_option(:collapse_snapshots, true)
             task.set_option(:power_off, true)
