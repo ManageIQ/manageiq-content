@@ -11,13 +11,15 @@ module ManageIQ
 
               def main
                 task = @handle.root['service_template_transformation_plan_task']
-                destination_vm = @handle.vmdb(:vm).find_by(:id => task.get_option(:destination_vm_id))
-                destination_ems = destination_vm.ext_management_system
-                destination_vm_sdk = ManageIQ::Automate::Transformation::Infrastructure::VM::RedHat::Utils.new(destination_ems).vm_find_by_name(destination_vm.name)
-                @handle.log(:info, "Status of VM '#{destination_vm.name}': #{destination_vm_sdk.status}")
-                unless destination_vm_sdk.status == OvirtSDK4::VmStatus::UP
-                  @handle.root["ae_result"] = "retry"
-                  @handle.root["ae_retry_interval"] = "15.seconds"
+                if task.get_option(:source_vm_power_state) == 'on'
+                  destination_vm = @handle.vmdb(:vm).find_by(:id => task.get_option(:destination_vm_id))
+                  destination_ems = destination_vm.ext_management_system
+                  destination_vm_sdk = ManageIQ::Automate::Transformation::Infrastructure::VM::RedHat::Utils.new(destination_ems).vm_find_by_name(destination_vm.name)
+                  @handle.log(:info, "Status of VM '#{destination_vm.name}': #{destination_vm_sdk.status}")
+                  unless destination_vm_sdk.status == OvirtSDK4::VmStatus::UP
+                    @handle.root["ae_result"] = "retry"
+                    @handle.root["ae_retry_interval"] = "15.seconds"
+                  end
                 end
               rescue => e
                 @handle.set_state_var(:ae_state_progress, 'message' => e.message)
