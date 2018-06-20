@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+##  Unreleased as of Sprint 88 Ending 2018-06-18
+
+### Added
+- Raise policy event when HOST_FAILURE is received. [(#329)](https://github.com/ManageIQ/manageiq-content/pull/329)
+- Tag migrated VM. [(#324)](https://github.com/ManageIQ/manageiq-content/pull/324)
+- Email instances for Cloud/Orchestration. [(#314)](https://github.com/ManageIQ/manageiq-content/pull/314)
+- Email instances for VmMigrate and Reconfiguration. [(#311)](https://github.com/ManageIQ/manageiq-content/pull/311)
+
+### Fixed
+- Restore VM power state upon transformation [(#336)](https://github.com/ManageIQ/manageiq-content/pull/336)
+- Remove check for a state of initialized in 4 start_retirement methods. [(#331)](https://github.com/ManageIQ/manageiq-content/pull/331)
+- Set insecure_connection to target provider as default behavior. [(#327)](https://github.com/ManageIQ/manageiq-content/pull/327)
+- handle volume snapshot status changes [(#285)](https://github.com/ManageIQ/manageiq-content/pull/285)
+
 ##  Unreleased as of Sprint 87 Ending 2018-06-04
 
 ### Added
