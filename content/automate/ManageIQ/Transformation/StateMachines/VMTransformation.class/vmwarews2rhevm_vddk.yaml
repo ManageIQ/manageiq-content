@@ -8,7 +8,7 @@ object:
     inherits: 
     description: 
   fields:
-  - State1:
+  - State2:
       value: "/Transformation/TransformationHosts/${state_var#transformation_host_type}/VMTransform_${state_var#source_ems_type}2${state_var#destination_ems_type}_${state_var#transformation_method}"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Convert disks", task_message => "Migrating")
@@ -16,7 +16,7 @@ object:
         => "Convert disks", task_message => "Migrating")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Convert disks", task_message => "Migrating")
-  - State2:
+  - State5:
       value: "/Transformation/TransformationHosts/${state_var#transformation_host_type}/VMCheckTransformed_${state_var#source_ems_type}2${state_var#destination_ems_type}_${state_var#transformation_method}"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 85, description
         => "Convert disks", task_message => "Migrating")
@@ -25,7 +25,7 @@ object:
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 85, description
         => "Convert disks", task_message => "Migrating")
       max_retries: '1500'
-  - State3:
+  - State8:
       value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/CheckVmInInventory"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 4, description
         => "Refresh inventory", task_message => "Migrating")
@@ -34,7 +34,7 @@ object:
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 4, description
         => "Refresh inventory", task_message => "Migrating")
       max_retries: '200'
-  - State4:
+  - State11:
       value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/SetDescription"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Update description of VM", task_message => "Migrating")
@@ -42,7 +42,7 @@ object:
         => "Update description of VM", task_message => "Migrating")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Update description of VM", task_message => "Migrating")
-  - State5:
+  - State14:
       value: "/Transformation/Infrastructure/VM/Common/PowerOn"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Power-on VM", task_message => "Migrating")
@@ -50,7 +50,7 @@ object:
         => "Power-on VM", task_message => "Migrating")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Power-on VM", task_message => "Migrating")
-  - State6:
+  - State17:
       value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/CheckPoweredOn"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 7, description
         => "Power-on VM", task_message => "Migrating")
