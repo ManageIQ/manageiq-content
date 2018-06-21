@@ -8,7 +8,7 @@ object:
     inherits: 
     description: 
   fields:
-  - State1:
+  - State2:
       value: "/Transformation/Common/AssessTransformation"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Assess Migration", task_message => "Validating")
@@ -16,7 +16,7 @@ object:
         => "Assess Migration", task_message => "Validating")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Assess Migration", task_message => "Validating")
-  - State2:
+  - State5:
       value: "/Transformation/Common/AcquireTransformationHost"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Acquire Transformation Host", task_message => "Pre-migration")
@@ -24,7 +24,7 @@ object:
         => "Acquire Transformation Host", task_message => "Pre-migration")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Acquire Transformation Host", task_message => "Pre-migration")
-  - State3:
+  - State11:
       value: "/Transformation/Infrastructure/VM/Common/PowerOff"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Power off", task_message => "Pre-migration")
@@ -32,7 +32,7 @@ object:
         => "Power off", task_message => "Pre-migration")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Power off", task_message => "Pre-migration")
-  - State4:
+  - State14:
       value: "/Transformation/Infrastructure/VM/${state_var#source_ems_type}/CollapseSnapshots"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Collapse Snapshots", task_message => "Pre-migration")
@@ -40,7 +40,7 @@ object:
         => "Collapse Snapshots", task_message => "Pre-migration")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Collapse Snapshots", task_message => "Pre-migration")
-  - State5:
+  - State17:
       value: "/Transformation/StateMachines/VMTransformation/${state_var#transformation_type}_${state_var#transformation_method}?state_ancestry=${#state_ancestry}/${#ae_state}"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 95, description
         => "Transform VM")
@@ -48,7 +48,7 @@ object:
         => "Transform VM")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 95, description
         => "Transform VM")
-  - State6:
+  - State26:
       value: "/Transformation/Infrastructure/VM/${state_var#source_ems_type}/SetMigrated"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Mark source as migrated", task_message => "Migrating")
@@ -56,6 +56,6 @@ object:
         => "Mark source as migrated", task_message => "Migrating")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Mark source as migrated", task_message => "Migrating")
-  - State7:
+  - State28:
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Virtual machine migrated", task_message => "Migration complete")
