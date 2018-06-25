@@ -42,12 +42,20 @@ object:
         => "Collapse Snapshots", task_message => "Pre-migration")
   - State17:
       value: "/Transformation/StateMachines/VMTransformation/${state_var#transformation_type}_${state_var#transformation_method}?state_ancestry=${#state_ancestry}/${#ae_state}"
-      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 95, description
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 94, description
         => "Transform VM")
-      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 95, description
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 94, description
         => "Transform VM")
-      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 95, description
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 94, description
         => "Transform VM")
+  - State23:
+      value: "/Transformation/Infrastructure/VM/Common/RestoreVmAttributes"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Restore VM Attributes", task_message => "Migrating")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Restore VM Attributes", task_message => "Migrating")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
+        => "Restore VM Attributes", task_message => "Migrating")
   - State26:
       value: "/Transformation/Infrastructure/VM/${state_var#source_ems_type}/SetMigrated"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
