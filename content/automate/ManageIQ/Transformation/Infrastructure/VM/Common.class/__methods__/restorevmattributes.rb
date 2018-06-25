@@ -17,8 +17,10 @@ module ManageIQ
                 @handle.log(:info, "VM Id: #{destination_vm.id}")
 
                 # Reconnect destination VM to service
-                destination_vm.add_to_service(source_vm.service) unless source_vm.service.nil?
-                source_vm.remove_from_service
+                if source_vm.service
+                  destination_vm.add_to_service(source_vm.service)
+                  source_vm.remove_from_service
+                end
 
                 # Restore tags of the source VM
                 source_vm.tags.each do |tag|
