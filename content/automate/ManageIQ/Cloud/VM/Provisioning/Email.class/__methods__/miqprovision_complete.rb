@@ -12,6 +12,7 @@
 # 3. signature - used to stamp the email with a custom signature
 #
 
+$evm.log("warn", "[DEPRECATION] This method will be deprecated. Please use similarly named method from System/Notification/Email class.")
 # Get vm from miq_provision object
 prov = $evm.root['miq_provision']
 vm = prov.vm
