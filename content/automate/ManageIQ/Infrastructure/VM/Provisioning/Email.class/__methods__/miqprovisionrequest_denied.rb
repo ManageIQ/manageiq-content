@@ -103,6 +103,7 @@ def emailapprover(miq_request, appliance, msg, provisionRequestApproval)
   $evm.execute(:send_email, to, from, subject, body)
 end
 
+$evm.log("warn", "[DEPRECATION] This method will be deprecated. Please use similarly named method from System/Notification/Email class.")
 # Get miq_request from root
 miq_request = $evm.root['miq_request']
 raise "miq_request missing" if miq_request.nil?

@@ -76,6 +76,7 @@ def email_requester(appliance)
   send_mail(to, from, subject, requester_text(appliance))
 end
 
+$evm.log("warn", "[DEPRECATION] This method will be deprecated. Please use similarly named method from System/Notification/Email class.")
 @miq_request = $evm.root['miq_request']
 $evm.log(:info, "miq_request id: #{@miq_request.id} approval_state: #{@miq_request.approval_state}")
 $evm.log(:info, "options: #{@miq_request.options.inspect}")
