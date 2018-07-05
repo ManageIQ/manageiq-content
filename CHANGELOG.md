@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+##  Unreleased as of Sprint 89 Ending 2018-07-02
+
+### Added
+- Add a state to restore VM attributes during migration. [(#340)](https://github.com/ManageIQ/manageiq-content/pull/340)
+- Add a precanned physical server automation event [(#339)](https://github.com/ManageIQ/manageiq-content/pull/339)
+- Add extra empty states to allow pre and post states. [(#338)](https://github.com/ManageIQ/manageiq-content/pull/338)
+
 ##  Unreleased as of Sprint 88 Ending 2018-06-18
 
 ### Added
