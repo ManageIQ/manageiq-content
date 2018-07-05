@@ -13,6 +13,35 @@ module ManageIQ
             @handle = handle
           end
 
+          def network_mappings(task, vm)
+            mappings = []
+            vm.hardware.nics.select { |n| n.device_type == 'ethernet' }.each do |nic|
+              source_network = nic.lan
+              destination_network = task.transformation_destination(source_network)
+              raise "[#{vm.name}] NIC #{nic.device_name} [#{source_network.name}] has no mapping. Aborting." if destination_network.nil?
+              mappings << {
+                :source      => source_network.name,
+                :destination => destination_network.name,
+                :mac_address => nic.address
+              }
+            end
+            mappings
+          end
+
+          def storage_mappings(task, vm)
+            vm.hardware.disks.select { |d| d.device_type == 'disk' }.each do |disk|
+              source_storage = disk.storage
+              destination_storage = task.transformation_destination(disk.storage)
+              raise "[#{vm.name}] Disk #{disk.device_name} [#{source_storage.name}] has no mapping. Aborting." if destination_storage.nil?
+              virtv2v_disks << {
+                :path    => disk.filename,
+                :size    => disk.size,
+                :percent => 0,
+                :weight  => disk.size.to_f / vm.allocated_disk_storage.to_f * 100
+              }
+            end
+          end
+
           def main
             task = @handle.root['service_template_transformation_plan_task']
             raise 'No task found. Exiting' if task.nil?
@@ -28,23 +57,11 @@ module ManageIQ
             source_ems = source_vm.ext_management_system
             destination_ems = destination_cluster.ext_management_system
 
-            virtv2v_networks = []
-            source_vm.hardware.nics.select { |n| n.device_type == 'ethernet' }.each do |nic|
-              source_network = nic.lan
-              destination_network = task.transformation_destination(source_network)
-              raise "[#{source_vm.name}] NIC #{nic.device_name} [#{source_network.name}] has no mapping. Aborting." if destination_network.nil?
-              virtv2v_networks << { :source => source_network.name, :destination => destination_network.name }
-            end
+            virtv2v_networks = network_mappings(task, source_vm)
             @handle.log(:info, "Network mappings: #{virtv2v_networks}")
             task.set_option(:virtv2v_networks, virtv2v_networks)
 
-            virtv2v_disks = []
-            source_vm.hardware.disks.select { |d| d.device_type == 'disk' }.each do |disk|
-              source_storage = disk.storage
-              destination_storage = task.transformation_destination(disk.storage)
-              raise "[#{source_vm.name}] Disk #{disk.device_name} [#{source_storage.name}] has no mapping. Aborting." if destination_storage.nil?
-              virtv2v_disks << { :path => disk.filename, :size => disk.size, :percent => 0, :weight => disk.size.to_f / source_vm.allocated_disk_storage.to_f * 100 }
-            end
+            virtv2v_disks = storage_mappings(task, source_vm)
             @handle.log(:info, "Source VM Disks #{virtv2v_disks}")
             task.set_option(:virtv2v_disks, virtv2v_disks)
 
