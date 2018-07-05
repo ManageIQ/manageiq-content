@@ -14,26 +14,24 @@ module ManageIQ
           end
 
           def network_mappings(task, vm)
-            mappings = []
-            vm.hardware.nics.select { |n| n.device_type == 'ethernet' }.each do |nic|
+            vm.hardware.nics.select { |n| n.device_type == 'ethernet' }.collect do |nic|
               source_network = nic.lan
               destination_network = task.transformation_destination(source_network)
               raise "[#{vm.name}] NIC #{nic.device_name} [#{source_network.name}] has no mapping. Aborting." if destination_network.nil?
-              mappings << {
+              {
                 :source      => source_network.name,
                 :destination => destination_network.name,
                 :mac_address => nic.address
               }
             end
-            mappings
           end
 
           def storage_mappings(task, vm)
-            vm.hardware.disks.select { |d| d.device_type == 'disk' }.each do |disk|
+            vm.hardware.disks.select { |d| d.device_type == 'disk' }.collect do |disk|
               source_storage = disk.storage
               destination_storage = task.transformation_destination(disk.storage)
               raise "[#{vm.name}] Disk #{disk.device_name} [#{source_storage.name}] has no mapping. Aborting." if destination_storage.nil?
-              virtv2v_disks << {
+              {
                 :path    => disk.filename,
                 :size    => disk.size,
                 :percent => 0,
