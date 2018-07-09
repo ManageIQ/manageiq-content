@@ -3,8 +3,8 @@ object_type: class
 version: 1.0
 object:
   attributes:
-    description: 
-    display_name: 
+    description: Deprecated please use System/Notification/Email
+    display_name: Email (Deprecated)
     name: Email
     type: 
     inherits: 
