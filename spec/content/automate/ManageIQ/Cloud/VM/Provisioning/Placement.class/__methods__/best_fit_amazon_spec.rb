@@ -32,6 +32,17 @@ describe ManageIQ::Automate::Cloud::VM::Provisioning::Placement::BestFitAmazon d
     described_class.new(ae_service).main
   end
 
+  context 'skips setting properties' do
+    let(:flavor) { FactoryGirl.create(:flavor, :name => 'flavor1', :cloud_subnet_required => false) }
+
+    it '#cloud subnet is not required' do
+      expect(ae_service).to(receive(:log).with("debug", "instance id=#{svc_flavor.id} name=#{svc_flavor.name}"))
+      expect(ae_service).to(receive(:log).with("info", "Using EC2 for default placement of instance type=[#{svc_flavor.name}]"))
+
+      described_class.new(ae_service).main
+    end
+  end
+
   it "should raise 'Image not specified'" do
     allow(svc_provision).to receive(:vm_template) { nil }
     expect { described_class.new(ae_service).main }.to raise_error('Image not specified')
