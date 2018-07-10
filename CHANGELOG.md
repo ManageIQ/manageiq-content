@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+## Gaprindashvili-4
+
+### Added
+- New email consolidated namespace and class. [(#246)](https://github.com/ManageIQ/manageiq-content/pull/246)
+- Automation for transformation plan [(#244)](https://github.com/ManageIQ/manageiq-content/pull/244)
+- V2V - State machines - Initial work [(#248)](https://github.com/ManageIQ/manageiq-content/pull/248)
+- Add VM Transformation state machine [(#252)](https://github.com/ManageIQ/manageiq-content/pull/252)
+- Add V2V for VMware to oVirt / RHV [(#301)](https://github.com/ManageIQ/manageiq-content/pull/301)
+- Tag migrated VM. [(#324)](https://github.com/ManageIQ/manageiq-content/pull/324)
+- Add extra empty states to allow pre and post states. [(#338)](https://github.com/ManageIQ/manageiq-content/pull/338)
+- Add a state to restore VM attributes during migration. [(#340)](https://github.com/ManageIQ/manageiq-content/pull/340)
+
+### Fixed
+- Calculate quota using service dialogs overrides. [(#203)](https://github.com/ManageIQ/manageiq-content/pull/203)
+- Modify on {entry,exit,error} path to use WeightedUpdateStatus [(#265)](https://github.com/ManageIQ/manageiq-content/pull/265)
+- Fix ManageIQ/manageiq-content/issues/275 [(#276)](https://github.com/ManageIQ/manageiq-content/pull/276)
+- Fix System/CommonMethods/MiqAe directory name [(#312)](https://github.com/ManageIQ/manageiq-content/pull/312)
+- Set insecure_connection to target provider as default behavior. [(#327)](https://github.com/ManageIQ/manageiq-content/pull/327)
+- Restore VM power state upon transformation [(#336)](https://github.com/ManageIQ/manageiq-content/pull/336)
+
 ## Gaprindashvili-3
 
 ### Added
