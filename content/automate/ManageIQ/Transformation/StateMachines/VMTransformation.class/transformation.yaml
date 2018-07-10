@@ -25,7 +25,7 @@ object:
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Acquire Transformation Host", task_message => "Pre-migration")
   - State8:
-      value: "/Transformation/StateMachines/Ansible/TransformationPlaybook?migration_hook=pre"
+      value: "/Transformation/StateMachines/Ansible/TransformationPlaybook?transformation_hook=pre"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
         => "Run pre-migration playbook")
       on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
@@ -57,7 +57,7 @@ object:
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 84, description
         => "Transform VM")
   - State20:
-      value: "/Transformation/StateMachines/Ansible/TransformationPlaybook?migration_hook=post"
+      value: "/Transformation/StateMachines/Ansible/TransformationPlaybook?transformation_hook=post"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
         => "Run post-migration playbook")
       on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
