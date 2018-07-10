@@ -7,21 +7,19 @@ module ManageIQ
             @handle = handle
           end
 
-          def target_host(transformation_hook)
+          def target_host(task, transformation_hook)
             target_host = nil
             case transformation_hook
             when /^pre_/
-              target_host = source_vm
+              target_host = task.source
             when /^post_/
-              target_host = destination_vm
+              target_host = @handle.vmdb(:vm).find_by(:id => task.get_option('destination_vm_id'))
             end
             target_host
           end
 
           def main
             task = @handle.root['service_template_transformation_plan_task']
-            source_vm = task.source
-            destination_vm = @handle.vmdb(:vm).find_by(:id => task.get_option('destination_vm_id'))
             transformation_hook = @handle.inputs['transformation_hook']
 
             unless transformation_hook == '_'
