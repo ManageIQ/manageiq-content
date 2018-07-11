@@ -31,7 +31,7 @@ module ManageIQ
 
             def create_cleanup_request
               sm_uri = @handle.object['cleanup_state_machine']
-              unless sm_uri.blank?
+              if sm_uri.present?
                 options = {}
                 sm_uri_array = sm_uri.split('/')
                 options[:instance_name] = sm_uri_array.pop
