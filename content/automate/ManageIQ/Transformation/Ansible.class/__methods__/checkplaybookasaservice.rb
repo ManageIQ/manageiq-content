@@ -18,7 +18,7 @@ module ManageIQ
 
             playbooks_status = task.get_option(:playbooks) || {}
             playbooks_status[transformation_hook] = { :job_state => service_request.request_state }
-            
+
             if service_request.request_state == 'finished'
               @handle.log(:info, "Ansible playbook service request (id: #{service_request_id}) is finished.")
               playbooks_status[transformation_hook][:job_status] = service_request.status
@@ -27,9 +27,9 @@ module ManageIQ
                 raise "Ansible playbook has failed (hook=#{transformation_hook})"
               end
             else
-            @handle.log(:info, "Playbook for #{transformation_hook} migration is not finished. Retrying.")
-            @handle.root['ae_result'] = 'retry'
-            @handle.root['ae_retry_interval'] = '15.seconds'
+              @handle.log(:info, "Playbook for #{transformation_hook} migration is not finished. Retrying.")
+              @handle.root['ae_result'] = 'retry'
+              @handle.root['ae_retry_interval'] = '15.seconds'
             end
           rescue => e
             @handle.set_state_var(:ae_state_progress, 'message' => e.message)
