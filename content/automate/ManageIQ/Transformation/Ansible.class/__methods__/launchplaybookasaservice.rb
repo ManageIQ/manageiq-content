@@ -10,10 +10,10 @@ module ManageIQ
           def target_host(task, transformation_hook)
             target_host = nil
             case transformation_hook
-            when /^pre_/
+            when 'pre'
               target_host = task.source
-            when /^post_/
-              target_host = @handle.vmdb(:vm).find_by(:id => task.get_option('destination_vm_id'))
+            when 'post'
+              target_host = @handle.vmdb(:vm).find_by(:id => task.get_option(:destination_vm_id))
             end
             target_host
           end
@@ -26,7 +26,7 @@ module ManageIQ
               service_template = task.send("#{transformation_hook}_ansible_playbook_service_template")
               @handle.log(:info, "Service Template Id: #{service_template.id}")
               unless service_template.nil?
-                target_host = target_host(transformation_hook)
+                target_host = target_host(task, transformation_hook)
                 unless target_host.nil?
                   if target_host.power_state == 'on'
                     service_dialog_options = { :hosts => target_host.ipaddresses.first }
