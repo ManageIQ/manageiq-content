@@ -11,6 +11,7 @@
 # 3. signature - used to stamp the email with a custom signature
 #
 
+$evm.log("warn", "[DEPRECATION] This method will be deprecated. Please use similarly named method from System/Notification/Email class.")
 # Look in the Root Object for the request
 miq_task = $evm.root['vm_migrate_task']
 miq_server = $evm.root['miq_server']

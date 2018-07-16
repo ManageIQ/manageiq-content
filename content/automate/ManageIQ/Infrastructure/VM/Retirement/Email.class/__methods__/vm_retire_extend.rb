@@ -15,6 +15,7 @@ module ManageIQ
               end
 
               def main
+                @handle.log("warn", "[DEPRECATION] This method will be deprecated. Please use similarly named method from System/Notification/Email class.")
                 @handle.log("info", "Starting vm_retire_extend")
                 check_retire_extend(vm)
                 @handle.log("info", "Ending vm_retire_extend")

@@ -11,6 +11,7 @@
 #    requester replies to the email
 # 3. signature - used to stamp the email with a custom signature
 #
+$evm.log("warn", "[DEPRECATION] This method will be deprecated. Please use similarly named method from System/Notification/Email class.")
 vm = $evm.object['vm']
 if vm.nil?
   vm_id = $evm.object['vm_id'].to_i
