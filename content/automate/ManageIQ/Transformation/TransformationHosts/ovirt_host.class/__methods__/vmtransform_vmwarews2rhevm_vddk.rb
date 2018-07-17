@@ -34,7 +34,7 @@ module ManageIQ
 
               max_runners = destination_ems.custom_get('Max Transformation Runners') || factory_config['max_transformation_runners_by_ems'] || 1
               if Transformation::TransformationHosts::Common::Utils.get_runners_count_by_ems(destination_ems, @handle.get_state_var(:transformation_method), factory_config) >= max_runners
-                @handle.log("Too many transformations running: (#{max_runners}). Retrying.")
+                @handle.log(":info, Too many transformations running: (#{max_runners}). Retrying.")
               else
                 # Collect the VMware connection information
                 vmware_uri = "vpx://"

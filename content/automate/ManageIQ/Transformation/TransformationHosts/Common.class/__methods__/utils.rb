@@ -13,7 +13,7 @@ module ManageIQ
             end
 
             def self.get_runners_count_by_host(host, handle = $evm)
-              handle.vmdb(:service_template_transformation_plan_task).where(:state => 'active').select { |task| task.get_option(:transformation_host) == host }.size
+              handle.vmdb(:service_template_transformation_plan_task).where(:state => 'active').select { |task| task.get_option(:transformation_host_id) == host.id }.size
             end
 
             def self.transformation_hosts(ems, method, factory_config)
@@ -24,7 +24,7 @@ module ManageIQ
                   :host    => host,
                   :runners => {
                     :current => get_runners_count_by_host(host),
-                    :maximum => host.custom_get('Max Transformation Runners') || factory_config['transformation_host_max_runners'] || 1
+                    :maximum => host.custom_get('Max Transformation Runners') || factory_config['transformation_host_max_runners'] || 10
                   }
                 }
               end
