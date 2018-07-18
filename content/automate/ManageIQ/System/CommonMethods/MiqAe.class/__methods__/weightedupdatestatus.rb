@@ -137,7 +137,6 @@ module ManageIQ
                   if @handle.root['ae_state_step'] == 'on_error'
                     task.message = 'Failed'
                     create_cleanup_request(task)
-                    task.set_option('cleanup_request_id', cleanup_request.id) unless cleanup_request.nil?
                   elsif task.get_option('cancel_requested')
                     task.message = 'Cancelled'
                     create_cleanup_request(task)
