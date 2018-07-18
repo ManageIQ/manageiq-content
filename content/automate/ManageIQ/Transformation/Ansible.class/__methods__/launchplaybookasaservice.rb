@@ -25,16 +25,13 @@ module ManageIQ
             unless transformation_hook == '_'
               service_template = task.send("#{transformation_hook}_ansible_playbook_service_template")
               @handle.log(:info, "Service Template Id: #{service_template.id}")
-              unless service_template.nil?
-                target_host = target_host(task, transformation_hook)
-                unless target_host.nil?
-                  if target_host.power_state == 'on'
-                    service_dialog_options = { :hosts => target_host.ipaddresses.first }
-                    service_request = @handle.execute(:create_service_provision_request, service_template, service_dialog_options)
-                    task.set_option("#{transformation_hook}_ansible_playbook_service_request_id", service_request.id)
-                  end
-                end
-              end
+              return if service_template.nil?
+              target_host = target_host(task, transformation_hook)
+              return if target_host.nil?
+              return unless target_host.power_state == 'on'
+              service_dialog_options = { :hosts => target_host.ipaddresses.first }
+              service_request = @handle.execute(:create_service_provision_request, service_template, service_dialog_options)
+              task.set_option("#{transformation_hook}_ansible_playbook_service_request_id".to_sym, service_request.id)
             end
           rescue => e
             @handle.set_state_var(:ae_state_progress, 'message' => e.message)

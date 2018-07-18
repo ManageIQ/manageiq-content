@@ -13,7 +13,7 @@ module ManageIQ
           def main
             transformation_hook = @handle.inputs['transformation_hook']
             task = @handle.root['service_template_transformation_plan_task']
-            service_request_id = task.get_option("#{transformation_hook}_ansible_playbook_service_request_id")
+            service_request_id = task.get_option("#{transformation_hook}_ansible_playbook_service_request_id".to_sym)
 
             if service_request_id.present?
               service_request = @handle.vmdb(:miq_request).find_by(:id => service_request_id)
