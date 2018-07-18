@@ -39,8 +39,8 @@ module ManageIQ
                 options[:namespace] = sm_uri_array.join('/')
                 options[:user_id] = @handle.root['user_id']
                 request = @handle.execute("create_automation_request", options, 'admin', true)
+                task.set_option(:cleanup_request_id, request.id) unless request.nil?
               end
-              task.set_option(:cleanup_request_id, request.id) unless request.nil?
             end
 
             def on_entry(state_hash, _, _, state_weight, state_description)
