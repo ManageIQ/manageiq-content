@@ -29,18 +29,18 @@ module ManageIQ
               percent
             end
 
-            def create_cleanup_request
+            def create_cleanup_request(task)
               sm_uri = @handle.object['cleanup_state_machine']
-              if sm_uri.present?
+              if sm_uri.present? && task.get_option(:cleanup_request_id).absent?
                 options = {}
                 sm_uri_array = sm_uri.split('/')
                 options[:instance_name] = sm_uri_array.pop
                 options[:class_name] = sm_uri_array.pop
                 options[:namespace] = sm_uri_array.join('/')
                 options[:user_id] = @handle.root['user_id']
-                request = @handle.execute("create_automation_request", options, 'admin', true).id
+                request = @handle.execute("create_automation_request", options, 'admin', true)
               end
-              request
+              task.set_option(:cleanup_request_id, request.id) unless request.nil?
             end
 
             def on_entry(state_hash, _, _, state_weight, state_description)
@@ -136,10 +136,11 @@ module ManageIQ
                   # We set the task message.
                   if @handle.root['ae_state_step'] == 'on_error'
                     task.message = 'Failed'
-                    task.set_option('cleanup_request_id', create_cleanup_request.id)
+                    create_cleanup_request(task)
+                    task.set_option('cleanup_request_id', cleanup_request.id) unless cleanup_request.nil?
                   elsif task.get_option('cancel_requested')
                     task.message = 'Cancelled'
-                    task.set_option('cleanup_request_id', create_cleanup_request.id)
+                    create_cleanup_request(task)
                     raise "Task cancellation requested."
                   else
                     task.message = @handle.inputs['task_message'] unless @handle.inputs['task_message'] == '_'
