@@ -22,17 +22,14 @@ module ManageIQ
             task = @handle.root['service_template_transformation_plan_task']
             transformation_hook = @handle.inputs['transformation_hook']
 
-            unless transformation_hook == '_'
-              service_template = task.send("#{transformation_hook}_ansible_playbook_service_template")
-              @handle.log(:info, "Service Template Id: #{service_template.id}")
-              return if service_template.nil?
-              target_host = target_host(task, transformation_hook)
-              return if target_host.nil?
-              return unless target_host.power_state == 'on'
-              service_dialog_options = { :hosts => target_host.ipaddresses.first }
-              service_request = @handle.execute(:create_service_provision_request, service_template, service_dialog_options)
-              task.set_option("#{transformation_hook}_ansible_playbook_service_request_id".to_sym, service_request.id)
-            end
+            return if transformation_hook == '_'
+            service_template = task.send("#{transformation_hook}_ansible_playbook_service_template")
+            return if service_template.nil?
+            target_host = target_host(task, transformation_hook)
+            return if target_host.nil? || target_host.power_state != 'on'
+            service_dialog_options = { :hosts => target_host.ipaddresses.first }
+            service_request = @handle.execute(:create_service_provision_request, service_template, service_dialog_options)
+            task.set_option("#{transformation_hook}_ansible_playbook_service_request_id".to_sym, service_request.id)
           rescue => e
             @handle.set_state_var(:ae_state_progress, 'message' => e.message)
             raise
