@@ -24,6 +24,14 @@ object:
         => "Acquire Transformation Host", task_message => "Pre-migration")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Acquire Transformation Host", task_message => "Pre-migration")
+  - State8:
+      value: "/Transformation/StateMachines/Ansible/TransformationPlaybook?transformation_hook=pre"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Run pre-migration playbook")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Run pre-migration playbook")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Run pre-migration playbook")
   - State11:
       value: "/Transformation/Infrastructure/VM/Common/PowerOff"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
@@ -42,12 +50,20 @@ object:
         => "Collapse Snapshots", task_message => "Pre-migration")
   - State17:
       value: "/Transformation/StateMachines/VMTransformation/${state_var#transformation_type}_${state_var#transformation_method}?state_ancestry=${#state_ancestry}/${#ae_state}"
-      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 94, description
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 84, description
         => "Transform VM")
-      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 94, description
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 84, description
         => "Transform VM")
-      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 94, description
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 84, description
         => "Transform VM")
+  - State20:
+      value: "/Transformation/StateMachines/Ansible/TransformationPlaybook?transformation_hook=post"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Run post-migration playbook")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Run post-migration playbook")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Run post-migration playbook")
   - State23:
       value: "/Transformation/Infrastructure/VM/Common/RestoreVmAttributes"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
