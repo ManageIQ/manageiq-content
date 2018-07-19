@@ -4,7 +4,7 @@ version: 1.0
 object:
   attributes:
     display_name: 
-    name: enterprise_update
+    name: nuage_enterprise_update
     inherits: 
     description: 
   fields:
