@@ -138,7 +138,7 @@ module ManageIQ
                     task.message = 'Failed'
                     create_cleanup_request(task)
                   elsif task.get_option('cancel_requested')
-                    task.message = 'Cancelled'
+                    task.message = 'Canceled'
                     create_cleanup_request(task)
                     raise "Task cancellation requested."
                   else
