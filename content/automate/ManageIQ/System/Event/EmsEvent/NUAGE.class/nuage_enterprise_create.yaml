@@ -4,7 +4,7 @@ version: 1.0
 object:
   attributes:
     display_name: 
-    name: enterprise_create
+    name: nuage_enterprise_create
     inherits: 
     description: 
   fields:

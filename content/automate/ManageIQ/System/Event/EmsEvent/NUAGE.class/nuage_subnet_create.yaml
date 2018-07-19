@@ -4,7 +4,7 @@ version: 1.0
 object:
   attributes:
     display_name: 
-    name: subnet_create
+    name: nuage_subnet_create
     inherits: 
     description: 
   fields:
