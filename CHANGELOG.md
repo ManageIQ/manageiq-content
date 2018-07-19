@@ -5,25 +5,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+##  Unreleased as of Sprint 90 Ending 2018-07-16
+
+### Added
+- Add checks for retirement of correct child service in bundle [(#284)](https://github.com/ManageIQ/manageiq-content/pull/284)
+
+## Gaprindashvili-4 - Released 2018-07-16
+
+### Added
+- New email consolidated namespace and class. [(#246)](https://github.com/ManageIQ/manageiq-content/pull/246)
+- Automation for transformation plan [(#244)](https://github.com/ManageIQ/manageiq-content/pull/244)
+- V2V - State machines - Initial work [(#248)](https://github.com/ManageIQ/manageiq-content/pull/248)
+- Add VM Transformation state machine [(#252)](https://github.com/ManageIQ/manageiq-content/pull/252)
+- Add V2V for VMware to oVirt / RHV [(#301)](https://github.com/ManageIQ/manageiq-content/pull/301)
+- Tag migrated VM. [(#324)](https://github.com/ManageIQ/manageiq-content/pull/324)
+- Add extra empty states to allow pre and post states. [(#338)](https://github.com/ManageIQ/manageiq-content/pull/338)
+- Add a state to restore VM attributes during migration. [(#340)](https://github.com/ManageIQ/manageiq-content/pull/340)
+
+### Fixed
+- Calculate quota using service dialogs overrides. [(#203)](https://github.com/ManageIQ/manageiq-content/pull/203)
+- Modify on {entry,exit,error} path to use WeightedUpdateStatus [(#265)](https://github.com/ManageIQ/manageiq-content/pull/265)
+- Fix ManageIQ/manageiq-content/issues/275 [(#276)](https://github.com/ManageIQ/manageiq-content/pull/276)
+- Fix System/CommonMethods/MiqAe directory name [(#312)](https://github.com/ManageIQ/manageiq-content/pull/312)
+- Set insecure_connection to target provider as default behavior. [(#327)](https://github.com/ManageIQ/manageiq-content/pull/327)
+- Restore VM power state upon transformation [(#336)](https://github.com/ManageIQ/manageiq-content/pull/336)
+
 ##  Unreleased as of Sprint 89 Ending 2018-07-02
 
 ### Added
-- Add a state to restore VM attributes during migration. [(#340)](https://github.com/ManageIQ/manageiq-content/pull/340)
 - Add a precanned physical server automation event [(#339)](https://github.com/ManageIQ/manageiq-content/pull/339)
-- Add extra empty states to allow pre and post states. [(#338)](https://github.com/ManageIQ/manageiq-content/pull/338)
 
 ##  Unreleased as of Sprint 88 Ending 2018-06-18
 
 ### Added
 - Raise policy event when HOST_FAILURE is received. [(#329)](https://github.com/ManageIQ/manageiq-content/pull/329)
-- Tag migrated VM. [(#324)](https://github.com/ManageIQ/manageiq-content/pull/324)
 - Email instances for Cloud/Orchestration. [(#314)](https://github.com/ManageIQ/manageiq-content/pull/314)
 - Email instances for VmMigrate and Reconfiguration. [(#311)](https://github.com/ManageIQ/manageiq-content/pull/311)
 
 ### Fixed
-- Restore VM power state upon transformation [(#336)](https://github.com/ManageIQ/manageiq-content/pull/336)
 - Remove check for a state of initialized in 4 start_retirement methods. [(#331)](https://github.com/ManageIQ/manageiq-content/pull/331)
-- Set insecure_connection to target provider as default behavior. [(#327)](https://github.com/ManageIQ/manageiq-content/pull/327)
 - handle volume snapshot status changes [(#285)](https://github.com/ManageIQ/manageiq-content/pull/285)
 
 ##  Unreleased as of Sprint 87 Ending 2018-06-04
@@ -39,12 +59,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Email instances for Cloud and Infrastructure retirement. [(#304)](https://github.com/ManageIQ/manageiq-content/pull/304)
 - Email instances for Infra VM provisioning. [(#303)](https://github.com/ManageIQ/manageiq-content/pull/303)
 - Email instances for Cloud VM provisioning. [(#302)](https://github.com/ManageIQ/manageiq-content/pull/302)
-- Add V2V for VMware to oVirt / RHV [(#301)](https://github.com/ManageIQ/manageiq-content/pull/301)
 - Updated Configuration/Email class and existing V2v instances. [(#300)](https://github.com/ManageIQ/manageiq-content/pull/300)
 - Created new namespace for Configuration/Email. [(#299)](https://github.com/ManageIQ/manageiq-content/pull/299)
-
-### Fixed
-- Fix System/CommonMethods/MiqAe directory name [(#312)](https://github.com/ManageIQ/manageiq-content/pull/312)
 
 ## Gaprindashvili-3 - Released 2018-05-15
 
@@ -69,21 +85,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ### Added
 - Add changes for service vm retire request approval [(#272)](https://github.com/ManageIQ/manageiq-content/pull/272)
 - Add task status update to retirement status [(#262)](https://github.com/ManageIQ/manageiq-content/pull/262)
-
-##  Unreleased as of Sprint 82 Ending 2018-03-26
-
-### Added
-- Add VM Transformation state machine [(#252)](https://github.com/ManageIQ/manageiq-content/pull/252)
-
-### Fixed
-- Modify on {entry exit error} path to use WeightedUpdateStatus [(#265)](https://github.com/ManageIQ/manageiq-content/pull/265)
-
-
-##  Unreleased as of Sprint 79 Ending 2018-02-12
-
-### Added
-- Automation for transformation plan [(#244)](https://github.com/ManageIQ/manageiq-content/pull/244)
-- New email consolidated namespace and class. [(#246)](https://github.com/ManageIQ/manageiq-content/pull/246)
 
 ## Gaprindashvili-1 - Released 2018-01-31
 
