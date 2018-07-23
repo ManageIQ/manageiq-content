@@ -9,6 +9,13 @@ module ManageIQ
               @handle = handle
             end
 
+            def set_retry(message = nil, interval = '1.minutes')
+              @handle.log(:info, message) if message.present?
+              @handle.root['ae_result'] = 'retry'
+              @handle.root['ae_retry_server_affinity'] = true
+              @handle.root['ae_retry_interval'] = interval
+            end
+
             def main
               require 'json'
 
@@ -49,11 +56,7 @@ module ManageIQ
                 task.set_option(:virtv2v_status, 'active')
               end
 
-              if task.get_option(:virtv2v_started_on).nil?
-                @handle.root['ae_result'] = 'retry'
-                @handle.root['ae_retry_server_affinity'] = true
-                @handle.root['ae_retry_interval'] = $evm.object['check_convert_interval'] || '1.minutes'
-              end
+              set_retry if task.get_option(:virtv2v_started_on).nil?
             rescue => e
               @handle.set_state_var(:ae_state_progress, 'message' => e.message)
               raise
