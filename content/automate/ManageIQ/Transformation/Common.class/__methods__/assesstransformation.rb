@@ -53,7 +53,9 @@ module ManageIQ
             raise "No destination cluster for '#{source_vm.name}'. Exiting." if destination_cluster.nil?
 
             source_ems = source_vm.ext_management_system
+            task.set_option(:source_ems_id, source_ems.id)
             destination_ems = destination_cluster.ext_management_system
+            task.set_option(:destination_ems_id, destination_ems.id)
 
             virtv2v_networks = network_mappings(task, source_vm)
             @handle.log(:info, "Network mappings: #{virtv2v_networks}")
@@ -68,15 +70,8 @@ module ManageIQ
 
             raise "Unsupported destination EMS type: #{destination_ems.emstype}." unless SUPPORTED_DESTINATION_EMS_TYPES.include?(destination_ems.emstype)
             @handle.set_state_var(:destination_ems_type, destination_ems.emstype)
-
-            transformation_type = "#{source_ems.emstype}2#{destination_ems.emstype}"
-            @handle.set_state_var(:transformation_type, transformation_type)
-
-            transformation_method = "vddk"
-            @handle.set_state_var(:transformation_method, transformation_method)
-
-            transformation_host_type = "ovirt_host"
-            @handle.set_state_var(:transformation_host_type, transformation_host_type)
+            
+            task.set_option(:transformation_type, "#{source_ems.emstype}2#{destination_ems.emstype}")
 
             factory_config = {
               'vmtransformation_check_interval' => @handle.object['vmtransformation_check_interval'] || '15.seconds',

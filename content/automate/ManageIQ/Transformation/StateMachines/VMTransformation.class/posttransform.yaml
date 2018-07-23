@@ -1,0 +1,59 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: PostTransform
+    inherits: 
+    description: 
+  fields:
+  - State2:
+      value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/SetDescription"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Update description of VM", task_message => "Migrating")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Update description of VM", task_message => "Migrating")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Update description of VM", task_message => "Migrating")
+  - State5:
+      value: "/Transformation/Infrastructure/VM/Common/PowerOn"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Power-on VM", task_message => "Migrating")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Power-on VM", task_message => "Migrating")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Power-on VM", task_message => "Migrating")
+  - State8:
+      value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/CheckPoweredOn"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Power-on VM", task_message => "Migrating")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Power-on VM", task_message => "Migrating")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Power-on VM", task_message => "Migrating")
+      max_retries: '200'
+  - State11:
+      value: "/Transformation/StateMachines/Ansible/TransformationPlaybook?transformation_hook=post"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description         =>
+        "Run post-migration playbook")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description         =>
+        "Run post-migration playbook")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description         =>
+        "Run post-migration playbook")
+  - State14:
+      value: "/Transformation/Infrastructure/VM/Common/RestoreVmAttributes"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Restore VM Attributes", task_message => "Migrating")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Restore VM Attributes", task_message => "Migrating")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Restore VM Attributes", task_message => "Migrating")
+  - State17:
+      value: "/Transformation/Infrastructure/VM/${state_var#source_ems_type}/SetMigrated"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Mark source as migrated", task_message => "Migrating")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Mark source as migrated", task_message => "Migrating")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Mark source as migrated", task_message => "Migrating")
