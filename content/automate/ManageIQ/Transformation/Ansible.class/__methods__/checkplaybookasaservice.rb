@@ -7,7 +7,7 @@ module ManageIQ
             @handle = handle
           end
 
-	  def set_retry(message = nil, interval = '1.minutes')
+          def set_retry(message = nil, interval = '1.minutes')
             @handle.log(:info, message) if message.present?
             @handle.root['ae_result'] = 'retry'
             @handle.root['ae_retry_interval'] = interval
