@@ -70,7 +70,7 @@ module ManageIQ
 
             raise "Unsupported destination EMS type: #{destination_ems.emstype}." unless SUPPORTED_DESTINATION_EMS_TYPES.include?(destination_ems.emstype)
             @handle.set_state_var(:destination_ems_type, destination_ems.emstype)
-            
+
             task.set_option(:transformation_type, "#{source_ems.emstype}2#{destination_ems.emstype}")
 
             factory_config = {

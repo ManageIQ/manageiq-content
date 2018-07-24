@@ -39,7 +39,7 @@ module ManageIQ
                 wrapper_options = ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils.virtv2vwrapper_options(task)
 
                 # WARNING: Enable at your own risk, as it may lead to sensitive data leak
-                #@handle.log(:info, "JSON Input:\n#{JSON.pretty_generate(wrapper_options)}") if @debug
+                # @handle.log(:info, "JSON Input:\n#{JSON.pretty_generate(wrapper_options)}") if @debug
 
                 @handle.log(:info, "Connecting to #{transformation_host.name} as #{transformation_host.authentication_userid}") if @debug
                 @handle.log(:info, "Executing '/usr/bin/virt-v2v-wrapper.py'")
