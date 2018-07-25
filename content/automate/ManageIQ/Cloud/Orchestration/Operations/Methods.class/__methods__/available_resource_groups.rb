@@ -6,7 +6,7 @@ module ManageIQ
     module Cloud
       module Orchestration
         module Operations
-          class AvailableResoureceGroups
+          class AvailableResourceGroups
             def initialize(handle = $evm)
               @handle = handle
             end
@@ -57,5 +57,5 @@ module ManageIQ
 end
 
 if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableResoureceGroups.new.main
+  ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableResourceGroups.new.main
 end
