@@ -1,0 +1,35 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: PreTransform
+    inherits: 
+    description: 
+  fields:
+  - State2:
+      value: "/Transformation/StateMachines/Ansible/TransformationPlaybook?transformation_hook=pre"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 30, description         =>
+        "Run pre-migration playbook")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 30, description         =>
+        "Run pre-migration playbook")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 30, description         =>
+        "Run pre-migration playbook")
+  - State5:
+      value: "/Transformation/Infrastructure/VM/Common/PowerOff"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Power off", task_message => "Pre-migration")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Power off", task_message => "Pre-migration")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Power off", task_message => "Pre-migration")
+      max_retries: '20'
+  - State8:
+      value: "/Transformation/Infrastructure/VM/${state_var#source_ems_type}/CollapseSnapshots"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Collapse Snapshots", task_message => "Pre-migration")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Collapse Snapshots", task_message => "Pre-migration")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Collapse Snapshots", task_message => "Pre-migration")

@@ -13,8 +13,7 @@ module ManageIQ
                 task = @handle.root['service_template_transformation_plan_task']
                 source_vm = task.source
                 destination_vm = @handle.vmdb(:vm).find_by(:id => task.get_option(:destination_vm_id))
-                @handle.log(:info, "VM: #{destination_vm.inspect}")
-                @handle.log(:info, "VM Id: #{destination_vm.id}")
+                @handle.log(:info, "VM: #{destination_vm.name} [#{destination_vm.id}]")
 
                 # Reconnect destination VM to service
                 if source_vm.service
