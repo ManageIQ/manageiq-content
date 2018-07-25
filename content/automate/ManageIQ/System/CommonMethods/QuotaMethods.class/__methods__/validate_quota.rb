@@ -14,6 +14,7 @@ end
 
 def quota_check(item, used, requested, quota_max, quota_warn)
   $evm.log(:info, "Item: #{item} Used: (#{used}) Requested: (#{requested}) Max: (#{quota_max}) Warn: (#{quota_warn})")
+  return unless requested.positive?
   return unless quota_max + quota_warn > 0
   if quota_exceeded?(item, used, requested, quota_max)
     quota_exceeded(item, reason(item, used, requested, quota_max), false)
