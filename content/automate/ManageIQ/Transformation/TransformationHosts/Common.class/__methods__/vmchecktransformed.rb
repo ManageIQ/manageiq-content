@@ -2,8 +2,8 @@ module ManageIQ
   module Automate
     module Transformation
       module TransformationHost
-        module OVirtHost
-          class VMCheckTransformedVmwarews2rhevmVddk
+        module Common
+          class VMCheckTransformed
             def initialize(handle = $evm)
               @debug = true
               @handle = handle
@@ -21,7 +21,7 @@ module ManageIQ
               transformation_host = @handle.vmdb(:host).find_by(:id => task.get_option(:transformation_host_id))
 
               # Retrieve state of virt-v2v
-              result = Transformation::TransformationHosts::OVirtHost::Utils.remote_command(transformation_host, "cat '#{task.get_option(:virtv2v_wrapper)['state_file']}'")
+              result = Transformation::TransformationHosts::Common::Utils.remote_command(task, transformation_host, "cat '#{task.get_option(:virtv2v_wrapper)['state_file']}'")
               raise result[:stderr] unless result[:success] && !result[:stdout].empty?
               virtv2v_state = JSON.parse(result[:stdout])
               @handle.log(:info, "VirtV2V State: #{virtv2v_state.inspect}")
@@ -79,5 +79,5 @@ module ManageIQ
 end
 
 if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Transformation::TransformationHost::OVirtHost::VMCheckTransformedVmwarews2rhevmVddk.new.main
+  ManageIQ::Automate::Transformation::TransformationHost::Common::VMCheckTransformed.new.main
 end
