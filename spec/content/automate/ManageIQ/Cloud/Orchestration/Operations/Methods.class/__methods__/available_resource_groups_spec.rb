@@ -1,6 +1,6 @@
 require_domain_file
 
-describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableResoureceGroups do
+describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableResourceGroups do
   let(:root_hash) do
     { 'service_template' => MiqAeMethodService::MiqAeServiceServiceTemplate.find(service_template.id) }
   end
