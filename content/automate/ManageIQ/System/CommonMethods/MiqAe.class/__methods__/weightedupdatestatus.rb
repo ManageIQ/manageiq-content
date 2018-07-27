@@ -30,8 +30,8 @@ module ManageIQ
             end
 
             def create_cleanup_request(task)
-              sm_uri = @handle.object['cleanup_state_machine']
-              if sm_uri.present? && task.get_option(:cleanup_request_id).absent?
+              sm_uri = @handle.root['cleanup_state_machine']
+              if sm_uri.present? && task.get_option(:cleanup_request_id).nil?
                 options = {}
                 sm_uri_array = sm_uri.split('/')
                 options[:instance_name] = sm_uri_array.pop
@@ -137,7 +137,7 @@ module ManageIQ
                   if @handle.root['ae_state_step'] == 'on_error'
                     task.message = 'Failed'
                     create_cleanup_request(task)
-                  elsif task.get_option('cancel_requested') && task.get_option(:cleanup_request_id).absent?
+                  elsif task.get_option('cancel_requested') && task.get_option(:cleanup_request_id).nil?
                     task.message = 'Canceled'
                     create_cleanup_request(task)
                     raise "Task cancellation requested."
