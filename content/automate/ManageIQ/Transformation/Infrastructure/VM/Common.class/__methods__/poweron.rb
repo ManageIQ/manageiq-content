@@ -11,6 +11,7 @@ module ManageIQ
 
               def main
                 task = @handle.root['service_template_transformation_plan_task']
+                task ||= @handle.vmdb(:service_template_transformation_plan_task).find_by(:id => @handle.root['service_template_transformation_plan_task_id'])
                 if task.get_option(:source_vm_power_state) == 'on'
                   destination_vm = @handle.vmdb(:vm).find_by(:id => task.get_option(:destination_vm_id))
                   destination_vm.start
