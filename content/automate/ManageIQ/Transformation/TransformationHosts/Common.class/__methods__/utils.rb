@@ -5,6 +5,7 @@ module ManageIQ
         module Common
           class Utils
             DEFAULT_EMS_MAX_RUNNERS = 10
+            DEFAULT_HOST_MAX_RUNNERS = 10
 
             def initialize(handle = $evm)
               @debug = true
@@ -18,6 +19,19 @@ module ManageIQ
               handle.vmdb(:service_template_transformation_plan_task).where(:state => 'active').select { |task| task.get_option(:transformation_host_id) == host.id }.size
             end
 
+            def self.host_max_runners(host, factory_config, handle = $evm)
+              if host.custom_get('Max Transformation Runners')
+                handle.log(:info, "Using max transformation runners from host custom attribute: #{host.custom_get('Max Transformation Runners')}")
+                host.custom_get('Max Transformation Runners').to_i
+              elsif factory_config['transformation_host_max_runners']
+                handle.log(:info, "Using max transformation runners from factory config: #{factory_config['transformation_host_max_runners']}")
+                factory_config['transformation_host_max_runners'].to_i
+              else
+                handle.log(:info, "Using default max transformation runners: #{DEFAULT_HOST_MAX_RUNNERS}")
+                DEFAULT_HOST_MAX_RUNNERS
+              end
+            end
+
             def self.transformation_hosts(ems, factory_config)
               thosts = []
               ems.hosts.each do |host|
@@ -28,7 +42,7 @@ module ManageIQ
                   :host                  => host,
                   :runners               => {
                     :current => get_runners_count_by_host(host),
-                    :maximum => host.custom_get('Max Transformation Runners') || factory_config['transformation_host_max_runners'] || 10
+                    :maximum => host_max_runners(host, factory_config)
                   }
                 }
               end
