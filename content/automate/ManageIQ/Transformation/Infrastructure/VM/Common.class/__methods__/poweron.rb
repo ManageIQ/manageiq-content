@@ -10,12 +10,14 @@ module ManageIQ
               end
 
               def main
-                task = @handle.root['service_template_transformation_plan_task']
-                task ||= @handle.vmdb(:service_template_transformation_plan_task).find_by(:id => @handle.root['service_template_transformation_plan_task_id'])
-                if task.get_option(:source_vm_power_state) == 'on'
-                  destination_vm = @handle.vmdb(:vm).find_by(:id => task.get_option(:destination_vm_id))
-                  destination_vm.start
+                if @handle.root['service_template_transformation_plan_task'].blank?
+                  task = @handle.vmdb(:service_template_transformation_plan_task).find_by(:id => @handle.root['service_template_transformation_plan_task_id'])
+                  vm = task.source
+                else
+                  task = @handle.root['service_template_transformation_plan_task']
+                  vm = @handle.vmdb(:vm).find_by(:id => task.get_option(:destination_vm_id))
                 end
+                vm.start if task.get_option(:source_vm_power_state) == 'on'
               rescue => e
                 @handle.set_state_var(:ae_state_progress, 'message' => e.message)
                 raise
