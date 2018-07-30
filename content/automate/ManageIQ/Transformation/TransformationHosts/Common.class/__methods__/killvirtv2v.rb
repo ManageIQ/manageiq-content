@@ -15,7 +15,7 @@ module ManageIQ
               return if task.get_option(:virtv2v_wrapper).blank?
               result = Transformation::TransformationHosts::Common::Utils.remote_command(task, transformation_host, "cat '#{task.get_option(:virtv2v_wrapper)['state_file']}'")
               return if !result[:success] || result[:stdout].empty?
-              virtv2v_state = JSON.parse(result[:stdout])
+              JSON.parse(result[:stdout])
             end
 
             def main
