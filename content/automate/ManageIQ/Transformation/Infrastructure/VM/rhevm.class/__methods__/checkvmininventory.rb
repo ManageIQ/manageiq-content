@@ -16,7 +16,7 @@ module ManageIQ
                 destination_vm = ManageIQ::Automate::Transformation::Infrastructure::VM::RedHat::Utils.new(destination_ems).vm_find_by_name(source_vm.name)
                 raise "VM #{source_vm.name} not found in destination provider #{destination_ems.name}" if destination_vm.nil?
 
-                destination_vm_vmdb = @handle.vmdb(:vm).where(["ems_ref = ?", destination_vm.href.gsub(/^\/ovirt-engine/, '')]).first
+                destination_vm_vmdb = @handle.vmdb(:vm).find_by(:ems_ref => destination_vm.href.gsub(/^\/ovirt-engine/, ''))
                 if destination_vm_vmdb.blank?
                   @handle.root['ae_result'] = 'retry'
                   @handle.root['ae_retry_interval'] = '15.seconds'
