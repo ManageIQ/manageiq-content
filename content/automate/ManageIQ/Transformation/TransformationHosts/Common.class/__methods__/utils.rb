@@ -4,16 +4,24 @@ module ManageIQ
       module TransformationHosts
         module Common
           class Utils
-            def initialize(handle = $evm)
-              @debug = true
-              @handle = handle
-            end
-
-            def main
-            end
+            DEFAULT_EMS_MAX_RUNNERS = 10
+            DEFAULT_HOST_MAX_RUNNERS = 10
 
             def self.get_runners_count_by_host(host, handle = $evm)
               handle.vmdb(:service_template_transformation_plan_task).where(:state => 'active').select { |task| task.get_option(:transformation_host_id) == host.id }.size
+            end
+
+            def self.host_max_runners(host, factory_config, max_runners = DEFAULT_HOST_MAX_RUNNERS, handle = $evm)
+              if host.custom_get('Max Transformation Runners')
+                handle.log(:info, "Using max transformation runners from host custom attribute: #{host.custom_get('Max Transformation Runners')}")
+                host.custom_get('Max Transformation Runners').to_i
+              elsif factory_config['transformation_host_max_runners']
+                handle.log(:info, "Using max transformation runners from factory config: #{factory_config['transformation_host_max_runners']}")
+                factory_config['transformation_host_max_runners'].to_i
+              else
+                handle.log(:info, "Using default max transformation runners: #{max_runners}")
+                max_runners
+              end
             end
 
             def self.transformation_hosts(ems, factory_config)
@@ -26,7 +34,7 @@ module ManageIQ
                   :host                  => host,
                   :runners               => {
                     :current => get_runners_count_by_host(host),
-                    :maximum => host.custom_get('Max Transformation Runners') || factory_config['transformation_host_max_runners'] || 10
+                    :maximum => host_max_runners(host, factory_config)
                   }
                 }
               end
@@ -41,11 +49,23 @@ module ManageIQ
               transformation_hosts(ems, factory_config).inject(0) { |sum, thost| sum + thost[:runners][:current] }
             end
 
+            def self.ems_max_runners(ems, factory_config, max_runners = DEFAULT_EMS_MAX_RUNNERS, handle = $evm)
+              if ems.custom_get('Max Transformation Runners')
+                handle.log(:info, "Using max transformation runners from EMS custom attribute: #{ems.custom_get('Max Transformation Runners')}")
+                ems.custom_get('Max Transformation Runners').to_i
+              elsif factory_config['ems_max_runners']
+                handle.log(:info, "Using max transformation runners from factory config: #{factory_config['ems_max_runners']}")
+                factory_config['ems_max_runners'].to_i
+              else
+                handle.log(:info, "Using default max transformation runners: #{max_runners}")
+                max_runners
+              end
+            end
+
             def self.get_transformation_host(task, factory_config, handle = $evm)
               ems = handle.vmdb(:ext_management_system).find_by(:id => task.get_option(:destination_ems_id))
-              ems_max_runners = ems.custom_get('Max Transformation Runners').to_i || factory_config['ems_max_runners'] || 1
               ems_cur_runners = get_runners_count_by_ems(ems, factory_config)
-              transformation_host_hash = ems_cur_runners < ems_max_runners ? eligible_transformation_hosts(ems, factory_config).first : {}
+              transformation_host_hash = ems_cur_runners < ems_max_runners(ems, factory_config) ? eligible_transformation_hosts(ems, factory_config).first : {}
               return transformation_host_hash[:type], transformation_host_hash[:host], transformation_host_hash[:transformation_method]
             end
 
@@ -117,8 +137,4 @@ module ManageIQ
       end
     end
   end
-end
-
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils.new.main
 end
