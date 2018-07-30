@@ -32,7 +32,7 @@ module ManageIQ
               @handle.log(:info, "Transformation - Started On: #{start_timestamp}")
 
               destination_ems = @handle.vmdb(:ext_management_system).find_by(:id => task.get_option(:destination_ems_id))
-              max_runners = destination_ems.custom_get('Max Transformation Runners').to_i || factory_config['max_transformation_runners_by_ems'] || 10
+              max_runners = Transformation::TransformationHosts::Common::Utils.ems_max_runners(destination_ems, factory_config)
               if Transformation::TransformationHosts::Common::Utils.get_runners_count_by_ems(destination_ems, factory_config) >= max_runners
                 @handle.log(:info, "Too many transformations running [#{max_runners}]. Retrying.")
               else
