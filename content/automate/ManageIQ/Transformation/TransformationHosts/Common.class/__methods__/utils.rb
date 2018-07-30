@@ -19,7 +19,7 @@ module ManageIQ
               handle.vmdb(:service_template_transformation_plan_task).where(:state => 'active').select { |task| task.get_option(:transformation_host_id) == host.id }.size
             end
 
-            def self.host_max_runners(host, factory_config, handle = $evm)
+            def self.host_max_runners(host, factory_config, max_runners = DEFAULT_HOST_MAX_RUNNERS, handle = $evm)
               if host.custom_get('Max Transformation Runners')
                 handle.log(:info, "Using max transformation runners from host custom attribute: #{host.custom_get('Max Transformation Runners')}")
                 host.custom_get('Max Transformation Runners').to_i
@@ -27,8 +27,8 @@ module ManageIQ
                 handle.log(:info, "Using max transformation runners from factory config: #{factory_config['transformation_host_max_runners']}")
                 factory_config['transformation_host_max_runners'].to_i
               else
-                handle.log(:info, "Using default max transformation runners: #{DEFAULT_HOST_MAX_RUNNERS}")
-                DEFAULT_HOST_MAX_RUNNERS
+                handle.log(:info, "Using default max transformation runners: #{max_runners}")
+                max_runners
               end
             end
 
@@ -57,7 +57,7 @@ module ManageIQ
               transformation_hosts(ems, factory_config).inject(0) { |sum, thost| sum + thost[:runners][:current] }
             end
 
-            def self.ems_max_runners(ems, factory_config, handle = $evm)
+            def self.ems_max_runners(ems, factory_config, max_runners = DEFAULT_EMS_MAX_RUNNERS, handle = $evm)
               if ems.custom_get('Max Transformation Runners')
                 handle.log(:info, "Using max transformation runners from EMS custom attribute: #{ems.custom_get('Max Transformation Runners')}")
                 ems.custom_get('Max Transformation Runners').to_i
@@ -65,8 +65,8 @@ module ManageIQ
                 handle.log(:info, "Using max transformation runners from factory config: #{factory_config['ems_max_runners']}")
                 factory_config['ems_max_runners'].to_i
               else
-                handle.log(:info, "Using default max transformation runners: #{DEFAULT_EMS_MAX_RUNNERS}")
-                DEFAULT_EMS_MAX_RUNNERS
+                handle.log(:info, "Using default max transformation runners: #{max_runners}")
+                max_runners
               end
             end
 
