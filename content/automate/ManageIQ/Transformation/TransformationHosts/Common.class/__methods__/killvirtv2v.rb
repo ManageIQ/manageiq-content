@@ -3,9 +3,8 @@ module ManageIQ
     module Transformation
       module TransformationHost
         module Common
-          class VMCheckTransformed
+          class KillVirtV2V
             def initialize(handle = $evm)
-              @debug = true
               @handle = handle
             end
 
@@ -36,5 +35,5 @@ module ManageIQ
 end
 
 if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Transformation::TransformationHost::Common::VMCheckTransformed.new.main
+  ManageIQ::Automate::Transformation::TransformationHost::Common::KillVirtV2V.new.main
 end

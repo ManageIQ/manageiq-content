@@ -5,6 +5,7 @@ module ManageIQ
         class AssessTransformationCleanup
           def initialize(handle = $evm)
             @handle = handle
+            @debug = false
           end
 
           def main
