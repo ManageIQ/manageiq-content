@@ -7,14 +7,6 @@ module ManageIQ
             DEFAULT_EMS_MAX_RUNNERS = 10
             DEFAULT_HOST_MAX_RUNNERS = 10
 
-            def initialize(handle = $evm)
-              @debug = true
-              @handle = handle
-            end
-
-            def main
-            end
-
             def self.get_runners_count_by_host(host, handle = $evm)
               handle.vmdb(:service_template_transformation_plan_task).where(:state => 'active').select { |task| task.get_option(:transformation_host_id) == host.id }.size
             end
@@ -145,8 +137,4 @@ module ManageIQ
       end
     end
   end
-end
-
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils.new.main
 end
