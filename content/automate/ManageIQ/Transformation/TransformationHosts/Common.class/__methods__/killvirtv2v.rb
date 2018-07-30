@@ -18,7 +18,7 @@ module ManageIQ
               transformation_host = @handle.vmdb(:host).find_by(:id => task.get_option(:transformation_host_id))
 
               # Skip if virtv2v has not started yet or is already finished
-              return if task.get_option(:virtv2v_started_on).blank? || !task.get_option(:virtv2v_finished_on).blank?
+              return if task.get_option(:virtv2v_started_on).blank? || task.get_option(:virtv2v_finished_on).present?
               # Skip if virtv2v wrapper information is not available
               return if task.get_option(:virtv2v_wrapper).blank?
               # Get the state of virtv2v from the conversion host
@@ -28,7 +28,7 @@ module ManageIQ
               virtv2v_state = JSON.parse(result[:stdout])
               @handle.log(:info, "VirtV2V State: #{virtv2v_state.inspect}")
               # Kill virt-v2v process
-              result = Transformation::TransformationHosts::Common::Utils.remote_command(task, transformation_host, "kill -9 #{virtv2v_state['pid']}")
+              Transformation::TransformationHosts::Common::Utils.remote_command(task, transformation_host, "kill -9 #{virtv2v_state['pid']}")
             rescue => e
               @handle.set_state_var(:ae_state_progress, 'message' => e.message)
               raise
