@@ -8,6 +8,8 @@ object:
     inherits: 
     description: 
   fields:
+  - cleanup_state_machine:
+      value: "/Transformation/StateMachines/VMTransformation/TransformationCleanup"
   - State2:
       value: "/Transformation/Common/AssessTransformation"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
