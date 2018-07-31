@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+##  Unreleased as of Sprint 91 Ending 2018-07-30
+
+### Added
+- Use targeted refresh during transformation [(#381)](https://github.com/ManageIQ/manageiq-content/pull/381)
+- Add default cleanup state machine for VM transformation [(#378)](https://github.com/ManageIQ/manageiq-content/pull/378)
+- Refactor set retry for pre/post migration playbooks [(#369)](https://github.com/ManageIQ/manageiq-content/pull/369)
+- Trigger targeted refresh for new Nuage entities [(#367)](https://github.com/ManageIQ/manageiq-content/pull/367)
+- Actually rename AE Instances not just fixture filename [(#365)](https://github.com/ManageIQ/manageiq-content/pull/365)
+- Update Weighted to handle task cancellation and cleanup [(#357)](https://github.com/ManageIQ/manageiq-content/pull/357)
+- Add support for pre/post-migration playbook [(#355)](https://github.com/ManageIQ/manageiq-content/pull/355)
+- Add support for MAC address in network mapping [(#351)](https://github.com/ManageIQ/manageiq-content/pull/351)
+- Requested Quota for instance_type dialog override. [(#333)](https://github.com/ManageIQ/manageiq-content/pull/333)
+- Adjust Automate Instance names to new event type prefix [(#363)](https://github.com/ManageIQ/manageiq-content/pull/363)
+- Refactor to add support for SSH transport method [(#359)](https://github.com/ManageIQ/manageiq-content/pull/359)
+
+### Fixed
+- Fix transformation host selection [(#379)](https://github.com/ManageIQ/manageiq-content/pull/379)
+- Fix weightedupdatestatus for cancellation [(#377)](https://github.com/ManageIQ/manageiq-content/pull/377)
+- Fix hook string passing for pre/post-migration playbooks [(#370)](https://github.com/ManageIQ/manageiq-content/pull/370)
+- Add event handling for Openstack volume attachment events [(#368)](https://github.com/ManageIQ/manageiq-content/pull/368)
+- Fix computation of currently running conversions by host [(#358)](https://github.com/ManageIQ/manageiq-content/pull/358)
+
 ##  Unreleased as of Sprint 90 Ending 2018-07-16
 
 ### Added
