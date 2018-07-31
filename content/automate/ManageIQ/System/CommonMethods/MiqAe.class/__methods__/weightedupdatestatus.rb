@@ -38,6 +38,7 @@ module ManageIQ
                 options[:class_name] = sm_uri_array.pop
                 options[:namespace] = sm_uri_array.join('/')
                 options[:user_id] = @handle.root['user_id']
+                options[:attrs] = { :service_template_transformation_plan_task_id => task.id }
                 request = @handle.execute("create_automation_request", options, @handle.root['user'].userid, true)
                 task.set_option(:cleanup_request_id, request.id) unless request.nil?
               end

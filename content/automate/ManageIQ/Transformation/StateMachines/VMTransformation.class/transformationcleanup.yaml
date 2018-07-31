@@ -9,14 +9,6 @@ object:
     description: 
   fields:
   - State2:
-      value: "/Transformation/Common/AssessTransformationCleanup"
-      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 10, description
-        => "Assess Migration Cleanup", task_message => "Cleanup")
-      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 10, description
-        => "Assess Migration Cleanup", task_message => "Cleanup")
-      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 10, description
-        => "Assess Migration Cleanup", task_message => "Cleanup")
-  - State5:
       value: "/Transformation/TransformationHosts/Common/KillVirtV2V"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
         => "Interrupt virt-v2v", task_message => "Cleanup")
@@ -24,7 +16,7 @@ object:
         => "Interrupt virt-v2v", task_message => "Cleanup")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
         => "Interrupt virt-v2v", task_message => "Cleanup")
-  - State8:
+  - State5:
       value: "/Transformation/Infrastructure/VM/Common/PowerOn"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 10, description
         => "Power-on VM", task_message => "Cleanup")
@@ -32,8 +24,8 @@ object:
         => "Power-on VM", task_message => "Cleanup")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 10, description
         => "Power-on VM", task_message => "Cleanup")
-  - State11:
-      value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/CheckPoweredOn"
+  - State8:
+      value: "/Transformation/Infrastructure/VM/Common/CheckPoweredOn"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
         => "Power-on VM", task_message => "Cleanup")
       on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
