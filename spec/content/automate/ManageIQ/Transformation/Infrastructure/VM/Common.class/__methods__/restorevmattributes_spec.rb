@@ -19,7 +19,7 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
 
   let(:root) do
     Spec::Support::MiqAeMockObject.new(
-      'cureent' => current_object,
+      'current' => current_object,
       'user'    => svc_model_user,
     )
   end
