@@ -29,19 +29,19 @@ describe "Quota Validation" do
   end
 
   context "Service provisioning quota" do
-    it "generic calculate_requested" do
+    it "generic requested" do
       setup_model("generic")
       build_generic_service_item
       expect { run_automate_method(service_attrs) }.not_to raise_exception
     end
 
-    it "generic ansible tower calculate_requested" do
+    it "generic ansible tower requested" do
       setup_model("generic")
       build_generic_ansible_tower_service_item
       expect { run_automate_method(service_attrs) }.not_to raise_exception
     end
 
-    it "vmware service item calculate_requested" do
+    it "vmware service item requested" do
       setup_model("vmware")
       build_small_environment
       build_vmware_service_item
@@ -165,7 +165,7 @@ describe "Quota Validation" do
       {"dialog_option_0_instance_type" => large_flavor.id}
     end
 
-    it "calculate_requested" do
+    it "requested" do
       setup_model("google")
       build_google_service_item
 
@@ -178,7 +178,7 @@ describe "Quota Validation" do
   end
 
   context "google service item" do
-    it "calculate_requested" do
+    it "requested" do
       setup_model("google")
       build_google_service_item
       ws = run_automate_method(service_attrs)
@@ -187,7 +187,7 @@ describe "Quota Validation" do
   end
 
   context "VM Cloud provisioning with cloud volumes" do
-    it "google calculate_requested number of vms 3, cloud volumes 3 gig " do
+    it "google requested number of vms 3, cloud volumes 3 gig " do
       setup_model("google")
       @miq_provision_request.options[:volumes] = [{:name => "Fred", :size => '1'}, {:name => "Wilma", :size => '2'}]
       @miq_provision_request.options[:number_of_vms] = 3
@@ -198,13 +198,13 @@ describe "Quota Validation" do
   end
 
   context "VM provisioning quota" do
-    it "vmware calculate_requested" do
+    it "vmware requested" do
       setup_model("vmware")
       ws = run_automate_method(vm_attrs)
       check_results(ws.root['quota_requested'], 512.megabytes, 4, 1, 1.gigabytes)
     end
 
-    it "google calculate_requested" do
+    it "google requested" do
       setup_model("google")
       ws = run_automate_method(vm_attrs)
       check_results(ws.root['quota_requested'], 10.gigabytes, 4, 1, 1024)
@@ -212,7 +212,7 @@ describe "Quota Validation" do
   end
 
   context "VM provisioning multiple vms quota" do
-    it "vmware calculate_requested number of vms 3" do
+    it "vmware requested number of vms 3" do
       setup_model("vmware")
       @miq_provision_request.options[:number_of_vms] = 3
       @miq_provision_request.save
@@ -220,7 +220,7 @@ describe "Quota Validation" do
       check_results(ws.root['quota_requested'], 1536.megabytes, 12, 3, 3.gigabytes)
     end
 
-    it "google calculate_requested number of vms 3" do
+    it "google requested number of vms 3" do
       setup_model("google")
       @miq_provision_request.options[:number_of_vms] = 3
       @miq_provision_request.save
@@ -229,7 +229,7 @@ describe "Quota Validation" do
     end
   end
 
-  context "VmReconfig quota calculate_request" do
+  context "VmReconfig quota request" do
     it "add 2 cpus and add 4096 memory " do
       setup_model("vmware_reconfigure")
       @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :cores_per_socket => 2,\
