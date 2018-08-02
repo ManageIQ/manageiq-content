@@ -51,18 +51,26 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
     end
 
     it "restore service" do
-      described_class.new(ae_service).main
+      described_class.new(ae_service).vm_restore_service(svc_model_src_vm, svc_model_dst_vm)
       expect(svc_model_src_vm.service).to be_nil
       expect(svc_model_dst_vm.service.id).to eq(svc_model_service.id)
     end
 
     it "restore tags" do
-      described_class.new(ae_service).main
+      described_class.new(ae_service).vm_restore_tags(svc_model_src_vm, svc_model_dst_vm)
       expect(svc_model_dst_vm.tags).to eq(["environment/prod"])
     end
 
     it "restore customer attributes" do
+      described_class.new(ae_service).vm_restore_custom_attributes(svc_model_src_vm, svc_model_dst_vm)
+      expect(svc_model_dst_vm.custom_get('attr')).to eq('value')
+    end
+
+    it "restore identity" do
       described_class.new(ae_service).main
+      expect(svc_model_src_vm.service).to be_nil
+      expect(svc_model_dst_vm.service.id).to eq(svc_model_service.id)
+      expect(svc_model_dst_vm.tags).to eq(["environment/prod"])
       expect(svc_model_dst_vm.custom_get('attr')).to eq('value')
     end
   end
