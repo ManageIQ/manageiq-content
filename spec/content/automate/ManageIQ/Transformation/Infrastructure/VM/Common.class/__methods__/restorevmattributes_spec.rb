@@ -21,7 +21,7 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
     Spec::Support::MiqAeMockObject.new(
       'cureent'                                   => current_object,
       'user'                                      => svc_model_user,
-      'service_template_transformation_plan_task' => svc_model_task
+#      'service_template_transformation_plan_task' => svc_model_task
     )
   end
 
@@ -39,10 +39,81 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
     svc_model_src_vm.custom_set('attr', 'value')
   end
 
+  context "validate task" do
+    it "when task is nil" do
+      errormsg = 'ERROR - task object is not passed in'
+      expect { described_class.new(ae_service).task }.to raise_error(errormsg)
+    end
+
+    it "when task is present" do
+      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
+      expect(described_class.new(ae_service).task.id).to eq(svc_model_task.id)
+    end
+  end
+
+  shared_examples_for "validate source and destination vms" do
+    let(:svc_vmdb_handle) { MiqAeMethodService::MiqAeServiceVm }
+
+    before do
+      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
+    end
+
+    it "when task.source is nil" do
+      errormsg = 'ERROR - task.source is not set'
+      expect { described_class.new(ae_service).source_vm }.to raise_error(errormsg)
+    end
+
+    it "when task.source is present" do
+      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
+      allow(svc_model_task).to receive(:source) { svc_model_src_vm }
+      expect(described_class.new(ae_service).source_vm.id).to eq(svc_model_src_vm.id)
+    end
+
+    it "when destination_vm_id option is absent" do
+      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
+      errormsg = "ERROR - task has no ':destination_vm_id' option"
+      expect { described_class.new(ae_service).destination_vm }.to raise_error(errormsg)
+    end
+
+    it "when destination_vm is nil" do
+      allow(svc_model_task).to receive(:get_option).with(:destination_vm_id).and_return(svc_model_dst_vm.id)
+      allow(ae_service).to receive(:vmdb).with(:vm).and_return(svc_vmdb_handle)
+      allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_dst_vm.id).and_return(nil)
+      errormsg = 'ERROR - destination_vm is nil'
+      expect { described_class.new(ae_service).destination_vm }.to raise_error(errormsg)
+    end
+
+    it "when destination_vm present" do
+      allow(svc_model_task).to receive(:get_option).with(:destination_vm_id).and_return(svc_model_dst_vm.id)
+      allow(ae_service).to receive(:vmdb).with(:vm).and_return(svc_vmdb_handle)
+      allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_dst_vm.id).and_return(svc_model_dst_vm)
+      expect(described_class.new(ae_service).destination_vm.id).to eq(svc_model_dst_vm.id)
+    end
+  end
+
+  context "validate when source is vmware and destination redhat" do
+    let(:src_vm) { src_vm_vmware }
+    let(:dst_vm) { dst_vm_redhat }
+    let(:svc_model_src_vm) { svc_model_src_vm_vmware }
+    let(:svc_model_dst_vm) { svc_model_dst_vm_redhat }
+
+    it_behaves_like "validate source and destination vms"
+  end
+
+  context "validate when source is vmware and destination openstack" do
+    let(:src_vm) { src_vm_vmware }
+    let(:dst_vm) { dst_vm_openstack }
+    let(:svc_model_src_vm) { svc_model_src_vm_vmware }
+    let(:svc_model_dst_vm) { svc_model_dst_vm_openstack }
+
+    it_behaves_like "validate source and destination vms"
+  end
+
   shared_examples_for "restore identity" do
     let(:svc_vmdb_handle) { MiqAeMethodService::MiqAeServiceVm }
 
     before do
+      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
       allow(svc_model_task).to receive(:source) { svc_model_src_vm }
       allow(svc_model_task).to receive(:get_option).with(:destination_vm_id).and_return(svc_model_dst_vm.id)
       allow(ae_service).to receive(:vmdb).with(:vm).and_return(svc_vmdb_handle)
@@ -75,7 +146,7 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
     end
   end
 
-  context 'when source is vmware and destination redhat' do
+  context "restore when source is vmware and destination redhat" do
     let(:src_vm) { src_vm_vmware }
     let(:dst_vm) { dst_vm_redhat }
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
@@ -84,7 +155,7 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
     it_behaves_like "restore identity"
   end
 
-  context 'when source is vmware and destination openstack' do
+  context "restore when source is vmware and destination openstack" do
     let(:src_vm) { src_vm_vmware }
     let(:dst_vm) { dst_vm_openstack }
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
@@ -99,8 +170,9 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
     end
 
     it "forcefully raise" do
-      expect { described_class.new(ae_service).main }.to raise_error(StandardError, 'kaboom')
-      expect(ae_service.get_state_var(:ae_state_progress)).to eq('message' => 'kaboom')
+      errormsg = 'ERROR - task object is not passed in'
+      expect { described_class.new(ae_service).main }.to raise_error(errormsg)
+      expect(ae_service.get_state_var(:ae_state_progress)).to eq('message' => errormsg)
     end
   end
 end

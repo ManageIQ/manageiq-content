@@ -5,10 +5,34 @@ module ManageIQ
         module VM
           module Common
             class RestoreVmAttributes
-              IDENTITY_ITEMS = %w[service tags custom_attributes].freeze
+              IDENTITY_ITEMS = %w(service tags custom_attributes).freeze
 
               def initialize(handle = $evm)
                 @handle = handle
+              end
+
+              def log_and_raise(message)
+                @handle.log(:error, message)
+                raise "ERROR - #{message}"
+              end
+
+              def task
+                @task ||= @handle.root["service_template_transformation_plan_task"].tap do |task|
+                  log_and_raise('task object is not passed in') if task.nil?
+                end
+              end
+
+              def source_vm
+                @vm ||= task.source.tap do |vm|
+                  log_and_raise('task.source is not set') if vm.nil?
+                end
+              end
+
+              def destination_vm
+                log_and_raise("task has no ':destination_vm_id' option") if task.get_option(:destination_vm_id).blank?
+                @destination_vm ||= @handle.vmdb(:vm).find_by(:id => task.get_option(:destination_vm_id)).tap do |vm|
+                  log_and_raise('destination_vm is nil') if vm.nil?
+                end
               end
 
               def vm_restore_service(source_vm, destination_vm)
@@ -31,11 +55,6 @@ module ManageIQ
               end
 
               def main
-                task = @handle.root['service_template_transformation_plan_task']
-                source_vm = task.source
-                destination_vm = @handle.vmdb(:vm).find_by(:id => task.get_option(:destination_vm_id))
-                @handle.log(:info, "VM: #{destination_vm.name} [#{destination_vm.id}]")
-
                 IDENTITY_ITEMS.each { |item| send("vm_restore_#{item}", source_vm, destination_vm) }
               rescue => e
                 @handle.set_state_var(:ae_state_progress, 'message' => e.message)
