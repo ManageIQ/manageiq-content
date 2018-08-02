@@ -1,6 +1,6 @@
 #
 # Description: Display Log messages for object attributes for root, current or desired object.
-#
+# Added InspectMe functionality
 
 module ManageIQ
   module Automate
@@ -37,10 +37,55 @@ module ManageIQ
             # instance method
             #    ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log(vm, "My Object", @handle)
 
-            def self.log(obj, object_string = 'Automation Object', handle = $evm)
-              handle.log("info", "Listing #{object_string} Attributes - Begin")
+            def self.log(obj, log_prefix = 'Automation Object', handle = $evm)
+              handle.log("info", "Listing #{log_prefix} Attributes - Begin")
               obj.attributes.sort.each { |k, v| handle.log("info", "   Attribute - #{k}: #{v}") }
-              handle.log("info", "Listing #{object_string} Attributes - End")
+              handle.log("info", "Listing #{log_prefix} Attributes - End")
+            end
+
+            def self.ar_object?(obj)
+              obj.respond_to?(:object_class)
+            end
+
+            def self.log_ar_objects(log_prefix = 'VMDB Object', handle = $evm)
+              handle.log("info", "#{log_prefix} log_ar_objects Begins")
+              handle.root.attributes.sort.each do |k, v|
+                log_ar_object(k, v, log_prefix, handle) if ar_object?(v)
+              end
+            end
+
+            def self.log_ar_object(key, object, log_prefix, handle = $evm)
+              handle.log("info", "key:<#{key}>  object:<#{object}>")
+              attributes(object, log_prefix, handle)
+              associations(object, log_prefix, handle)
+              tags(object, log_prefix, handle)
+            end
+
+            def self.attributes(obj, log_prefix, handle = $evm)
+              handle.log("info", " #{log_prefix} Begin Attributes [object.attributes]")
+              obj.attributes.sort.each do |k, v|
+                handle.log("info", "  Attribute:  #{k} = #{v.inspect}")
+              end
+              handle.log("info", " #{log_prefix} End Attributes [object.attributes]")
+            end
+
+            def self.associations(obj, log_prefix, handle = $evm)
+              return unless ar_object?(obj)
+              handle.log("info", " #{log_prefix} Begin Associations [object.associations]")
+              obj.associations.sort.each do |assc|
+                handle.log("info", "   Associations - #{assc}")
+              end
+              handle.log("info", " #{log_prefix} End Associations [object.associations]")
+            end
+
+            def self.tags(obj, log_prefix, handle = $evm)
+              return if obj.tags.nil?
+              handle.log("info", " #{log_prefix} Begin Tags [object.tags]")
+              obj.tags.sort.each do |tag_element|
+                tag_text = tag_element.split('/')
+                handle.log("info", "    Category:<#{tag_text.first.inspect}> Tag:<#{tag_text.last.inspect}>")
+              end
+              handle.log("info", " #{log_prefix} End Tags [object.tags]")
             end
           end
         end
