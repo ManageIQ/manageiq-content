@@ -1,8 +1,7 @@
 require domain_file
-require 'byebug'
 
 describe ManageIQ::Automate::Transformation::Common::Utils do
-  
+
   let(:user) { FactoryGirl.create(:user_with_email_and_group) }
   let(:task) { FactoryGirl.create(:service_template_transformation_plan_task) }
   let(:src_vm_vmware) { FactoryGirl.create(:vm_vmware) }
@@ -33,19 +32,18 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
   context "migration phase" do
     it "with task" do
       ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      expect(described_class.migration_phase(ae_service)).to eq('migration')     
+      expect(described_class.migration_phase(ae_service)).to eq('migration')
     end
 
     it "with task_id" do
       ae_service.root['service_template_transformation_plan_task_id'] = svc_model_task.id
-      expect(described_class.migration_phase(ae_service)).to eq('cleanup')     
+      expect(described_class.migration_phase(ae_service)).to eq('cleanup')
     end
 
     it "failure" do
       expect { described_class.migration_phase(ae_service) }.to raise_error(StandardError, 'Migration phase is not valid')
     end
   end
-
 
   shared_examples_for "task_in_migration" do
     it "with task" do
@@ -72,7 +70,6 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
     it_behaves_like "task_in_migration"
   end
 
-
   shared_examples_for "task_in_cleanup" do
     it "with task_id" do
       ae_service.root['service_template_transformation_plan_task_id'] = svc_model_task.id
@@ -98,7 +95,6 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
     it_behaves_like "task_in_cleanup"
   end
 
-
   shared_examples_for "vm_at_source" do
     before do
       allow(svc_model_task).to receive(:source) { svc_model_src_vm }
@@ -113,7 +109,6 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     it_behaves_like "vm_at_source"
   end
-
 
   shared_examples_for "vm_at_destination" do
     before do
@@ -135,8 +130,6 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
     it_behaves_like "vm_at_destination"
   end
 
-
-
   shared_examples_for "task_and_vm" do
     before do
       allow(svc_model_task).to receive(:source) { svc_model_src_vm }
@@ -145,7 +138,6 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
 
     it "task_and_vm in migration at source" do
       ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      byebug
       r_task, r_vm = described_class.task_and_vm('source', ae_service)
       expect(r_task.id).to eq(svc_model_task.id)
       expect(r_vm.id).to eq(svc_model_src_vm.id)
@@ -162,7 +154,7 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
       ae_service.root['service_template_transformation_plan_task'] = svc_model_task
       r_task, r_vm = described_class.task_and_vm('source', ae_service)
       expect(r_task.id).to eq(svc_model_task.id)
-      expect(r_vm.id).to eq(svc_model_dst_vm.id)
+      expect(r_vm.id).to eq(svc_model_src_vm.id)
     end
 
     it "task_and_vm_in cleanup at destination" do

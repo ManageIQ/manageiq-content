@@ -10,8 +10,8 @@ module ManageIQ
           end
 
           def self.task_and_vm(vm_type, handle = $evm)
-            task = send("task_in_#{migration_phase}")
-            vm = send("vm_at_#{vm_type}", task) if task.present?
+            task = send("task_in_#{migration_phase(handle)}", handle)
+            vm = send("vm_at_#{vm_type}", task, handle) if task.present?
             return task, vm
           end
 
