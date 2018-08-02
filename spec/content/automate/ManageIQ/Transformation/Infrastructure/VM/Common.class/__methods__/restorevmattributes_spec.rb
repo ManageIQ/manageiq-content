@@ -40,7 +40,7 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
 
   context "validate task" do
     it "when task is nil" do
-      errormsg = 'ERROR - task object is not passed in'
+      errormsg = 'ERROR - A service_template_transformation_plan_task is needed for this method to continue'
       expect { described_class.new(ae_service).task }.to raise_error(errormsg)
     end
 
@@ -58,7 +58,7 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
     end
 
     it "when task.source is nil" do
-      errormsg = 'ERROR - task.source is not set'
+      errormsg = 'ERROR - Source VM has not been defined in the task'
       expect { described_class.new(ae_service).source_vm }.to raise_error(errormsg)
     end
 
@@ -70,7 +70,7 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
 
     it "when destination_vm_id option is absent" do
       ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      errormsg = "ERROR - task has no ':destination_vm_id' option"
+      errormsg = "ERROR - destination_vm_id is blank"
       expect { described_class.new(ae_service).destination_vm }.to raise_error(errormsg)
     end
 
@@ -78,7 +78,7 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
       allow(svc_model_task).to receive(:get_option).with(:destination_vm_id).and_return(svc_model_dst_vm.id)
       allow(ae_service).to receive(:vmdb).with(:vm).and_return(svc_vmdb_handle)
       allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_dst_vm.id).and_return(nil)
-      errormsg = 'ERROR - destination_vm is nil'
+      errormsg = 'ERROR - Destination VM not found in the database after migration'
       expect { described_class.new(ae_service).destination_vm }.to raise_error(errormsg)
     end
 
@@ -169,7 +169,7 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
     end
 
     it "forcefully raise" do
-      errormsg = 'ERROR - task object is not passed in'
+      errormsg = 'ERROR - A service_template_transformation_plan_task is needed for this method to continue'
       expect { described_class.new(ae_service).main }.to raise_error(errormsg)
       expect(ae_service.get_state_var(:ae_state_progress)).to eq('message' => errormsg)
     end

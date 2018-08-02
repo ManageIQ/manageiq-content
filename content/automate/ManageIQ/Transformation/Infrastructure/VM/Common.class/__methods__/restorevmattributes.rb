@@ -18,20 +18,20 @@ module ManageIQ
 
               def task
                 @task ||= @handle.root["service_template_transformation_plan_task"].tap do |task|
-                  log_and_raise('task object is not passed in') if task.nil?
+                  log_and_raise('A service_template_transformation_plan_task is needed for this method to continue') if task.nil?
                 end
               end
 
               def source_vm
                 @vm ||= task.source.tap do |vm|
-                  log_and_raise('task.source is not set') if vm.nil?
+                  log_and_raise('Source VM has not been defined in the task') if vm.nil?
                 end
               end
 
               def destination_vm
-                log_and_raise("task has no ':destination_vm_id' option") if task.get_option(:destination_vm_id).blank?
+                log_and_raise('destination_vm_id is blank') if task.get_option(:destination_vm_id).blank?
                 @destination_vm ||= @handle.vmdb(:vm).find_by(:id => task.get_option(:destination_vm_id)).tap do |vm|
-                  log_and_raise('destination_vm is nil') if vm.nil?
+                  log_and_raise('Destination VM not found in the database after migration') if vm.nil?
                 end
               end
 
