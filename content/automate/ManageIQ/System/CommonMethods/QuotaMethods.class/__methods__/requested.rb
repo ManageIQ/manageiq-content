@@ -264,7 +264,7 @@ def cloud_storage(args_hash)
               flavor.root_disk_size.to_i + flavor.ephemeral_disk_size.to_i + flavor.swap_disk_size.to_i
             end
 
-  storage += cloud_volume_storage(args_hash) if @reconfigure_request
+  storage += cloud_volume_storage(args_hash)
   $evm.log(:info, "Retrieving cloud storage #{storage}")
   default_option(storage, args_hash[:options_array])
 end
