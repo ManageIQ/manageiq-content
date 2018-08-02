@@ -19,9 +19,8 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
 
   let(:root) do
     Spec::Support::MiqAeMockObject.new(
-      'cureent'                                   => current_object,
-      'user'                                      => svc_model_user,
-#      'service_template_transformation_plan_task' => svc_model_task
+      'cureent' => current_object,
+      'user'    => svc_model_user,
     )
   end
 
