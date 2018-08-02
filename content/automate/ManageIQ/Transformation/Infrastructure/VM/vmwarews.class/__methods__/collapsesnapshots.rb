@@ -34,6 +34,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Transformation::Infrastructure::VM::VMware::CollapseSnapshots.new.main
-end
+ManageIQ::Automate::Transformation::Infrastructure::VM::VMware::CollapseSnapshots.new.main

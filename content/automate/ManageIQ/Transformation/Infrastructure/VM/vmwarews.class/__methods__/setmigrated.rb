@@ -52,6 +52,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Transformation::Infrastructure::VM::VMware::SetMigrated.new.main
-end
+ManageIQ::Automate::Transformation::Infrastructure::VM::VMware::SetMigrated.new.main

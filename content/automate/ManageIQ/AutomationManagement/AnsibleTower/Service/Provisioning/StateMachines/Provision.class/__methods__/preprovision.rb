@@ -61,6 +61,5 @@ module ManageIQ
     end
   end
 end
-if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::AutomationManagement::AnsibleTower::Service::Provisioning::StateMachines::Provision::Preprovision.new.main
-end
+
+ManageIQ::Automate::AutomationManagement::AnsibleTower::Service::Provisioning::StateMachines::Provision::Preprovision.new.main

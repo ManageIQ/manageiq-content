@@ -33,6 +33,4 @@ module ManageIQ
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::Infrastructure::VM::Transform::Import::InstallDrivers.new.main
-end
+ManageIQ::Automate::Infrastructure::VM::Transform::Import::InstallDrivers.new.main

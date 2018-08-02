@@ -57,6 +57,4 @@ module ManageIQ
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::Infrastructure::VM::Migrate::StateMachines::UpdateMigrationStatus.new.main
-end
+ManageIQ::Automate::Infrastructure::VM::Migrate::StateMachines::UpdateMigrationStatus.new.main

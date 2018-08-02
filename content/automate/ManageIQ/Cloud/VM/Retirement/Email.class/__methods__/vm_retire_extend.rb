@@ -83,6 +83,4 @@ module ManageIQ
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::Cloud::VM::Retirement::Email::VmRetireExtend.new.main
-end
+ManageIQ::Automate::Cloud::VM::Retirement::Email::VmRetireExtend.new.main
