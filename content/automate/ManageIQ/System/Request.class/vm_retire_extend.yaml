@@ -8,5 +8,7 @@ object:
     inherits: 
     description: 
   fields:
+  - meth4:
+      value: vm_retire_extend
   - rel5:
       value: "/System/Notification/Email/${/#ae_provider_category}VmRetireExtend?event=vm_retire_extend"
