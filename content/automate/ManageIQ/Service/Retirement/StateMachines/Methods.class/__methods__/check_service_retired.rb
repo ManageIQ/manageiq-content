@@ -64,6 +64,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Service::Retirement::StateMachines::Methods::CheckServiceRetired.new.main
-end
+ManageIQ::Automate::Service::Retirement::StateMachines::Methods::CheckServiceRetired.new.main

@@ -59,6 +59,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::System::Request::VmRetireExtend.new.main
-end
+ManageIQ::Automate::System::Request::VmRetireExtend.new.main

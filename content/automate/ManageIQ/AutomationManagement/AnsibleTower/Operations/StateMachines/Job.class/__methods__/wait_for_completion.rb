@@ -67,6 +67,4 @@ module ManageIQ
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::StateMachines::Job::WaitForCompletion.new.main
-end
+ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::StateMachines::Job::WaitForCompletion.new.main

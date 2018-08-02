@@ -34,6 +34,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Transformation::TransformationHost::Common::KillVirtV2V.new.main
-end
+ManageIQ::Automate::Transformation::TransformationHost::Common::KillVirtV2V.new.main

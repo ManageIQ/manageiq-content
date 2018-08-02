@@ -46,6 +46,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::System::Event::StateMachines::Refresh::TargetRefresh.new.main
-end
+ManageIQ::Automate::System::Event::StateMachines::Refresh::TargetRefresh.new.main

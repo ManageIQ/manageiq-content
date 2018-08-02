@@ -35,6 +35,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Cloud::VM::Provisioning::Profile::VmDialogNamePrefix.new.main
-end
+ManageIQ::Automate::Cloud::VM::Provisioning::Profile::VmDialogNamePrefix.new.main

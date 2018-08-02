@@ -36,6 +36,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Transformation::Infrastructure::VM::RedHat::CheckVmInInventory.new.main
-end
+ManageIQ::Automate::Transformation::Infrastructure::VM::RedHat::CheckVmInInventory.new.main

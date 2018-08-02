@@ -47,6 +47,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Transformation::Ansible::CheckPlaybookAsAService.new.main
-end
+ManageIQ::Automate::Transformation::Ansible::CheckPlaybookAsAService.new.main

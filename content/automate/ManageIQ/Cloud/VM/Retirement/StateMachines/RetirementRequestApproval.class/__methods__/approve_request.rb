@@ -34,6 +34,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::RetirementRequestApproval::ApproveRequest.new.main
-end
+ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::RetirementRequestApproval::ApproveRequest.new.main

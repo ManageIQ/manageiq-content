@@ -16,8 +16,6 @@ describe ManageIQ::Automate::Service::Retirement::StateMachines::Methods::CheckS
   end
   let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
 
-  it_behaves_like "automate_engine_call", domain_file
-
   context "with non retired resource" do
     it "check" do
       service.service_resources << FactoryGirl.create(:service_resource, :resource_type => "VmOrTemplate", :service_id => service.id, :resource_id => vm.id)

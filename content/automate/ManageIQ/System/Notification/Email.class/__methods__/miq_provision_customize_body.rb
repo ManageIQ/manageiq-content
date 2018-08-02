@@ -69,6 +69,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::System::Notification::Email::MiqProvisionCustomizeBody.new.main
-end
+ManageIQ::Automate::System::Notification::Email::MiqProvisionCustomizeBody.new.main
