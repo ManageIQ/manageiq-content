@@ -23,7 +23,7 @@ module ManageIQ
             handle.vmdb(:service_template_transformation_plan_task).find_by(:id => handle.root['service_template_transformation_plan_task_id'])
           end
 
-          def self.vm_at_source(task, handle = $evm)
+          def self.vm_at_source(task, _)
             task.source
           end
 

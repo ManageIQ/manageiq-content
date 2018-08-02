@@ -1,7 +1,6 @@
 require domain_file
 
 describe ManageIQ::Automate::Transformation::Common::Utils do
-
   let(:user) { FactoryGirl.create(:user_with_email_and_group) }
   let(:task) { FactoryGirl.create(:service_template_transformation_plan_task) }
   let(:src_vm_vmware) { FactoryGirl.create(:vm_vmware) }
