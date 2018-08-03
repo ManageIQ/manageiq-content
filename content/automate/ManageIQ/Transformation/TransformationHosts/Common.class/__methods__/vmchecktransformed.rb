@@ -50,12 +50,12 @@ module ManageIQ
                 end
               else
                 task.set_option(:virtv2v_finished_on, Time.now.utc.strftime('%Y%m%d_%H%M'))
-                if virtv2v_state['return_code'].zero?
+                if virtv2v_state['failed']
+                  @handle.set_state_var(:ae_state_progress, 'message' => 'Disks transformation failed.')
+                  raise "Disks transformation failed."
+                else
                   virtv2v_disks.each { |d| d[:percent] = 100 }
                   @handle.set_state_var(:ae_state_progress, 'message' => 'Disks transformation succeeded.', 'percent' => 100)
-                else
-                  @handle.set_state_var(:ae_state_progress, 'message' => 'Disks transformation succeeded.')
-                  raise "Disks transformation failed."
                 end
               end
 
