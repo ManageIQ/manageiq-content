@@ -95,6 +95,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Transformation::Common::AssessTransformation.new.main
-end
+ManageIQ::Automate::Transformation::Common::AssessTransformation.new.main

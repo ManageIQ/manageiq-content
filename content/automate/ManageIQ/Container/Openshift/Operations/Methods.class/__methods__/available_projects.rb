@@ -49,6 +49,4 @@ module ManageIQ
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::Container::Openshift::Operations::AvailableProjects.new.main
-end
+ManageIQ::Automate::Container::Openshift::Operations::AvailableProjects.new.main

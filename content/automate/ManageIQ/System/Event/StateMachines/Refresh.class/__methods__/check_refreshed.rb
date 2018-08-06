@@ -59,6 +59,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::System::Event::StateMachines::Refresh::CheckRefreshed.new.main
-end
+ManageIQ::Automate::System::Event::StateMachines::Refresh::CheckRefreshed.new.main

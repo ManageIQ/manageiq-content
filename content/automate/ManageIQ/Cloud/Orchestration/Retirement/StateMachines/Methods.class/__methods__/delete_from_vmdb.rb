@@ -32,6 +32,4 @@ module ManageIQ
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::Cloud::Orchestration::Retirement::StateMachines::Methods::DeleteFromVmdb.new.main
-end
+ManageIQ::Automate::Cloud::Orchestration::Retirement::StateMachines::Methods::DeleteFromVmdb.new.main

@@ -1,4 +1,4 @@
-require domain_file
+require_domain_file
 
 describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::RestoreVmAttributes do
   let(:user) { FactoryGirl.create(:user_with_email_and_group) }

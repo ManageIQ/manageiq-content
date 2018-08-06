@@ -49,6 +49,4 @@ module ManageIQ
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::System::Event::EmsEvent::RHEVM::UpdateVmImportStatus.new.main
-end
+ManageIQ::Automate::System::Event::EmsEvent::RHEVM::UpdateVmImportStatus.new.main

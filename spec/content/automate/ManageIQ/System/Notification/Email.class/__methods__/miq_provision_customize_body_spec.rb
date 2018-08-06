@@ -53,8 +53,6 @@ describe ManageIQ::Automate::System::Notification::Email::MiqProvisionCustomizeB
                        :options => options, :userid => user.userid)
   end
 
-  it_behaves_like "automate_engine_call", domain_file
-
   it "Check object values" do
     allow(svc_miq_provision).to receive(:vm).and_return(svc_vm)
     allow(svc_vm).to receive(:show_url).and_return(vm_url)

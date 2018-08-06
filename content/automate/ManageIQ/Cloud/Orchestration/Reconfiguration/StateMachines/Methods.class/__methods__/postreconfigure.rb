@@ -54,6 +54,4 @@ module ManageIQ
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::Cloud::Orchestration::Reconfiguration::StateMachines::PostReconfigure.new.main
-end
+ManageIQ::Automate::Cloud::Orchestration::Reconfiguration::StateMachines::PostReconfigure.new.main

@@ -31,6 +31,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Transformation::Infrastructure::VM::Common::PowerOn.new.main
-end
+ManageIQ::Automate::Transformation::Infrastructure::VM::Common::PowerOn.new.main

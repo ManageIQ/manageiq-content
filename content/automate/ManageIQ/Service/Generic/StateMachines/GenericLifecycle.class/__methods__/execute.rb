@@ -58,6 +58,4 @@ module ManageIQ
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::Execute.new.main
-end
+ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::Execute.new.main

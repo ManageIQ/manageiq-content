@@ -81,6 +81,4 @@ module ManageIQ
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::Cloud::VM::Provisioning::Placement::BestFitAmazon.new.main
-end
+ManageIQ::Automate::Cloud::VM::Provisioning::Placement::BestFitAmazon.new.main

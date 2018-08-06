@@ -1,7 +1,6 @@
 require_domain_file
 
-describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::
-VMRetirement::UpdateRetirementStatus do
+describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::VMRetirement::UpdateRetirementStatus do
   let(:user) { FactoryGirl.create(:user_with_group) }
   let(:miq_server) { EvmSpecHelper.local_miq_server }
   let(:vm) { FactoryGirl.create(:vm_vmware, :ems_id => FactoryGirl.create(:ems_vmware).id, :evm_owner => user) }
@@ -18,8 +17,6 @@ VMRetirement::UpdateRetirementStatus do
 
   let(:svc_model_miq_server) { MiqAeMethodService::MiqAeServiceMiqServer.find(miq_server.id) }
   let(:svc_model_vm) { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }
-
-  it_behaves_like "automate_engine_call", domain_file
 
   context "with a stp request object" do
     let(:miq_request_task) do

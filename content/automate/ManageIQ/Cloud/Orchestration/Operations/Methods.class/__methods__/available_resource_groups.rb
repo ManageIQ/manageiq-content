@@ -56,6 +56,4 @@ module ManageIQ
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableResourceGroups.new.main
-end
+ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableResourceGroups.new.main

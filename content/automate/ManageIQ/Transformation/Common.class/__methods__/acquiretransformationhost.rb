@@ -37,6 +37,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Transformation::Common::AcquireTransformationHost.new.main
-end
+ManageIQ::Automate::Transformation::Common::AcquireTransformationHost.new.main
