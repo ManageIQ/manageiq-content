@@ -34,6 +34,7 @@ module ManageIQ
               if sm_uri.present? && task.get_option(:cleanup_request_id).blank?
                 options = {}
                 sm_uri_array = sm_uri.split('/')
+                sm_uri_array.shift
                 options[:instance_name] = sm_uri_array.pop
                 options[:class_name] = sm_uri_array.pop
                 options[:namespace] = sm_uri_array.join('/')
