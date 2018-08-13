@@ -9,7 +9,5 @@ object:
     scope: instance
     language: ruby
     location: inline
-    embedded_methods:
-    - "/Transformation/Infrastructure/VM/rhevm/Utils"
     options: {}
   inputs: []
