@@ -5,7 +5,7 @@ module ManageIQ
         module VM
           module Common
             class RestoreVmAttributes
-              IDENTITY_ITEMS = %w(service tags custom_attributes).freeze
+              IDENTITY_ITEMS = %w(service tags custom_attributes ownership retirement).freeze
 
               def initialize(handle = $evm)
                 @handle = handle
@@ -52,6 +52,20 @@ module ManageIQ
                 source_vm.custom_keys.each do |ca|
                   destination_vm.custom_set(ca, source_vm.custom_get(ca))
                 end
+              end
+
+              def vm_restore_ownership(source_vm, destination_vm)
+                owner = source_vm.owner
+                miq_group = @handle.vmdb(:miq_group).find_by(:id => source_vm.miq_group_id)
+                destination_vm.owner = owner if owner.present?
+                destination_vm.group = miq_group if miq_group.present?
+              end
+
+              def vm_restore_retirement(source_vm, destination_vm)
+                retirement_datetime = source_vm.retires_on
+                retirement_warn = source_vm.retirement_warn
+                destination_vm.retires_on = retirement_datetime if retirement_datetime.present?
+                destination_vm.retirement_warn = retirement_warn if retirement_warn.present?
               end
 
               def main
