@@ -2,6 +2,7 @@ require_domain_file
 
 describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::RestoreVmAttributes do
   let(:user) { FactoryGirl.create(:user_with_email_and_group) }
+  let(:group) { FactoryGirl.create(:miq_group) }
   let(:task) { FactoryGirl.create(:service_template_transformation_plan_task) }
   let(:src_vm_vmware) { FactoryGirl.create(:vm_vmware) }
   let(:dst_vm_redhat) { FactoryGirl.create(:vm_redhat) }
@@ -11,11 +12,14 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
   let!(:classification) { FactoryGirl.create(:classification, :name => "prod", :description => "Production", :parent => parent_classification) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
+  let(:svc_model_group) { MiqAeMethodService::MiqAeServiceMiqGroup.find(group.id) }
   let(:svc_model_task) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask.find(task.id) }
   let(:svc_model_src_vm_vmware) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_Vmware_InfraManager_Vm.find(src_vm_vmware.id) }
   let(:svc_model_dst_vm_redhat) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_Redhat_InfraManager_Vm.find(dst_vm_redhat.id) }
   let(:svc_model_dst_vm_openstack) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_Openstack_CloudManager_Vm.find(dst_vm_openstack.id) }
   let(:svc_model_service) { MiqAeMethodService::MiqAeServiceService.find(service.id) }
+
+  let(:retirement_date) { DateTime.now + 1 }
 
   let(:root) do
     Spec::Support::MiqAeMockObject.new(
@@ -36,6 +40,10 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
     svc_model_src_vm.add_to_service(svc_model_service)
     src_vm.tag_with("prod", :ns => "/managed", :cat => "environment")
     svc_model_src_vm.custom_set('attr', 'value')
+    svc_model_src_vm.owner = svc_model_user
+    svc_model_src_vm.group = svc_model_group
+    svc_model_src_vm.retires_on = retirement_date
+    svc_model_src_vm.retirement_warn = 7
   end
 
   context "validate task" do
@@ -109,7 +117,7 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
   end
 
   shared_examples_for "restore identity" do
-    let(:svc_vmdb_handle) { MiqAeMethodService::MiqAeServiceVm }
+    let(:svc_vmdb_handle) { MiqAeMethodService::MiqAeServiceMiqGroup }
 
     before do
       ae_service.root['service_template_transformation_plan_task'] = svc_model_task
@@ -136,12 +144,32 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
       expect(svc_model_dst_vm.custom_get('attr')).to eq('value')
     end
 
+    it "restore ownership" do
+      allow(ae_service).to receive(:vmdb).with(:miq_group).and_return(svc_vmdb_handle)
+      allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_group.id).and_return(svc_model_group)
+      described_class.new(ae_service).vm_restore_ownership(svc_model_src_vm, svc_model_dst_vm)
+      expect(svc_model_dst_vm.owner.id).to eq(svc_model_user.id)
+      expect(svc_model_dst_vm.miq_group_id).to eq(svc_model_group.id)
+    end
+
+    it "restore retirement" do
+      described_class.new(ae_service).vm_restore_retirement(svc_model_src_vm, svc_model_dst_vm)
+      expect(svc_model_dst_vm.retires_on.to_i).to be(retirement_date.to_i)
+      expect(svc_model_dst_vm.retirement_warn).to eq(7)
+    end
+
     it "restore identity" do
+      allow(ae_service).to receive(:vmdb).with(:miq_group).and_return(svc_vmdb_handle)
+      allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_group.id).and_return(svc_model_group)
       described_class.new(ae_service).main
       expect(svc_model_src_vm.service).to be_nil
       expect(svc_model_dst_vm.service.id).to eq(svc_model_service.id)
       expect(svc_model_dst_vm.tags).to eq(["environment/prod"])
       expect(svc_model_dst_vm.custom_get('attr')).to eq('value')
+      expect(svc_model_dst_vm.owner.id).to eq(svc_model_user.id)
+      expect(svc_model_dst_vm.miq_group_id).to eq(svc_model_group.id)
+      expect(svc_model_dst_vm.retires_on.to_i).to be(retirement_date.to_i)
+      expect(svc_model_dst_vm.retirement_warn).to eq(7)
     end
   end
 
