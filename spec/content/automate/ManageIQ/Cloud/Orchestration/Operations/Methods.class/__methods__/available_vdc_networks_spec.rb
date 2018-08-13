@@ -1,6 +1,6 @@
 require_domain_file
 
-describe AvailableVdcNetworks do
+describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableVdcNetworks do
   let(:default_desc_none) { "<none>" }
   let(:default_desc_multiple) { "<select>" }
   let(:root_object) { Spec::Support::MiqAeMockObject.new(root_hash) }
@@ -67,7 +67,8 @@ describe AvailableVdcNetworks do
 
         expect(ae_service.object["values"]).to include(
           nil              => default_desc_multiple,
-          vdc_net1.ems_ref => vdc_net1.name)
+          vdc_net1.ems_ref => vdc_net1.name
+        )
         expect(ae_service.object["default_value"]).to eq(nil)
       end
     end
