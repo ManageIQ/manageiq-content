@@ -19,7 +19,7 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::Restore
   let(:svc_model_dst_vm_openstack) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_Openstack_CloudManager_Vm.find(dst_vm_openstack.id) }
   let(:svc_model_service) { MiqAeMethodService::MiqAeServiceService.find(service.id) }
 
-  let(:retirement_date) { DateTime.now + 1 }
+  let(:retirement_date) { Time.now.utc + 1.day }
 
   let(:root) do
     Spec::Support::MiqAeMockObject.new(
