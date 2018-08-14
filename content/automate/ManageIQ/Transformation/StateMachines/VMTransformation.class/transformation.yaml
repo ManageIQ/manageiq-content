@@ -8,6 +8,8 @@ object:
     inherits: 
     description: 
   fields:
+  - state_machine_phase:
+      value: transformation
   - cleanup_state_machine:
       value: "/Transformation/StateMachines/VMTransformation/TransformationCleanup"
   - State2:
