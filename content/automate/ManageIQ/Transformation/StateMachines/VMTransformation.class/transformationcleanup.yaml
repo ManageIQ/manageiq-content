@@ -8,6 +8,8 @@ object:
     inherits: 
     description: 
   fields:
+  - state_machine_phase:
+      value: cleanup
   - State2:
       value: "/Transformation/TransformationHosts/Common/KillVirtV2V"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
