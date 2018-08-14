@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+##  Unreleased as of Sprint 92 Ending 2018-08-13
+
+### Added
+- Add Openstack volume.update.end event handler [(#401)](https://github.com/ManageIQ/manageiq-content/pull/401)
+- Restore VM ownership and retirement when migrating [(#397)](https://github.com/ManageIQ/manageiq-content/pull/397)
+- Created log_object method in System/CommonMethods/Utils class [(#362)](https://github.com/ManageIQ/manageiq-content/pull/362)
+
+### Changed
+- Changed validate_quota method to check individual quota items [(#375)](https://github.com/ManageIQ/manageiq-content/pull/375)
+
+### Fixed
+- Transformation - Fix virt-v2v success check [(#393)](https://github.com/ManageIQ/manageiq-content/pull/393)
+- Fix cleanup state machine path build [(#392)](https://github.com/ManageIQ/manageiq-content/pull/392)
+- Fix quota requested cloud_volume calculations. [(#388)](https://github.com/ManageIQ/manageiq-content/pull/388)
+- Fix default cleanup state machine [(#382)](https://github.com/ManageIQ/manageiq-content/pull/382)
+- Added vm_retire_extend method for new email. [(#366)](https://github.com/ManageIQ/manageiq-content/pull/366)
+
+### Removed
+- Remove check on number of runners when converting VM [(#395)](https://github.com/ManageIQ/manageiq-content/pull/395)
+
 ##  Unreleased as of Sprint 91 Ending 2018-07-30
 
 ### Added
