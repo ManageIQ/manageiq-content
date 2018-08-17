@@ -28,153 +28,197 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
     end
   end
 
-  context "migration phase" do
+  context "transformation phase" do
     it "with task" do
-      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      expect(described_class.migration_phase(ae_service)).to eq('migration')
+      ae_service.root['state_machine_phase'] = 'transformation'
+      expect(described_class.transformation_phase(ae_service)).to eq('transformation')
     end
 
     it "with task_id" do
-      ae_service.root['service_template_transformation_plan_task_id'] = svc_model_task.id
-      expect(described_class.migration_phase(ae_service)).to eq('cleanup')
+      ae_service.root['state_machine_phase'] = 'cleanup'
+      expect(described_class.transformation_phase(ae_service)).to eq('cleanup')
     end
 
     it "failure" do
-      expect { described_class.migration_phase(ae_service) }.to raise_error(StandardError, 'Migration phase is not valid')
+      ae_service.root['state_machine_phase'] = 'invalid'
+      errormsg = 'ERROR - Migration phase is not valid'
+      expect { described_class.transformation_phase(ae_service) }.to raise_error(errormsg)
     end
   end
 
-  shared_examples_for "task_in_migration" do
+  shared_examples_for "transformation_task" do
     it "with task" do
       ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      expect(described_class.task_in_migration(ae_service).id).to eq(svc_model_task.id)
+      expect(described_class.transformation_task(ae_service).id).to eq(svc_model_task.id)
+      expect(described_class.task(ae_service).id).to eq(svc_model_task.id)
     end
 
     it "without task" do
-      expect(described_class.task_in_migration(ae_service)).to be_nil
+      errormsg = 'ERROR - A service_template_transformation_plan_task is needed for this method to continue'
+      expect(described_class.transformation_task(ae_service)).to raise_error(errormsg)
+      expect(described_class.task(ae_service)).to raise_error(errormsg)
     end
   end
 
-  context "task_in_migration vmware to redhat" do
+  context "transformation_task vmware to redhat" do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:svc_model_dst_vm) { svc_model_dst_vm_redhat }
 
-    it_behaves_like "task_in_migration"
+    it_behaves_like "transformation_task"
   end
 
-  context "task_in_migration vmware to openstack" do
+  context "transformation_task vmware to openstack" do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:svc_model_dst_vm) { svc_model_dst_vm_openstack }
 
-    it_behaves_like "task_in_migration"
+    it_behaves_like "transformation_task"
   end
 
-  shared_examples_for "task_in_cleanup" do
-    it "with task_id" do
+  shared_examples_for "cleanup_task" do
+    let(:svc_vmdb_handle) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask }
+
+    it "with task_id and with task" do
       ae_service.root['service_template_transformation_plan_task_id'] = svc_model_task.id
-      expect(described_class.task_in_cleanup(ae_service).id).to eq(svc_model_task.id)
+      allow(ae_service).to receive(:vmdb).with(:service_template_transformation_plan_task).and_return(svc_vmdb_handle)
+      allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_task.id).and_return(svc_model_task)
+      expect(described_class.cleanup_task(ae_service).id).to eq(svc_model_task.id)
+      expect(described_class.task(ae_service).id).to eq(svc_model_task.id)
+    end
+
+    it "with task_id and without task" do
+      ae_service.root['service_template_transformation_plan_task_id'] = svc_model_task.id
+      allow(ae_service).to receive(:vmdb).with(:service_template_transformation_plan_task).and_return(svc_vmdb_handle)
+      allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_task.id).and_return(nil)
+      errormsg = 'ERROR - A service_template_transformation_plan_task is needed for this method to continue'
+      expect(described_class.cleanup_task(ae_service)).to raise_error(errormsg)
+      expect(described_class.task(ae_service)).to raise_error(errormsg)
     end
 
     it "without task_id" do
-      expect(described_class.task_in_cleanup(ae_service)).to be_nil
+      errormsg = 'ERROR - A service_template_transformation_plan_task is needed for this method to continue'
+      expect(described_class.cleanup_task(ae_service)).to raise_error(errormsg)
+      expect(described_class.task(ae_service)).to raise_error(errormsg)
     end
   end
 
-  context "task_in_cleanup vmware to redhat" do
+  context "cleanup_task vmware to redhat" do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:svc_model_dst_vm) { svc_model_dst_vm_redhat }
 
-    it_behaves_like "task_in_cleanup"
+    it_behaves_like "cleanup_task"
   end
 
-  context "task_in_cleanup vmware to openstack" do
+  context "cleanup_task vmware to openstack" do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:svc_model_dst_vm) { svc_model_dst_vm_openstack }
 
-    it_behaves_like "task_in_cleanup"
+    it_behaves_like "cleanup_task"
   end
 
-  shared_examples_for "vm_at_source" do
+  shared_examples_for "task" do
+    it "in transformation" do
+      ae_service.root['state_machine_phase'] = 'transformation'
+      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
+      expect(described_class.transformation_task(ae_service).id).to eq(svc_model_task.id)
+      expect(described_class.task(ae_service).id).to eq(svc_model_task.id)
+    end
+
+    it "in cleanup" do
+      ae_service.root['state_machine_phase'] = 'cleanup'
+      ae_service.root['service_template_transformation_plan_task_id'] = svc_model_task.id
+      allow(ae_service).to receive(:vmdb).with(:service_template_transformation_plan_task).and_return(svc_vmdb_handle)
+      allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_task.id).and_return(svc_model_task)
+      expect(described_class.cleanup_task(ae_service).id).to eq(svc_model_task.id)
+      expect(described_class.task(ae_service).id).to eq(svc_model_task.id)
+    end
+  end
+
+  shared_examples_for "source_vm" do
     before do
+      ae_service.root['state_machine_phase'] = 'transformation'
+      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
+    end
+
+    it "with source vm" do
       allow(svc_model_task).to receive(:source) { svc_model_src_vm }
+      expect(described_class.source_vm(ae_service).id).to eq(svc_model_src_vm.id)
     end
 
-    it "vm" do
-      expect(described_class.vm_at_source(svc_model_task, ae_service).id).to eq(svc_model_src_vm.id)
+    it "without source vm" do
+      allow(svc_model_task).to receive(:source).and_return(nil)
+      errormsg = 'ERROR - Source VM has not been defined in the task'
+      expect(described_class.source_vm(ae_service)).to raise_error(errormsg)
     end
   end
 
-  context "vm_at_source vmware" do
+  context "source_vm vmware" do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
-    it_behaves_like "vm_at_source"
+    it_behaves_like "source_vm"
   end
 
-  shared_examples_for "vm_at_destination" do
+  shared_examples_for "destination_vm" do
+    let(:svc_vmdb_handle) { MiqAeMethodService::MiqAeServiceVm }
+
     before do
+      ae_service.root['state_machine_phase'] = 'transformation'
+      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
+    end
+
+    it "with destination vm" do
+      allow(svc_model_task).to receive(:get_option).with(:destination_vm_id).and_return(nil)
+      expect(described_class.destination_vm(ae_service)).to be_nil
+    end
+
+    it "without destination vm" do
       allow(svc_model_task).to receive(:get_option).with(:destination_vm_id).and_return(svc_model_dst_vm.id)
-    end
-
-    it "vm" do
-      expect(described_class.vm_at_destination(svc_model_task, ae_service).id).to eq(svc_model_dst_vm.id)
+      allow(ae_service).to receive(:vmdb).with(:vm).and_return(svc_vmdb_handle)
+      allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_dst_vm.id).and_return(svc_model_dst_vm)
+      expect(described_class.destination_vm(ae_service).id).to eq(svc_model_dst_vm.id)
     end
   end
 
-  context "vm_at_source vmware to redhat" do
+  context "destination_vm redhat" do
     let(:svc_model_dst_vm) { svc_model_dst_vm_redhat }
-    it_behaves_like "vm_at_destination"
+    it_behaves_like "destination_vm"
   end
 
-  context "vm_at_source vmware to openstack" do
+  context "destination_vm openstack" do
     let(:svc_model_dst_vm) { svc_model_dst_vm_openstack }
-    it_behaves_like "vm_at_destination"
+    it_behaves_like "destination_vm"
   end
 
-  shared_examples_for "task_and_vm" do
+  shared_examples_for "task_and_vms" do
+    let(:svc_vmdb_handle) { MiqAeMethodService::MiqAeServiceVm }
+
     before do
+      ae_service.root['state_machine_phase'] = 'transformation'
+      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
       allow(svc_model_task).to receive(:source) { svc_model_src_vm }
       allow(svc_model_task).to receive(:get_option).with(:destination_vm_id).and_return(svc_model_dst_vm.id)
+      allow(ae_service).to receive(:vmdb).with(:vm).and_return(svc_vmdb_handle)
+      allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_dst_vm.id).and_return(svc_model_dst_vm)
     end
 
-    it "task_and_vm in migration at source" do
+    it "task_and_vms in transformation with destination_vm" do
       ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      r_task, r_vm = described_class.task_and_vm('source', ae_service)
-      expect(r_task.id).to eq(svc_model_task.id)
-      expect(r_vm.id).to eq(svc_model_src_vm.id)
-    end
-
-    it "task_and_vm in migration at destination" do
-      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      r_task, r_vm = described_class.task_and_vm('destination', ae_service)
-      expect(r_task.id).to eq(svc_model_task.id)
-      expect(r_vm.id).to eq(svc_model_dst_vm.id)
-    end
-
-    it "task_and_vm_in cleanup at source" do
-      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      r_task, r_vm = described_class.task_and_vm('source', ae_service)
-      expect(r_task.id).to eq(svc_model_task.id)
-      expect(r_vm.id).to eq(svc_model_src_vm.id)
-    end
-
-    it "task_and_vm_in cleanup at destination" do
-      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      r_task, r_vm = described_class.task_and_vm('destination', ae_service)
-      expect(r_task.id).to eq(svc_model_task.id)
-      expect(r_vm.id).to eq(svc_model_dst_vm.id)
+      described_class.task_and_vms(ae_service)
+      expect(@task.id).to eq(svc_model_task.id)
+      expect(@source_vm.id).to eq(svc_model_src_vm.id)
+      expect(@destination_vm.id).to eq(svc_model_dst_vm.id)
     end
   end
 
-  context "task_and_vm migration vmware to redhat" do
+  context "task_and_vms vmware to redhat" do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:svc_model_dst_vm) { svc_model_dst_vm_redhat }
 
-    it_behaves_like "task_and_vm"
+    it_behaves_like "task_and_vms"
   end
 
-  context "task_and_vm migration vmware to openstack" do
+  context "task_and_vms vmware to openstack" do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:svc_model_dst_vm) { svc_model_dst_vm_openstack }
 
-    it_behaves_like "task_and_vm"
+    it_behaves_like "task_and_vms"
   end
 end

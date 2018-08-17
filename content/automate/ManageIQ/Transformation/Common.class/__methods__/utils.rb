@@ -3,33 +3,49 @@ module ManageIQ
     module Transformation
       module Common
         class Utils
-          def self.migration_phase(handle = $evm)
-            return 'migration' if handle.root['service_template_transformation_plan_task'].present?
-            return 'cleanup' if handle.root['service_template_transformation_plan_task_id'].present?
-            raise 'Migration phase is not valid'
+          STATE_MACHINE_PHASES=%(transformation cleanup)
+
+          def self.log_and_raise(message, handle = $evm)
+            handle.log(:error, message)
+            raise "ERROR - #{message}"
           end
 
-          def self.task_and_vm(vm_type, handle = $evm)
-            task = send("task_in_#{migration_phase(handle)}", handle)
-            vm = send("vm_at_#{vm_type}", task, handle) if task.present?
-            return task, vm
+          def self.transformation_phase(handle = $evm)
+            @transformation_phase = handle.root['state_machine_phase'].tap do |phase|
+              log_and_raise('Transformation phase is not valid', handle) if STATE_MACHINE_PHASES.exclude?(phase)
+            end
           end
 
-          def self.task_in_migration(handle = $evm)
-            handle.root['service_template_transformation_plan_task']
+          def self.task_and_vms(handle = $evm)
+            %w(source destination).each { |vm_type| send("#{vm_type}_vm", handle) }
           end
 
-          def self.task_in_cleanup(handle = $evm)
-            handle.vmdb(:service_template_transformation_plan_task).find_by(:id => handle.root['service_template_transformation_plan_task_id'])
+          def self.task(handle = $evm)
+            send("#{transformation_phase(handle)}_task", handle)
           end
 
-          def self.vm_at_source(task, _)
-            task.source
+          def self.transformation_task(handle = $evm)
+            @task ||= handle.root['service_template_transformation_plan_task'].tap do |task|
+              log_and_raise('A service_template_transformation_plan_task is needed for this method to continue', handle) if task.nil?
+            end
           end
 
-          def self.vm_at_destination(task, handle = $evm)
-            return if task.get_option(:destination_vm_id).nil?
-            handle.vmdb(:vm).find_by(:id => task.get_option(:destination_vm_id))
+          def self.cleanup_task(handle = $evm)
+            log_and_raise('service_template_transformation_plan_task_id is not defined') if handle.root['service_template_transformation_plan_task_id'].nil?
+            @task ||= handle.vmdb(:service_template_transformation_plan_task).find_by(:id => handle.root['service_template_transformation_plan_task_id']).tap do |task|
+              log_and_raise('A service_template_transformation_plan_task is needed for this method to continue', handle) if task.nil?
+            end
+          end
+
+          def self.source_vm(handle = $evm)
+            @source_vm ||= task(handle).source.tap do |vm|
+              log_and_raise('Source VM has not been defined in the task', handle) if vm.nil?
+            end
+          end
+
+          def self.destination_vm(handle = $evm)
+            return if task(handle).get_option(:destination_vm_id).nil?
+            @destination_vm ||= handle.vmdb(:vm).find_by(:id => task(handle).get_option(:destination_vm_id))
           end
         end
       end
