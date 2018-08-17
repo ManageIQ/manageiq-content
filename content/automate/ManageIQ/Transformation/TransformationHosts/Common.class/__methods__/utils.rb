@@ -87,7 +87,6 @@ module ManageIQ
 
               vmware_uri = "esx://"
               vmware_uri += "root@#{source_vm.host.ipaddress}/"
-              vmware_uri += "#{source_cluster.v_parent_datacenter.gsub(' ', '%20')}/#{source_cluster.name.gsub(' ', '%20')}/#{source_vm.host.uid_ems}"
               vmware_uri += "?no_verify=1"
 
               {
