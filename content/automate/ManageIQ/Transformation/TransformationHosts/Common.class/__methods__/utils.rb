@@ -79,24 +79,23 @@ module ManageIQ
 
             def self.virtv2vwrapper_options_vmwarews2rhevm_vddk(task)
               source_vm = task.source
-              source_ems = source_vm.ext_management_system
               source_cluster = source_vm.ems_cluster
 
               destination_cluster = task.transformation_destination(source_cluster)
               destination_ems = destination_cluster.ext_management_system
               destination_storage = task.transformation_destination(source_vm.hardware.disks.select { |d| d.device_type == 'disk' }.first.storage)
 
-              vmware_uri = "vpx://"
-              vmware_uri += "#{source_ems.authentication_userid.gsub('@', '%40')}@#{source_ems.hostname}/"
+              vmware_uri = "esx://"
+              vmware_uri += "root@#{source_vm.host.ipaddress}/"
               vmware_uri += "#{source_cluster.v_parent_datacenter.gsub(' ', '%20')}/#{source_cluster.name.gsub(' ', '%20')}/#{source_vm.host.uid_ems}"
               vmware_uri += "?no_verify=1"
 
               {
                 :vm_name             => source_vm.name,
                 :transport_method    => 'vddk',
-                :vmware_fingerprint  => ManageIQ::Automate::Transformation::Infrastructure::VM::VMware::Utils.get_vcenter_fingerprint(source_ems),
+                :vmware_fingerprint  => ManageIQ::Automate::Transformation::Infrastructure::VM::VMware::Utils.host_fingerprint(source_vm.host),
                 :vmware_uri          => vmware_uri,
-                :vmware_password     => source_ems.authentication_password,
+                :vmware_password     => source_vm.host.authentication_password,
                 :rhv_url             => "https://#{destination_ems.hostname}/ovirt-engine/api",
                 :rhv_cluster         => destination_cluster.name,
                 :rhv_storage         => destination_storage.name,
