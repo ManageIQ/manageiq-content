@@ -1,4 +1,4 @@
-require domain_file
+require_domain_file
 
 describe ManageIQ::Automate::Transformation::Common::Utils do
   let(:user) { FactoryGirl.create(:user_with_email_and_group) }
@@ -28,35 +28,47 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
     end
   end
 
+  before(:each) do
+    ManageIQ::Automate::Transformation::Common::Utils.instance_variable_set(:@transformation_phase, nil)
+    ManageIQ::Automate::Transformation::Common::Utils.instance_variable_set(:@task, nil)
+    ManageIQ::Automate::Transformation::Common::Utils.instance_variable_set(:@source_vm, nil)
+    ManageIQ::Automate::Transformation::Common::Utils.instance_variable_set(:@destination_vm, nil)
+  end
+
   context "transformation phase" do
-    it "with task" do
+    it "is transformation" do
       ae_service.root['state_machine_phase'] = 'transformation'
-      expect(described_class.transformation_phase(ae_service)).to eq('transformation')
+      described_class.transformation_phase(ae_service)
+      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@transformation_phase)).to eq('transformation')
     end
 
-    it "with task_id" do
+    it "is cleanup" do
       ae_service.root['state_machine_phase'] = 'cleanup'
-      expect(described_class.transformation_phase(ae_service)).to eq('cleanup')
+      described_class.transformation_phase(ae_service)
+      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@transformation_phase)).to eq('cleanup')
     end
 
-    it "failure" do
+    it "is invalid" do
       ae_service.root['state_machine_phase'] = 'invalid'
-      errormsg = 'ERROR - Migration phase is not valid'
+      errormsg = 'ERROR - Transformation phase is not valid'
       expect { described_class.transformation_phase(ae_service) }.to raise_error(errormsg)
     end
   end
 
   shared_examples_for "transformation_task" do
-    it "with task" do
-      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      expect(described_class.transformation_task(ae_service).id).to eq(svc_model_task.id)
-      expect(described_class.task(ae_service).id).to eq(svc_model_task.id)
+    before do
+      ae_service.root['state_machine_phase'] = 'transformation'
     end
 
     it "without task" do
       errormsg = 'ERROR - A service_template_transformation_plan_task is needed for this method to continue'
-      expect(described_class.transformation_task(ae_service)).to raise_error(errormsg)
-      expect(described_class.task(ae_service)).to raise_error(errormsg)
+      expect { described_class.transformation_task(ae_service) }.to raise_error(errormsg)
+    end
+
+    it "with task" do
+      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
+      described_class.transformation_task(ae_service)
+      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@task).id).to eq(svc_model_task.id)
     end
   end
 
@@ -77,12 +89,16 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
   shared_examples_for "cleanup_task" do
     let(:svc_vmdb_handle) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask }
 
+    before do
+      ae_service.root['state_machine_phase'] = 'cleanup'
+    end
+
     it "with task_id and with task" do
       ae_service.root['service_template_transformation_plan_task_id'] = svc_model_task.id
       allow(ae_service).to receive(:vmdb).with(:service_template_transformation_plan_task).and_return(svc_vmdb_handle)
       allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_task.id).and_return(svc_model_task)
-      expect(described_class.cleanup_task(ae_service).id).to eq(svc_model_task.id)
-      expect(described_class.task(ae_service).id).to eq(svc_model_task.id)
+      described_class.cleanup_task(ae_service)
+      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@task).id).to eq(svc_model_task.id)
     end
 
     it "with task_id and without task" do
@@ -90,14 +106,12 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
       allow(ae_service).to receive(:vmdb).with(:service_template_transformation_plan_task).and_return(svc_vmdb_handle)
       allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_task.id).and_return(nil)
       errormsg = 'ERROR - A service_template_transformation_plan_task is needed for this method to continue'
-      expect(described_class.cleanup_task(ae_service)).to raise_error(errormsg)
-      expect(described_class.task(ae_service)).to raise_error(errormsg)
+      expect { described_class.cleanup_task(ae_service) }.to raise_error(errormsg)
     end
 
     it "without task_id" do
-      errormsg = 'ERROR - A service_template_transformation_plan_task is needed for this method to continue'
-      expect(described_class.cleanup_task(ae_service)).to raise_error(errormsg)
-      expect(described_class.task(ae_service)).to raise_error(errormsg)
+      errormsg = 'ERROR - service_template_transformation_plan_task_id is not defined'
+      expect { described_class.cleanup_task(ae_service) }.to raise_error(errormsg)
     end
   end
 
@@ -119,8 +133,8 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
     it "in transformation" do
       ae_service.root['state_machine_phase'] = 'transformation'
       ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      expect(described_class.transformation_task(ae_service).id).to eq(svc_model_task.id)
-      expect(described_class.task(ae_service).id).to eq(svc_model_task.id)
+      described_class.task(ae_service)
+      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@task).id).to eq(svc_model_task.id)
     end
 
     it "in cleanup" do
@@ -128,8 +142,8 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
       ae_service.root['service_template_transformation_plan_task_id'] = svc_model_task.id
       allow(ae_service).to receive(:vmdb).with(:service_template_transformation_plan_task).and_return(svc_vmdb_handle)
       allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_task.id).and_return(svc_model_task)
-      expect(described_class.cleanup_task(ae_service).id).to eq(svc_model_task.id)
-      expect(described_class.task(ae_service).id).to eq(svc_model_task.id)
+      described_class.task(ae_service)
+      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@task).id).to eq(svc_model_task.id)
     end
   end
 
@@ -140,14 +154,15 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
     end
 
     it "with source vm" do
-      allow(svc_model_task).to receive(:source) { svc_model_src_vm }
-      expect(described_class.source_vm(ae_service).id).to eq(svc_model_src_vm.id)
+      allow(svc_model_task).to receive(:source).and_return(svc_model_src_vm)
+      described_class.source_vm(ae_service)
+      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@source_vm).id).to eq(svc_model_src_vm.id)
     end
 
     it "without source vm" do
       allow(svc_model_task).to receive(:source).and_return(nil)
       errormsg = 'ERROR - Source VM has not been defined in the task'
-      expect(described_class.source_vm(ae_service)).to raise_error(errormsg)
+      expect { described_class.source_vm(ae_service) }.to raise_error(errormsg)
     end
   end
 
@@ -164,16 +179,25 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
       ae_service.root['service_template_transformation_plan_task'] = svc_model_task
     end
 
-    it "with destination vm" do
+    it "without destination_vm_id" do
       allow(svc_model_task).to receive(:get_option).with(:destination_vm_id).and_return(nil)
       expect(described_class.destination_vm(ae_service)).to be_nil
     end
 
-    it "without destination vm" do
+    it "with destination_vm_id and without destination vm" do
+      allow(svc_model_task).to receive(:get_option).with(:destination_vm_id).and_return(svc_model_dst_vm.id)
+      allow(ae_service).to receive(:vmdb).with(:vm).and_return(svc_vmdb_handle)
+      allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_dst_vm.id).and_return(nil)
+      errormsg = "ERROR - No match for destination_vm_id in VMDB"
+      expect { described_class.destination_vm(ae_service) }.to raise_error(errormsg)
+    end
+
+    it "with destination_vm_id and with destination vm" do
       allow(svc_model_task).to receive(:get_option).with(:destination_vm_id).and_return(svc_model_dst_vm.id)
       allow(ae_service).to receive(:vmdb).with(:vm).and_return(svc_vmdb_handle)
       allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_dst_vm.id).and_return(svc_model_dst_vm)
-      expect(described_class.destination_vm(ae_service).id).to eq(svc_model_dst_vm.id)
+      described_class.destination_vm(ae_service)
+      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@destination_vm).id).to eq(svc_model_dst_vm.id)
     end
   end
 
@@ -193,18 +217,17 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
     before do
       ae_service.root['state_machine_phase'] = 'transformation'
       ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      allow(svc_model_task).to receive(:source) { svc_model_src_vm }
+      allow(svc_model_task).to receive(:source).and_return(svc_model_src_vm)
       allow(svc_model_task).to receive(:get_option).with(:destination_vm_id).and_return(svc_model_dst_vm.id)
       allow(ae_service).to receive(:vmdb).with(:vm).and_return(svc_vmdb_handle)
       allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_dst_vm.id).and_return(svc_model_dst_vm)
     end
 
-    it "task_and_vms in transformation with destination_vm" do
-      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
+    it "in transformation with destination_vm" do
       described_class.task_and_vms(ae_service)
-      expect(@task.id).to eq(svc_model_task.id)
-      expect(@source_vm.id).to eq(svc_model_src_vm.id)
-      expect(@destination_vm.id).to eq(svc_model_dst_vm.id)
+      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@task).id).to eq(svc_model_task.id)
+      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@source_vm).id).to eq(svc_model_src_vm.id)
+      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@destination_vm).id).to eq(svc_model_dst_vm.id)
     end
   end
 
