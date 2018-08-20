@@ -3,7 +3,7 @@ module ManageIQ
     module Transformation
       module Common
         class Utils
-          STATE_MACHINE_PHASES=%(transformation cleanup)
+          STATE_MACHINE_PHASES = %w(transformation cleanup).freeze
 
           def self.log_and_raise(message, handle = $evm)
             handle.log(:error, message)
@@ -11,7 +11,7 @@ module ManageIQ
           end
 
           def self.transformation_phase(handle = $evm)
-            @transformation_phase = handle.root['state_machine_phase'].tap do |phase|
+            @transformation_phase ||= handle.root['state_machine_phase'].tap do |phase|
               log_and_raise('Transformation phase is not valid', handle) if STATE_MACHINE_PHASES.exclude?(phase)
             end
           end
@@ -31,7 +31,7 @@ module ManageIQ
           end
 
           def self.cleanup_task(handle = $evm)
-            log_and_raise('service_template_transformation_plan_task_id is not defined') if handle.root['service_template_transformation_plan_task_id'].nil?
+            log_and_raise('service_template_transformation_plan_task_id is not defined', handle) if handle.root['service_template_transformation_plan_task_id'].nil?
             @task ||= handle.vmdb(:service_template_transformation_plan_task).find_by(:id => handle.root['service_template_transformation_plan_task_id']).tap do |task|
               log_and_raise('A service_template_transformation_plan_task is needed for this method to continue', handle) if task.nil?
             end
@@ -44,8 +44,11 @@ module ManageIQ
           end
 
           def self.destination_vm(handle = $evm)
-            return if task(handle).get_option(:destination_vm_id).nil?
-            @destination_vm ||= handle.vmdb(:vm).find_by(:id => task(handle).get_option(:destination_vm_id))
+            destination_vm_id = task(handle).get_option(:destination_vm_id)
+            return if destination_vm_id.nil?
+            @destination_vm ||= handle.vmdb(:vm).find_by(:id => destination_vm_id).tap do |vm|
+              log_and_raise("No match for destination_vm_id in VMDB", handle) if vm.nil?
+            end
           end
         end
       end
