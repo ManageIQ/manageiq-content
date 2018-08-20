@@ -3,7 +3,7 @@ module ManageIQ
     module Transformation
       module Common
         class Utils
-          STATE_MACHINE_PHASES=%(transformation cleanup)
+          STATE_MACHINE_PHASES = %w(transformation cleanup).freeze
 
           def self.log_and_raise(message, handle = $evm)
             handle.log(:error, message)
