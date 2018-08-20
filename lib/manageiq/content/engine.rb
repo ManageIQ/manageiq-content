@@ -8,6 +8,10 @@ module ManageIQ
       def vmdb_plugin?
         true
       end
+
+      def self.plugin_name
+        _('Content')
+      end
     end
   end
 end
