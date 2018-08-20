@@ -26,12 +26,10 @@ module ManageIQ
                 vim.serviceInstance.content.searchIndex.FindByUuid(:datacenter => dc, :uuid => vm.uid_ems, :vmSearch => true, :instanceUuid => false)
               end
 
-              def self.get_vcenter_fingerprint(ems, handle = $evm)
-                command = "openssl s_client -connect #{ems.hostname}:443 2>\/dev\/null | openssl x509 -noout -fingerprint -sha1"
+              def self.host_fingerprint(host)
+                command = "openssl s_client -connect #{host.ipaddress}:443 2>\/dev\/null | openssl x509 -noout -fingerprint -sha1"
                 ssl_fingerprint = `#{command}`
-                fingerprint = ssl_fingerprint[17..ssl_fingerprint.size - 2]
-                handle.log(:info, "vCenter fingerprint: #{fingerprint}")
-                fingerprint
+                ssl_fingerprint[17..ssl_fingerprint.size - 2]
               end
 
               def self.vm_rename(vm, new_name, handle = $evm)
