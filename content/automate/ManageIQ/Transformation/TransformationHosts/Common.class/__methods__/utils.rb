@@ -86,7 +86,7 @@ module ManageIQ
               destination_storage = task.transformation_destination(source_vm.hardware.disks.select { |d| d.device_type == 'disk' }.first.storage)
 
               vmware_uri = "esx://"
-              vmware_uri += "root@#{source_vm.host.ipaddress}/"
+              vmware_uri += "#{CGI.escape(source_vm.host.authentication_userid)}@#{source_vm.host.ipaddress}/"
               vmware_uri += "?no_verify=1"
 
               {
