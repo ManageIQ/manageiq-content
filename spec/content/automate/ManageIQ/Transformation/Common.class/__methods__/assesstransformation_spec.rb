@@ -1,4 +1,5 @@
 require_domain_file
+require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Transformation/Common.class/__methods__/utils.rb')
 
 describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   let(:user) { FactoryGirl.create(:user_with_email_and_group) }
@@ -9,7 +10,7 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   let(:src_ems_vmware) { FactoryGirl.create(:ems_vmware) }
   let(:dst_cluster) { FactoryGirl.create(:ems_cluster) }
   let(:dst_ems_redhat) { FactoryGirl.create(:ems_redhat) }
-  let(:dst_ems_openstack { FactoryGirl.create(:ems_openstack_infra) }
+  let(:dst_ems_openstack) { FactoryGirl.create(:ems_openstack_infra) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_group) { MiqAeMethodService::MiqAeServiceMiqGroup.find(group.id) }
@@ -20,8 +21,6 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   let(:svc_model_dst_cluster) { MiqAeMethodService::MiqAeServiceEmsCluster.find(dst_cluster) }
   let(:svc_model_dst_ems_redhat) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(dst_ems_redhat) }
   let(:svc_model_dst_ems_openstack) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(dst_ems_openstack) }
-
-  let(:retirement_date) { Time.now.utc + 1.day }
 
   let(:root) do
     Spec::Support::MiqAeMockObject.new(
@@ -36,6 +35,15 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
       current_object.parent = root
       service.current_object = current_object
     end
+  end
+
+  before(:each) do
+    ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@task, svc_model_task)
+    ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@source_vm, svc_model_src_vm)
+    ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@source_cluster, nil)
+    ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@source_ems, nil)
+    ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@destination_cluster, nil)
+    ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@destination_ems, nil)
   end
 
   def set_vm_identity
@@ -57,13 +65,13 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     it "when source vm is absent" do
       allow(ManageIQ::Automate::Transformation::Common::Utils).to receive(:task).and_return(svc_model_task)
       errormsg = 'ERROR - Source VM has not been defined in the task'
-      expect { described_class.new(ae_service).task_and_vms }.to raise_error(errormsg)
+      expect { described_class.new(ae_service).new.task_and_vms }.to raise_error(errormsg)
     end
 
     it "when task is present" do
       allow(ManageIQ::Automate::Transformation::Common::Utils).to receive(:task).and_return(svc_model_task)
       allow(ManageIQ::Automate::Transformation::Common::Utils).to receive(:source_vm).and_return(svc_model_src_vm)
-      described_class.new(ae_service).task_and_vms
+      described_class.new(ae_service).new.task_and_vms
       expect(ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_get(:@task).id).to eq(svc_model_task.id)
       expect(ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_get(:@source_vm).id).to eq(svc_model_src_vm.id)
     end
@@ -77,12 +85,63 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   end
 
   shared_examples_for "source and destination items" do
-    it "" do
-
+    it "source_cluster without cluster" do
+      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(nil)
+      errormsg = "No source cluster for VM '#{svc_model_src_vm.name}'"
+      expect { described_class.new.source_cluster }.to raise_error(errormsg)
     end
+
+    it "source_cluster with cluster" do
+      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
+      described_class.new.source_cluster
+      expect(ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_get(:@source_cluster).id).to eq(svc_model_src_cluster.id)
+    end
+
+    it "source_ems without ems" do
+      allow(svc_model_src_vm).to receive(:ext_management_system).and_return(nil)
+      errormsg = "No source EMS for VM '#{svc_model_src_vm.name}'"
+      expect { described_class.new.source_ems }.to raise_error(errormsg)
+    end
+
+    it "source_cluster with cluster" do
+      allow(svc_model_src_vm).to receive(:ext_management_system).and_return(svc_model_src_ems)
+      described_class.new.source_ems
+      expect(ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_get(:@source_ems).id).to eq(svc_model_src_ems.id)
+    end
+
+    it "destination_cluster without cluster" do
+      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(nil)
+      errormsg = "No destination cluster for VM '#{svc_model_src_vm.name}'"
+      expect { described_class.new.destination_cluster }.to raise_error(errormsg)
+    end
+
+    it "destination_cluster with cluster" do
+      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
+      described_class.new.destination_cluster
+      expect(ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_get(:@destination_cluster).id).to eq(svc_model_dst_cluster.id)
+    end
+
+    it "destination_ems without ems" do
+      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
+      allow(svc_model_dst_cluster).to receive(:ext_management_system).and_return(nil)
+      errormsg = "No destination EMS for VM '#{svc_model_src_vm.name}'"
+      expect { described_class.new.destination_ems }.to raise_error(errormsg)
+    end
+
+    it "source_cluster with cluster" do
+      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
+      allow(svc_model_src_vm).to receive(:ext_management_system).and_return(svc_model_dst_ems)
+      described_class.new.destination_ems
+      expect(ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_get(:@destination_ems).id).to eq(svc_model_dst_ems.id)
+    end
+
   end
 
-  context "source and destination items source vmware and destination redhat"
+  context "source and destination items source vmware and destination redhat" do
     let(:src_vm) { src_vm_vmware }
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:src_ems) { src_ems_vmware }
@@ -93,7 +152,7 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     it_behaves_like "source and destination items"
   end
 
- context "source and destination items source vmware and destination openstack"
+ context "source and destination items source vmware and destination openstack" do
     let(:src_vm) { src_vm_vmware }
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:src_ems) { src_ems_vmware }
@@ -104,7 +163,7 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     it_behaves_like "source and destination items"
   end
 
-  context "source and destination items with invalid source vmware and destination redhat"
+  context "source and destination items with invalid source vmware and destination redhat" do
     let(:src_vm) { src_vm_vmware }
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:src_ems) { src_ems_vmware }
@@ -115,7 +174,7 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     it_behaves_like "source and destination items"
   end
 
-   context "source and destination items source vmware and invalid destination"
+   context "source and destination items source vmware and invalid destination" do
     let(:src_vm) { src_vm_vmware }
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:src_ems) { src_ems_vmware }
@@ -126,18 +185,23 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     it_behaves_like "source and destination items"
   end
 
-  shared_examples_for "transformation_type" do
-    it "invalid source ems" do
-
-    end
-
-    it "invalid destination ems" do
-
-    end
+  context "transformation_type with invalid source ems" do
+    ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@source_ems, svc_model_dst_ems_redhat)
+    errormsg = "Unsupported source EMS type: #{svc_model_dst_ems_redhat.emstype}."
+    expect { described_class.new.transformation_type }.to raise_error(errormsg)
   end
 
-  context "transformation_type" do
+  context "transformation_type with invalid destination ems" do
+    ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@source_ems, svc_model_src_ems_vmware)
+    ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@destination_ems, svc_model_src_ems_vmware)
+    errormsg = "Unsupported destination EMS type: #{svc_model_src_ems_vmware.emstype}."
+    expect { described_class.new.transformation_type }.to raise_error(errormsg)
+  end
 
+  context "transformation_type with valid source and destination ems" do
+    ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@source_ems, svc_model_src_ems_vmware)
+    ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@destination_ems, svc_model_dst_ems_redhat)
+    expect(described_class.new(ae_service).transformation_type).to eq("#{svc_model_src_ems_vmware.emstype}2#{svc_model_dst_ems_redhat.emstype}")
   end
 
   context "catchall exception rescue" do

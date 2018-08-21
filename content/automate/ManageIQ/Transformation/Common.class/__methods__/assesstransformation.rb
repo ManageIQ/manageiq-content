@@ -44,35 +44,33 @@ module ManageIQ
 
           def source_cluster
             @source_cluster ||= @source_vm.ems_cluster.tap do |cluster|
-              raise "No source cluster for VM '#{@source_vm.name}'. Exiting." if cluster.nil?
+              raise "No source cluster for VM '#{@source_vm.name}'" if cluster.nil?
             end
           end
           
           def source_ems
             @source_ems ||= source_cluster.ext_management_system.tap do |ems|
-              raise "No source EMS for VM '#{@source_vm.name}'. Exiting." if ems.nil?
+              raise "No source EMS for VM '#{@source_vm.name}'" if ems.nil?
             end
           end
           
           def destination_cluster
             @destination_cluster ||= @task.transformation_destination(source_cluster).tap do |cluster|
-              raise "No destination cluster for '#{@source_vm.name}'. Exiting." if cluster.nil?
+              raise "No destination cluster for '#{@source_vm.name}'" if cluster.nil?
             end
           end
           
           def destination_ems
             @destination_ems ||= destination_cluster.ext_management_system.tap do |ems|
-              raise "No destination EMS for '#{@source_vm.name}'. Exiting." if ems.nil?
+              raise "No destination EMS for '#{@source_vm.name}'" if ems.nil?
             end
           end
 
           def transformation_type
             raise "Unsupported source EMS type: #{source_ems.emstype}." unless SUPPORTED_SOURCE_EMS_TYPES.include?(source_ems.emstype)
-            @handle.set_state_var(:source_ems_type, source_ems.emstype)
-
             raise "Unsupported destination EMS type: #{destination_ems.emstype}." unless SUPPORTED_DESTINATION_EMS_TYPES.include?(destination_ems.emstype)
+            @handle.set_state_var(:source_ems_type, source_ems.emstype)
             @handle.set_state_var(:destination_ems_type, destination_ems.emstype)
-            
             "#{source_ems.emstype}2#{destination_ems.emstype}"
           end
           
