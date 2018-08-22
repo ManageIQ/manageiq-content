@@ -33,10 +33,110 @@ object:
       max_time: 
   - field:
       aetype: attribute
-      name: logical_event
+      name: nuage_username
       display_name: 
       datatype: string
       priority: 2
+      owner: 
+      default_value: 
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: attribute
+      name: nuage_password
+      display_name: 
+      datatype: password
+      priority: 3
+      owner: 
+      default_value: 
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: attribute
+      name: nuage_enterprise
+      display_name: 
+      datatype: string
+      priority: 4
+      owner: 
+      default_value: csp
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: attribute
+      name: nuage_url
+      display_name: 
+      datatype: string
+      priority: 5
+      owner: 
+      default_value: https://my.nuage.net:8443
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: attribute
+      name: nuage_api_version
+      display_name: 
+      datatype: string
+      priority: 6
+      owner: 
+      default_value: v5_0
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: attribute
+      name: logical_event
+      display_name: 
+      datatype: string
+      priority: 7
       owner: 
       default_value: 
       substitute: true
@@ -56,7 +156,7 @@ object:
       name: on_entry
       display_name: 
       datatype: string
-      priority: 3
+      priority: 8
       owner: 
       default_value: 
       substitute: true
@@ -76,7 +176,7 @@ object:
       name: rel1
       display_name: 
       datatype: string
-      priority: 4
+      priority: 9
       owner: 
       default_value: 
       substitute: true
@@ -96,7 +196,7 @@ object:
       name: meth1
       display_name: 
       datatype: string
-      priority: 5
+      priority: 10
       owner: 
       default_value: 
       substitute: true
@@ -116,7 +216,7 @@ object:
       name: rel2
       display_name: 
       datatype: string
-      priority: 6
+      priority: 11
       owner: 
       default_value: 
       substitute: true
@@ -136,7 +236,7 @@ object:
       name: meth2
       display_name: 
       datatype: string
-      priority: 7
+      priority: 12
       owner: 
       default_value: 
       substitute: true
@@ -156,7 +256,7 @@ object:
       name: rel3
       display_name: 
       datatype: string
-      priority: 8
+      priority: 13
       owner: 
       default_value: 
       substitute: true
@@ -176,7 +276,7 @@ object:
       name: meth3
       display_name: 
       datatype: string
-      priority: 9
+      priority: 14
       owner: 
       default_value: 
       substitute: true
@@ -196,7 +296,7 @@ object:
       name: rel4
       display_name: 
       datatype: string
-      priority: 10
+      priority: 15
       owner: 
       default_value: 
       substitute: true
@@ -216,7 +316,7 @@ object:
       name: meth4
       display_name: 
       datatype: string
-      priority: 11
+      priority: 16
       owner: 
       default_value: 
       substitute: true
@@ -236,7 +336,7 @@ object:
       name: rel5
       display_name: 
       datatype: string
-      priority: 12
+      priority: 17
       owner: 
       default_value: 
       substitute: true
@@ -256,7 +356,7 @@ object:
       name: meth5
       display_name: 
       datatype: string
-      priority: 13
+      priority: 18
       owner: 
       default_value: 
       substitute: true
@@ -276,7 +376,7 @@ object:
       name: rel6
       display_name: 
       datatype: string
-      priority: 14
+      priority: 19
       owner: 
       default_value: 
       substitute: true
@@ -296,7 +396,7 @@ object:
       name: meth6
       display_name: 
       datatype: string
-      priority: 15
+      priority: 20
       owner: 
       default_value: 
       substitute: true
@@ -316,7 +416,7 @@ object:
       name: rel7
       display_name: 
       datatype: string
-      priority: 16
+      priority: 21
       owner: 
       default_value: 
       substitute: true
@@ -336,7 +436,7 @@ object:
       name: meth7
       display_name: 
       datatype: string
-      priority: 17
+      priority: 22
       owner: 
       default_value: 
       substitute: true
@@ -356,7 +456,7 @@ object:
       name: rel8
       display_name: 
       datatype: string
-      priority: 18
+      priority: 23
       owner: 
       default_value: 
       substitute: true
@@ -376,7 +476,7 @@ object:
       name: meth8
       display_name: 
       datatype: string
-      priority: 19
+      priority: 24
       owner: 
       default_value: 
       substitute: true
@@ -396,7 +496,7 @@ object:
       name: rel9
       display_name: 
       datatype: string
-      priority: 20
+      priority: 25
       owner: 
       default_value: 
       substitute: true
@@ -416,7 +516,7 @@ object:
       name: on_exit
       display_name: 
       datatype: string
-      priority: 21
+      priority: 26
       owner: 
       default_value: 
       substitute: true
