@@ -16,10 +16,6 @@ module ManageIQ
             end
           end
 
-          def self.task_and_vms(handle = $evm)
-            %w(source destination).each { |vm_type| send("#{vm_type}_vm", handle) }
-          end
-
           def self.task(handle = $evm)
             send("#{transformation_phase(handle)}_task", handle)
           end

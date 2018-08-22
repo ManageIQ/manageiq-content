@@ -38,14 +38,12 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
   context "transformation phase" do
     it "is transformation" do
       ae_service.root['state_machine_phase'] = 'transformation'
-      described_class.transformation_phase(ae_service)
-      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@transformation_phase)).to eq('transformation')
+      expect(described_class.transformation_phase(ae_service)).to eq('transformation')
     end
 
     it "is cleanup" do
       ae_service.root['state_machine_phase'] = 'cleanup'
-      described_class.transformation_phase(ae_service)
-      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@transformation_phase)).to eq('cleanup')
+      expect(described_class.transformation_phase(ae_service)).to eq('cleanup')
     end
 
     it "is invalid" do
@@ -67,8 +65,7 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
 
     it "with task" do
       ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      described_class.transformation_task(ae_service)
-      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@task).id).to eq(svc_model_task.id)
+      expect(described_class.transformation_task(ae_service).id).to eq(svc_model_task.id)
     end
   end
 
@@ -97,8 +94,7 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
       ae_service.root['service_template_transformation_plan_task_id'] = svc_model_task.id
       allow(ae_service).to receive(:vmdb).with(:service_template_transformation_plan_task).and_return(svc_vmdb_handle)
       allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_task.id).and_return(svc_model_task)
-      described_class.cleanup_task(ae_service)
-      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@task).id).to eq(svc_model_task.id)
+      expect(described_class.cleanup_task(ae_service).id).to eq(svc_model_task.id)
     end
 
     it "with task_id and without task" do
@@ -133,8 +129,7 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
     it "in transformation" do
       ae_service.root['state_machine_phase'] = 'transformation'
       ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      described_class.task(ae_service)
-      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@task).id).to eq(svc_model_task.id)
+      expect(described_class.task(ae_service).id).to eq(svc_model_task.id)
     end
 
     it "in cleanup" do
@@ -142,8 +137,7 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
       ae_service.root['service_template_transformation_plan_task_id'] = svc_model_task.id
       allow(ae_service).to receive(:vmdb).with(:service_template_transformation_plan_task).and_return(svc_vmdb_handle)
       allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_task.id).and_return(svc_model_task)
-      described_class.task(ae_service)
-      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@task).id).to eq(svc_model_task.id)
+      expect(described_class.task(ae_service).id).to eq(svc_model_task.id)
     end
   end
 
@@ -155,8 +149,7 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
 
     it "with source vm" do
       allow(svc_model_task).to receive(:source).and_return(svc_model_src_vm)
-      described_class.source_vm(ae_service)
-      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@source_vm).id).to eq(svc_model_src_vm.id)
+      expect(described_class.source_vm(ae_service).id).to eq(svc_model_src_vm.id)
     end
 
     it "without source vm" do
@@ -196,8 +189,7 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
       allow(svc_model_task).to receive(:get_option).with(:destination_vm_id).and_return(svc_model_dst_vm.id)
       allow(ae_service).to receive(:vmdb).with(:vm).and_return(svc_vmdb_handle)
       allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_dst_vm.id).and_return(svc_model_dst_vm)
-      described_class.destination_vm(ae_service)
-      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@destination_vm).id).to eq(svc_model_dst_vm.id)
+      expect(described_class.destination_vm(ae_service).id).to eq(svc_model_dst_vm.id)
     end
   end
 
@@ -209,39 +201,5 @@ describe ManageIQ::Automate::Transformation::Common::Utils do
   context "destination_vm openstack" do
     let(:svc_model_dst_vm) { svc_model_dst_vm_openstack }
     it_behaves_like "destination_vm"
-  end
-
-  shared_examples_for "task_and_vms" do
-    let(:svc_vmdb_handle) { MiqAeMethodService::MiqAeServiceVm }
-
-    before do
-      ae_service.root['state_machine_phase'] = 'transformation'
-      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      allow(svc_model_task).to receive(:source).and_return(svc_model_src_vm)
-      allow(svc_model_task).to receive(:get_option).with(:destination_vm_id).and_return(svc_model_dst_vm.id)
-      allow(ae_service).to receive(:vmdb).with(:vm).and_return(svc_vmdb_handle)
-      allow(svc_vmdb_handle).to receive(:find_by).with(:id => svc_model_dst_vm.id).and_return(svc_model_dst_vm)
-    end
-
-    it "in transformation with destination_vm" do
-      described_class.task_and_vms(ae_service)
-      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@task).id).to eq(svc_model_task.id)
-      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@source_vm).id).to eq(svc_model_src_vm.id)
-      expect(ManageIQ::Automate::Transformation::Common::Utils.instance_variable_get(:@destination_vm).id).to eq(svc_model_dst_vm.id)
-    end
-  end
-
-  context "task_and_vms vmware to redhat" do
-    let(:svc_model_src_vm) { svc_model_src_vm_vmware }
-    let(:svc_model_dst_vm) { svc_model_dst_vm_redhat }
-
-    it_behaves_like "task_and_vms"
-  end
-
-  context "task_and_vms vmware to openstack" do
-    let(:svc_model_src_vm) { svc_model_src_vm_vmware }
-    let(:svc_model_dst_vm) { svc_model_dst_vm_openstack }
-
-    it_behaves_like "task_and_vms"
   end
 end
