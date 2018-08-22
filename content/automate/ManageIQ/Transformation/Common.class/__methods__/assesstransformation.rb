@@ -8,8 +8,8 @@ module ManageIQ
 
           def initialize(handle = $evm)
             @handle = handle
-            @task = ManageIQ::Automate::Transformation::Common::Utils.task
-            @source_vm = ManageIQ::Automate::Transformation::Common::Utils.source_vm
+            @task ||= ManageIQ::Automate::Transformation::Common::Utils.task(@handle)
+            @source_vm ||= ManageIQ::Automate::Transformation::Common::Utils.source_vm(@handle)
           end
 
           def virtv2v_networks
