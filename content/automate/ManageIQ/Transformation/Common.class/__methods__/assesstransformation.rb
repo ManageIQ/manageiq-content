@@ -8,13 +8,10 @@ module ManageIQ
 
           def initialize(handle = $evm)
             @handle = handle
-          end
-
-          def task_and_vms
             @task = ManageIQ::Automate::Transformation::Common::Utils.task
             @source_vm = ManageIQ::Automate::Transformation::Common::Utils.source_vm
           end
-          
+
           def virtv2v_networks
             @source_vm.hardware.nics.select { |n| n.device_type == 'ethernet' }.collect do |nic|
               source_network = nic.lan
@@ -47,19 +44,19 @@ module ManageIQ
               raise "No source cluster for VM '#{@source_vm.name}'" if cluster.nil?
             end
           end
-          
+
           def source_ems
             @source_ems ||= source_cluster.ext_management_system.tap do |ems|
               raise "No source EMS for VM '#{@source_vm.name}'" if ems.nil?
             end
           end
-          
+
           def destination_cluster
             @destination_cluster ||= @task.transformation_destination(source_cluster).tap do |cluster|
               raise "No destination cluster for '#{@source_vm.name}'" if cluster.nil?
             end
           end
-          
+
           def destination_ems
             @destination_ems ||= destination_cluster.ext_management_system.tap do |ems|
               raise "No destination EMS for '#{@source_vm.name}'" if ems.nil?
@@ -73,7 +70,7 @@ module ManageIQ
             @handle.set_state_var(:destination_ems_type, destination_ems.emstype)
             "#{source_ems.emstype}2#{destination_ems.emstype}"
           end
-          
+
           def populate_task_options
             @task.set_option(:source_ems_id, source_ems.id)
             @task.set_option(:destination_ems_id, destination_ems.id)
@@ -92,9 +89,8 @@ module ManageIQ
             }
             @handle.set_state_var(:factory_config, factory_config)
           end
-          
+
           def main
-            task_and_vms
             populate_task_options
             force_factory_config
           rescue => e
