@@ -41,25 +41,26 @@ module ManageIQ
 
           def source_cluster
             @source_cluster ||= @source_vm.ems_cluster.tap do |cluster|
-              raise "No source cluster for VM '#{@source_vm.name}'" if cluster.nil?
+              raise "No source cluster" if cluster.nil?
             end
           end
 
           def source_ems
-            @source_ems ||= source_cluster.ext_management_system.tap do |ems|
-              raise "No source EMS for VM '#{@source_vm.name}'" if ems.nil?
+            @source_ems ||= @source_vm.ext_management_system.tap do |ems|
+              raise "No source EMS" if ems.nil?
             end
           end
 
           def destination_cluster
             @destination_cluster ||= @task.transformation_destination(source_cluster).tap do |cluster|
-              raise "No destination cluster for '#{@source_vm.name}'" if cluster.nil?
+              #raise "No destination cluster for '#{@source_vm.name}'" if cluster.nil?
+              raise "No destination cluster" if cluster.nil?
             end
           end
 
           def destination_ems
             @destination_ems ||= destination_cluster.ext_management_system.tap do |ems|
-              raise "No destination EMS for '#{@source_vm.name}'" if ems.nil?
+              raise "No destination EMS" if ems.nil?
             end
           end
 
@@ -82,7 +83,7 @@ module ManageIQ
             @task.set_option(:power_off, true)
           end
 
-          def force_factory_config
+          def populate_factory_config
             factory_config = {
               'vmtransformation_check_interval' => @handle.object['vmtransformation_check_interval'] || '15.seconds',
               'vmpoweroff_check_interval'       => @handle.object['vmpoweroff_check_interval'] || '30.seconds'
@@ -91,8 +92,7 @@ module ManageIQ
           end
 
           def main
-            populate_task_options
-            force_factory_config
+            %w(task_options factory_config).each { |ci| send("populate_#{ci}") }
           rescue => e
             @handle.set_state_var(:ae_state_progress, 'message' => e.message)
             raise
