@@ -1,4 +1,5 @@
 require_domain_file
+require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Transformation/Common.class/__methods__/utils.rb')
 
 describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   let(:user) { FactoryGirl.create(:user_with_email_and_group) }
@@ -43,8 +44,8 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   let(:svc_model_nic_1) { MiqAeMethodService::MiqAeServiceGuestDevice.find(nic_1) }
   let(:svc_model_nic_2) { MiqAeMethodService::MiqAeServiceGuestDevice.find(nic_2) }
 
-  let(:disk_1) { instance_double("disk", :device_name => "Hard disk 1", :device_type => "disk", :filename => "[datastore12] test_vm/test_vm.vmdk", :size => 17179869184) }
-  let(:disk_2) { instance_double("disk", :device_name => "Hard disk 2", :device_type => "disk", :filename => "[datastore12] test_vm/test_vm-2.vmdk", :size => 17179869184) }
+  let(:disk_1) { instance_double("disk", :device_name => "Hard disk 1", :device_type => "disk", :filename => "[datastore12] test_vm/test_vm.vmdk", :size => 17_179_869_184) }
+  let(:disk_2) { instance_double("disk", :device_name => "Hard disk 2", :device_type => "disk", :filename => "[datastore12] test_vm/test_vm-2.vmdk", :size => 17_179_869_184) }
 
   let(:virtv2v_networks) do
     [
@@ -167,7 +168,7 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   context "transformation_type" do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
 
-    it  "transformation_type with invalid source ems" do
+    it "transformation_type with invalid source ems" do
       allow(svc_model_src_vm).to receive(:ext_management_system).and_return(svc_model_dst_ems_redhat)
       errormsg = "Unsupported source EMS type: #{svc_model_dst_ems_redhat.emstype}."
       expect { described_class.new(ae_service).transformation_type }.to raise_error(errormsg)
@@ -212,7 +213,7 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
       expect(described_class.new(ae_service).virtv2v_disks).to eq(virtv2v_disks)
     end
 
-     it "source_vm has no nic" do
+    it "source_vm has no nic" do
       allow(svc_model_src_vm.hardware).to receive(:nics).and_return([])
       expect(described_class.new(ae_service).virtv2v_networks).to eq([])
     end
@@ -324,7 +325,7 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
       expect(ae_service.get_state_var(:factory_config)['vmtransformation_check_interval']).to eq('15.seconds')
       expect(ae_service.get_state_var(:factory_config)['vmpoweroff_check_interval']).to eq('30.seconds')
     end
-   end
+  end
 
   context "source is vmware and destination is redhat" do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }

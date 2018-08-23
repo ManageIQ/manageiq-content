@@ -53,7 +53,6 @@ module ManageIQ
 
           def destination_cluster
             @destination_cluster ||= @task.transformation_destination(source_cluster).tap do |cluster|
-              #raise "No destination cluster for '#{@source_vm.name}'" if cluster.nil?
               raise "No destination cluster" if cluster.nil?
             end
           end
