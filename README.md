@@ -34,7 +34,30 @@ Now you are ready to begin development.  You can run the specs with
 
 Please be sure to add specs for any new automate methods you create, and follow
 the [ManageIQ development guidelines](https://github.com/ManageIQ/guides/blob/master/coding_style_and_standards.md).
-Thanks for your contribution!
+
+
+## Testing your own Automate Domain
+
+It is possible to test your own ManageIQ Automate Domain methods leveraging this framework.
+
+Individual Automate methods need to be converted to the [Class Style](https://github.com/ManageIQ/manageiq-content/issues/8), and tests written.
+
+1. In `content/automate/` symlink in the top of your exported Automate domain
+2. In `spec/content/automate` symlink in to the top of your _spec.rb tree (which matches above)
+3. In `spec/factories` symlink in to the top of a directory of helpers/factories of share test doubles.
+
+### Embedded Method Testing & Mocking
+
+For Automate "Methods" intended to be Embedded Methods, the ruby code, to be both available for use in Automate, and testable here, requires additional decorations, as does the calling Automate code.
+
+1. The Embedded Method methods are Module methods (other languages would call them "static"), that not attached to a (ruby) Class.
+2. The calling Automate Method, in the `class` definition can `include` the full name of the Embedded "method", making the Embedded Method a ruby _mixin_.
+3. The Embedded Method developer should provide required mock/stub/double factories.
+4. The Embedded Method developer should also provide reasonable test coverage of their Methods.
+
+   For testing the Embedded Method _spec.rb, you will need to create a concrete, if dummy, Class to test Module methods.
+5. By convention, the mock/stub/double factories live in `spec/factories`, so symlink in to the top directory of all "factories" or other helpers you have.
+
 
 ## License
 
