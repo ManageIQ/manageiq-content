@@ -5,7 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-## Gaprindashvili-4
+## Gaprindashvili-5
+
+### Added
+- Add support for pre/post-migration playbook [(#355)](https://github.com/ManageIQ/manageiq-content/pull/355)
+- Refactor set retry for pre/post migration playbooks [(#369)](https://github.com/ManageIQ/manageiq-content/pull/369)
+- Refactor to add support for SSH transport method [(#359)](https://github.com/ManageIQ/manageiq-content/pull/359)
+- Allow running playbook against powered off VM [(#380)](https://github.com/ManageIQ/manageiq-content/pull/380)
+- Add support for MAC address in network mapping [(#351)](https://github.com/ManageIQ/manageiq-content/pull/351)
+- Use targeted refresh during transformation [(#381)](https://github.com/ManageIQ/manageiq-content/pull/381)
+- Update WeightedUpdateStatus to handle task cancellation and cleanup [(#357)](https://github.com/ManageIQ/manageiq-content/pull/357)
+- Add default cleanup state machine for VM transformation [(#378)](https://github.com/ManageIQ/manageiq-content/pull/378)
+
+### Fixed
+- Fix default cleanup state machine [(#382)](https://github.com/ManageIQ/manageiq-content/pull/382)
+- Transformation - Fix virt-v2v success check [(#393)](https://github.com/ManageIQ/manageiq-content/pull/393)
+- Fix cleanup state machine path build [(#392)](https://github.com/ManageIQ/manageiq-content/pull/392)
+- Remove check on number of runners when converting VM [(#395)](https://github.com/ManageIQ/manageiq-content/pull/395)
+- Fix hook string passing for pre/post-migration playbooks [(#370)](https://github.com/ManageIQ/manageiq-content/pull/370)
+- Fix computation of currently running conversions by host [(#358)](https://github.com/ManageIQ/manageiq-content/pull/358)
+- Fix transformation host selection [(#379)](https://github.com/ManageIQ/manageiq-content/pull/379)
+- Fix weightedupdatestatus for cancellation [(#377)](https://github.com/ManageIQ/manageiq-content/pull/377)
+
+## Gaprindashvili-4 - Released 2018-07-16
 
 ### Added
 - New email consolidated namespace and class. [(#246)](https://github.com/ManageIQ/manageiq-content/pull/246)
@@ -25,7 +47,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Set insecure_connection to target provider as default behavior. [(#327)](https://github.com/ManageIQ/manageiq-content/pull/327)
 - Restore VM power state upon transformation [(#336)](https://github.com/ManageIQ/manageiq-content/pull/336)
 
-## Gaprindashvili-3
+## Gaprindashvili-3 - Released 2018-0515
 
 ### Added
 - Add azure event handlers for targeted refresh [(#260)](https://github.com/ManageIQ/manageiq-content/pull/260)
