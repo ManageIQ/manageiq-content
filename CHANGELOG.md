@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+##  Unreleased as of Sprint 93 Ending 2018-08-27
+
+### Added
+- Add plugin display name [(#411)](https://github.com/ManageIQ/manageiq-content/pull/411)
+- Trigger Nuage targeted refresh more often [(#409)](https://github.com/ManageIQ/manageiq-content/pull/409)
+- Prepare Nuage authentication attributes (for Embedded Ansible) [(#406)](https://github.com/ManageIQ/manageiq-content/pull/406)
+- Change VMware URI to connect directly to ESXi [(#405)](https://github.com/ManageIQ/manageiq-content/pull/405)
+- Add state_machine_phase attribute to transformation state machines [(#402)](https://github.com/ManageIQ/manageiq-content/pull/402)
+- Add CustomButtonEvent to automate explorer [(#398)](https://github.com/ManageIQ/manageiq-content/pull/398)
+- Adding Inspectme functionality into log_object embedded method. [(#386)](https://github.com/ManageIQ/manageiq-content/pull/386)
+
+### Fixed
+- Do not check instance variables in specs for Transformation - Common - Utils [(#410)](https://github.com/ManageIQ/manageiq-content/pull/410)
+- Escape username of VMware host [(#407)](https://github.com/ManageIQ/manageiq-content/pull/407)
+- Add event handling for Openstack port events [(#372)](https://github.com/ManageIQ/manageiq-content/pull/372)
+- Event handling for Openstack keypair events [(#371)](https://github.com/ManageIQ/manageiq-content/pull/371)
+
 ##  Unreleased as of Sprint 92 Ending 2018-08-13
 
 ### Added
