@@ -60,6 +60,18 @@ describe ManageIQ::Automate::System::CommonMethods::Utils::LogObject do
     ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log(root, 'My Object', ae_service)
   end
 
+  it '.log_and_exit' do
+    exit_msg = "Ta Ta for now"
+    exit_code = 7
+    expect(ae_service).to receive(:log).with('info', "Script ending #{exit_msg} code : #{exit_code}").exactly(1).times
+
+    expect do
+      ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_exit(exit_msg, exit_code, ae_service)
+    end.to raise_error(SystemExit) do |error|
+      expect(error.status).to eq(exit_code)
+    end
+  end
+
   context 'log ar_objects' do
     let(:ar_object) { svc_model_vm1 }
 

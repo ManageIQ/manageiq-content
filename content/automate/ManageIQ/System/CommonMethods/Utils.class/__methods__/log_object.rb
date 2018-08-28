@@ -8,6 +8,16 @@ module ManageIQ
       module CommonMethods
         module Utils
           class LogObject
+            # If you want to log a message and exit without specifying a handle using the global $evm
+            #    ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_exit(msg, code)
+            #
+            # If you want to log a message and exit using a specific handle
+            #    ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_exit(msg, code, handle)
+            #
+            def self.log_and_exit(msg, exit_code, handle = $evm)
+              handle.log('info', "Script ending #{msg} code : #{exit_code}")
+              exit(exit_code)
+            end
             # If you want to log the root MiqAeObject and use the global $evm
             #    ManageIQ::Automate::System::CommonMethods::Utils::LogObject.root
             #
