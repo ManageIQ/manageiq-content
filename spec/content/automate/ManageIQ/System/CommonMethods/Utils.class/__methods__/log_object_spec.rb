@@ -52,6 +52,14 @@ describe ManageIQ::Automate::System::CommonMethods::Utils::LogObject do
     ManageIQ::Automate::System::CommonMethods::Utils::LogObject.current(ae_service)
   end
 
+  it '.log_and_raise' do
+    errormsg = 'ERROR - vm object not passed in'
+    expect do
+      # described_class_and_raise.log(errormsg, ae_service)
+      ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise(errormsg, ae_service)
+    end.to raise_error(RuntimeError, errormsg)
+  end
+
   it '.log' do
     expect(ae_service).to receive(:log).with('info', /Listing My Object Attributes/).exactly(log_header_footer_count).times
     expect(ae_service).to receive(:log).with('info', /   Attribute/).exactly(root_attr_count).times
