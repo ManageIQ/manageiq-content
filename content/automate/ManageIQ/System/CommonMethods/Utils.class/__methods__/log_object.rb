@@ -53,6 +53,11 @@ module ManageIQ
               handle.log("info", "Listing #{log_prefix} Attributes - End")
             end
 
+            def self.log_and_raise(message, handle = $evm)
+              handle.log("error", message)
+              raise message.to_s
+            end
+
             def self.ar_object?(obj)
               obj.respond_to?(:object_class)
             end
