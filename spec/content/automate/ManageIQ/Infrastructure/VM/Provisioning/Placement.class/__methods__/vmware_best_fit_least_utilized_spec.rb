@@ -32,8 +32,8 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
 
   context "Auto placement" do
     let(:storages) { Array.new(4) { |r| FactoryGirl.create(:storage, :free_space => 1000 * (r + 1)) } }
-
     let(:ro_storage) { FactoryGirl.create(:storage, :free_space => 10_000) }
+    let(:storage_profile) { FactoryGirl.create(:storage_profile) }
 
     let(:vms) { Array.new(5) { FactoryGirl.create(:vm_vmware) } }
 
@@ -43,6 +43,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
     let(:host1) { FactoryGirl.create(:host_vmware, :storages => storages[0..1], :vms => vms[2..3], :ext_management_system => ems) }
     let(:host2) { FactoryGirl.create(:host_vmware, :storages => storages[0..1], :vms => vms[2..4], :ext_management_system => ems) }
     let(:host3) { FactoryGirl.create(:host_vmware, :storages => [ro_storage, storages[2]], :vms => vms[2..4], :ext_management_system => ems) }
+    let(:host4) { FactoryGirl.create(:host_vmware, :storages => storages[0..2], :vms => vms[2..4], :ext_management_system => ems) }
 
     let(:host_struct) do
       [MiqHashStruct.new(:id => host1.id, :evm_object_class => host1.class.base_class.name.to_sym),
@@ -52,13 +53,16 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
     let(:svc_host1) { MiqAeMethodService::MiqAeServiceHost.find(host1.id) }
     let(:svc_host2) { MiqAeMethodService::MiqAeServiceHost.find(host2.id) }
     let(:svc_host3) { MiqAeMethodService::MiqAeServiceHost.find(host3.id) }
+    let(:svc_host4) { MiqAeMethodService::MiqAeServiceHost.find(host4.id) }
+
     let(:svc_storages) { storages.collect { |s| MiqAeMethodService::MiqAeServiceStorage.find(s.id) } }
-    let(:svc_host_struct) { [svc_host1, svc_host2] }
+    let(:svc_host_struct) { [svc_host1, svc_host2, svc_host4] }
 
     context "hosts with a cluster" do
       before do
         host1.ems_cluster = ems_cluster
         host2.ems_cluster = ems_cluster
+        host4.ems_cluster = ems_cluster
         datacenter.with_relationship_type("ems_metadata") { datacenter.add_child(ems_cluster) }
         HostStorage.where(:host_id => host3.id, :storage_id => ro_storage.id).update(:read_only => true)
       end
@@ -85,6 +89,23 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
           # ro_storage is larger but read-only, so it should select storages[2]
           expect(s.id).to eq(storages[2].id)
           expect(s.name).to eq(storages[2].name)
+        end
+
+        described_class.new(ae_service).main
+      end
+
+      it "selects the storage in the storage profile" do
+        options = miq_provision.options.merge(:placement_storage_profile => storage_profile.id)
+        miq_provision.update_attributes(:options => options)
+        storages[2].storage_profiles = [storage_profile]
+
+        allow(svc_miq_provision).to receive(:eligible_hosts).and_return(svc_host_struct)
+        allow(svc_miq_provision).to receive(:eligible_storages).and_return(svc_storages)
+
+        expect(svc_miq_provision).to receive(:set_host).with(svc_host4)
+        allow(svc_miq_provision).to receive(:set_storage) do |s|
+          expect(s.id).to eq(svc_host4.storages[2].id)
+          expect(s.name).to eq(svc_host4.storages[2].name)
         end
 
         described_class.new(ae_service).main

@@ -31,11 +31,19 @@ module ManageIQ
                 end
               end
 
+              def storage_profile_id
+                @storage_profile_id ||= request.get_option(:placement_storage_profile).tap do |sp|
+                  @handle.log("info", "Selected storage_profile_id: #{sp}") if sp
+                end
+              end
+
               def best_fit_least_utilized
                 host = storage = min_registered_vms = nil
                 request.eligible_hosts.select { |h| !h.maintenance && h.power_state == "on" }.each do |h|
                   next if min_registered_vms && h.vms.size >= min_registered_vms
+
                   storages = h.writable_storages.find_all { |s| s.free_space > vm.provisioned_storage } # Filter out storages that do not have enough free space for the Vm
+                  storages.select! { |s| s.storage_profiles.pluck(:id).include?(storage_profile_id) } if storage_profile_id
 
                   s = storages.max_by(&:free_space)
                   next if s.nil?
