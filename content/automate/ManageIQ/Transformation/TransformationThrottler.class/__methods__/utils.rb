@@ -67,7 +67,7 @@ module ManageIQ
                 :class_name    => CLASS_NAME,
                 :instance_name => throttler_type(handle),
                 :user_id       => 1,
-                :attrs         => { :ttl => throttler_ttl }
+                :attrs         => { :ttl => throttler_ttl(handle) }
               },
               'admin',
               true
@@ -75,10 +75,10 @@ module ManageIQ
           end
 
           def self.retry_or_die(handle = $evm)
-            return if current_throttler.created_on.utc + throttler_ttl < Time.now.utc
+            return if current_throttler(handle).created_on.utc + throttler_ttl(handle) < Time.now.utc
             return if active_transformation_tasks(handle).empty?
             handle.root['ae_result'] = 'retry'
-            handle.root['ae_retry_interval'] = (throttler_ttl / handle.root['ae_state_max_retries']).seconds
+            handle.root['ae_retry_interval'] = (throttler_ttl(handle) / handle.root['ae_state_max_retries']).seconds
           end
 
           def self.tasks_scheduling_policy(handle = $evm)
