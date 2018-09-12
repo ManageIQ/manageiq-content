@@ -7,53 +7,44 @@ module ManageIQ
             class Utils
               require 'rbvmomi'
 
-              def initialize(handle = $evm)
-                @handle = handle
+              def self.host_fingerprint(host)
+                require 'socket'
+                require 'openssl'
+
+                tcp_client = TCPSocket.new(host.ipaddress, 443)
+                ssl_context = OpenSSL::SSL::SSLContext('SSLv23_client')
+                ssl_content.verify_mode = OpenSSL::SSL::VERIFY_NONE
+                ssl_client = OpenSSL::SSL::SSLSocker.new(tcp_client, ssl_context)
+                cert = OpenSSL::X509::Certificate.new(ssl_client.peer_cert)
+                ssl_client.sysclose
+                tcp_client.close
+
+                Digest::SHA1.hexdigest(cert.to_der).upcase.scan(/../).join(":")
               end
 
-              def main
+              def self.provider_connection(ems)
+                @provider_connection ||= RbVmomi::VIM.connect(:host => ems.ipaddress || ems.hostname, :user => ems.authentication_userid, :password => ems.authentication_password, :insecure => true)
+              rescue => e
+                raise "Could not connect to #{ems.name}: #{e.message}" if c.nil?
               end
+              private_class_method :provider_connection
 
-              def connect_to_provider(ems)
-                ipaddress = ems.ipaddress
-                ipaddress ||= ems.hostname
-                RbVmomi::VIM.connect(:host => ipaddress, :user => ems.authentication_userid, :password => ems.authentication_password, :insecure => true)
-              end
-
-              def vm_get_ref(vim, vm)
+              def self.vm_get_ref(vim, vm)
                 dc = vim.serviceInstance.find_datacenter(vm.v_owning_datacenter)
                 raise "Datacenter '#{vm.datacenter.name}' not found in vCenter" unless dc
                 vim.serviceInstance.content.searchIndex.FindByUuid(:datacenter => dc, :uuid => vm.uid_ems, :vmSearch => true, :instanceUuid => false)
+              rescue => e
+                raise "Could not find VM #{vm.name}: #{e.message}"
               end
-
-              def self.host_fingerprint(host)
-                command = "openssl s_client -connect #{host.ipaddress}:443 2>\/dev\/null | openssl x509 -noout -fingerprint -sha1"
-                ssl_fingerprint = `#{command}`
-                ssl_fingerprint[17..ssl_fingerprint.size - 2]
-              end
+              private_class_method :vm_get_ref
 
               def self.vm_rename(vm, new_name, handle = $evm)
-                ems = vm.ext_management_system
-                ems_endpoint = ems.ipaddress || ems.hostname
-                vim = RbVmomi::VIM.connect(:host => ems_endpoint, :user => ems.authentication_userid, :password => ems.authentication_password, :insecure => true)
-
-                sleep 2
-                dc = vim.serviceInstance.find_datacenter(vm.v_owning_datacenter)
-                raise "Datacenter '#{vm.v_owning_datacenter}' not found in vCenter" unless dc
-
-                sleep 2
-                vim_vm = dc.find_vm(vm.name)
-                raise "Unable to locate #{vm.name} in data center #{dc}" unless vim_vm
-                begin
-                  sleep 2
-                  vim_vm.ReconfigVM_Task(:spec => RbVmomi::VIM::VirtualMachineConfigSpec(:name => new_name)).wait_for_completion
-                  sleep 2
-                  dc.find_vm(new_name)
-                  handle.log(:info, "Successfully renamed #{options[:source_vm]} to #{options[:new_name]}.")
-                rescue
-                  return false
-                end
-                true
+                vim_vm = vm_get_ref(provider_connection, vm)
+                raise "Unable to locate #{vm.name} in datacenter #{dc}" unless vim_vm
+                vim_vm.ReconfigVM_Task(:spec => RbVmomi::VIM::VirtualMachineConfigSpec(:name=> new_name)).wait_for_completion
+                dc.find_vm(options[:new_name])
+              rescue => e
+                raise "Failed to rename #{options[:source_vm]}: #{e.message}"
               end
             end
           end
