@@ -35,7 +35,17 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
     end
   end
 
-  before do
+  before(:each) do
+    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@task, nil)
+    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@current_throttler, nil)
+    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@active_throttlers, nil)
+    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@throttler_election_policy, nil)
+    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@throttler_type, nil)
+    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@throttler_ttl, nil)
+    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@tasks_scheduling_policy, nil)
+    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@limits_adjustment_policy, nil)
+    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@active_transformation_tasks, nil)
+
     svc_model_automation_request_1.set_option(:namespace, 'Transformation/StateMachines')
     svc_model_automation_request_1.set_option(:class_name, 'TransformationThrottler')
     svc_model_automation_request_1.set_option(:instance_name, 'Default')
@@ -47,18 +57,6 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
     svc_model_automation_request_3.set_option(:namespace, 'Transformation/StateMachines')
     svc_model_automation_request_3.set_option(:class_name, 'TransformationThrottler')
     svc_model_automation_request_3.set_option(:instance_name, 'Invalid')
-  end
-
-  before(:each) do
-    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@task, nil)
-    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@current_throttler, nil)
-    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@active_throttlers, nil)
-    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@throttler_election_policy, nil)
-    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@throttler_type, nil)
-    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@throttler_ttl, nil)
-    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@tasks_scheduling_policy, nil)
-    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@limits_adjustment_policy, nil)
-    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@active_transformation_tasks, nil)
   end
 
   context "#task" do
