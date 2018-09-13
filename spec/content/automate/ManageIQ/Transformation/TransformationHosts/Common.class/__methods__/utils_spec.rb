@@ -130,26 +130,28 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
       allow(svc_model_task_2).to receive(:get_option).with(:transformation_host_id).and_return(svc_model_dst_host_1.id)
       allow(svc_model_task_3).to receive(:get_option).with(:transformation_host_id).and_return(svc_model_dst_host_2.id)
 
-      expect(described_class.transformation_hosts(svc_model_dst_ems_redhat, {}, ae_service)).to eq([
-        {
-          :type                  => 'OVirtHost',
-          :transformation_method => 'vddk',
-          :host                  => svc_model_dst_host_2,
-          :runners               => {
-            :current => 1,
-            :maximum => 10
+      expect(described_class.transformation_hosts(svc_model_dst_ems_redhat, {}, ae_service)).to eq(
+        [
+          {
+            :type                  => 'OVirtHost',
+            :transformation_method => 'vddk',
+            :host                  => svc_model_dst_host_2,
+            :runners               => {
+              :current => 1,
+              :maximum => 10
+            }
+          },
+          {
+            :type                  => 'OVirtHost',
+            :transformation_method => 'vddk',
+            :host                  => svc_model_dst_host_1,
+            :runners               => {
+              :current => 2,
+              :maximum => 10
+            }
           }
-        },
-        {
-          :type                  => 'OVirtHost',
-          :transformation_method => 'vddk',
-          :host                  => svc_model_dst_host_1,
-          :runners               => {
-            :current => 2,
-            :maximum => 10
-          }
-        }
-      ])
+        ]
+      )
     end
   end
 
@@ -164,17 +166,19 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
       allow(svc_model_task_3).to receive(:get_option).with(:transformation_host_id).and_return(svc_model_dst_host_2.id)
       allow(svc_model_dst_host_1).to receive(:custom_get).with('Max Transformation Runners').and_return('2')
 
-      expect(described_class.eligible_transformation_hosts(svc_model_dst_ems_redhat, {}, ae_service)).to eq([
-        {
-          :type                  => 'OVirtHost',
-          :transformation_method => 'vddk',
-          :host                  => svc_model_dst_host_2,
-          :runners               => {
-            :current => 1,
-            :maximum => 10
+      expect(described_class.eligible_transformation_hosts(svc_model_dst_ems_redhat, {}, ae_service)).to eq(
+        [
+          {
+            :type                  => 'OVirtHost',
+            :transformation_method => 'vddk',
+            :host                  => svc_model_dst_host_2,
+            :runners               => {
+              :current => 1,
+              :maximum => 10
+            }
           }
-        }
-      ])
+        ]
+      )
     end
   end
 
