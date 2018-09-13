@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+##  Unreleased as of Sprint 94 Ending 2018-09-10
+
+### Added
+- Adding log and raise error method into log_object embedded method. [(#416)](https://github.com/ManageIQ/manageiq-content/pull/416)
+- Added log_and_exit utility method [(#414)](https://github.com/ManageIQ/manageiq-content/pull/414)
+
+### Fixed
+- Updated requested method to fix vm_reconfigure via rest-api. [(#413)](https://github.com/ManageIQ/manageiq-content/pull/413)
+
+## Gaprindashvili-5 - Released 2018-09-07
+
+### Added
+- Add support for pre/post-migration playbook [(#355)](https://github.com/ManageIQ/manageiq-content/pull/355)
+- Refactor set retry for pre/post migration playbooks [(#369)](https://github.com/ManageIQ/manageiq-content/pull/369)
+- Refactor to add support for SSH transport method [(#359)](https://github.com/ManageIQ/manageiq-content/pull/359)
+- Allow running playbook against powered off VM [(#380)](https://github.com/ManageIQ/manageiq-content/pull/380)
+- Add support for MAC address in network mapping [(#351)](https://github.com/ManageIQ/manageiq-content/pull/351)
+- Use targeted refresh during transformation [(#381)](https://github.com/ManageIQ/manageiq-content/pull/381)
+- Update WeightedUpdateStatus to handle task cancellation and cleanup [(#357)](https://github.com/ManageIQ/manageiq-content/pull/357)
+- Add default cleanup state machine for VM transformation [(#378)](https://github.com/ManageIQ/manageiq-content/pull/378)
+
+### Fixed
+- Fix default cleanup state machine [(#382)](https://github.com/ManageIQ/manageiq-content/pull/382)
+- Transformation - Fix virt-v2v success check [(#393)](https://github.com/ManageIQ/manageiq-content/pull/393)
+- Fix cleanup state machine path build [(#392)](https://github.com/ManageIQ/manageiq-content/pull/392)
+- Fix hook string passing for pre/post-migration playbooks [(#370)](https://github.com/ManageIQ/manageiq-content/pull/370)
+- Fix computation of currently running conversions by host [(#358)](https://github.com/ManageIQ/manageiq-content/pull/358)
+- Fix transformation host selection [(#379)](https://github.com/ManageIQ/manageiq-content/pull/379)
+- Fix weightedupdatestatus for cancellation [(#377)](https://github.com/ManageIQ/manageiq-content/pull/377)
+
+### Removed
+- Remove check on number of runners when converting VM [(#395)](https://github.com/ManageIQ/manageiq-content/pull/395)
+
 ##  Unreleased as of Sprint 93 Ending 2018-08-27
 
 ### Added
@@ -33,36 +66,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Changed validate_quota method to check individual quota items [(#375)](https://github.com/ManageIQ/manageiq-content/pull/375)
 
 ### Fixed
-- Transformation - Fix virt-v2v success check [(#393)](https://github.com/ManageIQ/manageiq-content/pull/393)
-- Fix cleanup state machine path build [(#392)](https://github.com/ManageIQ/manageiq-content/pull/392)
 - Fix quota requested cloud_volume calculations. [(#388)](https://github.com/ManageIQ/manageiq-content/pull/388)
-- Fix default cleanup state machine [(#382)](https://github.com/ManageIQ/manageiq-content/pull/382)
 - Added vm_retire_extend method for new email. [(#366)](https://github.com/ManageIQ/manageiq-content/pull/366)
-
-### Removed
-- Remove check on number of runners when converting VM [(#395)](https://github.com/ManageIQ/manageiq-content/pull/395)
 
 ##  Unreleased as of Sprint 91 Ending 2018-07-30
 
 ### Added
-- Use targeted refresh during transformation [(#381)](https://github.com/ManageIQ/manageiq-content/pull/381)
-- Add default cleanup state machine for VM transformation [(#378)](https://github.com/ManageIQ/manageiq-content/pull/378)
-- Refactor set retry for pre/post migration playbooks [(#369)](https://github.com/ManageIQ/manageiq-content/pull/369)
 - Trigger targeted refresh for new Nuage entities [(#367)](https://github.com/ManageIQ/manageiq-content/pull/367)
 - (Nuage Networks) Actually rename AE Instances not just fixture filename [(#365)](https://github.com/ManageIQ/manageiq-content/pull/365)
-- Update Weighted to handle task cancellation and cleanup [(#357)](https://github.com/ManageIQ/manageiq-content/pull/357)
-- Add support for pre/post-migration playbook [(#355)](https://github.com/ManageIQ/manageiq-content/pull/355)
-- Add support for MAC address in network mapping [(#351)](https://github.com/ManageIQ/manageiq-content/pull/351)
 - Requested Quota for instance_type dialog override. [(#333)](https://github.com/ManageIQ/manageiq-content/pull/333)
 - (Nuage Networks) Adjust Automate Instance names to new event type prefix [(#363)](https://github.com/ManageIQ/manageiq-content/pull/363)
-- Refactor to add support for SSH transport method [(#359)](https://github.com/ManageIQ/manageiq-content/pull/359)
 
 ### Fixed
-- Fix transformation host selection [(#379)](https://github.com/ManageIQ/manageiq-content/pull/379)
-- Fix weightedupdatestatus for cancellation [(#377)](https://github.com/ManageIQ/manageiq-content/pull/377)
-- Fix hook string passing for pre/post-migration playbooks [(#370)](https://github.com/ManageIQ/manageiq-content/pull/370)
 - Add event handling for Openstack volume attachment events [(#368)](https://github.com/ManageIQ/manageiq-content/pull/368)
-- Fix computation of currently running conversions by host [(#358)](https://github.com/ManageIQ/manageiq-content/pull/358)
 
 ##  Unreleased as of Sprint 90 Ending 2018-07-16
 
