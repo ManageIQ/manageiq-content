@@ -54,7 +54,7 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
   let(:disk_2) { instance_double("disk", :device_name => "Hard disk 2", :device_type => "disk", :filename => "[datastore12] test_vm/test_vm-2.vmdk", :size => 17_179_869_184) }
 
   let(:virtv2v_networks) do
-     [
+    [
       { :source => svc_model_src_lan_1.name, :destination => svc_model_dst_lan_1.name, :mac_address => svc_model_nic_1.address },
       { :source => svc_model_src_lan_2.name, :destination => svc_model_dst_lan_2.name, :mac_address => svc_model_nic_2.address },
     ]
@@ -90,10 +90,6 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
     allow(svc_model_dst_host_2).to receive(:tags).with('v2v_transformation_method').and_return('vddk')
   end
 
-  before(:each) do
-#    ManageIQ::Automate::Transformation::TransformationThrottler::Utils.instance_variable_set(:@task, nil)
-  end
-
   context "#get_runners_count_by_host" do
     let(:svc_vmdb_handle) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask }
 
@@ -112,7 +108,7 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
     end
 
     it "with factory_config key" do
-      expect(described_class.host_max_runners(svc_model_dst_host_1, {'transformation_host_max_runners' => 2}, handle = ae_service)).to eq(2)
+      expect(described_class.host_max_runners(svc_model_dst_host_1, {'transformation_host_max_runners' => 2}, ae_service)).to eq(2)
     end
 
     it "with overridden max_runners" do
@@ -135,24 +131,24 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
       allow(svc_model_task_3).to receive(:get_option).with(:transformation_host_id).and_return(svc_model_dst_host_2.id)
 
       expect(described_class.transformation_hosts(svc_model_dst_ems_redhat, {}, ae_service)).to eq([
-       {
-         :type                  => 'OVirtHost',
-         :transformation_method => 'vddk',
-         :host                  => svc_model_dst_host_2,
-         :runners               => {
-           :current => 1,
-           :maximum => 10
-         }
-       },
-       {
-         :type                  => 'OVirtHost',
-         :transformation_method => 'vddk',
-         :host                  => svc_model_dst_host_1,
-         :runners               => {
-           :current => 2,
-           :maximum => 10
-         }
-       }
+        {
+          :type                  => 'OVirtHost',
+          :transformation_method => 'vddk',
+          :host                  => svc_model_dst_host_2,
+          :runners               => {
+            :current => 1,
+            :maximum => 10
+          }
+        },
+        {
+          :type                  => 'OVirtHost',
+          :transformation_method => 'vddk',
+          :host                  => svc_model_dst_host_1,
+          :runners               => {
+            :current => 2,
+            :maximum => 10
+          }
+        }
       ])
     end
   end
@@ -169,15 +165,15 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
       allow(svc_model_dst_host_1).to receive(:custom_get).with('Max Transformation Runners').and_return('2')
 
       expect(described_class.eligible_transformation_hosts(svc_model_dst_ems_redhat, {}, ae_service)).to eq([
-       {
-         :type                  => 'OVirtHost',
-         :transformation_method => 'vddk',
-         :host                  => svc_model_dst_host_2,
-         :runners               => {
-           :current => 1,
-           :maximum => 10
-         }
-       }
+        {
+          :type                  => 'OVirtHost',
+          :transformation_method => 'vddk',
+          :host                  => svc_model_dst_host_2,
+          :runners               => {
+            :current => 1,
+            :maximum => 10
+          }
+        }
       ])
     end
   end
@@ -202,7 +198,7 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
     end
 
     it "with factory_config key" do
-      expect(described_class.ems_max_runners(svc_model_dst_ems_redhat, {'ems_max_runners' => 2}, handle = ae_service)).to eq(2)
+      expect(described_class.ems_max_runners(svc_model_dst_ems_redhat, {'ems_max_runners' => 2}, ae_service)).to eq(2)
     end
 
     it "with overridden max_runners" do
@@ -269,7 +265,7 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
 
     it "when transformation method is vddk" do
       allow(svc_model_task_1).to receive(:get_option).with(:transformation_method).and_return('vddk')
-      expect(described_class.virtv2vwrapper_options(svc_model_task_1)).to eq({
+      expect(described_class.virtv2vwrapper_options(svc_model_task_1)).to eq(
         :vm_name             => svc_model_src_vm_vmware.name,
         :transport_method    => 'vddk',
         :vmware_fingerprint  => '01:23:45:67:89:ab:cd:ef:01:23:45:67:89:ab:cd:ef:01:23:45:67',
@@ -279,34 +275,34 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
         :rhv_cluster         => svc_model_dst_cluster.name,
         :rhv_storage         => svc_model_dst_storage.name,
         :rhv_password        => 'rhv_passwd',
-        :source_disks        => [ disk_1.filename, disk_2.filename ],
+        :source_disks        => [disk_1.filename, disk_2.filename],
         :network_mappings    => virtv2v_networks,
         :install_drivers     => true,
         :insecure_connection => true
-      })
+      )
     end
 
     it "when transformation method is ssh" do
       allow(svc_model_task_1).to receive(:get_option).with(:transformation_method).and_return('ssh')
-      expect(described_class.virtv2vwrapper_options(svc_model_task_1)).to eq({
+      expect(described_class.virtv2vwrapper_options(svc_model_task_1)).to eq(
         :vm_name             => "ssh://root@10.0.0.1/vmfs/volumes/#{svc_model_src_storage.name}/#{svc_model_src_vm_vmware.location}",
         :transport_method    => 'ssh',
         :rhv_url             => "https://#{svc_model_dst_ems_redhat.hostname}/ovirt-engine/api",
         :rhv_cluster         => svc_model_dst_cluster.name,
         :rhv_storage         => svc_model_dst_storage.name,
         :rhv_password        => 'rhv_passwd',
-        :source_disks        => [ disk_1.filename, disk_2.filename ],
+        :source_disks        => [disk_1.filename, disk_2.filename],
         :network_mappings    => virtv2v_networks,
         :install_drivers     => true,
         :insecure_connection => true
-      })
+      )
     end
   end
 
   context "#remote_command" do
     it "check constantize with ovirt host" do
       allow(svc_model_task_1).to receive(:get_option).with(:transformation_host_type).and_return('OVirtHost')
-      allow(ManageIQ::Automate::Transformation::TransformationHosts::OVirtHost::Utils).to receive(:remote_command).with(svc_model_dst_host_1, 'my_command', 'test stdin').and_return({ :success => true, :stdout => 'test stdout', :rc => 0 })
+      allow(ManageIQ::Automate::Transformation::TransformationHosts::OVirtHost::Utils).to receive(:remote_command).with(svc_model_dst_host_1, 'my_command', 'test stdin').and_return(:success => true, :stdout => 'test stdout', :rc => 0)
       expect(ManageIQ::Automate::Transformation::TransformationHosts::OVirtHost::Utils).to receive(:remote_command).with(svc_model_dst_host_1, 'my_command', 'test stdin', nil)
       described_class.remote_command(svc_model_task_1, svc_model_dst_host_1, 'my_command', 'test stdin')
     end

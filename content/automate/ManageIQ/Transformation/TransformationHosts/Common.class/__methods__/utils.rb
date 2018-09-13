@@ -62,7 +62,6 @@ module ManageIQ
               return unless ems_cur_runners < ems_max_runners(ems, factory_config)
               thosts = eligible_transformation_hosts(ems, factory_config, handle)
               return if thosts.size.zero?
-              #return thosts.first[:type], thosts.first[:host], thosts.first[:transformation_method]
               [thosts.first[:type], thosts.first[:host], thosts.first[:transformation_method]]
             end
 
@@ -90,7 +89,7 @@ module ManageIQ
                 :host     => vm.host.ipaddress,
                 :path     => "/vmfs/volumes"
               ).to_s
-              url += "/#{storage.name}/#{vm.location}"
+              url + "/#{storage.name}/#{vm.location}"
             end
             private_class_method :vmware_uri_ssh
 
