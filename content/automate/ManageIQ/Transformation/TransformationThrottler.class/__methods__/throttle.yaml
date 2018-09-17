@@ -3,13 +3,14 @@ object_type: method
 version: 1.0
 object:
   attributes:
-    name: AcquireTransformationHost
+    name: Throttle
     display_name: 
     description: 
     scope: instance
     language: ruby
     location: inline
     embedded_methods:
-    - "/Transformation/Common/Utils"
+    - "/Transformation/TransformationThrottler/Utils"
+    - "/Transformation/TransformationHosts/Common/Utils"
     options: {}
   inputs: []
