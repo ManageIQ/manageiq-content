@@ -80,6 +80,61 @@ describe ManageIQ::Automate::System::CommonMethods::Utils::LogObject do
     end
   end
 
+  shared_examples_for "log_and_notify" do
+    it "check" do
+      expect(ae_service).to receive(:create_notification).with(:level => notify_level, :message => message, :subject => vm1)
+      expect(ae_service).to receive(:log).with(log_level, /#{message}/).exactly(1).times
+      # described_class.log_and_notify.log(level, message, subject, ae_service)
+      ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_notify(level, message, vm1, ae_service)
+    end
+  end
+
+  context "level is iNfo" do
+    let(:level) { 'iNfo' }
+    let(:notify_level) { 'info' }
+    let(:log_level) { 'info' }
+    let(:message) { 'info msg' }
+
+    it_behaves_like "log_and_notify"
+  end
+
+  context "level is success" do
+    let(:level) { 'success' }
+    let(:notify_level) { 'success' }
+    let(:log_level) { 'info' }
+    let(:message) { 'success msg' }
+
+    it_behaves_like "log_and_notify"
+  end
+
+  context "level is warniNG" do
+    let(:level) { 'warniNG' }
+    let(:notify_level) { 'warning' }
+    let(:log_level) { 'warn' }
+    let(:message) { 'warning msg' }
+
+    it_behaves_like "log_and_notify"
+  end
+
+  context "level is error" do
+    let(:level) { 'error' }
+    let(:notify_level) { 'error' }
+    let(:log_level) { 'error' }
+    let(:message) { 'error msg' }
+
+    it_behaves_like "log_and_notify"
+  end
+
+  it "log_and_notify failure" do
+    level = 'fred'
+    message = 'blah blah blah'
+    errormsg = 'Invalid notify level fred'
+    expect do
+      # described_class.log_and_notify.log(:fred, 'blah blah blah', vm1, ae_service)
+      ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_notify(level, message, vm1, ae_service)
+    end.to raise_error(RuntimeError, errormsg)
+  end
+
   context 'log ar_objects' do
     let(:ar_object) { svc_model_vm1 }
 

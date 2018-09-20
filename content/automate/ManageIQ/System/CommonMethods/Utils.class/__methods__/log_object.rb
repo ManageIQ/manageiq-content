@@ -1,6 +1,7 @@
 #
 # Description: Display Log messages for object attributes for root, current or desired object.
 # Added InspectMe functionality
+# Added log_and_notify
 
 module ManageIQ
   module Automate
@@ -8,6 +9,12 @@ module ManageIQ
       module CommonMethods
         module Utils
           class LogObject
+            NOTIFY_LEVEL_TO_LOG_LEVEL = {
+              'info'    => 'info',
+              'warning' => 'warn',
+              'error'   => 'error',
+              'success' => 'info'
+            }.freeze
             # If you want to log a message and exit without specifying a handle using the global $evm
             #    ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_exit(msg, code)
             #
@@ -18,6 +25,20 @@ module ManageIQ
               handle.log('info', "Script ending #{msg} code : #{exit_code}")
               exit(exit_code)
             end
+
+            # If you want to create a notification and log a message without specifying a handle using the global $evm
+            #    ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_notify(notify_level, msg, subject)
+            #
+            # If you want to create a notification and log a message using a specific handle
+            #    ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_notify(notify_level, msg, subject, handle)
+            #
+            # Valid types are : info, warning, error and success
+            def self.log_and_notify(notify_level, message, subject, handle = $evm)
+              raise "Invalid notify level #{notify_level}" unless NOTIFY_LEVEL_TO_LOG_LEVEL.keys.include?(notify_level.downcase.to_s)
+              handle.create_notification(:level => notify_level.downcase, :message => message, :subject => subject)
+              handle.log(NOTIFY_LEVEL_TO_LOG_LEVEL[notify_level.downcase.to_s], message)
+            end
+
             # If you want to log the root MiqAeObject and use the global $evm
             #    ManageIQ::Automate::System::CommonMethods::Utils::LogObject.root
             #
