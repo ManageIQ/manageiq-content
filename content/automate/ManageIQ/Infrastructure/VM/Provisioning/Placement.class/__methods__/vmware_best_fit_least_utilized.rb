@@ -1,37 +1,74 @@
 #
 # Description: This method is used to find all hosts, datastores that are the least utilized
 #
-$evm.log("info", "Args:    #{MIQ_ARGS.inspect}")
+module ManageIQ
+  module Automate
+    module Infrastructure
+      module VM
+        module Provisioning
+          module Placement
+            class VmwareBestFitLeastUtilized
+              def initialize(handle = $evm)
+                @handle = handle
+              end
 
-# Get variables
-prov = $evm.root["miq_provision"]
-vm = prov.vm_template
-raise "VM not specified" if vm.nil?
-ems = vm.ext_management_system
-raise "EMS not found for VM [#{vm.name}]" if ems.nil?
+              def main
+                @handle.log("info", "vm=[#{vm.name}], space required=[#{vm.provisioned_storage}]")
+                best_fit_least_utilized
+              end
 
-# Log space required
-$evm.log("info", "vm=[#{vm.name}], space required=[#{vm.provisioned_storage}]")
+              private
 
-host = storage = nil
-min_registered_vms = nil
-prov.eligible_hosts.each do |h|
-  next if h.maintenance
-  next unless h.power_state == "on"
-  nvms = h.vms.length
-  if min_registered_vms.nil? || nvms < min_registered_vms
-    storages = h.writable_storages.find_all { |s| s.free_space > vm.provisioned_storage } # Filter out storages that do not have enough free space for the Vm
-    s = storages.max_by(&:free_space)
-    unless s.nil?
-      host    = h
-      storage = s
-      min_registered_vms = nvms
+              def request
+                @request ||= @handle.root["miq_provision"].tap do |req|
+                  log_and_raise('miq_provision not specified') if req.nil?
+                end
+              end
+
+              def vm
+                @vm ||= request.vm_template.tap do |vm|
+                  log_and_raise('VM not specified') if vm.nil?
+                end
+              end
+
+              def storage_profile_id
+                @storage_profile_id ||= request.get_option(:placement_storage_profile).tap do |sp|
+                  @handle.log("info", "Selected storage_profile_id: #{sp}") if sp
+                end
+              end
+
+              def best_fit_least_utilized
+                host = storage = min_registered_vms = nil
+                request.eligible_hosts.select { |h| !h.maintenance && h.power_state == "on" }.each do |h|
+                  next if min_registered_vms && h.vms.size >= min_registered_vms
+
+                  storages = h.writable_storages.find_all { |s| s.free_space > vm.provisioned_storage } # Filter out storages that do not have enough free space for the Vm
+                  storages.select! { |s| s.storage_profiles.pluck(:id).include?(storage_profile_id) } if storage_profile_id
+
+                  s = storages.max_by(&:free_space)
+                  next if s.nil?
+                  host    = h
+                  storage = s
+                  min_registered_vms = h.vms.size
+                end
+
+                # Set host and storage
+                request.set_host(host) if host
+                request.set_storage(storage) if storage
+
+                @handle.log("info", "vm=[#{vm.name}] host=[#{host}] storage=[#{storage}]")
+              end
+
+              def log_and_raise(message)
+                @handle.log(:error, message)
+                raise "ERROR - #{message}"
+              end
+            end
+          end
+        end
+      end
     end
   end
 end
 
-# Set host and storage
-prov.set_host(host) if host
-prov.set_storage(storage) if storage
-
-$evm.log("info", "vm=[#{vm.name}] host=[#{host}] storage=[#{storage}]")
+ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::VmwareBestFitLeastUtilized.new.main
