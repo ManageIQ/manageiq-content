@@ -55,7 +55,4 @@ module ManageIQ
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::ConfigurationManagement::AnsibleTower::Service::
-    Provisioning::StateMachines::UpdateServiceProvisionStatus.new.main
-end
+ManageIQ::Automate::ConfigurationManagement::AnsibleTower::Service::Provisioning::StateMachines::UpdateServiceProvisionStatus.new.main

@@ -86,6 +86,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::System::CommonMethods::QuotaMethods::Used.new.main
-end
+ManageIQ::Automate::System::CommonMethods::QuotaMethods::Used.new.main

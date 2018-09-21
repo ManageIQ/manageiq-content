@@ -23,6 +23,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Transformation::TransformationHost::OVirtHost::RoleDisable.new.main
-end
+ManageIQ::Automate::Transformation::TransformationHost::OVirtHost::RoleDisable.new.main

@@ -53,7 +53,5 @@ module ManageIQ
     end
   end
 end
-if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::Service::Provisioning::StateMachines::
-    ServiceProvision_Template::UpdateServiceProvisionStatus.new.main
-end
+
+ManageIQ::Automate::Service::Provisioning::StateMachines::ServiceProvision_Template::UpdateServiceProvisionStatus.new.main

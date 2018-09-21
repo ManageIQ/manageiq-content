@@ -82,6 +82,4 @@ module ManageIQ
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  ManageIQ::Automate::Transformation::Infrastructure::VM::Common::RestoreVmAttributes.new.main
-end
+ManageIQ::Automate::Transformation::Infrastructure::VM::Common::RestoreVmAttributes.new.main

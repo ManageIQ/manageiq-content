@@ -37,6 +37,4 @@ module ManageIQ
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
-  ManageIQ::Automate::Cloud::Orchestration::Provisioning::StateMachines::Provision.new.main
-end
+ManageIQ::Automate::Cloud::Orchestration::Provisioning::StateMachines::Provision.new.main
