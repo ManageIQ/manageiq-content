@@ -174,27 +174,26 @@ module ManageIQ
               destination_security_group = handle.vmdb(:security_group).find_by(:id => task.get_option(:destination_security_group_id))
 
               {
-                :vm_name             => source_vm.name,
-                :transport_method    => 'vddk',
-                :vmware_fingerprint  => ManageIQ::Automate::Transformation::Infrastructure::VM::VMware::Utils.host_fingerprint(source_vm.host),
-                :vmware_uri          => vmware_uri_vddk(source_vm),
-                :vmware_password     => source_vm.host.authentication_password,
+                :vm_name                    => source_vm.name,
+                :transport_method           => 'vddk',
+                :vmware_fingerprint         => ManageIQ::Automate::Transformation::Infrastructure::VM::VMware::Utils.host_fingerprint(source_vm.host),
+                :vmware_uri                 => vmware_uri_vddk(source_vm),
+                :vmware_password            => source_vm.host.authentication_password,
                 :osp_environment     => {
                   :os_no_cache            => true,
                   :os_auth_url            => openstack_auth_url(destination_ems),
                   :os_user_domain_name    => destination_ems.uid_ems,
                   :os_username            => destination_ems.authentication_userid,
                   :os_password            => destination_ems.authentication_password,
-                  :os_project_name        => destination_cloud_tenant.name,
-                  :os_project_id          => destination_cloud_tenant.ems_ref,
-                  :os_volume_type_id      => destination_cloud_volume_type.ems_ref,
-                  :os_flavor_id           => destination_flavor.ems_ref,
-                  :os_security_groups_ids => [destination_security_group.ems_ref]
+                  :os_project_name        => destination_cloud_tenant.name
                 },
-                :source_disks        => task[:options][:virtv2v_disks].map { |disk| disk[:path] },
-                :network_mappings    => task[:options][:virtv2v_networks],
-                :install_drivers     => true,
-                :insecure_connection => true
+                :osp_destination_project_id => destination_cloud_tenant.ems_ref,
+                :osp_volume_type_id         => destination_cloud_volume_type.ems_ref,
+                :osp_flavor_id              => destination_flavor.ems_ref,
+                :osp_security_groups_ids    => [destination_security_group.ems_ref],
+                :source_disks               => task[:options][:virtv2v_disks].map { |disk| disk[:path] },
+                :network_mappings           => task[:options][:virtv2v_networks],
+                :install_drivers            => true
               }
             end
             private_class_method :virtv2vwrapper_options_vmwarews2openstack_vddk
@@ -220,16 +219,15 @@ module ManageIQ
                   :os_user_domain_name    => destination_ems.uid_ems,
                   :os_username            => destination_ems.authentication_userid,
                   :os_password            => destination_ems.authentication_password,
-                  :os_project_name        => destination_cloud_tenant.name,
-                  :os_project_id          => destination_cloud_tenant.ems_ref,
-                  :os_volume_type_id      => destination_cloud_volume_type.ems_ref,
-                  :os_flavor_id           => destination_flavor.ems_ref,
-                  :os_security_groups_ids => [destination_security_group.ems_ref]
+                  :os_project_name        => destination_cloud_tenant.name
                 },
-                :source_disks        => task[:options][:virtv2v_disks].map { |disk| disk[:path] },
-                :network_mappings    => task[:options][:virtv2v_networks],
-                :install_drivers     => true,
-                :insecure_connection => true
+                :osp_destination_project_id => destination_cloud_tenant.ems_ref,
+                :osp_volume_type_id         => destination_cloud_volume_type.ems_ref,
+                :osp_flavor_id              => destination_flavor.ems_ref,
+                :osp_security_groups_ids    => [destination_security_group.ems_ref],
+                :source_disks               => task[:options][:virtv2v_disks].map { |disk| disk[:path] },
+                :network_mappings           => task[:options][:virtv2v_networks],
+                :install_drivers            => true
               }
             end
             private_class_method :virtv2vwrapper_options_vmwarews2openstack_ssh

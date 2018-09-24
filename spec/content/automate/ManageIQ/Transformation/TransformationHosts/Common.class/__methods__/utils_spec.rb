@@ -353,12 +353,12 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
     it "when transformation method is vddk" do
       allow(svc_model_task_1).to receive(:get_option).with(:transformation_method).and_return('vddk')
       expect(described_class.virtv2vwrapper_options(svc_model_task_1, ae_service)).to eq(
-        :vm_name             => svc_model_src_vm_vmware.name,
-        :transport_method    => 'vddk',
-        :vmware_fingerprint  => '01:23:45:67:89:ab:cd:ef:01:23:45:67:89:ab:cd:ef:01:23:45:67',
-        :vmware_uri          => "esx://esx_user@10.0.0.1/?no_verify=1",
-        :vmware_password     => 'esx_passwd',
-        :osp_environment     => {
+        :vm_name                    => svc_model_src_vm_vmware.name,
+        :transport_method           => 'vddk',
+        :vmware_fingerprint         => '01:23:45:67:89:ab:cd:ef:01:23:45:67:89:ab:cd:ef:01:23:45:67',
+        :vmware_uri                 => "esx://esx_user@10.0.0.1/?no_verify=1",
+        :vmware_password            => 'esx_passwd',
+        :osp_environment            => {
           :os_no_cache            => true,
           :os_auth_url            => URI::Generic.build(
             :scheme => svc_model_dst_ems_openstack.security_protocol == 'non-ssl' ? 'http' : 'https',
@@ -369,25 +369,24 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
           :os_user_domain_name    => svc_model_dst_ems_openstack.uid_ems,
           :os_username            => svc_model_dst_ems_openstack.authentication_userid,
           :os_password            => svc_model_dst_ems_openstack.authentication_password,
-          :os_project_name        => svc_model_dst_cloud_tenant.name,
-          :os_project_id          => svc_model_dst_cloud_tenant.ems_ref,
-          :os_volume_type_id      => svc_model_dst_cloud_volume_type.ems_ref,
-          :os_flavor_id           => svc_model_dst_flavor.ems_ref,
-          :os_security_groups_ids => [svc_model_dst_security_group.ems_ref]
+          :os_project_name        => svc_model_dst_cloud_tenant.name
         },
-        :source_disks        => [disk_1.filename, disk_2.filename],
-        :network_mappings    => virtv2v_networks,
-        :install_drivers     => true,
-        :insecure_connection => true
+        :osp_destination_project_id => svc_model_dst_cloud_tenant.ems_ref,
+        :osp_volume_type_id         => svc_model_dst_cloud_volume_type.ems_ref,
+        :osp_flavor_id              => svc_model_dst_flavor.ems_ref,
+        :osp_security_groups_ids    => [svc_model_dst_security_group.ems_ref],
+        :source_disks               => [disk_1.filename, disk_2.filename],
+        :network_mappings           => virtv2v_networks,
+        :install_drivers            => true
       )
     end
 
     it "when transformation method is ssh" do
       allow(svc_model_task_1).to receive(:get_option).with(:transformation_method).and_return('ssh')
       expect(described_class.virtv2vwrapper_options(svc_model_task_1, ae_service)).to eq(
-        :vm_name             => "ssh://root@10.0.0.1/vmfs/volumes/#{svc_model_src_storage.name}/#{svc_model_src_vm_vmware.location}",
-        :transport_method    => 'ssh',
-        :osp_environment     => {
+        :vm_name                    => "ssh://root@10.0.0.1/vmfs/volumes/#{svc_model_src_storage.name}/#{svc_model_src_vm_vmware.location}",
+        :transport_method           => 'ssh',
+        :osp_environment            => {
           :os_no_cache            => true,
           :os_auth_url            => URI::Generic.build(
             :scheme => svc_model_dst_ems_openstack.security_protocol == 'non-ssl' ? 'http' : 'https',
@@ -398,16 +397,15 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
           :os_user_domain_name    => svc_model_dst_ems_openstack.uid_ems,
           :os_username            => svc_model_dst_ems_openstack.authentication_userid,
           :os_password            => svc_model_dst_ems_openstack.authentication_password,
-          :os_project_name        => svc_model_dst_cloud_tenant.name,
-          :os_project_id          => svc_model_dst_cloud_tenant.ems_ref,
-          :os_volume_type_id      => svc_model_dst_cloud_volume_type.ems_ref,
-          :os_flavor_id           => svc_model_dst_flavor.ems_ref,
-          :os_security_groups_ids => [svc_model_dst_security_group.ems_ref]
+          :os_project_name        => svc_model_dst_cloud_tenant.name
         },
-        :source_disks        => [disk_1.filename, disk_2.filename],
-        :network_mappings    => virtv2v_networks,
-        :install_drivers     => true,
-        :insecure_connection => true
+        :osp_destination_project_id => svc_model_dst_cloud_tenant.ems_ref,
+        :osp_volume_type_id         => svc_model_dst_cloud_volume_type.ems_ref,
+        :osp_flavor_id              => svc_model_dst_flavor.ems_ref,
+        :osp_security_groups_ids    => [svc_model_dst_security_group.ems_ref],
+        :source_disks               => [disk_1.filename, disk_2.filename],
+        :network_mappings           => virtv2v_networks,
+        :install_drivers            => true
       )
     end
   end
