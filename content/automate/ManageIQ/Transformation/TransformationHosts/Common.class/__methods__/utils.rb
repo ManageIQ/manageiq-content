@@ -179,13 +179,13 @@ module ManageIQ
                 :vmware_fingerprint         => ManageIQ::Automate::Transformation::Infrastructure::VM::VMware::Utils.host_fingerprint(source_vm.host),
                 :vmware_uri                 => vmware_uri_vddk(source_vm),
                 :vmware_password            => source_vm.host.authentication_password,
-                :osp_environment     => {
-                  :os_no_cache            => true,
-                  :os_auth_url            => openstack_auth_url(destination_ems),
-                  :os_user_domain_name    => destination_ems.uid_ems,
-                  :os_username            => destination_ems.authentication_userid,
-                  :os_password            => destination_ems.authentication_password,
-                  :os_project_name        => destination_cloud_tenant.name
+                :osp_environment            => {
+                  :os_no_cache         => true,
+                  :os_auth_url         => openstack_auth_url(destination_ems),
+                  :os_user_domain_name => destination_ems.uid_ems,
+                  :os_username         => destination_ems.authentication_userid,
+                  :os_password         => destination_ems.authentication_password,
+                  :os_project_name     => destination_cloud_tenant.name
                 },
                 :osp_destination_project_id => destination_cloud_tenant.ems_ref,
                 :osp_volume_type_id         => destination_cloud_volume_type.ems_ref,
@@ -211,15 +211,15 @@ module ManageIQ
               destination_security_group = handle.vmdb(:security_group).find_by(:id => task.get_option(:destination_security_group_id))
 
               {
-                :vm_name             => vmware_uri_ssh(source_vm, source_storage),
-                :transport_method    => 'ssh',
-                :osp_environment     => {
-                  :os_no_cache            => true,
-                  :os_auth_url            => openstack_auth_url(destination_ems),
-                  :os_user_domain_name    => destination_ems.uid_ems,
-                  :os_username            => destination_ems.authentication_userid,
-                  :os_password            => destination_ems.authentication_password,
-                  :os_project_name        => destination_cloud_tenant.name
+                :vm_name                    => vmware_uri_ssh(source_vm, source_storage),
+                :transport_method           => 'ssh',
+                :osp_environment            => {
+                  :os_no_cache         => true,
+                  :os_auth_url         => openstack_auth_url(destination_ems),
+                  :os_user_domain_name => destination_ems.uid_ems,
+                  :os_username         => destination_ems.authentication_userid,
+                  :os_password         => destination_ems.authentication_password,
+                  :os_project_name     => destination_cloud_tenant.name
                 },
                 :osp_destination_project_id => destination_cloud_tenant.ems_ref,
                 :osp_volume_type_id         => destination_cloud_volume_type.ems_ref,
