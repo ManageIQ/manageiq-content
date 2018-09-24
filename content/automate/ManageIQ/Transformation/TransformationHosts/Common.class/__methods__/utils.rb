@@ -65,8 +65,8 @@ module ManageIQ
               [thosts.first[:type], thosts.first[:host], thosts.first[:transformation_method]]
             end
 
-            def self.virtv2vwrapper_options(task)
-              send("virtv2vwrapper_options_#{task.get_option(:transformation_type)}_#{task.get_option(:transformation_method)}", task)
+            def self.virtv2vwrapper_options(task, handle)
+              send("virtv2vwrapper_options_#{task.get_option(:transformation_type)}_#{task.get_option(:transformation_method)}", task, handle)
             end
 
             def self.vmware_uri_vddk(vm)
@@ -102,7 +102,17 @@ module ManageIQ
             end
             private_class_method :rhv_url
 
-            def self.virtv2vwrapper_options_vmwarews2rhevm_vddk(task)
+            def self.openstack_auth_url(ems)
+              URI::Generic.build(
+                :scheme => ems.security_protocol == 'non-ssl' ? 'http' : 'https',
+                :host   => ems.hostname,
+                :port   => ems.port,
+                :path   => ems.api_version
+              )
+            end
+            private_class_method :openstack_auth_url
+
+            def self.virtv2vwrapper_options_vmwarews2rhevm_vddk(task, _)
               source_vm = task.source
               source_cluster = source_vm.ems_cluster
 
@@ -128,7 +138,7 @@ module ManageIQ
             end
             private_class_method :virtv2vwrapper_options_vmwarews2rhevm_vddk
 
-            def self.virtv2vwrapper_options_vmwarews2rhevm_ssh(task)
+            def self.virtv2vwrapper_options_vmwarews2rhevm_ssh(task, _)
               source_vm = task.source
               source_cluster = source_vm.ems_cluster
               source_storage = source_vm.hardware.disks.select { |d| d.device_type == 'disk' }.first.storage
@@ -151,6 +161,78 @@ module ManageIQ
               }
             end
             private_class_method :virtv2vwrapper_options_vmwarews2rhevm_ssh
+
+            def self.virtv2vwrapper_options_vmwarews2openstack_vddk(task, handle = $evm)
+              source_vm = task.source
+              source_cluster = source_vm.ems_cluster
+
+              destination_cloud_tenant = task.transformation_destination(source_cluster)
+              destination_ems = destination_cloud_tenant.ext_management_system
+              destination_cloud_volume_type = task.transformation_destination(source_vm.hardware.disks.select { |d| d.device_type == 'disk' }.first.storage)
+
+              destination_flavor = handle.vmdb(:flavor).find_by(:id => task.get_option(:destination_flavor_id))
+              destination_security_group = handle.vmdb(:security_group).find_by(:id => task.get_option(:destination_security_group_id))
+
+              {
+                :vm_name             => source_vm.name,
+                :transport_method    => 'vddk',
+                :vmware_fingerprint  => ManageIQ::Automate::Transformation::Infrastructure::VM::VMware::Utils.host_fingerprint(source_vm.host),
+                :vmware_uri          => vmware_uri_vddk(source_vm),
+                :vmware_password     => source_vm.host.authentication_password,
+                :osp_environment     => {
+                  :os_no_cache            => true,
+                  :os_auth_url            => openstack_auth_url(destination_ems),
+                  :os_user_domain_name    => destination_ems.uid_ems,
+                  :os_username            => destination_ems.authentication_userid,
+                  :os_password            => destination_ems.authentication_password,
+                  :os_project_name        => destination_cloud_tenant.name,
+                  :os_project_id          => destination_cloud_tenant.ems_ref,
+                  :os_volume_type_id      => destination_cloud_volume_type.ems_ref,
+                  :os_flavor_id           => destination_flavor.ems_ref,
+                  :os_security_groups_ids => [destination_security_group.ems_ref]
+                },
+                :source_disks        => task[:options][:virtv2v_disks].map { |disk| disk[:path] },
+                :network_mappings    => task[:options][:virtv2v_networks],
+                :install_drivers     => true,
+                :insecure_connection => true
+              }
+            end
+            private_class_method :virtv2vwrapper_options_vmwarews2openstack_vddk
+
+            def self.virtv2vwrapper_options_vmwarews2openstack_ssh(task, handle = $evm)
+              source_vm = task.source
+              source_cluster = source_vm.ems_cluster
+              source_storage = source_vm.hardware.disks.select { |d| d.device_type == 'disk' }.first.storage
+
+              destination_cloud_tenant = task.transformation_destination(source_cluster)
+              destination_ems = destination_cloud_tenant.ext_management_system
+              destination_cloud_volume_type = task.transformation_destination(source_vm.hardware.disks.select { |d| d.device_type == 'disk' }.first.storage)
+
+              destination_flavor = handle.vmdb(:flavor).find_by(:id => task.get_option(:destination_flavor_id))
+              destination_security_group = handle.vmdb(:security_group).find_by(:id => task.get_option(:destination_security_group_id))
+
+              {
+                :vm_name             => vmware_uri_ssh(source_vm, source_storage),
+                :transport_method    => 'ssh',
+                :osp_environment     => {
+                  :os_no_cache            => true,
+                  :os_auth_url            => openstack_auth_url(destination_ems),
+                  :os_user_domain_name    => destination_ems.uid_ems,
+                  :os_username            => destination_ems.authentication_userid,
+                  :os_password            => destination_ems.authentication_password,
+                  :os_project_name        => destination_cloud_tenant.name,
+                  :os_project_id          => destination_cloud_tenant.ems_ref,
+                  :os_volume_type_id      => destination_cloud_volume_type.ems_ref,
+                  :os_flavor_id           => destination_flavor.ems_ref,
+                  :os_security_groups_ids => [destination_security_group.ems_ref]
+                },
+                :source_disks        => task[:options][:virtv2v_disks].map { |disk| disk[:path] },
+                :network_mappings    => task[:options][:virtv2v_networks],
+                :install_drivers     => true,
+                :insecure_connection => true
+              }
+            end
+            private_class_method :virtv2vwrapper_options_vmwarews2openstack_ssh
 
             def self.remote_command(task, transformation_host, command, stdin = nil, run_as = nil)
               "ManageIQ::Automate::Transformation::TransformationHosts::#{task.get_option(:transformation_host_type)}::Utils".constantize.remote_command(transformation_host, command, stdin, run_as)

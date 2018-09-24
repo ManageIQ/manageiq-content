@@ -25,6 +25,13 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
   let(:hardware) { FactoryGirl.create(:hardware) }
   let(:nic_1) { FactoryGirl.create(:guest_device_nic) }
   let(:nic_2) { FactoryGirl.create(:guest_device_nic) }
+  let(:dst_ems_openstack) { FactoryGirl.create(:ems_openstack) }
+  let(:dst_cloud_tenant) { FactoryGirl.create(:cloud_tenant) }
+  let(:dst_cloud_volume_type) { FactoryGirl.create(:cloud_volume_type) }
+  let(:dst_cloud_network_1) { FactoryGirl.create(:cloud_network) }
+  let(:dst_cloud_network_2) { FactoryGirl.create(:cloud_network) }
+  let(:dst_flavor) { FactoryGirl.create(:flavor) }
+  let(:dst_security_group) { FactoryGirl.create(:security_group) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_task_1) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask.find(task_1.id) }
@@ -38,17 +45,24 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
   let(:svc_model_src_vm_vmware) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_Vmware_InfraManager_Vm.find(src_vm_vmware.id) }
   let(:svc_model_src_cluster) { MiqAeMethodService::MiqAeServiceEmsCluster.find(src_cluster.id) }
   let(:svc_model_dst_cluster) { MiqAeMethodService::MiqAeServiceEmsCluster.find(dst_cluster.id) }
-  let(:svc_model_src_storage) { MiqAeMethodService::MiqAeServiceStorage.find(src_storage) }
-  let(:svc_model_dst_storage) { MiqAeMethodService::MiqAeServiceStorage.find(dst_storage) }
-  let(:svc_model_src_lan_1) { MiqAeMethodService::MiqAeServiceLan.find(src_lan_1) }
-  let(:svc_model_src_lan_2) { MiqAeMethodService::MiqAeServiceLan.find(src_lan_2) }
-  let(:svc_model_dst_lan_1) { MiqAeMethodService::MiqAeServiceLan.find(dst_lan_1) }
-  let(:svc_model_dst_lan_2) { MiqAeMethodService::MiqAeServiceLan.find(dst_lan_2) }
-  let(:svc_model_hardware) { MiqAeMethodService::MiqAeServiceHardware.find(hardware) }
-  let(:svc_model_guest_device_1) { MiqAeMethodService::MiqAeServiceGuestDevice.find(guest_device_1) }
-  let(:svc_model_guest_device_2) { MiqAeMethodService::MiqAeServiceGuestDevice.find(guest_device_2) }
-  let(:svc_model_nic_1) { MiqAeMethodService::MiqAeServiceGuestDevice.find(nic_1) }
-  let(:svc_model_nic_2) { MiqAeMethodService::MiqAeServiceGuestDevice.find(nic_2) }
+  let(:svc_model_src_storage) { MiqAeMethodService::MiqAeServiceStorage.find(src_storage.id) }
+  let(:svc_model_dst_storage) { MiqAeMethodService::MiqAeServiceStorage.find(dst_storage.id) }
+  let(:svc_model_src_lan_1) { MiqAeMethodService::MiqAeServiceLan.find(src_lan_1.id) }
+  let(:svc_model_src_lan_2) { MiqAeMethodService::MiqAeServiceLan.find(src_lan_2.id) }
+  let(:svc_model_dst_lan_1) { MiqAeMethodService::MiqAeServiceLan.find(dst_lan_1.id) }
+  let(:svc_model_dst_lan_2) { MiqAeMethodService::MiqAeServiceLan.find(dst_lan_2.id) }
+  let(:svc_model_hardware) { MiqAeMethodService::MiqAeServiceHardware.find(hardware.id) }
+  let(:svc_model_guest_device_1) { MiqAeMethodService::MiqAeServiceGuestDevice.find(guest_device_1.id) }
+  let(:svc_model_guest_device_2) { MiqAeMethodService::MiqAeServiceGuestDevice.find(guest_device_2.id) }
+  let(:svc_model_nic_1) { MiqAeMethodService::MiqAeServiceGuestDevice.find(nic_1.id) }
+  let(:svc_model_nic_2) { MiqAeMethodService::MiqAeServiceGuestDevice.find(nic_2.id) }
+  let(:svc_model_dst_ems_openstack) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(dst_ems_openstack.id) }
+  let(:svc_model_dst_cloud_tenant) { MiqAeMethodService::MiqAeServiceCloudTenant.find(dst_cloud_tenant.id) }
+  let(:svc_model_dst_cloud_volume_type) { MiqAeMethodService::MiqAeServiceCloudVolumeType.find(dst_cloud_volume_type.id) }
+  let(:svc_model_dst_cloud_network_1) { MiqAeMethodService::MiqAeServiceCloudNetwork.find(dst_cloud_network_1.id) }
+  let(:svc_model_dst_cloud_network_2) { MiqAeMethodService::MiqAeServiceCloudNetwork.find(dst_cloud_network_2.id) }
+  let(:svc_model_dst_flavor) { MiqAeMethodService::MiqAeServiceFlavor.find(dst_flavor.id) }
+  let(:svc_model_dst_security_group) { MiqAeMethodService::MiqAeServiceSecurityGroup.find(dst_security_group.id) }
 
   let(:disk_1) { instance_double("disk", :device_name => "Hard disk 1", :device_type => "disk", :filename => "[datastore12] test_vm/test_vm.vmdk", :size => 17_179_869_184) }
   let(:disk_2) { instance_double("disk", :device_name => "Hard disk 2", :device_type => "disk", :filename => "[datastore12] test_vm/test_vm-2.vmdk", :size => 17_179_869_184) }
@@ -269,7 +283,7 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
 
     it "when transformation method is vddk" do
       allow(svc_model_task_1).to receive(:get_option).with(:transformation_method).and_return('vddk')
-      expect(described_class.virtv2vwrapper_options(svc_model_task_1)).to eq(
+      expect(described_class.virtv2vwrapper_options(svc_model_task_1, ae_service)).to eq(
         :vm_name             => svc_model_src_vm_vmware.name,
         :transport_method    => 'vddk',
         :vmware_fingerprint  => '01:23:45:67:89:ab:cd:ef:01:23:45:67:89:ab:cd:ef:01:23:45:67',
@@ -288,13 +302,108 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
 
     it "when transformation method is ssh" do
       allow(svc_model_task_1).to receive(:get_option).with(:transformation_method).and_return('ssh')
-      expect(described_class.virtv2vwrapper_options(svc_model_task_1)).to eq(
+      expect(described_class.virtv2vwrapper_options(svc_model_task_1, ae_service)).to eq(
         :vm_name             => "ssh://root@10.0.0.1/vmfs/volumes/#{svc_model_src_storage.name}/#{svc_model_src_vm_vmware.location}",
         :transport_method    => 'ssh',
         :rhv_url             => "https://#{svc_model_dst_ems_redhat.hostname}/ovirt-engine/api",
         :rhv_cluster         => svc_model_dst_cluster.name,
         :rhv_storage         => svc_model_dst_storage.name,
         :rhv_password        => 'rhv_passwd',
+        :source_disks        => [disk_1.filename, disk_2.filename],
+        :network_mappings    => virtv2v_networks,
+        :install_drivers     => true,
+        :insecure_connection => true
+      )
+    end
+  end
+
+  context "#virtv2vwrapper_options as when transformation type is vmwarews2openstack" do
+    let(:svc_vmdb_handle_flavor) { MiqAeMethodService::MiqAeServiceFlavor }
+    let(:svc_vmdb_handle_security_group) { MiqAeMethodService::MiqAeServiceSecurityGroup }
+
+    before do
+      allow(ae_service).to receive(:vmdb).with(:flavor).and_return(svc_vmdb_handle_flavor)
+      allow(svc_vmdb_handle_flavor).to receive(:find_by).with(:id => svc_model_dst_flavor.id).and_return(svc_model_dst_flavor)
+      allow(ae_service).to receive(:vmdb).with(:security_group).and_return(svc_vmdb_handle_security_group)
+      allow(svc_vmdb_handle_security_group).to receive(:find_by).with(:id => svc_model_dst_security_group.id).and_return(svc_model_dst_security_group)
+      allow(svc_model_task_1).to receive(:get_option).with(:transformation_type).and_return('vmwarews2openstack')
+      svc_model_task_1[:options][:virtv2v_disks] = virtv2v_disks
+      svc_model_task_1[:options][:virtv2v_networks] = virtv2v_networks
+      allow(svc_model_task_1).to receive(:source).and_return(svc_model_src_vm_vmware)
+      allow(svc_model_src_vm_vmware).to receive(:ems_cluster).and_return(svc_model_src_cluster)
+      allow(svc_model_task_1).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cloud_tenant)
+      allow(svc_model_dst_cloud_tenant).to receive(:ext_management_system).and_return(svc_model_dst_ems_openstack)
+      allow(svc_model_dst_ems_openstack).to receive(:authentication_password).and_return('osp_passwd')
+      allow(svc_model_src_vm_vmware).to receive(:hardware).and_return(svc_model_hardware)
+      allow(svc_model_hardware).to receive(:disks).and_return([disk_1, disk_2])
+      allow(disk_1).to receive(:storage).and_return(svc_model_src_storage)
+      allow(svc_model_task_1).to receive(:transformation_destination).with(svc_model_src_storage).and_return(svc_model_dst_cloud_volume_type)
+      allow(svc_model_hardware).to receive(:nics).and_return([svc_model_nic_1, svc_model_nic_2])
+      allow(svc_model_task_1).to receive(:transformation_destination).with(svc_model_src_lan_1).and_return(svc_model_dst_cloud_network_1)
+      allow(svc_model_task_1).to receive(:transformation_destination).with(svc_model_src_lan_2).and_return(svc_model_dst_cloud_network_2)
+      allow(svc_model_task_1).to receive(:get_option).with(:destination_flavor_id).and_return(svc_model_dst_flavor.id)
+      allow(svc_model_task_1).to receive(:get_option).with(:destination_security_group_id).and_return(svc_model_dst_security_group.id)
+      allow(svc_model_src_vm_vmware).to receive(:host).and_return(svc_model_src_host)
+      allow(svc_model_src_host).to receive(:ipaddress).and_return('10.0.0.1')
+      allow(svc_model_src_host).to receive(:authentication_userid).and_return('esx_user')
+      allow(svc_model_src_host).to receive(:authentication_password).and_return('esx_passwd')
+      allow(ManageIQ::Automate::Transformation::Infrastructure::VM::VMware::Utils).to receive(:host_fingerprint).with(svc_model_src_host).and_return('01:23:45:67:89:ab:cd:ef:01:23:45:67:89:ab:cd:ef:01:23:45:67')
+    end
+
+    it "when transformation method is vddk" do
+      allow(svc_model_task_1).to receive(:get_option).with(:transformation_method).and_return('vddk')
+      expect(described_class.virtv2vwrapper_options(svc_model_task_1, ae_service)).to eq(
+        :vm_name             => svc_model_src_vm_vmware.name,
+        :transport_method    => 'vddk',
+        :vmware_fingerprint  => '01:23:45:67:89:ab:cd:ef:01:23:45:67:89:ab:cd:ef:01:23:45:67',
+        :vmware_uri          => "esx://esx_user@10.0.0.1/?no_verify=1",
+        :vmware_password     => 'esx_passwd',
+        :osp_environment     => {
+          :os_no_cache            => true,
+          :os_auth_url            => URI::Generic.build(
+                :scheme => svc_model_dst_ems_openstack.security_protocol == 'non-ssl' ? 'http' : 'https',
+                :host   => svc_model_dst_ems_openstack.hostname,
+                :port   => svc_model_dst_ems_openstack.port,
+                :path   => svc_model_dst_ems_openstack.api_version
+              ),
+          :os_user_domain_name    => svc_model_dst_ems_openstack.uid_ems,
+          :os_username            => svc_model_dst_ems_openstack.authentication_userid,
+          :os_password            => svc_model_dst_ems_openstack.authentication_password,
+          :os_project_name        => svc_model_dst_cloud_tenant.name,
+          :os_project_id          => svc_model_dst_cloud_tenant.ems_ref,
+          :os_volume_type_id      => svc_model_dst_cloud_volume_type.ems_ref,
+          :os_flavor_id           => svc_model_dst_flavor.ems_ref,
+          :os_security_groups_ids => [svc_model_dst_security_group.ems_ref]
+        },
+        :source_disks        => [disk_1.filename, disk_2.filename],
+        :network_mappings    => virtv2v_networks,
+        :install_drivers     => true,
+        :insecure_connection => true
+      )
+    end
+
+    it "when transformation method is ssh" do
+      allow(svc_model_task_1).to receive(:get_option).with(:transformation_method).and_return('ssh')
+      expect(described_class.virtv2vwrapper_options(svc_model_task_1, ae_service)).to eq(
+        :vm_name             => "ssh://root@10.0.0.1/vmfs/volumes/#{svc_model_src_storage.name}/#{svc_model_src_vm_vmware.location}",
+        :transport_method    => 'ssh',
+        :osp_environment     => {
+          :os_no_cache            => true,
+          :os_auth_url            => URI::Generic.build(
+                :scheme => svc_model_dst_ems_openstack.security_protocol == 'non-ssl' ? 'http' : 'https',
+                :host   => svc_model_dst_ems_openstack.hostname,
+                :port   => svc_model_dst_ems_openstack.port,
+                :path   => svc_model_dst_ems_openstack.api_version
+              ),
+          :os_user_domain_name    => svc_model_dst_ems_openstack.uid_ems,
+          :os_username            => svc_model_dst_ems_openstack.authentication_userid,
+          :os_password            => svc_model_dst_ems_openstack.authentication_password,
+          :os_project_name        => svc_model_dst_cloud_tenant.name,
+          :os_project_id          => svc_model_dst_cloud_tenant.ems_ref,
+          :os_volume_type_id      => svc_model_dst_cloud_volume_type.ems_ref,
+          :os_flavor_id           => svc_model_dst_flavor.ems_ref,
+          :os_security_groups_ids => [svc_model_dst_security_group.ems_ref]
+        },
         :source_disks        => [disk_1.filename, disk_2.filename],
         :network_mappings    => virtv2v_networks,
         :install_drivers     => true,

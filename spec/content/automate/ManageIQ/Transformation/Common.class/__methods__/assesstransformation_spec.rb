@@ -4,16 +4,18 @@ require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Tra
 describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   let(:user) { FactoryGirl.create(:user_with_email_and_group) }
   let(:group) { FactoryGirl.create(:miq_group) }
+  let(:plan) { FactoryGirl.create(:service_template_transformation_plan) }
+  let(:request) { FactoryGirl.create(:service_template_transformation_plan_request) }
   let(:task) { FactoryGirl.create(:service_template_transformation_plan_task) }
   let(:src_vm_vmware) { FactoryGirl.create(:vm_vmware) }
   let(:src_cluster) { FactoryGirl.create(:ems_cluster) }
   let(:src_ems_vmware) { FactoryGirl.create(:ems_vmware) }
   let(:dst_cluster) { FactoryGirl.create(:ems_cluster) }
   let(:dst_ems_redhat) { FactoryGirl.create(:ems_redhat) }
-  let(:dst_ems_openstack) { FactoryGirl.create(:ems_openstack_infra) }
+  let(:dst_ems_openstack) { FactoryGirl.create(:ems_openstack) }
   let(:src_storage_1) { FactoryGirl.create(:storage) }
   let(:src_storage_2) { FactoryGirl.create(:storage) }
-  let(:dst_storage) { FactoryGirl.create(:storage) }
+  let(:dst_storage_redhat) { FactoryGirl.create(:storage) }
   let(:src_lan_1) { FactoryGirl.create(:lan) }
   let(:src_lan_2) { FactoryGirl.create(:lan) }
   let(:dst_lan_1) { FactoryGirl.create(:lan) }
@@ -21,37 +23,58 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   let(:hardware) { FactoryGirl.create(:hardware) }
   let(:nic_1) { FactoryGirl.create(:guest_device_nic) }
   let(:nic_2) { FactoryGirl.create(:guest_device_nic) }
+  let(:dst_cloud_tenant) { FactoryGirl.create(:cloud_tenant) }
+  let(:dst_cloud_network_1) { FactoryGirl.create(:cloud_network) }
+  let(:dst_cloud_network_2) { FactoryGirl.create(:cloud_network) }
+  let(:dst_flavor) { FactoryGirl.create(:flavor) }
+  let(:dst_security_group) { FactoryGirl.create(:security_group) }
+  let(:dst_cloud_volume_type) { FactoryGirl.create(:cloud_volume_type) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_group) { MiqAeMethodService::MiqAeServiceMiqGroup.find(group.id) }
+  let(:svc_model_plan) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlan.find(plan.id) }
+  let(:svc_model_request) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanRequest.find(request.id) }
   let(:svc_model_task) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask.find(task.id) }
   let(:svc_model_src_vm_vmware) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_Vmware_InfraManager_Vm.find(src_vm_vmware.id) }
-  let(:svc_model_src_cluster) { MiqAeMethodService::MiqAeServiceEmsCluster.find(src_cluster) }
-  let(:svc_model_src_ems_vmware) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(src_ems_vmware) }
-  let(:svc_model_dst_cluster) { MiqAeMethodService::MiqAeServiceEmsCluster.find(dst_cluster) }
-  let(:svc_model_dst_ems_redhat) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(dst_ems_redhat) }
-  let(:svc_model_dst_ems_openstack) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(dst_ems_openstack) }
-  let(:svc_model_src_storage_1) { MiqAeMethodService::MiqAeServiceStorage.find(src_storage_1) }
-  let(:svc_model_src_storage_2) { MiqAeMethodService::MiqAeServiceStorage.find(src_storage_2) }
-  let(:svc_model_dst_storage) { MiqAeMethodService::MiqAeServiceStorage.find(dst_storage) }
-  let(:svc_model_src_lan_1) { MiqAeMethodService::MiqAeServiceLan.find(src_lan_1) }
-  let(:svc_model_src_lan_2) { MiqAeMethodService::MiqAeServiceLan.find(src_lan_2) }
-  let(:svc_model_dst_lan_1) { MiqAeMethodService::MiqAeServiceLan.find(dst_lan_1) }
-  let(:svc_model_dst_lan_2) { MiqAeMethodService::MiqAeServiceLan.find(dst_lan_2) }
-  let(:svc_model_hardware) { MiqAeMethodService::MiqAeServiceHardware.find(hardware) }
-  let(:svc_model_guest_device_1) { MiqAeMethodService::MiqAeServiceGuestDevice.find(guest_device_1) }
-  let(:svc_model_guest_device_2) { MiqAeMethodService::MiqAeServiceGuestDevice.find(guest_device_2) }
-  let(:svc_model_nic_1) { MiqAeMethodService::MiqAeServiceGuestDevice.find(nic_1) }
-  let(:svc_model_nic_2) { MiqAeMethodService::MiqAeServiceGuestDevice.find(nic_2) }
+  let(:svc_model_src_cluster) { MiqAeMethodService::MiqAeServiceEmsCluster.find(src_cluster.id) }
+  let(:svc_model_src_ems_vmware) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(src_ems_vmware.id) }
+  let(:svc_model_dst_cluster) { MiqAeMethodService::MiqAeServiceEmsCluster.find(dst_cluster.id) }
+  let(:svc_model_dst_ems_redhat) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(dst_ems_redhat.id) }
+  let(:svc_model_dst_ems_openstack) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(dst_ems_openstack.id) }
+  let(:svc_model_src_storage_1) { MiqAeMethodService::MiqAeServiceStorage.find(src_storage_1.id) }
+  let(:svc_model_src_storage_2) { MiqAeMethodService::MiqAeServiceStorage.find(src_storage_2.id) }
+  let(:svc_model_dst_storage_redhat) { MiqAeMethodService::MiqAeServiceStorage.find(dst_storage_redhat.id) }
+  let(:svc_model_src_lan_1) { MiqAeMethodService::MiqAeServiceLan.find(src_lan_1.id) }
+  let(:svc_model_src_lan_2) { MiqAeMethodService::MiqAeServiceLan.find(src_lan_2.id) }
+  let(:svc_model_dst_lan_1) { MiqAeMethodService::MiqAeServiceLan.find(dst_lan_1.id) }
+  let(:svc_model_dst_lan_2) { MiqAeMethodService::MiqAeServiceLan.find(dst_lan_2.id) }
+  let(:svc_model_hardware) { MiqAeMethodService::MiqAeServiceHardware.find(hardware.id) }
+  let(:svc_model_guest_device_1) { MiqAeMethodService::MiqAeServiceGuestDevice.find(guest_device_1.id) }
+  let(:svc_model_guest_device_2) { MiqAeMethodService::MiqAeServiceGuestDevice.find(guest_device_2.id) }
+  let(:svc_model_nic_1) { MiqAeMethodService::MiqAeServiceGuestDevice.find(nic_1.id) }
+  let(:svc_model_nic_2) { MiqAeMethodService::MiqAeServiceGuestDevice.find(nic_2.id) }
+  let(:svc_model_dst_cloud_tenant) { MiqAeMethodService::MiqAeServiceCloudTenant.find(dst_cloud_tenant.id) }
+  let(:svc_model_dst_cloud_network_1) { MiqAeMethodService::MiqAeServiceCloudNetwork.find(dst_cloud_network_1.id) }
+  let(:svc_model_dst_cloud_network_2) { MiqAeMethodService::MiqAeServiceCloudNetwork.find(dst_cloud_network_2.id) }
+  let(:svc_model_dst_flavor) { MiqAeMethodService::MiqAeServiceFlavor.find(dst_flavor.id) }
+  let(:svc_model_dst_security_group) { MiqAeMethodService::MiqAeServiceSecurityGroup.find(dst_security_group.id) }
+  let(:svc_model_dst_cloud_volume_type) { MiqAeMethodService::MiqAeServiceCloudVolumeType.find(dst_cloud_volume_type.id) }
+
 
   let(:disk_1) { instance_double("disk", :device_name => "Hard disk 1", :device_type => "disk", :filename => "[datastore12] test_vm/test_vm.vmdk", :size => 17_179_869_184) }
   let(:disk_2) { instance_double("disk", :device_name => "Hard disk 2", :device_type => "disk", :filename => "[datastore12] test_vm/test_vm-2.vmdk", :size => 17_179_869_184) }
 
   let(:virtv2v_networks) do
-    [
-      { :source => svc_model_src_lan_1.name, :destination => svc_model_dst_lan_1.name, :mac_address => svc_model_nic_1.address },
-      { :source => svc_model_src_lan_2.name, :destination => svc_model_dst_lan_2.name, :mac_address => svc_model_nic_2.address },
-    ]
+    {
+      "rhevm" => [
+        { :source => svc_model_src_lan_1.name, :destination => svc_model_dst_lan_1.name, :mac_address => svc_model_nic_1.address },
+        { :source => svc_model_src_lan_2.name, :destination => svc_model_dst_lan_2.name, :mac_address => svc_model_nic_2.address },
+      ],
+      "openstack" => [
+        { :source => svc_model_src_lan_1.name, :destination => svc_model_dst_cloud_network_1.ems_ref, :mac_address => svc_model_nic_1.address },
+        { :source => svc_model_src_lan_2.name, :destination => svc_model_dst_cloud_network_2.ems_ref, :mac_address => svc_model_nic_2.address },
+      ]
+    }
   end
 
   let(:virtv2v_disks) do
@@ -81,6 +104,10 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   before do
     allow(ManageIQ::Automate::Transformation::Common::Utils).to receive(:task).and_return(svc_model_task)
     allow(ManageIQ::Automate::Transformation::Common::Utils).to receive(:source_vm).and_return(svc_model_src_vm)
+
+    allow(svc_model_task).to receive(:miq_request).and_return(svc_model_request)
+    allow(svc_model_request).to receive(:source).and_return(svc_model_plan)
+    allow(svc_model_plan).to receive(:options).and_return(:config_info => { 'osp_flavor' => svc_model_dst_flavor.id, 'osp_security_group' => svc_model_dst_security_group.id })
 
     allow(svc_model_src_vm).to receive(:hardware).and_return(svc_model_hardware)
     allow(disk_1).to receive(:storage).and_return(svc_model_src_storage_1)
@@ -225,16 +252,39 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
       expect { described_class.new(ae_service).virtv2v_networks }.to raise_error(errormsg)
     end
 
-    it "source_vm has nicss and lans have mapping" do
+    it "source_vm has nics and lans have mapping" do
+      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
       allow(svc_model_hardware).to receive(:nics).and_return([svc_model_nic_1, svc_model_nic_2])
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_1).and_return(svc_model_dst_lan_1)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_2).and_return(svc_model_dst_lan_2)
-      expect(described_class.new(ae_service).virtv2v_networks).to eq(virtv2v_networks)
+      expect(described_class.new(ae_service).virtv2v_networks).to eq(virtv2v_networks[svc_model_dst_ems.emstype])
     end
   end
 
-  context "source vm is vmware" do
+  context "virtv2v hardware vmwarews2rhevm" do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
+    let(:svc_model_dst_ems) { svc_model_dst_ems_redhat }
+    let(:svc_model_dst_storage) { svc_model_dst_storage_redhat }
+
+    before do
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
+      allow(svc_model_dst_cluster).to receive(:ext_management_system).and_return(svc_model_dst_ems)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_1).and_return(svc_model_dst_lan_1)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_2).and_return(svc_model_dst_lan_2)
+    end
+
+    it_behaves_like "virtv2v hardware"
+  end
+
+  context "virtv2v hardware vmwarews2openstack" do
+    let(:svc_model_src_vm) { svc_model_src_vm_vmware }
+    let(:svc_model_dst_ems) { svc_model_dst_ems_openstack }
+    let(:svc_model_dst_storage) { svc_model_dst_cloud_volume_type }
+
+    before do
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cloud_tenant)
+      allow(svc_model_dst_cloud_tenant).to receive(:ext_management_system).and_return(svc_model_dst_ems)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_1).and_return(svc_model_dst_cloud_network_1)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_2).and_return(svc_model_dst_cloud_network_2)
+    end
 
     it_behaves_like "virtv2v hardware"
   end
@@ -243,20 +293,14 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     it "task options" do
       allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
       allow(svc_model_src_vm).to receive(:ext_management_system).and_return(svc_model_src_ems)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
-      allow(svc_model_dst_cluster).to receive(:ext_management_system).and_return(svc_model_dst_ems)
       allow(svc_model_hardware).to receive(:disks).and_return([disk_1, disk_2])
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_1).and_return(svc_model_dst_storage)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_2).and_return(svc_model_dst_storage)
       allow(svc_model_src_vm).to receive(:allocated_disk_storage).and_return(disk_1.size + disk_2.size)
       allow(svc_model_hardware).to receive(:nics).and_return([svc_model_nic_1, svc_model_nic_2])
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_1).and_return(svc_model_dst_lan_1)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_2).and_return(svc_model_dst_lan_2)
       allow(svc_model_src_vm).to receive(:power_state).and_return("on")
       described_class.new(ae_service).populate_task_options
       expect(svc_model_task.get_option(:source_ems_id)).to eq(svc_model_src_ems.id)
       expect(svc_model_task.get_option(:destination_ems_id)).to eq(svc_model_dst_ems.id)
-      expect(svc_model_task[:options][:virtv2v_networks]).to eq(virtv2v_networks)
+      expect(svc_model_task[:options][:virtv2v_networks]).to eq(virtv2v_networks[svc_model_dst_ems.emstype])
       expect(svc_model_task[:options][:virtv2v_disks]).to eq(virtv2v_disks)
       expect(svc_model_task.get_option(:transformation_type)).to eq("#{svc_model_src_ems.emstype}2#{svc_model_dst_ems.emstype}")
       expect(svc_model_task.get_option(:source_vm_power_state)).to eq("on")
@@ -269,6 +313,32 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:svc_model_src_ems) { svc_model_src_ems_vmware }
     let(:svc_model_dst_ems) { svc_model_dst_ems_redhat }
+
+    before do
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
+      allow(svc_model_dst_cluster).to receive(:ext_management_system).and_return(svc_model_dst_ems)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_1).and_return(svc_model_dst_lan_1)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_2).and_return(svc_model_dst_lan_2)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_1).and_return(svc_model_dst_storage_redhat)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_2).and_return(svc_model_dst_storage_redhat)
+    end
+
+    it_behaves_like "populate task options"
+  end
+
+  context "source is vmware and destination is openstack" do
+    let(:svc_model_src_vm) { svc_model_src_vm_vmware }
+    let(:svc_model_src_ems) { svc_model_src_ems_vmware }
+    let(:svc_model_dst_ems) { svc_model_dst_ems_openstack }
+
+    before do
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cloud_tenant)
+      allow(svc_model_dst_cloud_tenant).to receive(:ext_management_system).and_return(svc_model_dst_ems)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_1).and_return(svc_model_dst_cloud_network_1)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_2).and_return(svc_model_dst_cloud_network_2)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_1).and_return(svc_model_dst_cloud_volume_type)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_2).and_return(svc_model_dst_cloud_volume_type)
+    end
 
     it_behaves_like "populate task options"
   end
@@ -303,20 +373,15 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     it "global summary test" do
       allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
       allow(svc_model_src_vm).to receive(:ext_management_system).and_return(svc_model_src_ems)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
       allow(svc_model_dst_cluster).to receive(:ext_management_system).and_return(svc_model_dst_ems)
       allow(svc_model_hardware).to receive(:disks).and_return([disk_1, disk_2])
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_1).and_return(svc_model_dst_storage)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_2).and_return(svc_model_dst_storage)
       allow(svc_model_src_vm).to receive(:allocated_disk_storage).and_return(disk_1.size + disk_2.size)
       allow(svc_model_hardware).to receive(:nics).and_return([svc_model_nic_1, svc_model_nic_2])
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_1).and_return(svc_model_dst_lan_1)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_2).and_return(svc_model_dst_lan_2)
       allow(svc_model_src_vm).to receive(:power_state).and_return("on")
       described_class.new(ae_service).main
       expect(svc_model_task.get_option(:source_ems_id)).to eq(svc_model_src_ems.id)
       expect(svc_model_task.get_option(:destination_ems_id)).to eq(svc_model_dst_ems.id)
-      expect(svc_model_task[:options][:virtv2v_networks]).to eq(virtv2v_networks)
+      expect(svc_model_task[:options][:virtv2v_networks]).to eq(virtv2v_networks[svc_model_dst_ems.emstype])
       expect(svc_model_task[:options][:virtv2v_disks]).to eq(virtv2v_disks)
       expect(svc_model_task.get_option(:transformation_type)).to eq("#{svc_model_src_ems.emstype}2#{svc_model_dst_ems.emstype}")
       expect(svc_model_task.get_option(:source_vm_power_state)).to eq("on")
@@ -331,6 +396,32 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:svc_model_src_ems) { svc_model_src_ems_vmware }
     let(:svc_model_dst_ems) { svc_model_dst_ems_redhat }
+
+    before do
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
+      allow(svc_model_dst_cluster).to receive(:ext_management_system).and_return(svc_model_dst_ems)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_1).and_return(svc_model_dst_lan_1)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_2).and_return(svc_model_dst_lan_2)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_1).and_return(svc_model_dst_storage_redhat)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_2).and_return(svc_model_dst_storage_redhat)
+    end
+
+    it_behaves_like "main"
+  end
+
+  context "source is vmware and destination is openstack" do
+    let(:svc_model_src_vm) { svc_model_src_vm_vmware }
+    let(:svc_model_src_ems) { svc_model_src_ems_vmware }
+    let(:svc_model_dst_ems) { svc_model_dst_ems_openstack }
+
+    before do
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cloud_tenant)
+      allow(svc_model_dst_cloud_tenant).to receive(:ext_management_system).and_return(svc_model_dst_ems)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_1).and_return(svc_model_dst_cloud_network_1)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_2).and_return(svc_model_dst_cloud_network_2)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_1).and_return(svc_model_dst_cloud_volume_type)
+      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_2).and_return(svc_model_dst_cloud_volume_type)
+    end
 
     it_behaves_like "main"
   end
