@@ -21,13 +21,13 @@ module ManageIQ
 
               def request
                 @request ||= @handle.root["miq_provision"].tap do |req|
-                  log_and_raise('miq_provision not specified') if req.nil?
+                  ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise('miq_provision not specified', @handle) if req.nil?
                 end
               end
 
               def vm
                 @vm ||= request.vm_template.tap do |vm|
-                  log_and_raise('VM not specified') if vm.nil?
+                  ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise('VM not specified', @handle) if vm.nil?
                 end
               end
 
@@ -57,11 +57,6 @@ module ManageIQ
                 request.set_storage(storage) if storage
 
                 @handle.log("info", "vm=[#{vm.name}] host=[#{host}] storage=[#{storage}]")
-              end
-
-              def log_and_raise(message)
-                @handle.log(:error, message)
-                raise "ERROR - #{message}"
               end
             end
           end

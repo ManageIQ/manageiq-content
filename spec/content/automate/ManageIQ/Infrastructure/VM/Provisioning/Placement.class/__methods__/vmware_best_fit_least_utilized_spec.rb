@@ -1,4 +1,5 @@
 require_domain_file
+require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/System/CommonMethods/Utils.class/__methods__/log_object.rb')
 
 describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::VmwareBestFitLeastUtilized do
   let(:datacenter)  { FactoryGirl.create(:datacenter, :ext_management_system => ems) }
@@ -22,12 +23,14 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
 
   it 'requires miq_provision attribute in root object' do
     new_service = Spec::Support::MiqAeMockService.new(Spec::Support::MiqAeMockObject.new)
-    expect { described_class.new(new_service).main }.to raise_error(RuntimeError, /miq_provision not specified/)
+    allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/miq_provision not specified/, new_service).and_raise(RuntimeError)
+    expect { described_class.new(new_service).main }.to raise_error(RuntimeError)
   end
 
   it 'requires source vm in miq_provision' do
     miq_provision.update_attributes(:source => nil)
-    expect { described_class.new(ae_service).main }.to raise_error(RuntimeError, /VM not specified/)
+    allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/VM not specified/, ae_service).and_raise(RuntimeError)
+    expect { described_class.new(ae_service).main }.to raise_error(RuntimeError)
   end
 
   context "Auto placement" do
