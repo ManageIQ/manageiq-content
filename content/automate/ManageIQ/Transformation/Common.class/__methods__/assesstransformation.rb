@@ -3,9 +3,9 @@ module ManageIQ
     module Transformation
       module Common
         class AssessTransformation
-          SUPPORTED_SOURCE_EMS_TYPES = ['vmwarews'].freeze
-          SUPPORTED_DESTINATION_EMS_TYPES = ['openstack', 'rhevm'].freeze
-          
+          SUPPORTED_SOURCE_EMS_TYPES = %w('vmwarews').freeze
+          SUPPORTED_DESTINATION_EMS_TYPES = %w('openstack', 'rhevm').freeze
+
           def initialize(handle = $evm)
             @handle = handle
             @task = ManageIQ::Automate::Transformation::Common::Utils.task(@handle)
@@ -74,7 +74,7 @@ module ManageIQ
           def destination_network_ref_openstack(network)
             network.ems_ref
           end
-          
+
           def transformation_type
             raise "Unsupported source EMS type: #{source_ems.emstype}." unless SUPPORTED_SOURCE_EMS_TYPES.include?(source_ems.emstype)
             raise "Unsupported destination EMS type: #{destination_ems.emstype}." unless SUPPORTED_DESTINATION_EMS_TYPES.include?(destination_ems.emstype)
@@ -88,7 +88,7 @@ module ManageIQ
               raise "No transformation plan" if plan.nil?
             end
           end
-          
+
           def destination_flavor
             return unless destination_ems.emstype == 'openstack'
             flavor_id = transformation_plan.options[:config_info]['osp_flavor']
@@ -97,7 +97,7 @@ module ManageIQ
               raise "No flavor" if flavor.nil?
             end
           end
-          
+
           def destination_security_group
             return unless destination_ems.emstype == 'openstack'
             security_group_id = transformation_plan.options[:config_info]['osp_security_group']
@@ -106,7 +106,7 @@ module ManageIQ
               raise "No security group" if sg.nil?
             end
           end
-          
+
           def populate_task_options
             @task.set_option(:source_ems_id, source_ems.id)
             @task.set_option(:destination_ems_id, destination_ems.id)

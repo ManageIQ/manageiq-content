@@ -66,7 +66,7 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
 
   let(:virtv2v_networks) do
     {
-      "rhevm" => [
+      "rhevm"     => [
         { :source => svc_model_src_lan_1.name, :destination => svc_model_dst_lan_1.name, :mac_address => svc_model_nic_1.address },
         { :source => svc_model_src_lan_2.name, :destination => svc_model_dst_lan_2.name, :mac_address => svc_model_nic_2.address },
       ],

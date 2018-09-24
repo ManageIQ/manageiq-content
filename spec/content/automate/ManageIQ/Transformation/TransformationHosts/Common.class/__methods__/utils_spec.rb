@@ -361,11 +361,11 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
         :osp_environment     => {
           :os_no_cache            => true,
           :os_auth_url            => URI::Generic.build(
-                :scheme => svc_model_dst_ems_openstack.security_protocol == 'non-ssl' ? 'http' : 'https',
-                :host   => svc_model_dst_ems_openstack.hostname,
-                :port   => svc_model_dst_ems_openstack.port,
-                :path   => svc_model_dst_ems_openstack.api_version
-              ),
+            :scheme => svc_model_dst_ems_openstack.security_protocol == 'non-ssl' ? 'http' : 'https',
+            :host   => svc_model_dst_ems_openstack.hostname,
+            :port   => svc_model_dst_ems_openstack.port,
+            :path   => svc_model_dst_ems_openstack.api_version
+          ),
           :os_user_domain_name    => svc_model_dst_ems_openstack.uid_ems,
           :os_username            => svc_model_dst_ems_openstack.authentication_userid,
           :os_password            => svc_model_dst_ems_openstack.authentication_password,
@@ -390,11 +390,11 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils 
         :osp_environment     => {
           :os_no_cache            => true,
           :os_auth_url            => URI::Generic.build(
-                :scheme => svc_model_dst_ems_openstack.security_protocol == 'non-ssl' ? 'http' : 'https',
-                :host   => svc_model_dst_ems_openstack.hostname,
-                :port   => svc_model_dst_ems_openstack.port,
-                :path   => svc_model_dst_ems_openstack.api_version
-              ),
+            :scheme => svc_model_dst_ems_openstack.security_protocol == 'non-ssl' ? 'http' : 'https',
+            :host   => svc_model_dst_ems_openstack.hostname,
+            :port   => svc_model_dst_ems_openstack.port,
+            :path   => svc_model_dst_ems_openstack.api_version
+          ),
           :os_user_domain_name    => svc_model_dst_ems_openstack.uid_ems,
           :os_username            => svc_model_dst_ems_openstack.authentication_userid,
           :os_password            => svc_model_dst_ems_openstack.authentication_password,
