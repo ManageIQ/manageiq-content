@@ -4,7 +4,7 @@ module ManageIQ
       module Common
         class AssessTransformation
           SUPPORTED_SOURCE_EMS_TYPES = %w(vmwarews).freeze
-          SUPPORTED_DESTINATION_EMS_TYPES = %w(openstack, rhevm).freeze
+          SUPPORTED_DESTINATION_EMS_TYPES = %w(openstack rhevm).freeze
 
           def initialize(handle = $evm)
             @handle = handle
