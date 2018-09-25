@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+##  Unreleased as of Sprint 95 Ending 2018-09-24
+
+### Added
+- Use embedded log method. [(#427)](https://github.com/ManageIQ/manageiq-content/pull/427)
+- Adding log_and_notify method into log_object embedded method. [(#423)](https://github.com/ManageIQ/manageiq-content/pull/423)
+- Transformation throttling - Base components [(#418)](https://github.com/ManageIQ/manageiq-content/pull/418)
+
+### Fixed
+- Add storage profile support in vmware_best_fit_least_utilized method. [(#420)](https://github.com/ManageIQ/manageiq-content/pull/420)
+
 ##  Unreleased as of Sprint 94 Ending 2018-09-10
 
 ### Added
