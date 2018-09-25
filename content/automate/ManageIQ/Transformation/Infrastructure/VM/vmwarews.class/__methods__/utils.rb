@@ -7,7 +7,7 @@ module ManageIQ
             class Utils
               require 'rbvmomi'
 
-              def self.host_fingerprint(host)
+              def self.host_fingerprint(host, handle = $evm)
                 require 'socket'
                 require 'openssl'
 
@@ -22,14 +22,14 @@ module ManageIQ
                 Digest::SHA1.hexdigest(cert.to_der).upcase.scan(/../).join(":")
               end
 
-              def self.provider_connection(ems)
+              def self.provider_connection(ems, handle = $evm)
                 @provider_connection ||= RbVmomi::VIM.connect(:host => ems.ipaddress || ems.hostname, :user => ems.authentication_userid, :password => ems.authentication_password, :insecure => true)
               rescue => e
                 raise "Could not connect to #{ems.name}: #{e.message}" if c.nil?
               end
               private_class_method :provider_connection
 
-              def self.vm_get_ref(vim, vm)
+              def self.vm_get_ref(vim, vm, handle = $evm)
                 dc = vim.serviceInstance.find_datacenter(vm.v_owning_datacenter)
                 raise "Datacenter '#{vm.datacenter.name}' not found in vCenter" unless dc
                 vim.serviceInstance.content.searchIndex.FindByUuid(:datacenter => dc, :uuid => vm.uid_ems, :vmSearch => true, :instanceUuid => false)
