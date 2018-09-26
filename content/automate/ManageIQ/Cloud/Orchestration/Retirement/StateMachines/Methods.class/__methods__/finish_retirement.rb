@@ -9,14 +9,18 @@ module ManageIQ
           module StateMachines
             module Methods
               class FinishRetirement
+                include ManageIQ::Automate::Cloud::Orchestration::Lifecycle::OrchestrationMixin
+
                 def initialize(handle = $evm)
                   @handle = handle
                 end
 
                 def main
-                  stack = @handle.root['orchestration_stack']
-                  stack.finish_retirement if stack
-                  @handle.create_notification(:type => :orchestration_stack_retired, :subject => stack) if stack
+                  if (stack = get_stack(@handle))
+                    stack.finish_retirement
+                    @handle.create_notification(:type => :orchestration_stack_retired, :subject => stack)
+                  end
+                  get_service(@handle).try(:finish_retirement)
                 end
               end
             end

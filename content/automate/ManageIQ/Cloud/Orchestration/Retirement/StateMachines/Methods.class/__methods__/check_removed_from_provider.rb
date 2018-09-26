@@ -9,6 +9,7 @@ module ManageIQ
           module StateMachines
             module Methods
               class CheckRemovedFromProvider
+                include ManageIQ::Automate::Cloud::Orchestration::Lifecycle::OrchestrationMixin
 
                 def initialize(handle = $evm)
                   @handle = handle
@@ -16,9 +17,8 @@ module ManageIQ
 
                 def main
                   @handle.root['ae_result'] = 'ok'
-                  stack = @handle.root['orchestration_stack']
 
-                  if stack && @handle.get_state_var('stack_exists_in_provider')
+                  if (stack = get_stack(@handle)) && @handle.get_state_var('stack_exists_in_provider')
                     begin
                       status, _reason = stack.normalized_live_status
                       if status == 'not_exist' || status == 'delete_complete'
