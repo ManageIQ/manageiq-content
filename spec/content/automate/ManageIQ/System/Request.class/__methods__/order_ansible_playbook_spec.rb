@@ -2,7 +2,9 @@ require_domain_file
 
 describe ManageIQ::Automate::System::Request::OrderAnsiblePlaybook do
   let(:root_object) do
-    Spec::Support::MiqAeMockObject.new(attributes)
+    Spec::Support::MiqAeMockObject.new(attributes).tap do |root|
+      allow(root).to receive(:encrypted?).and_return(false)
+    end
   end
 
   let(:ae_service) do
@@ -192,5 +194,26 @@ describe ManageIQ::Automate::System::Request::OrderAnsiblePlaybook do
 
       expect { described_class.new(ae_service).main }.to raise_error(/IP address not specified for vm/)
     end
+  end
+
+  context "with protected dialog fields" do
+    let(:extra_vars) do
+      { :credential      => nil,
+        :hosts           => nil,
+        'param_password' => 'secret' }
+    end
+    let(:attributes) do
+      { 'service_template_name' => svc_service_template.name,
+        'dialog_param_password' => 'encrypted_value',
+        'vmdb_object_type'      => 'vm',
+        'vm'                    => svc_vm }
+    end
+
+    before do
+      allow(root_object).to receive(:encrypted?).and_return(true)
+      allow(root_object).to receive(:encrypted_string).and_return("secret")
+    end
+
+    it_behaves_like "order playbook"
   end
 end
