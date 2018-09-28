@@ -43,46 +43,46 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::KillVi
   end
 
   context "#task_virtv2v_state" do
-    it "when virtv2v not started" do
-      allow(svc_model_task).to receive(:get_option).with(:virtv2v_started_on).and_return(nil)
-      expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil
+    context "when virtv2v is not started" do
+      before { allow(svc_model_task).to receive(:get_option).with(:virtv2v_started_on).and_return(nil) }
+      it { expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil }
     end
 
-    it "when virtv2v is finished" do
-      allow(svc_model_task).to receive(:get_option).with(:virtv2v_started_on).and_return(Time.now.utc - 1)
-      allow(svc_model_task).to receive(:get_option).with(:virtv2v_finished_on).and_return(Time.now.utc)
-      expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil
-    end
+    context "when virtv2v is started" do
+      before { allow(svc_model_task).to receive(:get_option).with(:virtv2v_started_on).and_return(Time.now.utc - 1) }
 
-    it "when virtv2v-wrapper has failed" do
-      allow(svc_model_task).to receive(:get_option).with(:virtv2v_started_on).and_return(Time.now.utc - 1)
-      allow(svc_model_task).to receive(:get_option).with(:virtv2v_finished_on).and_return(nil)
-      allow(svc_model_task).to receive(:get_option).with(:virtv2v_wrapper).and_return(nil)
-      expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil
-    end
+      context "when virtv2v is finished" do
+        before { allow(svc_model_task).to receive(:get_option).with(:virtv2v_finished_on).and_return(Time.now.utc) }
+        it { expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil }
+      end
 
-    it "when remote command fails" do
-      allow(svc_model_task).to receive(:get_option).with(:virtv2v_started_on).and_return(Time.now.utc - 1)
-      allow(svc_model_task).to receive(:get_option).with(:virtv2v_finished_on).and_return(nil)
-      allow(svc_model_task).to receive(:get_option).with(:virtv2v_wrapper).and_return('state_file' => '/tmp/fake_state_file.state')
-      allow(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:remote_command).with(svc_model_task, svc_model_host, "cat '/tmp/fake_state_file.state'").and_return(:success => false, :stdout => 'No such file or directory')
-      expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil
-    end
+      context "when virtv2v is not finished" do
+        before { allow(svc_model_task).to receive(:get_option).with(:virtv2v_finished_on).and_return(nil) }
 
-    it "when state file is empty" do
-      allow(svc_model_task).to receive(:get_option).with(:virtv2v_started_on).and_return(Time.now.utc - 1)
-      allow(svc_model_task).to receive(:get_option).with(:virtv2v_finished_on).and_return(nil)
-      allow(svc_model_task).to receive(:get_option).with(:virtv2v_wrapper).and_return('state_file' => '/tmp/fake_state_file.state')
-      allow(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:remote_command).with(svc_model_task, svc_model_host, "cat '/tmp/fake_state_file.state'").and_return(:success => true, :stdout => '')
-      expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil
-    end
+        context "when virtv2v-wrapper has failed" do
+          before { allow(svc_model_task).to receive(:get_option).with(:virtv2v_wrapper).and_return(nil) }
+          it { expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil }
 
-    it "when state file is ok" do
-      allow(svc_model_task).to receive(:get_option).with(:virtv2v_started_on).and_return(Time.now.utc - 1)
-      allow(svc_model_task).to receive(:get_option).with(:virtv2v_finished_on).and_return(nil)
-      allow(svc_model_task).to receive(:get_option).with(:virtv2v_wrapper).and_return('state_file' => '/tmp/fake_state_file.state')
-      allow(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:remote_command).with(svc_model_task, svc_model_host, "cat '/tmp/fake_state_file.state'").and_return(:success => true, :stdout => '{ "pid": "1234" }')
-      expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to eq('pid' => '1234')
+          context "when virtv2v-wrapper has started" do
+            before { allow(svc_model_task).to receive(:get_option).with(:virtv2v_wrapper).and_return('state_file' => '/tmp/fake_state_file.state') }
+
+            it "when remote command fails" do
+              allow(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:remote_command).with(svc_model_task, svc_model_host, "cat '/tmp/fake_state_file.state'").and_return(:success => false, :stdout => 'No such file or directory')
+              expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil
+            end
+
+            it "when state file is empty" do
+              allow(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:remote_command).with(svc_model_task, svc_model_host, "cat '/tmp/fake_state_file.state'").and_return(:success => true, :stdout => '')
+              expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil
+            end
+
+            it "when state file is ok" do
+              allow(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:remote_command).with(svc_model_task, svc_model_host, "cat '/tmp/fake_state_file.state'").and_return(:success => true, :stdout => '{ "pid": "1234" }')
+              expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to eq('pid' => '1234')
+            end
+          end
+        end
+      end
     end
   end
 
@@ -103,7 +103,7 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::KillVi
   end
 
   context "#main" do
-    it "wraping up" do
+    it "wrapping up" do
       allow(svc_model_task).to receive(:get_option).with(:virtv2v_started_on).and_return(Time.now.utc - 1)
       allow(svc_model_task).to receive(:get_option).with(:virtv2v_finished_on).and_return(nil)
       allow(svc_model_task).to receive(:get_option).with(:virtv2v_wrapper).and_return('state_file' => '/tmp/fake_state_file.state')
