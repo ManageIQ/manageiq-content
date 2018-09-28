@@ -24,8 +24,8 @@ module ManageIQ
 
               def main
                 RIGHT_SIZE_ITEMS.each do |item|
-                  next unless @task.get_option("right_size_strategy_#{item}".to_sym)
-                  send("apply_right_size_#{item}", @task.get_option("right_size_strategy_#{item}".to_sym))
+                  right_size_strategy = @task.get_option("right_size_strategy_#{item}".to_sym)
+                  send("apply_right_size_#{item}", right_size_strategy) if right_size_strategy
                 end
               rescue => e
                 @handle.set_state_var(:ae_state_progress, 'message' => e.message)
