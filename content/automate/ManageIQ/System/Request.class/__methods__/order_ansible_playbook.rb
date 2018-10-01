@@ -29,7 +29,8 @@ module ManageIQ
             key_list = @handle.root.attributes.keys.select { |k| k.start_with?('dialog_param') }
             key_list.each_with_object({}) do |key, hash|
               match_data = ANSIBLE_DIALOG_VAR_REGEX.match(key)
-              hash["param_#{match_data[1]}"] = @handle.root[key] if match_data
+              next unless match_data
+              hash["param_#{match_data[1]}"] = @handle.root.encrypted?(key) ? @handle.root.encrypted_string(key) : @handle.root[key]
             end
           end
 
