@@ -107,7 +107,7 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
 
     allow(svc_model_task).to receive(:miq_request).and_return(svc_model_request)
     allow(svc_model_request).to receive(:source).and_return(svc_model_plan)
-    allow(svc_model_plan).to receive(:options).and_return(:config_info => { 'osp_flavor' => svc_model_dst_flavor.id, 'osp_security_group' => svc_model_dst_security_group.id })
+    allow(svc_model_plan).to receive(:options).and_return(:config_info => { :osp_flavor => svc_model_dst_flavor.id, :osp_security_group => svc_model_dst_security_group.id })
 
     allow(svc_model_src_vm).to receive(:hardware).and_return(svc_model_hardware)
     allow(disk_1).to receive(:storage).and_return(svc_model_src_storage_1)

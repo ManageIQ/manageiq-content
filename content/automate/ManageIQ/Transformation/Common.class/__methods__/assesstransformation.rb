@@ -91,7 +91,7 @@ module ManageIQ
 
           def destination_flavor
             return unless destination_ems.emstype == 'openstack'
-            flavor_id = transformation_plan.options[:config_info]['osp_flavor']
+            flavor_id = transformation_plan.options[:config_info][:osp_flavor]
             raise 'No flavor id in task' if flavor_id.nil?
             @destination_flavor ||= @handle.vmdb(:flavor).find_by(:id => flavor_id).tap do |flavor|
               raise "No flavor" if flavor.nil?
@@ -100,7 +100,7 @@ module ManageIQ
 
           def destination_security_group
             return unless destination_ems.emstype == 'openstack'
-            security_group_id = transformation_plan.options[:config_info]['osp_security_group']
+            security_group_id = transformation_plan.options[:config_info][:osp_security_group]
             raise 'No security group id in task' if security_group_id.nil?
             @destination_security_group ||= @handle.vmdb(:security_group).find_by(:id => security_group_id).tap do |sg|
               raise "No security group" if sg.nil?
