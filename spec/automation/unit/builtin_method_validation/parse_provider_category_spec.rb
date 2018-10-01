@@ -1,12 +1,13 @@
 describe "parse_provider_category" do
-  let(:infra_ems)       { FactoryGirl.create(:ems_vmware_with_authentication) }
-  let(:infra_vm)        { FactoryGirl.create(:vm_vmware, :ems_id => infra_ems.id, :evm_owner => user) }
-  let(:migrate_request) { FactoryGirl.create(:vm_migrate_request, :requester => user) }
-  let(:user)            { FactoryGirl.create(:user_with_group) }
-  let(:inst)            { "/System/Process/parse_provider_category" }
+  let(:infra_ems)        { FactoryGirl.create(:ems_vmware_with_authentication) }
+  let(:infra_vm)         { FactoryGirl.create(:vm_vmware, :ems_id => infra_ems.id, :evm_owner => user) }
+  let(:migrate_request)  { FactoryGirl.create(:vm_migrate_request, :requester => user) }
+  let(:user)             { FactoryGirl.create(:user_with_group) }
+  let(:inst)             { "/System/Process/parse_provider_category" }
   let(:miq_host_provision) do
     FactoryGirl.create(:miq_host_provision, :provision_type => 'host_pxe_install', :state => 'pending', :status => 'Ok')
   end
+  let(:orch_retire_task) { FactoryGirl.create(:orchestration_stack_retire_task) }
 
   let(:infra_miq_request_task) do
     FactoryGirl.create(:miq_request_task, :miq_request => migrate_request, :source => infra_vm)
@@ -67,6 +68,11 @@ describe "parse_provider_category" do
       ws = MiqAeEngine.instantiate("#{inst}?OrchestrationStack::orchestration_stack=#{stack.id}", user)
       expect(ws.root["ae_provider_category"]).to eq("cloud")
       expect(prepend_namespace(ws)).to match(/amazon/i)
+    end
+
+    it "for orchestration stack retire task" do
+      ws = MiqAeEngine.instantiate("#{inst}?OrchestrationStack::orchestration_stack_retire_task=#{stack.id}", user)
+      expect(ws.root["ae_provider_category"]).to eq("cloud")
     end
 
     it "for miq_provision" do

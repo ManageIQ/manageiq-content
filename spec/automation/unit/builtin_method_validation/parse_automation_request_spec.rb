@@ -1,3 +1,4 @@
+
 describe "parse_automation_request" do
   let(:user) { FactoryGirl.create(:user_with_group) }
   let(:inst) { "/System/Process/parse_automation_request" }
@@ -7,7 +8,8 @@ describe "parse_automation_request" do
     expect(ws.root.attributes).to include(
       "target_component" => "VM",
       "target_class"     => "Lifecycle",
-      "target_instance"  => "Provisioning")
+      "target_instance"  => "Provisioning"
+    )
   end
 
   it "for vm_retired request" do
@@ -15,7 +17,8 @@ describe "parse_automation_request" do
     expect(ws.root.attributes).to include(
       "target_component" => "VM",
       "target_class"     => "Lifecycle",
-      "target_instance"  => "Retirement")
+      "target_instance"  => "Retirement"
+    )
   end
 
   it "for vm_migrate request" do
@@ -23,7 +26,17 @@ describe "parse_automation_request" do
     expect(ws.root.attributes).to include(
       "target_component" => "VM",
       "target_class"     => "Lifecycle",
-      "target_instance"  => "Migrate")
+      "target_instance"  => "Migrate"
+    )
+  end
+
+  it "for orchestration_stack_retire request" do
+    ws = MiqAeEngine.instantiate("#{inst}?request=orchestration_stack_retire", user)
+    expect(ws.root.attributes).to include(
+      "target_component" => "Orchestration",
+      "target_class"     => "Lifecycle",
+      "target_instance"  => "Retirement"
+    )
   end
 
   it "for host_provision request" do
@@ -40,6 +53,7 @@ describe "parse_automation_request" do
       "target_component"     => "Configured_System",
       "target_class"         => "Lifecycle",
       "target_instance"      => "Provisioning",
-      "ae_provider_category" => "infrastructure")
+      "ae_provider_category" => "infrastructure"
+    )
   end
 end
