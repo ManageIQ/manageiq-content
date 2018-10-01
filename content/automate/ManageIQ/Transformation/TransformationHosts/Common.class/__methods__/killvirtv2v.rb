@@ -18,15 +18,19 @@ module ManageIQ
               JSON.parse(result[:stdout])
             end
 
-            def kill_virtv2v(transformation_host, pid)
-              signal = 'KILL'
-              unless @handle.get_state_var('virtv2v_graceful_kill')
-                signal = 'TERM'
+            def kill_signal
+              if @handle.get_state_var('virtv2v_graceful_kill')
+                'KILL'
+              else
                 @handle.set_state_var('virtv2v_graceful_kill', true)
                 @handle.root['ae_result'] = 'retry'
                 @handle.root['ae_retry_interval'] = '30.seconds'
+                'TERM'
               end
-              ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils.remote_command(@task, transformation_host, "kill -s #{signal} #{pid}")
+            end
+
+            def kill_virtv2v(transformation_host, pid)
+              ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils.remote_command(@task, transformation_host, "kill -s #{kill_signal} #{pid}")
             end
 
             def main

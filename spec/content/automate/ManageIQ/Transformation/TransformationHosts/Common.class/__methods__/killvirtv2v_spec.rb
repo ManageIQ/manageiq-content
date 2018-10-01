@@ -31,6 +31,8 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::KillVi
   let(:svc_vmdb_handle_host) { MiqAeMethodService::MiqAeServiceHost }
 
   before do
+    ManageIQ::Automate::Transformation::TransformationHosts::Common::KillVirtV2V.instance_variable_set(:@task, nil)
+
     allow(ManageIQ::Automate::Transformation::Common::Utils).to receive(:task).with(ae_service).and_return(svc_model_task)
     allow(svc_model_task).to receive(:get_option).with(:transformation_host_id).and_return(svc_model_host.id)
 
@@ -38,64 +40,72 @@ describe ManageIQ::Automate::Transformation::TransformationHosts::Common::KillVi
     allow(svc_vmdb_handle_host).to receive(:find_by).with(:id => svc_model_host.id).and_return(svc_model_host)
   end
 
-  before(:each) do
-    ManageIQ::Automate::Transformation::TransformationHosts::Common::KillVirtV2V.instance_variable_set(:@task, nil)
-  end
-
   context "#task_virtv2v_state" do
     context "when virtv2v is not started" do
-      before { allow(svc_model_task).to receive(:get_option).with(:virtv2v_started_on).and_return(nil) }
-      it { expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil }
+      it "task_virtv2v_state should be nil" do
+        allow(svc_model_task).to receive(:get_option).with(:virtv2v_started_on).and_return(nil)
+        expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil
+      end
     end
 
     context "when virtv2v is started" do
       before { allow(svc_model_task).to receive(:get_option).with(:virtv2v_started_on).and_return(Time.now.utc - 1) }
 
       context "when virtv2v is finished" do
-        before { allow(svc_model_task).to receive(:get_option).with(:virtv2v_finished_on).and_return(Time.now.utc) }
-        it { expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil }
+        it "task_virtv2v_state should be nil" do
+          allow(svc_model_task).to receive(:get_option).with(:virtv2v_finished_on).and_return(Time.now.utc)
+          expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil
+        end
       end
 
       context "when virtv2v is not finished" do
         before { allow(svc_model_task).to receive(:get_option).with(:virtv2v_finished_on).and_return(nil) }
 
         context "when virtv2v-wrapper has failed" do
-          before { allow(svc_model_task).to receive(:get_option).with(:virtv2v_wrapper).and_return(nil) }
-          it { expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil }
+          it "task_virtv2v_state should be nil" do
+            allow(svc_model_task).to receive(:get_option).with(:virtv2v_wrapper).and_return(nil)
+            expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil
+          end
+        end
 
-          context "when virtv2v-wrapper has started" do
-            before { allow(svc_model_task).to receive(:get_option).with(:virtv2v_wrapper).and_return('state_file' => '/tmp/fake_state_file.state') }
+        context "when virtv2v-wrapper has started" do
+          before { allow(svc_model_task).to receive(:get_option).with(:virtv2v_wrapper).and_return('state_file' => '/tmp/fake_state_file.state') }
 
-            it "when remote command fails" do
-              allow(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:remote_command).with(svc_model_task, svc_model_host, "cat '/tmp/fake_state_file.state'").and_return(:success => false, :stdout => 'No such file or directory')
-              expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil
-            end
+          it "when remote command fails" do
+            allow(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:remote_command).with(svc_model_task, svc_model_host, "cat '/tmp/fake_state_file.state'").and_return(:success => false, :stdout => 'No such file or directory')
+            expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil
+          end
 
-            it "when state file is empty" do
-              allow(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:remote_command).with(svc_model_task, svc_model_host, "cat '/tmp/fake_state_file.state'").and_return(:success => true, :stdout => '')
-              expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil
-            end
+          it "when state file is empty" do
+            allow(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:remote_command).with(svc_model_task, svc_model_host, "cat '/tmp/fake_state_file.state'").and_return(:success => true, :stdout => '')
+            expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to be_nil
+          end
 
-            it "when state file is ok" do
-              allow(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:remote_command).with(svc_model_task, svc_model_host, "cat '/tmp/fake_state_file.state'").and_return(:success => true, :stdout => '{ "pid": "1234" }')
-              expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to eq('pid' => '1234')
-            end
+          it "when state file is ok" do
+            allow(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:remote_command).with(svc_model_task, svc_model_host, "cat '/tmp/fake_state_file.state'").and_return(:success => true, :stdout => '{ "pid": "1234" }')
+            expect(described_class.new(ae_service).task_virtv2v_state(svc_model_host)).to eq('pid' => '1234')
           end
         end
       end
     end
   end
 
-  context "#kill_virtv2v" do
+  context "#kill_signal" do
     it "when virtv2v has not received SIGTERM" do
       allow(ae_service).to receive(:get_state_var).with('virtv2v_graceful_kill').and_return(nil)
-      expect(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:remote_command).with(svc_model_task, svc_model_host, 'kill -s TERM 1234')
-      described_class.new(ae_service).kill_virtv2v(svc_model_host, '1234')
+      expect(described_class.new(ae_service).kill_signal).to eq('TERM')
       expect(ae_service.root['ae_result']).to eq('retry')
       expect(ae_service.root['ae_retry_interval']).to eq('30.seconds')
     end
 
-    it "when virtv2v has not received SIGTERM" do
+    it "when virtv2v has received SIGTERM" do
+      allow(ae_service).to receive(:get_state_var).with('virtv2v_graceful_kill').and_return(true)
+      expect(described_class.new(ae_service).kill_signal).to eq('KILL')
+    end
+  end
+
+  context "#kill_virtv2v" do
+    it "when virtv2v has received SIGTERM" do
       allow(ae_service).to receive(:get_state_var).with('virtv2v_graceful_kill').and_return(true)
       expect(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:remote_command).with(svc_model_task, svc_model_host, 'kill -s KILL 1234')
       described_class.new(ae_service).kill_virtv2v(svc_model_host, '1234')
