@@ -159,13 +159,14 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
 
   context "#launch" do
     it "with default values" do
+      user_admin = FactoryGirl.create(:user, :userid => 'admin')
       expect(ae_service).to receive(:execute).with(
         :create_automation_request,
         {
           :namespace     => 'Transformation/StateMachines',
           :class_name    => 'TransformationThrottler',
           :instance_name => 'Default',
-          :user_id       => 1,
+          :user_id       => user_admin.id,
           :attrs         => { :ttl => 3600 }
         },
         'admin',
