@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+##  Unreleased as of Sprint 96 Ending 2018-10-08
+
+### Added
+- Add support to apply right-size recommendation during transformation [(#417)](https://github.com/ManageIQ/manageiq-content/pull/417)
+
+### Fixed
+- Fix userid in transformation throttler launch [(#439)](https://github.com/ManageIQ/manageiq-content/pull/439)
+- Add tests for orchestration stack retirement [(#437)](https://github.com/ManageIQ/manageiq-content/pull/437)
+- Keep the encrypted value as is when creating service provision request. [(#435)](https://github.com/ManageIQ/manageiq-content/pull/435)
+
 ##  Unreleased as of Sprint 95 Ending 2018-09-24
 
 ### Added
