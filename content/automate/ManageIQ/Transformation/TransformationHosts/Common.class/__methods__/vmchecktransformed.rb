@@ -5,67 +5,44 @@ module ManageIQ
         module Common
           class VMCheckTransformed
             def initialize(handle = $evm)
-              @debug = true
               @handle = handle
+              @task = ManageIQ::Automate::Transformation::Common::Utils.task(@handle)
+            end
+
+            def set_retry
+              @handle.root['ae_result'] = 'retry'
+              @handle.root['ae_retry_server_affinity'] = true
+              @handle.log(:info, "Disk transformation is not finished. Checking in #{@handle.root['ae_retry_interval']}")
+            end
+
+            def update_total_percentage
+              virtv2v_disks = @task[:options][:virtv2v_disks]
+              converted_disks = virtv2v_disks.reject { |d| d[:percent].zero? }
+              message, percent = nil, nil
+              if converted_disks.empty?
+                percent = 1
+                message = 'Disks transformation is initializing.'
+              else
+                percent = 0
+                converted_disks.each { |disk| percent += (disk[:percent].to_f * disk[:weight].to_f / 100.0) }
+                message = "Converting disk #{converted_disks.length} / #{virtv2v_disks.length} [#{percent.round(2)}%]."
+              end
+              message, percent
             end
 
             def main
-              require 'json'
+              @task.get_conversion_state
 
-              factory_config = @handle.get_state_var(:factory_config)
-              raise "No factory config found. Aborting." if factory_config.nil?
-
-              task = @handle.root['service_template_transformation_plan_task']
-
-              # Retrieve transformation host
-              transformation_host = @handle.vmdb(:host).find_by(:id => task.get_option(:transformation_host_id))
-
-              # Retrieve state of virt-v2v
-              result = Transformation::TransformationHosts::Common::Utils.remote_command(task, transformation_host, "cat '#{task.get_option(:virtv2v_wrapper)['state_file']}'")
-              raise result[:stderr] unless result[:success] && !result[:stdout].empty?
-              virtv2v_state = JSON.parse(result[:stdout])
-              @handle.log(:info, "VirtV2V State: #{virtv2v_state.inspect}")
-
-              # Retrieve disks array
-              virtv2v_disks = task[:options][:virtv2v_disks]
-              @handle.log(:info, "Disks: #{virtv2v_disks.inspect}")
-
-              if virtv2v_state['finished'].nil?
-                # Update the progress of each disk
-                virtv2v_disks.each do |disk|
-                  matching_disks = virtv2v_state['disks'].select { |d| d['path'] == disk[:path] }
-                  raise "No disk matches '#{disk[:path]}'. Aborting." if matching_disks.length.zero?
-                  raise "More than one disk matches '#{disk[:path]}'. Aborting." if matching_disks.length > 1
-                  disk[:percent] = matching_disks.first['progress']
-                end
-                converted_disks = virtv2v_disks.reject { |d| d[:percent].zero? }
-                @handle.log(:info, "Converted disks: #{converted_disks.inspect}")
-                if converted_disks.empty?
-                  @handle.set_state_var(:ae_state_progress, 'message' => "Disks transformation is initializing.", 'percent' => 1)
-                else
-                  percent = 0
-                  converted_disks.each { |disk| percent += (disk[:percent].to_f * disk[:weight].to_f / 100.0) }
-                  message = "Converting disk #{converted_disks.length} / #{virtv2v_disks.length} [#{percent.round(2)}%]."
-                  @handle.set_state_var(:ae_state_progress, 'message' => message, 'percent' => percent.round(2))
-                end
-              else
-                task.set_option(:virtv2v_finished_on, Time.now.utc.strftime('%Y%m%d_%H%M'))
-                if virtv2v_state['failed']
-                  @handle.set_state_var(:ae_state_progress, 'message' => 'Disks transformation failed.')
-                  raise "Disks transformation failed."
-                else
-                  virtv2v_disks.each { |d| d[:percent] = 100 }
+              case @task.get_option(:virtv2v_status)
+              when 'active'
+                message, percent = update_total_percentage
+                @handle.set_state_var(:ae_state_progress, 'message' => message, 'percent' => percent.round(2))
+                set_retry
+              when 'failed'
+                @handle.set_state_var(:ae_state_progress, 'message' => 'Disks transformation failed.')
+                raise "Disks transformation failed."
+              when 'succeeded'
                   @handle.set_state_var(:ae_state_progress, 'message' => 'Disks transformation succeeded.', 'percent' => 100)
-                end
-              end
-
-              task.set_option(:virtv2v_disks, virtv2v_disks)
-
-              if task.get_option(:virtv2v_finished_on).nil?
-                @handle.root['ae_result'] = 'retry'
-                @handle.root['ae_retry_server_affinity'] = true
-                @handle.root['ae_retry_interval'] = factory_config['vmtransformation_check_interval'] || '15.seconds'
-                @handle.log(:info, "Disk transformation is not finished. Checking in #{@handle.root['ae_retry_interval']}")
               end
             rescue => e
               @handle.set_state_var(:ae_state_progress, 'message' => e.message)
