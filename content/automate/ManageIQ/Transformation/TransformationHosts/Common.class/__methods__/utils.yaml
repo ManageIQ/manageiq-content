@@ -9,8 +9,6 @@ object:
     scope: instance
     language: ruby
     location: inline
-    embedded_methods:
-    - "/Transformation/Infrastructure/VM/vmwarews/Utils"
-    - "/Transformation/TransformationHosts/ovirt_host/Utils"
+    embedded_methods: []
     options: {}
   inputs: []

@@ -5,45 +5,17 @@ module ManageIQ
         module Common
           class Utils
             DEFAULT_EMS_MAX_RUNNERS = 10
-            DEFAULT_HOST_MAX_RUNNERS = 10
 
-            def self.get_runners_count_by_host(host, handle = $evm)
-              handle.vmdb(:service_template_transformation_plan_task).where(:state => 'active').select { |task| task.get_option(:transformation_host_id) == host.id }.size
+            def self.transformation_hosts(ems, handle = $evm)
+              handle.vmdb(:conversion_host).all.select { |ch| ch.ext_management_system == ems }
             end
 
-            def self.host_max_runners(host, factory_config, max_runners = DEFAULT_HOST_MAX_RUNNERS)
-              if host.custom_get('Max Transformation Runners')
-                host.custom_get('Max Transformation Runners').to_i
-              elsif factory_config['transformation_host_max_runners']
-                factory_config['transformation_host_max_runners'].to_i
-              else
-                max_runners
-              end
+            def self.eligible_transformation_hosts(ems, handle = $evm)
+              transformation_hosts(ems, handle).select { |ch| ch.eligible? }.sort_by { |ch| ch.active_tasks.size }
             end
 
-            def self.transformation_hosts(ems, factory_config, handle = $evm)
-              thosts = []
-              ems.hosts.each do |host|
-                next unless host.tagged_with?('v2v_transformation_host', 'true')
-                thosts << {
-                  :type                  => 'OVirtHost',
-                  :transformation_method => host.tags('v2v_transformation_method'),
-                  :host                  => host,
-                  :runners               => {
-                    :current => get_runners_count_by_host(host, handle),
-                    :maximum => host_max_runners(host, factory_config)
-                  }
-                }
-              end
-              thosts.sort_by! { |th| th[:runners][:current] }
-            end
-
-            def self.eligible_transformation_hosts(ems, factory_config, handle = $evm)
-              transformation_hosts(ems, factory_config, handle).select { |thost| thost[:runners][:current] < thost[:runners][:maximum] }
-            end
-
-            def self.get_runners_count_by_ems(ems, factory_config, handle = $evm)
-              transformation_hosts(ems, factory_config, handle).inject(0) { |sum, thost| sum + thost[:runners][:current] }
+            def self.get_runners_count_by_ems(ems, handle = $evm)
+              transformation_hosts(ems, handle).inject(0) { |sum, ch| sum + ch.active_tasks.size }
             end
 
             def self.ems_max_runners(ems, factory_config, max_runners = DEFAULT_EMS_MAX_RUNNERS)
@@ -57,12 +29,12 @@ module ManageIQ
             end
 
             def self.get_transformation_host(task, factory_config, handle = $evm)
-              ems = handle.vmdb(:ext_management_system).find_by(:id => task.get_option(:destination_ems_id))
-              ems_cur_runners = get_runners_count_by_ems(ems, factory_config, handle)
+              ems = task.destination_ems
+              ems_cur_runners = get_runners_count_by_ems(ems, handle)
               return unless ems_cur_runners < ems_max_runners(ems, factory_config)
-              thosts = eligible_transformation_hosts(ems, factory_config, handle)
+              thosts = eligible_transformation_hosts(ems, handle)
               return if thosts.size.zero?
-              [thosts.first[:type], thosts.first[:host], thosts.first[:transformation_method]]
+              thosts.first
             end
           end
         end

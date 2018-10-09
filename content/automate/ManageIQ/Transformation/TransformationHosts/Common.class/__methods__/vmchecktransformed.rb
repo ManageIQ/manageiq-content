@@ -42,7 +42,7 @@ module ManageIQ
                 @handle.set_state_var(:ae_state_progress, 'message' => 'Disks transformation failed.')
                 raise "Disks transformation failed."
               when 'succeeded'
-                  @handle.set_state_var(:ae_state_progress, 'message' => 'Disks transformation succeeded.', 'percent' => 100)
+                @handle.set_state_var(:ae_state_progress, 'message' => 'Disks transformation succeeded.', 'percent' => 100)
               end
             rescue => e
               @handle.set_state_var(:ae_state_progress, 'message' => e.message)

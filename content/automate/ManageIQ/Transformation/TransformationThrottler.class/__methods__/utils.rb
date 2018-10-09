@@ -91,12 +91,9 @@ module ManageIQ
 
           def self.schedule_tasks_fifo(handle = $evm)
             unassigned_transformation_tasks(handle).sort_by(&:created_on).each do |transformation_task|
-              transformation_host_type, transformation_host, transformation_method = ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils.get_transformation_host(transformation_task, {})
+              transformation_host = ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils.get_transformation_host(transformation_task, {})
               break if transformation_host.nil?
-              transformation_task.set_option(:transformation_host_id, transformation_host.id)
-              transformation_task.set_option(:transformation_host_name, transformation_host.name)
-              transformation_task.set_option(:transformation_host_type, transformation_host_type)
-              transformation_task.set_option(:transformation_method, transformation_method)
+              transformation_task.conversion_host = transformation_host
             end
           end
 
@@ -111,12 +108,12 @@ module ManageIQ
           def self.adjust_limits_skip(handle = $evm)
           end
 
-          def self.active_transformation_tasks(handle)
+          def self.active_transformation_tasks(handle = $evm)
             @active_transformation_tasks ||= handle.vmdb(:service_template_transformation_plan_task).where(:state => 'active')
           end
 
-          def self.unassigned_transformation_tasks(handle)
-            active_transformation_tasks(handle).select { |transformation_task| transformation_task.get_option(:transformation_host_id).nil? }
+          def self.unassigned_transformation_tasks(handle = $evm)
+            active_transformation_tasks(handle).select { |transformation_task| transformation_task.conversion_host.nil? }
           end
         end
       end

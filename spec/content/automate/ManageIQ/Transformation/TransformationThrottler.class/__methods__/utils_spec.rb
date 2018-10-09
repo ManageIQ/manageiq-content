@@ -9,7 +9,7 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
   let(:automation_request_3) { FactoryGirl.create(:automation_request) }
   let(:transformation_task_1) { FactoryGirl.create(:service_template_transformation_plan_task) }
   let(:transformation_task_2) { FactoryGirl.create(:service_template_transformation_plan_task) }
-  let(:host) { FactoryGirl.create(:host) }
+  let(:conversion_host) { FactoryGirl.create(:conversion_host) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_automation_task) { MiqAeMethodService::MiqAeServiceAutomationTask.find(automation_task.id) }
@@ -19,6 +19,7 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
   let(:svc_model_transformation_task_1) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask.find(transformation_task_1.id) }
   let(:svc_model_transformation_task_2) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask.find(transformation_task_2.id) }
   let(:svc_model_host) { MiqAeMethodService::MiqAeServiceHost.find(host.id) }
+  let(:svc_model_conversion_host) { MiqAeMethodService::MiqAeServiceConversionHost.find(conversion_host.id) }
 
   let(:root) do
     Spec::Support::MiqAeMockObject.new(
@@ -230,16 +231,10 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
     it "only one slot available" do
       allow(ae_service).to receive(:vmdb).with(:service_template_transformation_plan_task).and_return(svc_vmdb_handle)
       allow(svc_vmdb_handle).to receive(:where).with(:state => 'active').and_return([svc_model_transformation_task_1, svc_model_transformation_task_2])
-      allow(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:get_transformation_host).and_return(['OVirtHost', svc_model_host, 'vddk'], [nil, nil, nil])
+      allow(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:get_transformation_host).and_return(svc_model_conversion_host, nil)
       described_class.schedule_tasks_fifo(ae_service)
-      expect(svc_model_transformation_task_1.get_option(:transformation_host_id)).to eq(svc_model_host.id)
-      expect(svc_model_transformation_task_1.get_option(:transformation_host_name)).to eq(svc_model_host.name)
-      expect(svc_model_transformation_task_1.get_option(:transformation_host_type)).to eq('OVirtHost')
-      expect(svc_model_transformation_task_1.get_option(:transformation_method)).to eq('vddk')
-      expect(svc_model_transformation_task_2.get_option(:transformation_host_id)).to be_nil
-      expect(svc_model_transformation_task_2.get_option(:transformation_host_name)).to be_nil
-      expect(svc_model_transformation_task_2.get_option(:transformation_host_type)).to be_nil
-      expect(svc_model_transformation_task_2.get_option(:transformation_method)).to be_nil
+      expect(svc_model_transformation_task_1.conversion_host.id).to eq(svc_model_host.id)
+      expect(svc_model_transformation_task_2.conversion_host).to be_nil
     end
   end
 
@@ -283,7 +278,7 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
     it "filter out assigned transformation task" do
       allow(ae_service).to receive(:vmdb).with(:service_template_transformation_plan_task).and_return(svc_vmdb_handle)
       allow(svc_vmdb_handle).to receive(:where).with(:state => 'active').and_return([svc_model_transformation_task_1, svc_model_transformation_task_2])
-      allow(svc_model_transformation_task_1).to receive(:get_option).with(:transformation_host_id).and_return(svc_model_host.id)
+      allow(svc_model_transformation_task_1).to receive(:conversion_host).and_return(svc_model_conversion_host)
       expect(described_class.unassigned_transformation_tasks(ae_service).length).to eq(1)
       expect(described_class.unassigned_transformation_tasks(ae_service).first.id).to eq(svc_model_transformation_task_2.id)
     end
