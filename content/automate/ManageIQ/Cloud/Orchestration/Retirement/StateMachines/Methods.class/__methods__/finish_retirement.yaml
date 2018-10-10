@@ -9,4 +9,6 @@ object:
     scope: instance
     language: ruby
     location: inline
+    embedded_methods:
+    - "/ManageIQ/Cloud/Orchestration/Lifecycle/orchestration_mixin"
   inputs: []

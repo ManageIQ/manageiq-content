@@ -1,3 +1,4 @@
+require_default_domain_file('Cloud/Orchestration/Lifecycle.class/__methods__/orchestration_mixin.rb')
 require_domain_file
 
 describe ManageIQ::Automate::Cloud::Orchestration::Retirement::StateMachines::Methods::CheckRemovedFromProvider do

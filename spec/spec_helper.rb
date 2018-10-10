@@ -13,6 +13,10 @@ def require_domain_file
   AutomateClassDefinitionHook.require_with_hook(file_name)
 end
 
+def require_default_domain_file(path)
+  require ManageIQ::Content::Engine.root.join('content/automate/ManageIQ').join(path)
+end
+
 def domain_file
   caller_locations(1..1).first.path.sub("spec/", "").sub("_spec.rb", ".rb")
 end
