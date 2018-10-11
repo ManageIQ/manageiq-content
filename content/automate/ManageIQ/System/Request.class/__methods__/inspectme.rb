@@ -39,7 +39,7 @@ def dump_associations(object)
 end
 
 def dump_tags(object)
-  return if object.tags.nil?
+  return unless object.taggable?
 
   $evm.log("info", "  Begin Tags [object.tags]")
   object.tags.sort.each do |tag_element|
