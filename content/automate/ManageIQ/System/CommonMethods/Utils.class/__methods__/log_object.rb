@@ -115,7 +115,7 @@ module ManageIQ
             end
 
             def self.tags(obj, log_prefix, handle = $evm)
-              return if obj.tags.nil?
+              return unless obj.taggable?
               handle.log("info", " #{log_prefix} Begin Tags [object.tags]")
               obj.tags.sort.each do |tag_element|
                 tag_text = tag_element.split('/')
