@@ -50,6 +50,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Nuage events callbacks for targeted refresh [(#204)](https://github.com/ManageIQ/manageiq-content/pull/204)
 - Add policy event triggers for Hawkular [(#201)](https://github.com/ManageIQ/manageiq-content/pull/201)
 - v2v: Extend 'VM Transform' dialog to select VMs by tag [(#200)](https://github.com/ManageIQ/manageiq-content/pull/200)
+- Add support to apply right-size recommendation during transformation [(#417)](https://github.com/ManageIQ/manageiq-content/pull/417)
 
 ### Changed
 - Changed validate_quota method to check individual quota items [(#375)](https://github.com/ManageIQ/manageiq-content/pull/375)
@@ -67,6 +68,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Remove check for a state of initialized in 4 start_retirement methods. [(#331)](https://github.com/ManageIQ/manageiq-content/pull/331)
 - handle volume snapshot status changes [(#285)](https://github.com/ManageIQ/manageiq-content/pull/285)
 - Move the task message into check for task presence [(#283)](https://github.com/ManageIQ/manageiq-content/pull/283)
+- Add tests for orchestration stack retirement [(#437)](https://github.com/ManageIQ/manageiq-content/pull/437)
+- Keep the encrypted value as is when creating service provision request. [(#435)](https://github.com/ManageIQ/manageiq-content/pull/435)
+- Fix userid in transformation throttler launch [(#439)](https://github.com/ManageIQ/manageiq-content/pull/439)
 
 ## Gaprindashvili-5 - Released 2018-09-07
 
