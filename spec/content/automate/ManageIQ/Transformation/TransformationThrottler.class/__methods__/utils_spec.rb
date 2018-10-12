@@ -18,7 +18,6 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
   let(:svc_model_automation_request_3) { MiqAeMethodService::MiqAeServiceAutomationRequest.find(automation_request_3.id) }
   let(:svc_model_transformation_task_1) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask.find(transformation_task_1.id) }
   let(:svc_model_transformation_task_2) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask.find(transformation_task_2.id) }
-  let(:svc_model_host) { MiqAeMethodService::MiqAeServiceHost.find(host.id) }
   let(:svc_model_conversion_host) { MiqAeMethodService::MiqAeServiceConversionHost.find(conversion_host.id) }
 
   let(:root) do
@@ -233,7 +232,7 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
       allow(svc_vmdb_handle).to receive(:where).with(:state => 'active').and_return([svc_model_transformation_task_1, svc_model_transformation_task_2])
       allow(ManageIQ::Automate::Transformation::TransformationHosts::Common::Utils).to receive(:get_transformation_host).and_return(svc_model_conversion_host, nil)
       described_class.schedule_tasks_fifo(ae_service)
-      expect(svc_model_transformation_task_1.conversion_host.id).to eq(svc_model_host.id)
+      expect(svc_model_transformation_task_1.conversion_host.id).to eq(svc_model_conversion_host.id)
       expect(svc_model_transformation_task_2.conversion_host).to be_nil
     end
   end

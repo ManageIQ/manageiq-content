@@ -3,7 +3,7 @@ object_type: method
 version: 1.0
 object:
   attributes:
-    name: VMTransform
+    name: VMCheckTransformed
     display_name: 
     description: 
     scope: instance
@@ -11,7 +11,5 @@ object:
     location: inline
     embedded_methods:
     - "/Transformation/TransformationHosts/Common/Utils"
-    - "/Transformation/Infrastructure/VM/vmwarews/Utils"
-    - "/Transformation/TransformationHosts/ovirt_host/Utils"
     options: {}
   inputs: []

@@ -11,7 +11,7 @@ object:
   - state_machine_phase:
       value: cleanup
   - State2:
-      value: "/Transformation/TransformationHosts/Common/KillVirtV2V"
+      value: "/Transformation/Common/KillVirtV2V"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
         => "Interrupt virt-v2v", task_message => "Cleanup")
       on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
