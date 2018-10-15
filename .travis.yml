@@ -5,7 +5,7 @@ rvm:
 sudo: false
 cache: bundler
 addons:
-  postgresql: '9.4'
+  postgresql: '9.5'
 bundler_args: "--no-deployment"
 before_script: bundle exec rake spec:setup
 install: bin/setup
