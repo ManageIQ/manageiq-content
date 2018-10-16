@@ -7,21 +7,14 @@ module ManageIQ
             class CollapseSnapshots
               def initialize(handle = $evm)
                 @handle = handle
+                @task = ManageIQ::Automate::Transformation::Common::Utils.task(@handle)
+                @source_vm = ManageIQ::Automate::Transformation::Common::Utils.source_vm(@handle)
               end
 
               def main
-                task = @handle.root['service_template_transformation_plan_task']
-                source_vm = task.source
-
-                if source_vm.snapshots.empty?
-                  @handle.log(:info, "VM '#{source_vm.name}' has no snapshot. Nothing to do.")
-                elsif task.get_option(:collapse_snapshots)
-                  @handle.log(:info, "VM '#{source_vm.name}' has snapshots and we need to collapse them.")
-                  @handle.log(:info, "Collapsing snapshots for #{source_vm.name}")
-                  source_vm.remove_all_snapshots
-                else
-                  raise "VM '#{source_vm.name}' has snapshots, but we are not allowed to collapse them. Exiting."
-                end
+                return if @source_vm.snapshots.empty?
+                raise "VM '#{@source_vm.name}' has snapshots, but we are not allowed to collapse them. Exiting." unless task.get_option(:collapse_snapshots)
+                @source_vm.remove_all_snapshots
               rescue => e
                 @handle.set_state_var(:ae_state_progress, 'message' => e.message)
                 raise
