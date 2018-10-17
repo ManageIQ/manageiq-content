@@ -12,6 +12,7 @@ module ManageIQ
               end
 
               def main
+                return unless @destination_vm.vendor == 'rhevm'
                 description = "Migrated by Cloudforms on #{Time.now.utc}."
                 ManageIQ::Automate::Transformation::Infrastructure::VM::RedHat::Utils.new(@task.destination_ems).vm_set_description(@destination_vm, description)
               rescue => e
