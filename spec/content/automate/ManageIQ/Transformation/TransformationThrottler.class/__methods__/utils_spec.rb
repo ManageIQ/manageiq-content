@@ -84,6 +84,7 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
     end
   end
 
+  let(:svc_vmdb_handle_user) { MiqAeMethodService::MiqAeServiceUser }
   let(:svc_vmdb_handle_request) { MiqAeMethodService::MiqAeServiceAutomationRequest }
   let(:svc_vmdb_handle_conversion_host) { MiqAeMethodService::MiqAeServiceConversionHost }
   let(:svc_vmdb_handle_transformation_task) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask }
@@ -111,9 +112,11 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
     svc_model_automation_request_3.set_option(:class_name, 'TransformationThrottler')
     svc_model_automation_request_3.set_option(:instance_name, 'Invalid')
 
+    allow(ae_service).to receive(:vmdb).with(:user).and_return(svc_vmdb_handle_user)
     allow(ae_service).to receive(:vmdb).with(:miq_request).and_return(svc_vmdb_handle_request)
-    allow(ae_service).to receive(:vmdb).with(:service_template_transformation_plan_task).and_return(svc_vmdb_handle_transformation_task)
     allow(ae_service).to receive(:vmdb).with(:conversion_host).and_return(svc_vmdb_handle_conversion_host)
+    allow(ae_service).to receive(:vmdb).with(:service_template_transformation_plan_task).and_return(svc_vmdb_handle_transformation_task)
+
     allow(svc_vmdb_handle_conversion_host).to receive(:all).and_return([svc_model_conversion_host_1, svc_model_conversion_host_2, svc_model_conversion_host_3])
     allow(svc_model_transformation_task_1).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
     allow(svc_model_conversion_host_1).to receive(:ext_management_system).and_return(svc_model_dst_ems_1)
@@ -215,13 +218,14 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
 
   context "#launch" do
     it "with default values" do
+      user_admin = FactoryGirl.create(:user, :userid => 'admin')
       expect(ae_service).to receive(:execute).with(
         :create_automation_request,
         {
           :namespace     => 'Transformation/StateMachines',
           :class_name    => 'TransformationThrottler',
           :instance_name => 'Default',
-          :user_id       => 1,
+          :user_id       => user_admin.id,
           :attrs         => { :ttl => 3600 }
         },
         'admin',

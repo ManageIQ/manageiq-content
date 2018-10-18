@@ -67,7 +67,7 @@ module ManageIQ
                 :namespace     => NAMESPACE,
                 :class_name    => CLASS_NAME,
                 :instance_name => throttler_type(handle),
-                :user_id       => 1,
+                :user_id       => handle.vmdb(:user).find_by(:userid => 'admin').id,
                 :attrs         => { :ttl => throttler_ttl(handle) }
               },
               'admin',
