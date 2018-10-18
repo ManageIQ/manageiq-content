@@ -279,7 +279,6 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
   context "#schedule_tasks_fifo" do
     before do
       allow(svc_vmdb_handle_transformation_task).to receive(:where).with(:state => 'active').and_return([svc_model_transformation_task_1])
-#      transformation_task_1 = nil
     end
 
     it "doesn't assign host when none is eligible" do
