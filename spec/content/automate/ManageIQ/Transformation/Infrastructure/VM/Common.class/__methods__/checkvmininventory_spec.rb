@@ -17,11 +17,11 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::CheckVm
       :transformation_mapping_items => [
         FactoryGirl.create(:transformation_mapping_item, :source => src_cluster, :destination => dst_cluster)
       ]
-    )   
-  end 
+    )
+  end
 
   let(:catalog_item_options) do
-    {   
+    {
       :name        => 'Transformation Plan',
       :description => 'a description',
       :config_info => {
@@ -30,8 +30,8 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::CheckVm
           {:vm_id => src_vm.id.to_s, :pre_service => false, :post_service => false}
         ],
       }
-    }   
-  end 
+    }
+  end
 
   let(:plan) { ServiceTemplateTransformationPlan.create_catalog_item(catalog_item_options) }
   let(:request) { FactoryGirl.create(:service_template_transformation_plan_request, :source => plan) }
@@ -77,7 +77,7 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::CheckVm
       allow(ManageIQ::Automate::Transformation::Common::Utils).to receive(:source_vm).and_return(svc_model_src_vm)
     end
 
-    it "retries if destination_vm is nil" do 
+    it "retries if destination_vm is nil" do
       allow(svc_vmdb_handle).to receive(:find_by).with(:name => svc_model_src_vm.name, :ems_id => svc_model_dst_ems.id).and_return(nil)
       described_class.new(ae_service).main
       expect(ae_service.root['ae_result']).to eq('retry')

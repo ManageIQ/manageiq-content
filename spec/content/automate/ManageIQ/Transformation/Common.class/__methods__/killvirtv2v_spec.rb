@@ -14,7 +14,7 @@ describe ManageIQ::Automate::Transformation::Common::KillVirtV2V do
     {
       "started"    => true,
       "disks"      => [{ "path" => "[datastore] test_vm/test_vm.vmdk", "progress" => 25 }],
-      "pid"        => 141350,
+      "pid"        => 141_350,
       "disk_count" => 1
     }
   end
@@ -70,7 +70,7 @@ describe ManageIQ::Automate::Transformation::Common::KillVirtV2V do
       allow(svc_model_task).to receive(:get_option).with(:virtv2v_finished_on).and_return(nil)
       allow(svc_model_task).to receive(:get_option).with(:virtv2v_wrapper).and_return('fake_key' => 'fave_value')
       expect(described_class.new(ae_service).task_virtv2v_state).to eq(conversion_state)
-    end    
+    end
   end
 
   describe "#kill_signal" do

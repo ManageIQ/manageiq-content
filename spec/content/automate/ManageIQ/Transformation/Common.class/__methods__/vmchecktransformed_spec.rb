@@ -35,8 +35,8 @@ describe ManageIQ::Automate::Transformation::Common::VMCheckTransformed do
     context "virtv2v has not started conversion" do
       let(:virtv2v_disks) do
         [
-          { :path => '[datastore] test_vm/test_vm.vmdk', :size => 1_234_567, :percent => 0, :weight  => 25 },
-          { :path => '[datastore] test_vm/test_vm-2.vmdk', :size => 3_703_701, :percent => 0, :weight  => 75 }
+          { :path => '[datastore] test_vm/test_vm.vmdk', :size => 1_234_567, :percent => 0, :weight => 25 },
+          { :path => '[datastore] test_vm/test_vm-2.vmdk', :size => 3_703_701, :percent => 0, :weight => 75 }
         ]
       end
 
@@ -52,8 +52,8 @@ describe ManageIQ::Automate::Transformation::Common::VMCheckTransformed do
     context "conversion is still running" do
       let(:virtv2v_disks) do
         [
-          { :path => '[datastore] test_vm/test_vm.vmdk', :size => 1_234_567, :percent => 100, :weight  => 25 },
-          { :path => '[datastore] test_vm/test_vm-2.vmdk', :size => 3_703_701, :percent => 25, :weight  => 75 }
+          { :path => '[datastore] test_vm/test_vm.vmdk', :size => 1_234_567, :percent => 100, :weight => 25 },
+          { :path => '[datastore] test_vm/test_vm-2.vmdk', :size => 3_703_701, :percent => 25, :weight => 75 }
         ]
       end
 

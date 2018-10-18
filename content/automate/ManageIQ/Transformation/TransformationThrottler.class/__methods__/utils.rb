@@ -122,7 +122,7 @@ module ManageIQ
           end
 
           def self.eligible_transformation_hosts(ems, handle = $evm)
-            transformation_hosts(ems, handle).select { |ch| ch.eligible? }.sort_by { |ch| ch.active_tasks.size }
+            transformation_hosts(ems, handle).select(&:eligible?).sort_by { |ch| ch.active_tasks.size }
           end
 
           def self.get_runners_count_by_ems(ems, handle = $evm)
