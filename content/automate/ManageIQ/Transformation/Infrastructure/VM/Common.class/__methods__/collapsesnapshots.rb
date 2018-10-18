@@ -12,8 +12,9 @@ module ManageIQ
               end
 
               def main
+                return unless @source_vm.vendor == 'vmware'
                 return if @source_vm.snapshots.empty?
-                raise "VM '#{@source_vm.name}' has snapshots, but we are not allowed to collapse them. Exiting." unless task.get_option(:collapse_snapshots)
+                raise "VM '#{@source_vm.name}' has snapshots, but we are not allowed to collapse them. Exiting." unless @task.get_option(:collapse_snapshots)
                 @source_vm.remove_all_snapshots
               rescue => e
                 @handle.set_state_var(:ae_state_progress, 'message' => e.message)

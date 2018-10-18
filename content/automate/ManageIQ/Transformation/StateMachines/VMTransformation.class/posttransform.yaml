@@ -17,7 +17,7 @@ object:
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
         => "Apply Right-Size Recommendation", task_message => "Migrating")
   - State5:
-      value: "/Transformation/Common/SetDescription"
+      value: "/Transformation/Infrastructure/VM/Common/SetDescription"
       on_entry: /Transformation/TransformationThrottler.Watch ; /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight
         => 5, description => "Update description of VM", task_message => "Migrating")
       on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description

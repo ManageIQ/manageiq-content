@@ -19,7 +19,7 @@ module ManageIQ
 
               def main
                 return if @vm.blank?
-                @vm.start if task.get_option(:source_vm_power_state) == 'on'
+                @vm.start if @task.get_option(:source_vm_power_state) == 'on'
               rescue => e
                 @handle.set_state_var(:ae_state_progress, 'message' => e.message)
                 raise

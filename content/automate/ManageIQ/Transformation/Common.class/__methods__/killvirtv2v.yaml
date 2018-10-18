@@ -10,7 +10,6 @@ object:
     language: ruby
     location: inline
     embedded_methods:
-    - "/Transformation/TransformationHosts/Common/Utils"
-    - "/Transformation/TransformationHosts/ovirt_host/Utils"
+    - "/Transformation/Common/Utils"
     options: {}
   inputs: []

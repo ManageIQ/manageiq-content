@@ -15,11 +15,6 @@ module ManageIQ
             @task.set_option(:power_off, true)
           end
 
-          def populate_state_vars
-            @handle.set_state_var(:source_ems_type, @task.source_ems.emstype)
-            @handle.set_state_var(:destination_ems_type, @task.destination_ems.emstype)
-          end
-
           def populate_factory_config
             factory_config = {
               'vmtransformation_check_interval' => @handle.object['vmtransformation_check_interval'] || '15.seconds',
@@ -29,8 +24,8 @@ module ManageIQ
           end
 
           def main
-            @task.preflight_check
-            %w(task_options state_vars factory_config).each { |ci| send("populate_#{ci}") }
+            @task.set_option('cancel_requested', true) unless @task.preflight_check
+            %w(task_options factory_config).each { |ci| send("populate_#{ci}") }
           rescue => e
             @handle.set_state_var(:ae_state_progress, 'message' => e.message)
             raise

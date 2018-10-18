@@ -120,20 +120,10 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     end
   end
 
-  shared_examples_for "#populate_state_vars" do
-    it "state_vars" do
-      described_class.new(ae_service).populate_state_vars
-      expect(ae_service.get_state_var(:source_ems_type)).to eq(svc_model_src_ems.emstype)
-      expect(ae_service.get_state_var(:destination_ems_type)).to eq(svc_model_dst_ems.emstype)
-    end
-  end
-
   shared_examples_for "main" do
     it "global summary test" do
       allow(svc_model_src_vm).to receive(:power_state).and_return("on")
       described_class.new(ae_service).main
-      expect(ae_service.get_state_var(:source_ems_type)).to eq(svc_model_src_ems.emstype)
-      expect(ae_service.get_state_var(:destination_ems_type)).to eq(svc_model_dst_ems.emstype)
       expect(svc_model_task.get_option(:source_vm_power_state)).to eq("on")
       expect(svc_model_task.get_option(:collapse_snapshots)).to be true
       expect(svc_model_task.get_option(:power_off)).to be true
@@ -189,7 +179,6 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     let(:task) { FactoryGirl.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_vmware) }
 
     it_behaves_like "#populate_task_options"
-    it_behaves_like "#populate_state_vars"
     it_behaves_like "main"
   end
 
@@ -240,14 +229,19 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     let(:task) { FactoryGirl.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_vmware) }
 
     it_behaves_like "#populate_task_options"
-    it_behaves_like "#populate_state_vars"
     it_behaves_like "main"
   end
 
-  context "catchall exception rescue" do
+  context "handle errors" do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
 
-    it "raises if task preflight check fails" do
+    it "sets cancel_requested option if preflight check returns false" do
+      allow(svc_model_task).to receive(:preflight_check).and_return(false)
+      described_class.new(ae_service).main
+      expect(svc_model_task.get_option('cancel_requested')).to eq(true)
+    end
+
+    it "raises if task preflight check raises" do
       errormsg = 'Unexpected error'
       allow(svc_model_task).to receive(:preflight_check).and_raise(errormsg)
       expect { described_class.new(ae_service).main }.to raise_error(errormsg)

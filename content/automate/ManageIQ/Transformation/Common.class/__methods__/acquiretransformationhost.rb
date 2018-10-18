@@ -9,7 +9,7 @@ module ManageIQ
           end
 
           def main
-            if @task.get_option(:transformation_host_id).nil?
+            if @task.conversion_host.nil?
               @handle.root['ae_result'] = 'retry'
               @handle.root['ae_retry_server_affinity'] = true
               @handle.root['ae_retry_interval'] = 15.seconds

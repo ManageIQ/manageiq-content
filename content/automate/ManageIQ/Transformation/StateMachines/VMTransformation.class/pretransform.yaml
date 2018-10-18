@@ -26,7 +26,7 @@ object:
         => "Power off", task_message => "Pre-migration")
       max_retries: '20'
   - State8:
-      value: "/Transformation/Infrastructure/VM/${state_var#source_ems_type}/CollapseSnapshots"
+      value: "/Transformation/Infrastructure/VM/Common/CollapseSnapshots"
       on_entry: /Transformation/TransformationThrottler.Watch ; /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight
         => 40, description => "Collapse Snapshots", task_message => "Pre-migration")
       on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description

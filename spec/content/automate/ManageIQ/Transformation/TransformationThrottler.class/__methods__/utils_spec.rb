@@ -1,5 +1,4 @@
 require_domain_file
-require 'byebug'
 
 describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
   let(:user) { FactoryGirl.create(:user_with_email_and_group) }
