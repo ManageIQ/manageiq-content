@@ -17,7 +17,7 @@ object:
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
         => "Apply Right-Size Recommendation", task_message => "Migrating")
   - State5:
-      value: "/Transformation/Infrastructure/VM/${state_var#destination_ems_type}/SetDescription"
+      value: "/Transformation/Infrastructure/VM/Common/SetDescription"
       on_entry: /Transformation/TransformationThrottler.Watch ; /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight
         => 5, description => "Update description of VM", task_message => "Migrating")
       on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
@@ -58,7 +58,7 @@ object:
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
         => "Restore VM Attributes", task_message => "Migrating")
   - State20:
-      value: "/Transformation/Infrastructure/VM/${state_var#source_ems_type}/SetMigrated"
+      value: "/Transformation/Common/SetMigrated"
       on_entry: /Transformation/TransformationThrottler.Watch ; /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight
         => 5, description => "Mark source as migrated", task_message => "Migrating")
       on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description

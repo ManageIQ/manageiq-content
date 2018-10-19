@@ -1,14 +1,41 @@
 require_domain_file
+require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Transformation/Common.class/__methods__/utils.rb')
 
 describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::CheckVmInInventory do
   let(:user) { FactoryGirl.create(:user_with_email_and_group) }
-  let(:task) { FactoryGirl.create(:service_template_transformation_plan_task) }
-  let(:src_vm_vmware) { FactoryGirl.create(:vm_vmware) }
-  let(:dst_vm_redhat) { FactoryGirl.create(:vm_redhat) }
-  let(:dst_vm_openstack) { FactoryGirl.create(:vm_openstack) }
-  let(:src_cluster) { FactoryGirl.create(:ems_cluster) }
-  let(:dst_cluster) { FactoryGirl.create(:ems_cluster) }
+  let(:src_vm_vmware) { FactoryGirl.create(:vm_vmware, :ext_management_system => src_ems, :ems_cluster => src_cluster) }
+  let(:dst_vm_redhat) { FactoryGirl.create(:vm_redhat, :ext_management_system => dst_ems) }
+  let(:dst_vm_openstack) { FactoryGirl.create(:vm_openstack, :ext_management_system => dst_ems) }
+  let(:src_ems) { FactoryGirl.create(:ext_management_system) }
+  let(:src_cluster) { FactoryGirl.create(:ems_cluster, :ext_management_system => src_ems) }
   let(:dst_ems) { FactoryGirl.create(:ext_management_system) }
+  let(:dst_cluster) { FactoryGirl.create(:ems_cluster, :ext_management_system => dst_ems) }
+
+  let(:mapping) do
+    FactoryGirl.create(
+      :transformation_mapping,
+      :transformation_mapping_items => [
+        FactoryGirl.create(:transformation_mapping_item, :source => src_cluster, :destination => dst_cluster)
+      ]
+    )
+  end
+
+  let(:catalog_item_options) do
+    {
+      :name        => 'Transformation Plan',
+      :description => 'a description',
+      :config_info => {
+        :transformation_mapping_id => mapping.id,
+        :actions                   => [
+          {:vm_id => src_vm.id.to_s, :pre_service => false, :post_service => false}
+        ],
+      }
+    }
+  end
+
+  let(:plan) { ServiceTemplateTransformationPlan.create_catalog_item(catalog_item_options) }
+  let(:request) { FactoryGirl.create(:service_template_transformation_plan_request, :source => plan) }
+  let(:task) { FactoryGirl.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_vmware) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_task) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask.find(task.id) }
@@ -23,6 +50,7 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::CheckVm
     Spec::Support::MiqAeMockObject.new(
       'current' => current_object,
       'user'    => svc_model_user,
+      'state_machine_phase' => 'transformation'
     )
   end
 
@@ -34,59 +62,38 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::CheckVm
     end
   end
 
-  context "validate task" do
-    it "when task is nil" do
-      errormsg = 'ERROR - A service_template_transformation_plan_task is needed for this method to continue'
-      expect { described_class.new(ae_service).task }.to raise_error(errormsg)
-    end
+  let(:svc_vmdb_handle) { MiqAeMethodService::MiqAeServiceVm }
 
-    it "when task is present" do
-      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      expect(described_class.new(ae_service).task.id).to eq(svc_model_task.id)
-    end
+  before do
+    ManageIQ::Automate::Transformation::Infrastructure::VM::Common::CheckVmInInventory.instance_variable_set(:@task, nil)
+    ManageIQ::Automate::Transformation::Infrastructure::VM::Common::CheckVmInInventory.instance_variable_set(:@source_vm, nil)
+
+    allow(ManageIQ::Automate::Transformation::Common::Utils).to receive(:task).and_return(svc_model_task)
+    allow(ae_service).to receive(:vmdb).with(:vm).and_return(svc_vmdb_handle)
   end
 
-  shared_examples_for "validate source and destination vms" do
-    let(:svc_vmdb_handle) { MiqAeMethodService::MiqAeServiceVm }
-
+  shared_examples_for "#main" do
     before do
-      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
+      allow(ManageIQ::Automate::Transformation::Common::Utils).to receive(:source_vm).and_return(svc_model_src_vm)
     end
 
-    it "when task.source vm is nil" do
-      errormsg = 'ERROR - Source VM has not been defined in the task'
-      expect { described_class.new(ae_service).source_vm }.to raise_error(errormsg)
-    end
-
-    it "when task.source is present" do
-      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      allow(svc_model_task).to receive(:source) { svc_model_src_vm }
-      expect(described_class.new(ae_service).source_vm.id).to eq(svc_model_src_vm.id)
-    end
-
-    it "when destination_vm is nil" do
-      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      allow(svc_model_task).to receive(:source) { svc_model_src_vm }
-      allow(svc_model_task).to receive(:transformation_destination).and_return(svc_model_dst_cluster)
-      allow(svc_model_dst_cluster).to receive(:ext_management_system).and_return(svc_model_dst_ems)
-      allow(ae_service).to receive(:vmdb).with(:vm).and_return(svc_vmdb_handle)
+    it "retries if destination_vm is nil" do
       allow(svc_vmdb_handle).to receive(:find_by).with(:name => svc_model_src_vm.name, :ems_id => svc_model_dst_ems.id).and_return(nil)
-      expect(described_class.new(ae_service).destination_vm).to be_nil
       described_class.new(ae_service).main
       expect(ae_service.root['ae_result']).to eq('retry')
       expect(ae_service.root['ae_retry_interval']).to eq('15.seconds')
     end
 
-    it "when destination_vm is present" do
-      ae_service.root['service_template_transformation_plan_task'] = svc_model_task
-      allow(svc_model_task).to receive(:source) { svc_model_src_vm }
-      allow(svc_model_task).to receive(:transformation_destination).and_return(svc_model_dst_cluster)
-      allow(svc_model_dst_cluster).to receive(:ext_management_system).and_return(svc_model_dst_ems)
-      allow(ae_service).to receive(:vmdb).with(:vm).and_return(svc_vmdb_handle)
+    it "sets task options if destination_vm exists" do
       allow(svc_vmdb_handle).to receive(:find_by).with(:name => svc_model_src_vm.name, :ems_id => svc_model_dst_ems.id).and_return(svc_model_dst_vm)
-      expect(described_class.new(ae_service).destination_vm.id).to eq(svc_model_dst_vm.id)
       described_class.new(ae_service).main
       expect(svc_model_task.get_option(:destination_vm_id)).to eq(svc_model_dst_vm.id)
+    end
+
+    it "raises if VMDB find raises" do
+      allow(svc_vmdb_handle).to receive(:find_by).with(:name => svc_model_src_vm.name, :ems_id => svc_model_dst_ems.id).and_raise('Unexpected error')
+      expect { described_class.new(ae_service).main }.to raise_error('Unexpected error')
+      expect(ae_service.get_state_var(:ae_state_progress)).to eq('message' => 'Unexpected error')
     end
   end
 
@@ -96,7 +103,7 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::CheckVm
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:svc_model_dst_vm) { svc_model_dst_vm_redhat }
 
-    it_behaves_like "validate source and destination vms"
+    it_behaves_like "#main"
   end
 
   context "validate when source is vmware and destination openstack" do
@@ -105,18 +112,6 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::CheckVm
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:svc_model_dst_vm) { svc_model_dst_vm_openstack }
 
-    it_behaves_like "validate source and destination vms"
-  end
-
-  context "catchall exception rescue" do
-    before do
-      allow(svc_model_task).to receive(:source).and_raise(StandardError.new('kaboom'))
-    end
-
-    it "forcefully raise" do
-      errormsg = 'ERROR - A service_template_transformation_plan_task is needed for this method to continue'
-      expect { described_class.new(ae_service).main }.to raise_error(errormsg)
-      expect(ae_service.get_state_var(:ae_state_progress)).to eq('message' => errormsg)
-    end
+    it_behaves_like "#main"
   end
 end

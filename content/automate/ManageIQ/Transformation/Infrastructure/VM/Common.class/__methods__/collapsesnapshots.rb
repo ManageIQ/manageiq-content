@@ -3,8 +3,8 @@ module ManageIQ
     module Transformation
       module Infrastructure
         module VM
-          module Common
-            class CheckVmInInventory
+          module VMware
+            class CollapseSnapshots
               def initialize(handle = $evm)
                 @handle = handle
                 @task = ManageIQ::Automate::Transformation::Common::Utils.task(@handle)
@@ -12,13 +12,10 @@ module ManageIQ
               end
 
               def main
-                destination_vm = @handle.vmdb(:vm).find_by(:name => @source_vm.name, :ems_id => @task.destination_ems.id)
-                if destination_vm.nil?
-                  @handle.root['ae_result'] = 'retry'
-                  @handle.root['ae_retry_interval'] = '15.seconds'
-                else
-                  @task.set_option(:destination_vm_id, destination_vm.id)
-                end
+                return unless @source_vm.vendor == 'vmware'
+                return if @source_vm.snapshots.empty?
+                raise "VM '#{@source_vm.name}' has snapshots, but we are not allowed to collapse them. Exiting." unless @task.get_option(:collapse_snapshots)
+                @source_vm.remove_all_snapshots
               rescue => e
                 @handle.set_state_var(:ae_state_progress, 'message' => e.message)
                 raise
@@ -31,4 +28,4 @@ module ManageIQ
   end
 end
 
-ManageIQ::Automate::Transformation::Infrastructure::VM::Common::CheckVmInInventory.new.main
+ManageIQ::Automate::Transformation::Infrastructure::VM::VMware::CollapseSnapshots.new.main

@@ -10,6 +10,6 @@ object:
     language: ruby
     location: inline
     embedded_methods:
-    - "/Transformation/Infrastructure/VM/vmwarews/Utils"
+    - "/Transformation/Common/Utils"
     options: {}
   inputs: []

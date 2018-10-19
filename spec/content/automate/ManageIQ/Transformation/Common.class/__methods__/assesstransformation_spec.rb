@@ -5,19 +5,13 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   let(:user) { FactoryGirl.create(:user_with_email_and_group) }
   let(:group) { FactoryGirl.create(:miq_group) }
   let(:task) { FactoryGirl.create(:service_template_transformation_plan_task) }
-  let(:src_vm_vmware) { FactoryGirl.create(:vm_vmware) }
-  let(:src_cluster) { FactoryGirl.create(:ems_cluster) }
   let(:src_ems_vmware) { FactoryGirl.create(:ems_vmware) }
-  let(:dst_cluster) { FactoryGirl.create(:ems_cluster) }
-  let(:dst_ems_redhat) { FactoryGirl.create(:ems_redhat) }
-  let(:dst_ems_openstack) { FactoryGirl.create(:ems_openstack_infra) }
+  let(:src_cluster_vmware) { FactoryGirl.create(:ems_cluster, :ext_management_system => src_ems_vmware) }
+  let(:src_vm_vmware) { FactoryGirl.create(:vm_vmware, :ext_management_system => src_ems_vmware, :ems_cluster => src_cluster_vmware) }
   let(:src_storage_1) { FactoryGirl.create(:storage) }
   let(:src_storage_2) { FactoryGirl.create(:storage) }
-  let(:dst_storage) { FactoryGirl.create(:storage) }
   let(:src_lan_1) { FactoryGirl.create(:lan) }
   let(:src_lan_2) { FactoryGirl.create(:lan) }
-  let(:dst_lan_1) { FactoryGirl.create(:lan) }
-  let(:dst_lan_2) { FactoryGirl.create(:lan) }
   let(:hardware) { FactoryGirl.create(:hardware) }
   let(:nic_1) { FactoryGirl.create(:guest_device_nic) }
   let(:nic_2) { FactoryGirl.create(:guest_device_nic) }
@@ -25,19 +19,13 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_group) { MiqAeMethodService::MiqAeServiceMiqGroup.find(group.id) }
   let(:svc_model_task) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask.find(task.id) }
-  let(:svc_model_src_vm_vmware) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_Vmware_InfraManager_Vm.find(src_vm_vmware.id) }
-  let(:svc_model_src_cluster) { MiqAeMethodService::MiqAeServiceEmsCluster.find(src_cluster) }
   let(:svc_model_src_ems_vmware) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(src_ems_vmware) }
-  let(:svc_model_dst_cluster) { MiqAeMethodService::MiqAeServiceEmsCluster.find(dst_cluster) }
-  let(:svc_model_dst_ems_redhat) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(dst_ems_redhat) }
-  let(:svc_model_dst_ems_openstack) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(dst_ems_openstack) }
+  let(:svc_model_src_cluster_vmware) { MiqAeMethodService::MiqAeServiceEmsCluster.find(src_cluster_vmware) }
+  let(:svc_model_src_vm_vmware) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_Vmware_InfraManager_Vm.find(src_vm_vmware.id) }
   let(:svc_model_src_storage_1) { MiqAeMethodService::MiqAeServiceStorage.find(src_storage_1) }
   let(:svc_model_src_storage_2) { MiqAeMethodService::MiqAeServiceStorage.find(src_storage_2) }
-  let(:svc_model_dst_storage) { MiqAeMethodService::MiqAeServiceStorage.find(dst_storage) }
   let(:svc_model_src_lan_1) { MiqAeMethodService::MiqAeServiceLan.find(src_lan_1) }
   let(:svc_model_src_lan_2) { MiqAeMethodService::MiqAeServiceLan.find(src_lan_2) }
-  let(:svc_model_dst_lan_1) { MiqAeMethodService::MiqAeServiceLan.find(dst_lan_1) }
-  let(:svc_model_dst_lan_2) { MiqAeMethodService::MiqAeServiceLan.find(dst_lan_2) }
   let(:svc_model_hardware) { MiqAeMethodService::MiqAeServiceHardware.find(hardware) }
   let(:svc_model_guest_device_1) { MiqAeMethodService::MiqAeServiceGuestDevice.find(guest_device_1) }
   let(:svc_model_guest_device_2) { MiqAeMethodService::MiqAeServiceGuestDevice.find(guest_device_2) }
@@ -96,183 +84,6 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@destination_ems, nil)
   end
 
-  shared_examples_for "source and destination items" do
-    it "source_cluster without cluster" do
-      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(nil)
-      errormsg = "No source cluster"
-      expect { described_class.new(ae_service).source_cluster }.to raise_error(errormsg)
-    end
-
-    it "source_cluster with cluster" do
-      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
-      expect(described_class.new(ae_service).source_cluster.id).to eq(svc_model_src_cluster.id)
-    end
-
-    it "source_ems without ems" do
-      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
-      allow(svc_model_src_cluster).to receive(:ext_management_system).and_return(nil)
-      errormsg = "No source EMS"
-      expect { described_class.new(ae_service).source_ems }.to raise_error(errormsg)
-    end
-
-    it "source_ems with ems" do
-      allow(svc_model_src_vm).to receive(:ext_management_system).and_return(svc_model_src_ems)
-      expect(described_class.new(ae_service).source_ems.id).to eq(svc_model_src_ems.id)
-    end
-
-    it "destination_cluster without cluster" do
-      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(nil)
-      errormsg = "No destination cluster"
-      expect { described_class.new(ae_service).destination_cluster }.to raise_error(errormsg)
-    end
-
-    it "destination_cluster with cluster" do
-      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
-      expect(described_class.new(ae_service).destination_cluster.id).to eq(svc_model_dst_cluster.id)
-    end
-
-    it "destination_ems without ems" do
-      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
-      allow(svc_model_dst_cluster).to receive(:ext_management_system).and_return(nil)
-      errormsg = "No destination EMS"
-      expect { described_class.new(ae_service).destination_ems }.to raise_error(errormsg)
-    end
-
-    it "destination_ems with ems" do
-      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
-      allow(svc_model_dst_cluster).to receive(:ext_management_system).and_return(svc_model_dst_ems)
-      expect(described_class.new(ae_service).destination_ems.id).to eq(svc_model_dst_ems.id)
-    end
-  end
-
-  context "source and destination items source vmware and destination redhat" do
-    let(:svc_model_src_vm) { svc_model_src_vm_vmware }
-    let(:svc_model_src_ems) { svc_model_src_ems_vmware }
-    let(:svc_model_dst_ems) { svc_model_dst_ems_redhat }
-
-    it_behaves_like "source and destination items"
-  end
-
-  context "source and destination items source vmware and destination openstack" do
-    let(:svc_model_src_vm) { svc_model_src_vm_vmware }
-    let(:svc_model_src_ems) { svc_model_src_ems_vmware }
-    let(:svc_model_dst_ems) { svc_model_dst_ems_openstack }
-
-    it_behaves_like "source and destination items"
-  end
-
-  context "transformation_type" do
-    let(:svc_model_src_vm) { svc_model_src_vm_vmware }
-
-    it "transformation_type with invalid source ems" do
-      allow(svc_model_src_vm).to receive(:ext_management_system).and_return(svc_model_dst_ems_redhat)
-      errormsg = "Unsupported source EMS type: #{svc_model_dst_ems_redhat.emstype}."
-      expect { described_class.new(ae_service).transformation_type }.to raise_error(errormsg)
-    end
-
-    it "transformation_type with invalid destination ems" do
-      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
-      allow(svc_model_src_vm).to receive(:ext_management_system).and_return(svc_model_src_ems_vmware)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
-      allow(svc_model_dst_cluster).to receive(:ext_management_system).and_return(svc_model_src_ems_vmware)
-      errormsg = "Unsupported destination EMS type: #{svc_model_src_ems_vmware.emstype}."
-      expect { described_class.new(ae_service).transformation_type }.to raise_error(errormsg)
-    end
-
-    it "transformation_type with valid source and destination ems" do
-      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
-      allow(svc_model_src_vm).to receive(:ext_management_system).and_return(svc_model_src_ems_vmware)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
-      allow(svc_model_dst_cluster).to receive(:ext_management_system).and_return(svc_model_dst_ems_redhat)
-      expect(described_class.new(ae_service).transformation_type).to eq("#{svc_model_src_ems_vmware.emstype}2#{svc_model_dst_ems_redhat.emstype}")
-    end
-  end
-
-  shared_examples_for "virtv2v hardware" do
-    it "source_vm has no disk" do
-      allow(svc_model_src_vm.hardware).to receive(:disks).and_return([])
-      expect(described_class.new(ae_service).virtv2v_disks).to eq([])
-    end
-
-    it "source_vm has disks, but src_storage_1 has no mapping" do
-      allow(svc_model_hardware).to receive(:disks).and_return([disk_1, disk_2])
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_1).and_return(nil)
-      errormsg = "[#{svc_model_src_vm.name}] Disk #{disk_1.device_name} [#{svc_model_src_storage_1.name}] has no mapping. Aborting."
-      expect { described_class.new(ae_service).virtv2v_disks }.to raise_error(errormsg)
-    end
-
-    it "source_vm has disks and storages have mapping" do
-      allow(svc_model_hardware).to receive(:disks).and_return([disk_1, disk_2])
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_1).and_return(svc_model_dst_storage)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_2).and_return(svc_model_dst_storage)
-      allow(svc_model_src_vm).to receive(:allocated_disk_storage).and_return(disk_1.size + disk_2.size)
-      expect(described_class.new(ae_service).virtv2v_disks).to eq(virtv2v_disks)
-    end
-
-    it "source_vm has no nic" do
-      allow(svc_model_src_vm.hardware).to receive(:nics).and_return([])
-      expect(described_class.new(ae_service).virtv2v_networks).to eq([])
-    end
-
-    it "source_vm has nics, but src_lan_1 has no mapping" do
-      allow(svc_model_hardware).to receive(:nics).and_return([svc_model_nic_1, svc_model_nic_2])
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_1).and_return(nil)
-      errormsg = "[#{svc_model_src_vm.name}] NIC #{svc_model_nic_1.device_name} [#{svc_model_src_lan_1.name}] has no mapping. Aborting."
-      expect { described_class.new(ae_service).virtv2v_networks }.to raise_error(errormsg)
-    end
-
-    it "source_vm has nicss and lans have mapping" do
-      allow(svc_model_hardware).to receive(:nics).and_return([svc_model_nic_1, svc_model_nic_2])
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_1).and_return(svc_model_dst_lan_1)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_2).and_return(svc_model_dst_lan_2)
-      expect(described_class.new(ae_service).virtv2v_networks).to eq(virtv2v_networks)
-    end
-  end
-
-  context "source vm is vmware" do
-    let(:svc_model_src_vm) { svc_model_src_vm_vmware }
-
-    it_behaves_like "virtv2v hardware"
-  end
-
-  shared_examples_for "populate task options" do
-    it "task options" do
-      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
-      allow(svc_model_src_vm).to receive(:ext_management_system).and_return(svc_model_src_ems)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
-      allow(svc_model_dst_cluster).to receive(:ext_management_system).and_return(svc_model_dst_ems)
-      allow(svc_model_hardware).to receive(:disks).and_return([disk_1, disk_2])
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_1).and_return(svc_model_dst_storage)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_2).and_return(svc_model_dst_storage)
-      allow(svc_model_src_vm).to receive(:allocated_disk_storage).and_return(disk_1.size + disk_2.size)
-      allow(svc_model_hardware).to receive(:nics).and_return([svc_model_nic_1, svc_model_nic_2])
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_1).and_return(svc_model_dst_lan_1)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_2).and_return(svc_model_dst_lan_2)
-      allow(svc_model_src_vm).to receive(:power_state).and_return("on")
-      described_class.new(ae_service).populate_task_options
-      expect(svc_model_task.get_option(:source_ems_id)).to eq(svc_model_src_ems.id)
-      expect(svc_model_task.get_option(:destination_ems_id)).to eq(svc_model_dst_ems.id)
-      expect(svc_model_task[:options][:virtv2v_networks]).to eq(virtv2v_networks)
-      expect(svc_model_task[:options][:virtv2v_disks]).to eq(virtv2v_disks)
-      expect(svc_model_task.get_option(:transformation_type)).to eq("#{svc_model_src_ems.emstype}2#{svc_model_dst_ems.emstype}")
-      expect(svc_model_task.get_option(:source_vm_power_state)).to eq("on")
-      expect(svc_model_task.get_option(:collapse_snapshots)).to be true
-      expect(svc_model_task.get_option(:power_off)).to be true
-    end
-  end
-
-  context "source is vmware and destination is redhat" do
-    let(:svc_model_src_vm) { svc_model_src_vm_vmware }
-    let(:svc_model_src_ems) { svc_model_src_ems_vmware }
-    let(:svc_model_dst_ems) { svc_model_dst_ems_redhat }
-
-    it_behaves_like "populate task options"
-  end
-
   context "populate factory config" do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
 
@@ -299,26 +110,20 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     end
   end
 
+  shared_examples_for "#populate_task_options" do
+    it "task options" do
+      allow(svc_model_src_vm).to receive(:power_state).and_return("on")
+      described_class.new(ae_service).populate_task_options
+      expect(svc_model_task.get_option(:source_vm_power_state)).to eq("on")
+      expect(svc_model_task.get_option(:collapse_snapshots)).to be true
+      expect(svc_model_task.get_option(:power_off)).to be true
+    end
+  end
+
   shared_examples_for "main" do
     it "global summary test" do
-      allow(svc_model_src_vm).to receive(:ems_cluster).and_return(svc_model_src_cluster)
-      allow(svc_model_src_vm).to receive(:ext_management_system).and_return(svc_model_src_ems)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_cluster).and_return(svc_model_dst_cluster)
-      allow(svc_model_dst_cluster).to receive(:ext_management_system).and_return(svc_model_dst_ems)
-      allow(svc_model_hardware).to receive(:disks).and_return([disk_1, disk_2])
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_1).and_return(svc_model_dst_storage)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_storage_2).and_return(svc_model_dst_storage)
-      allow(svc_model_src_vm).to receive(:allocated_disk_storage).and_return(disk_1.size + disk_2.size)
-      allow(svc_model_hardware).to receive(:nics).and_return([svc_model_nic_1, svc_model_nic_2])
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_1).and_return(svc_model_dst_lan_1)
-      allow(svc_model_task).to receive(:transformation_destination).with(svc_model_src_lan_2).and_return(svc_model_dst_lan_2)
       allow(svc_model_src_vm).to receive(:power_state).and_return("on")
       described_class.new(ae_service).main
-      expect(svc_model_task.get_option(:source_ems_id)).to eq(svc_model_src_ems.id)
-      expect(svc_model_task.get_option(:destination_ems_id)).to eq(svc_model_dst_ems.id)
-      expect(svc_model_task[:options][:virtv2v_networks]).to eq(virtv2v_networks)
-      expect(svc_model_task[:options][:virtv2v_disks]).to eq(virtv2v_disks)
-      expect(svc_model_task.get_option(:transformation_type)).to eq("#{svc_model_src_ems.emstype}2#{svc_model_dst_ems.emstype}")
       expect(svc_model_task.get_option(:source_vm_power_state)).to eq("on")
       expect(svc_model_task.get_option(:collapse_snapshots)).to be true
       expect(svc_model_task.get_option(:power_off)).to be true
@@ -328,18 +133,117 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   end
 
   context "source is vmware and destination is redhat" do
+    let(:src_vm) { src_vm_vmware }
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:svc_model_src_ems) { svc_model_src_ems_vmware }
-    let(:svc_model_dst_ems) { svc_model_dst_ems_redhat }
 
+    let(:dst_ems) { FactoryGirl.create(:ems_redhat) }
+    let(:svc_model_dst_ems) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(dst_ems.id) }
+    let(:dst_cluster) { FactoryGirl.create(:ems_cluster, :ext_management_system => dst_ems) }
+    let(:svc_model_dst_cluster) { MiqAeMethodService::MiqAeServiceEmsCluster.find(dst_cluster.id) }
+    let(:dst_storage) { FactoryGirl.create(:storage) }
+    let(:svc_model_dst_storage) { MiqAeMethodService::MiqAeServiceStorage.find(dst_storage.id) }
+    let(:dst_lan_1) { FactoryGirl.create(:lan) }
+    let(:svc_model_dst_lan_1) { MiqAeMethodService::MiqAeServiceLan.find(dst_lan_1.id) }
+    let(:dst_lan_2) { FactoryGirl.create(:lan) }
+    let(:svc_model_dst_lan_2) { MiqAeMethodService::MiqAeServiceLan.find(dst_lan_2.id) }
+
+    let(:mapping) do
+      FactoryGirl.create(
+        :transformation_mapping,
+        :transformation_mapping_items => [
+          FactoryGirl.create(:transformation_mapping_item, :source => src_cluster_vmware, :destination => dst_cluster),
+          FactoryGirl.create(:transformation_mapping_item, :source => src_storage_1, :destination => dst_storage),
+          FactoryGirl.create(:transformation_mapping_item, :source => src_storage_2, :destination => dst_storage),
+          FactoryGirl.create(:transformation_mapping_item, :source => src_lan_1, :destination => dst_lan_1),
+          FactoryGirl.create(:transformation_mapping_item, :source => src_lan_2, :destination => dst_lan_2)
+        ]
+      )
+    end
+
+    let(:catalog_item_options) do
+      {
+        :name        => 'Transformation Plan',
+        :description => 'a description',
+        :config_info => {
+          :transformation_mapping_id => mapping.id,
+          :actions                   => [
+            {:vm_id => src_vm.id.to_s, :pre_service => false, :post_service => false}
+          ],
+        }
+      }
+    end
+
+    let(:plan) { ServiceTemplateTransformationPlan.create_catalog_item(catalog_item_options) }
+    let(:request) { FactoryGirl.create(:service_template_transformation_plan_request, :source => plan) }
+    let(:task) { FactoryGirl.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_vmware) }
+
+    it_behaves_like "#populate_task_options"
     it_behaves_like "main"
   end
 
-  context "catchall exception rescue" do
+  context "source is vmware and destination is openstack" do
+    let(:src_vm) { src_vm_vmware }
+    let(:svc_model_src_vm) { svc_model_src_vm_vmware }
+    let(:svc_model_src_ems) { svc_model_src_ems_vmware }
+
+    let(:dst_ems) { FactoryGirl.create(:ems_openstack_infra) }
+    let(:svc_model_dst_ems) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(dst_ems.id) }
+    let(:dst_cloud_tenant) { FactoryGirl.create(:cloud_tenant, :ext_management_system => dst_ems) }
+    let(:svc_model_dst_cloud_tenant) { MiqAeMethodService::MiqAeServiceCloudTenant.find(dst_cluster.id) }
+    let(:dst_cloud_volume_type) { FactoryGirl.create(:cloud_volume_type) }
+    let(:svc_model_dst_cloud_volume_type) { MiqAeMethodService::MiqAeServiceCloudVolumeType.find(dst_cloud_volume_type.id) }
+    let(:dst_cloud_network_1) { FactoryGirl.create(:cloud_network) }
+    let(:svc_model_cloud_network_1) { MiqAeMethodService::MiqAeServiceCloudNetwork.find(dst_cloud_network_1.id) }
+    let(:dst_cloud_network_2) { FactoryGirl.create(:cloud_network) }
+    let(:svc_model_cloud_network_1) { MiqAeMethodService::MiqAeServiceCloudNetwork.find(dst_cloud_network_2.id) }
+
+    let(:mapping) do
+      FactoryGirl.create(
+        :transformation_mapping,
+        :transformation_mapping_items => [
+          FactoryGirl.create(:transformation_mapping_item, :source => src_cluster_vmware, :destination => dst_cloud_tenant),
+          FactoryGirl.create(:transformation_mapping_item, :source => src_storage_1, :destination => dst_cloud_volume_type),
+          FactoryGirl.create(:transformation_mapping_item, :source => src_storage_2, :destination => dst_cloud_volume_type),
+          FactoryGirl.create(:transformation_mapping_item, :source => src_lan_1, :destination => dst_cloud_network_1),
+          FactoryGirl.create(:transformation_mapping_item, :source => src_lan_2, :destination => dst_cloud_network_2)
+        ]
+      )
+    end
+
+    let(:catalog_item_options) do
+      {
+        :name        => 'Transformation Plan',
+        :description => 'a description',
+        :config_info => {
+          :transformation_mapping_id => mapping.id,
+          :actions                   => [
+            {:vm_id => src_vm.id.to_s, :pre_service => false, :post_service => false}
+          ],
+        }
+      }
+    end
+
+    let(:plan) { ServiceTemplateTransformationPlan.create_catalog_item(catalog_item_options) }
+    let(:request) { FactoryGirl.create(:service_template_transformation_plan_request, :source => plan) }
+    let(:task) { FactoryGirl.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_vmware) }
+
+    it_behaves_like "#populate_task_options"
+    it_behaves_like "main"
+  end
+
+  context "handle errors" do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
 
-    it "forcefully raise" do
-      errormsg = 'No source EMS'
+    it "sets cancel_requested option if preflight check returns false" do
+      allow(svc_model_task).to receive(:preflight_check).and_return(false)
+      described_class.new(ae_service).main
+      expect(svc_model_task.get_option('cancel_requested')).to eq(true)
+    end
+
+    it "raises if task preflight check raises" do
+      errormsg = 'Unexpected error'
+      allow(svc_model_task).to receive(:preflight_check).and_raise(errormsg)
       expect { described_class.new(ae_service).main }.to raise_error(errormsg)
       expect(ae_service.get_state_var(:ae_state_progress)).to eq('message' => errormsg)
     end
