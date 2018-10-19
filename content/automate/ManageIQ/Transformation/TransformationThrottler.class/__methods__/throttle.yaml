@@ -11,6 +11,5 @@ object:
     location: inline
     embedded_methods:
     - "/Transformation/TransformationThrottler/Utils"
-    - "/Transformation/TransformationHosts/Common/Utils"
     options: {}
   inputs: []

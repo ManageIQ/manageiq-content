@@ -4,11 +4,11 @@ require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Tra
 describe ManageIQ::Automate::Transformation::Common::AcquireTransformationHost do
   let(:user) { FactoryGirl.create(:user_with_email_and_group) }
   let(:task) { FactoryGirl.create(:service_template_transformation_plan_task) }
-  let(:host) { FactoryGirl.create(:host) }
+  let(:conversion_host) { FactoryGirl.create(:conversion_host) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_task) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask.find(task.id) }
-  let(:svc_model_host) { MiqAeMethodService::MiqAeServiceHost.find(host.id) }
+  let(:svc_model_conversion_host) { MiqAeMethodService::MiqAeServiceConversionHost.find(conversion_host.id) }
 
   let(:root) do
     Spec::Support::MiqAeMockObject.new(
@@ -33,7 +33,7 @@ describe ManageIQ::Automate::Transformation::Common::AcquireTransformationHost d
 
   context "#main" do
     it "without transformation host" do
-      allow(svc_model_task).to receive(:get_option).with(:transformation_host_id).and_return(nil)
+      allow(svc_model_task).to receive(:conversion_host).and_return(nil)
       described_class.new(ae_service).main
       expect(ae_service.root['ae_result']).to eq('retry')
       expect(ae_service.root['ae_retry_server_affinity']).to eq(true)
@@ -41,7 +41,7 @@ describe ManageIQ::Automate::Transformation::Common::AcquireTransformationHost d
     end
 
     it "with transformation host" do
-      allow(svc_model_task).to receive(:get_option).with(:transformation_host_id).and_return(svc_model_host.id)
+      allow(svc_model_task).to receive(:conversion_host).and_return(svc_model_conversion_host)
       described_class.new(ae_service).main
       expect(ae_service.root['ae_result']).to be_nil
       expect(ae_service.root['ae_retry_server_affinity']).to be_nil
@@ -53,7 +53,7 @@ describe ManageIQ::Automate::Transformation::Common::AcquireTransformationHost d
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
 
     before do
-      allow(svc_model_task).to receive(:get_option).with(:transformation_host_id).and_raise(StandardError, 'kaboom')
+      allow(svc_model_task).to receive(:conversion_host).and_raise(StandardError, 'kaboom')
     end
 
     it "forcefully raise" do

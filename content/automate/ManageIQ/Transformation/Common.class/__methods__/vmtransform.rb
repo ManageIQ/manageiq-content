@@ -2,18 +2,18 @@ module ManageIQ
   module Automate
     module Transformation
       module Common
-        class AcquireTransformationHost
+        class VMTransform
           def initialize(handle = $evm)
+            @debug = false
             @handle = handle
             @task = ManageIQ::Automate::Transformation::Common::Utils.task(@handle)
           end
 
           def main
-            if @task.conversion_host.nil?
-              @handle.root['ae_result'] = 'retry'
-              @handle.root['ae_retry_server_affinity'] = true
-              @handle.root['ae_retry_interval'] = 15.seconds
-            end
+            # WARNING: Enable at your own risk, as it may lead to sensitive data leak
+            # @handle.log(:info, "JSON Input:\n#{JSON.pretty_generate(@task.conversion_options)}") if @debug
+
+            @task.run_conversion
           rescue => e
             @handle.set_state_var(:ae_state_progress, 'message' => e.message)
             raise
@@ -24,4 +24,4 @@ module ManageIQ
   end
 end
 
-ManageIQ::Automate::Transformation::Common::AcquireTransformationHost.new.main
+ManageIQ::Automate::Transformation::Common::VMTransform.new.main
