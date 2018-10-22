@@ -9,4 +9,7 @@ object:
     scope: instance
     language: ruby
     location: inline
+    embedded_methods:
+    - "/System/CommonMethods/Utils/log_object"
+    options: {}
   inputs: []
