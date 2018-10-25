@@ -5,34 +5,78 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-##  Unreleased as of Sprint 96 Ending 2018-10-08
-
-### Added
-- Add support to apply right-size recommendation during transformation [(#417)](https://github.com/ManageIQ/manageiq-content/pull/417)
+##  Unreleased as of Sprint 97 Ending 2018-10-22
 
 ### Fixed
-- Fix userid in transformation throttler launch [(#439)](https://github.com/ManageIQ/manageiq-content/pull/439)
-- Add tests for orchestration stack retirement [(#437)](https://github.com/ManageIQ/manageiq-content/pull/437)
-- Keep the encrypted value as is when creating service provision request. [(#435)](https://github.com/ManageIQ/manageiq-content/pull/435)
+- Modified Log_Object method to check if object is taggable. [(#446)](https://github.com/ManageIQ/manageiq-content/pull/446)
+- Modified InspectMe method to check if object is taggable. [(#445)](https://github.com/ManageIQ/manageiq-content/pull/445)
 
-##  Unreleased as of Sprint 95 Ending 2018-09-24
+##  Hammer Beta-1 - Released 2018-10-12
 
 ### Added
 - Use embedded log method. [(#427)](https://github.com/ManageIQ/manageiq-content/pull/427)
 - Adding log_and_notify method into log_object embedded method. [(#423)](https://github.com/ManageIQ/manageiq-content/pull/423)
 - Transformation throttling - Base components [(#418)](https://github.com/ManageIQ/manageiq-content/pull/418)
+- Adding log and raise error method into log_object embedded method. [(#416)](https://github.com/ManageIQ/manageiq-content/pull/416)
+- Added log_and_exit utility method [(#414)](https://github.com/ManageIQ/manageiq-content/pull/414)
+- Add plugin display name [(#411)](https://github.com/ManageIQ/manageiq-content/pull/411)
+- Trigger Nuage targeted refresh more often [(#409)](https://github.com/ManageIQ/manageiq-content/pull/409)
+- Prepare Nuage authentication attributes (for Embedded Ansible) [(#406)](https://github.com/ManageIQ/manageiq-content/pull/406)
+- Change VMware URI to connect directly to ESXi [(#405)](https://github.com/ManageIQ/manageiq-content/pull/405)
+- Add state_machine_phase attribute to transformation state machines [(#402)](https://github.com/ManageIQ/manageiq-content/pull/402)
+- Add CustomButtonEvent to automate explorer [(#398)](https://github.com/ManageIQ/manageiq-content/pull/398)
+- Adding Inspectme functionality into log_object embedded method. [(#386)](https://github.com/ManageIQ/manageiq-content/pull/386)
+- Add Openstack volume.update.end event handler [(#401)](https://github.com/ManageIQ/manageiq-content/pull/401)
+- Restore VM ownership and retirement when migrating [(#397)](https://github.com/ManageIQ/manageiq-content/pull/397)
+- Created log_object method in System/CommonMethods/Utils class [(#362)](https://github.com/ManageIQ/manageiq-content/pull/362)
+- Trigger targeted refresh for new Nuage entities [(#367)](https://github.com/ManageIQ/manageiq-content/pull/367)
+- (Nuage Networks) Actually rename AE Instances not just fixture filename [(#365)](https://github.com/ManageIQ/manageiq-content/pull/365)
+- Requested Quota for instance_type dialog override. [(#333)](https://github.com/ManageIQ/manageiq-content/pull/333)
+- (Nuage Networks) Adjust Automate Instance names to new event type prefix [(#363)](https://github.com/ManageIQ/manageiq-content/pull/363)
+- Add checks for retirement of correct child service in bundle [(#284)](https://github.com/ManageIQ/manageiq-content/pull/284)
+- Add a precanned physical server automation event [(#339)](https://github.com/ManageIQ/manageiq-content/pull/339)
+- Raise policy event when HOST_FAILURE is received. [(#329)](https://github.com/ManageIQ/manageiq-content/pull/329)
+- Email instances for Cloud/Orchestration. [(#314)](https://github.com/ManageIQ/manageiq-content/pull/314)
+- Email instances for VmMigrate and Reconfiguration. [(#311)](https://github.com/ManageIQ/manageiq-content/pull/311)
+- Email instances for Service provisioning. [(#313)](https://github.com/ManageIQ/manageiq-content/pull/313)
+- Email instances for Automation/Management/AnsibleTower provisioning. [(#310)](https://github.com/ManageIQ/manageiq-content/pull/310)
+- Email instances for Host provisioning. [(#309)](https://github.com/ManageIQ/manageiq-content/pull/309)
+- Email instances for /Infrastructure/Configured_System provisioning. [(#308)](https://github.com/ManageIQ/manageiq-content/pull/308)
+- Updated existing V2v instances in Configuration/Email. [(#307)](https://github.com/ManageIQ/manageiq-content/pull/307)
+- Updated Email instances for Cloud VM provisioning. [(#306)](https://github.com/ManageIQ/manageiq-content/pull/306)
+- Updated Email instances for Infra VM provisioning. [(#305)](https://github.com/ManageIQ/manageiq-content/pull/305)
+- Email instances for Cloud and Infrastructure retirement. [(#304)](https://github.com/ManageIQ/manageiq-content/pull/304)
+- Email instances for Infra VM provisioning. [(#303)](https://github.com/ManageIQ/manageiq-content/pull/303)
+- Email instances for Cloud VM provisioning. [(#302)](https://github.com/ManageIQ/manageiq-content/pull/302)
+- Updated Configuration/Email class and existing V2v instances. [(#300)](https://github.com/ManageIQ/manageiq-content/pull/300)
+- Created new namespace for Configuration/Email. [(#299)](https://github.com/ManageIQ/manageiq-content/pull/299)
+- Change check for start_retirement to not initialized vs retiring [(#281)](https://github.com/ManageIQ/manageiq-content/pull/281)
+- Add changes for service vm retire request approval [(#272)](https://github.com/ManageIQ/manageiq-content/pull/272)
+- Add task status update to retirement status [(#262)](https://github.com/ManageIQ/manageiq-content/pull/262)
+- Nuage events callbacks for targeted refresh [(#204)](https://github.com/ManageIQ/manageiq-content/pull/204)
+- Add policy event triggers for Hawkular [(#201)](https://github.com/ManageIQ/manageiq-content/pull/201)
+- v2v: Extend 'VM Transform' dialog to select VMs by tag [(#200)](https://github.com/ManageIQ/manageiq-content/pull/200)
+- Add support to apply right-size recommendation during transformation [(#417)](https://github.com/ManageIQ/manageiq-content/pull/417)
+
+### Changed
+- Changed validate_quota method to check individual quota items [(#375)](https://github.com/ManageIQ/manageiq-content/pull/375)
 
 ### Fixed
 - Add storage profile support in vmware_best_fit_least_utilized method. [(#420)](https://github.com/ManageIQ/manageiq-content/pull/420)
-
-##  Unreleased as of Sprint 94 Ending 2018-09-10
-
-### Added
-- Adding log and raise error method into log_object embedded method. [(#416)](https://github.com/ManageIQ/manageiq-content/pull/416)
-- Added log_and_exit utility method [(#414)](https://github.com/ManageIQ/manageiq-content/pull/414)
-
-### Fixed
 - Updated requested method to fix vm_reconfigure via rest-api. [(#413)](https://github.com/ManageIQ/manageiq-content/pull/413)
+- Do not check instance variables in specs for Transformation - Common - Utils [(#410)](https://github.com/ManageIQ/manageiq-content/pull/410)
+- Escape username of VMware host [(#407)](https://github.com/ManageIQ/manageiq-content/pull/407)
+- Add event handling for Openstack port events [(#372)](https://github.com/ManageIQ/manageiq-content/pull/372)
+- Event handling for Openstack keypair events [(#371)](https://github.com/ManageIQ/manageiq-content/pull/371)
+- Fix quota requested cloud_volume calculations. [(#388)](https://github.com/ManageIQ/manageiq-content/pull/388)
+- Added vm_retire_extend method for new email. [(#366)](https://github.com/ManageIQ/manageiq-content/pull/366)
+- Add event handling for Openstack volume attachment events [(#368)](https://github.com/ManageIQ/manageiq-content/pull/368)
+- Remove check for a state of initialized in 4 start_retirement methods. [(#331)](https://github.com/ManageIQ/manageiq-content/pull/331)
+- handle volume snapshot status changes [(#285)](https://github.com/ManageIQ/manageiq-content/pull/285)
+- Move the task message into check for task presence [(#283)](https://github.com/ManageIQ/manageiq-content/pull/283)
+- Add tests for orchestration stack retirement [(#437)](https://github.com/ManageIQ/manageiq-content/pull/437)
+- Keep the encrypted value as is when creating service provision request. [(#435)](https://github.com/ManageIQ/manageiq-content/pull/435)
+- Fix userid in transformation throttler launch [(#439)](https://github.com/ManageIQ/manageiq-content/pull/439)
 
 ## Gaprindashvili-5 - Released 2018-09-07
 
@@ -58,53 +102,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ### Removed
 - Remove check on number of runners when converting VM [(#395)](https://github.com/ManageIQ/manageiq-content/pull/395)
 
-##  Unreleased as of Sprint 93 Ending 2018-08-27
-
-### Added
-- Add plugin display name [(#411)](https://github.com/ManageIQ/manageiq-content/pull/411)
-- Trigger Nuage targeted refresh more often [(#409)](https://github.com/ManageIQ/manageiq-content/pull/409)
-- Prepare Nuage authentication attributes (for Embedded Ansible) [(#406)](https://github.com/ManageIQ/manageiq-content/pull/406)
-- Change VMware URI to connect directly to ESXi [(#405)](https://github.com/ManageIQ/manageiq-content/pull/405)
-- Add state_machine_phase attribute to transformation state machines [(#402)](https://github.com/ManageIQ/manageiq-content/pull/402)
-- Add CustomButtonEvent to automate explorer [(#398)](https://github.com/ManageIQ/manageiq-content/pull/398)
-- Adding Inspectme functionality into log_object embedded method. [(#386)](https://github.com/ManageIQ/manageiq-content/pull/386)
-
-### Fixed
-- Do not check instance variables in specs for Transformation - Common - Utils [(#410)](https://github.com/ManageIQ/manageiq-content/pull/410)
-- Escape username of VMware host [(#407)](https://github.com/ManageIQ/manageiq-content/pull/407)
-- Add event handling for Openstack port events [(#372)](https://github.com/ManageIQ/manageiq-content/pull/372)
-- Event handling for Openstack keypair events [(#371)](https://github.com/ManageIQ/manageiq-content/pull/371)
-
-##  Unreleased as of Sprint 92 Ending 2018-08-13
-
-### Added
-- Add Openstack volume.update.end event handler [(#401)](https://github.com/ManageIQ/manageiq-content/pull/401)
-- Restore VM ownership and retirement when migrating [(#397)](https://github.com/ManageIQ/manageiq-content/pull/397)
-- Created log_object method in System/CommonMethods/Utils class [(#362)](https://github.com/ManageIQ/manageiq-content/pull/362)
-
-### Changed
-- Changed validate_quota method to check individual quota items [(#375)](https://github.com/ManageIQ/manageiq-content/pull/375)
-
-### Fixed
-- Fix quota requested cloud_volume calculations. [(#388)](https://github.com/ManageIQ/manageiq-content/pull/388)
-- Added vm_retire_extend method for new email. [(#366)](https://github.com/ManageIQ/manageiq-content/pull/366)
-
-##  Unreleased as of Sprint 91 Ending 2018-07-30
-
-### Added
-- Trigger targeted refresh for new Nuage entities [(#367)](https://github.com/ManageIQ/manageiq-content/pull/367)
-- (Nuage Networks) Actually rename AE Instances not just fixture filename [(#365)](https://github.com/ManageIQ/manageiq-content/pull/365)
-- Requested Quota for instance_type dialog override. [(#333)](https://github.com/ManageIQ/manageiq-content/pull/333)
-- (Nuage Networks) Adjust Automate Instance names to new event type prefix [(#363)](https://github.com/ManageIQ/manageiq-content/pull/363)
-
-### Fixed
-- Add event handling for Openstack volume attachment events [(#368)](https://github.com/ManageIQ/manageiq-content/pull/368)
-
-##  Unreleased as of Sprint 90 Ending 2018-07-16
-
-### Added
-- Add checks for retirement of correct child service in bundle [(#284)](https://github.com/ManageIQ/manageiq-content/pull/284)
-
 ## Gaprindashvili-4 - Released 2018-07-16
 
 ### Added
@@ -125,38 +122,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Set insecure_connection to target provider as default behavior. [(#327)](https://github.com/ManageIQ/manageiq-content/pull/327)
 - Restore VM power state upon transformation [(#336)](https://github.com/ManageIQ/manageiq-content/pull/336)
 
-##  Unreleased as of Sprint 89 Ending 2018-07-02
-
-### Added
-- Add a precanned physical server automation event [(#339)](https://github.com/ManageIQ/manageiq-content/pull/339)
-
-##  Unreleased as of Sprint 88 Ending 2018-06-18
-
-### Added
-- Raise policy event when HOST_FAILURE is received. [(#329)](https://github.com/ManageIQ/manageiq-content/pull/329)
-- Email instances for Cloud/Orchestration. [(#314)](https://github.com/ManageIQ/manageiq-content/pull/314)
-- Email instances for VmMigrate and Reconfiguration. [(#311)](https://github.com/ManageIQ/manageiq-content/pull/311)
-
-### Fixed
-- Remove check for a state of initialized in 4 start_retirement methods. [(#331)](https://github.com/ManageIQ/manageiq-content/pull/331)
-- handle volume snapshot status changes [(#285)](https://github.com/ManageIQ/manageiq-content/pull/285)
-
-##  Unreleased as of Sprint 87 Ending 2018-06-04
-
-### Added
-- Email instances for Service provisioning. [(#313)](https://github.com/ManageIQ/manageiq-content/pull/313)
-- Email instances for Automation/Management/AnsibleTower provisioning. [(#310)](https://github.com/ManageIQ/manageiq-content/pull/310)
-- Email instances for Host provisioning. [(#309)](https://github.com/ManageIQ/manageiq-content/pull/309)
-- Email instances for /Infrastructure/Configured_System provisioning. [(#308)](https://github.com/ManageIQ/manageiq-content/pull/308)
-- Updated existing V2v instances in Configuration/Email. [(#307)](https://github.com/ManageIQ/manageiq-content/pull/307)
-- Updated Email instances for Cloud VM provisioning. [(#306)](https://github.com/ManageIQ/manageiq-content/pull/306)
-- Updated Email instances for Infra VM provisioning. [(#305)](https://github.com/ManageIQ/manageiq-content/pull/305)
-- Email instances for Cloud and Infrastructure retirement. [(#304)](https://github.com/ManageIQ/manageiq-content/pull/304)
-- Email instances for Infra VM provisioning. [(#303)](https://github.com/ManageIQ/manageiq-content/pull/303)
-- Email instances for Cloud VM provisioning. [(#302)](https://github.com/ManageIQ/manageiq-content/pull/302)
-- Updated Configuration/Email class and existing V2v instances. [(#300)](https://github.com/ManageIQ/manageiq-content/pull/300)
-- Created new namespace for Configuration/Email. [(#299)](https://github.com/ManageIQ/manageiq-content/pull/299)
-
 ## Gaprindashvili-3 - Released 2018-05-15
 
 ### Added
@@ -166,20 +131,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Fixed
 - Add event state machine for refresh. [(#243)](https://github.com/ManageIQ/manageiq-content/pull/243)
-
-##  Unreleased as of Sprint 85 Ending 2018-05-07
-
-### Added
-- Change check for start_retirement to not initialized vs retiring [(#281)](https://github.com/ManageIQ/manageiq-content/pull/281)
-
-### Fixed
-- Move the task message into check for task presence [(#283)](https://github.com/ManageIQ/manageiq-content/pull/283)
-
-##  Unreleased as of Sprint 83 Ending 2018-04-09
-
-### Added
-- Add changes for service vm retire request approval [(#272)](https://github.com/ManageIQ/manageiq-content/pull/272)
-- Add task status update to retirement status [(#262)](https://github.com/ManageIQ/manageiq-content/pull/262)
 
 ## Gaprindashvili-1 - Released 2018-01-31
 
@@ -226,13 +177,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Removed
 - Removed the schema values for PreDeleteFromProvider. [(#226)](https://github.com/ManageIQ/manageiq-content/pull/226)
-
-## Unreleased as of Sprint 72 Ending 2017-10-30
-
-### Added
-- Nuage events callbacks for targeted refresh [(#204)](https://github.com/ManageIQ/manageiq-content/pull/204)
-- Add policy event triggers for Hawkular [(#201)](https://github.com/ManageIQ/manageiq-content/pull/201)
-- v2v: Extend 'VM Transform' dialog to select VMs by tag [(#200)](https://github.com/ManageIQ/manageiq-content/pull/200)
 
 ## Fine-3
 
