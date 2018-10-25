@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-##  Hammer Beta-1
+##  Hammer Beta-2
+
+### Fixed
+- Modified InspectMe method to check if object is taggable. [(#445)](https://github.com/ManageIQ/manageiq-content/pull/445)
+- Modified Log_Object method to check if object is taggable. [(#446)](https://github.com/ManageIQ/manageiq-content/pull/446)
+
+##  Hammer Beta-1 - Released 2018-10-12
 
 ### Added
 - Use embedded log method. [(#427)](https://github.com/ManageIQ/manageiq-content/pull/427)
