@@ -1,5 +1,9 @@
-#
-# Description: Placeholder for service request validation
-#
-prov = $evm.root['miq_request']
-prov.source_vms.each { |vm| prov.approve_vm(vm) if prov.validate_vm(vm) }
+request = $evm.root['miq_request']
+
+unless request.validate_conversion_hosts
+  $evm.object['reason'] = 'No conversion host configured'
+  request.message = 'No conversion host configured'
+  exit MIQ_ABORT
+end
+
+request.source_vms.each { |vm| request.approve_vm(vm) if request.validate_vm(vm) }
