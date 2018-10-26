@@ -9,6 +9,8 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
                     'status': ['preview'],
                     'supported_by': 'community'}
 
+DEFAULT_RETRY_INTERVAL = 60
+
 
 DOCUMENTATION = '''
 module: manageiq_automate
@@ -50,6 +52,8 @@ class ManageIQAutomate(object):
             The url to connect to the workspace
         """
         url_str = self._module.params['manageiq_connection']['automate_workspace']
+        if url_str is None:
+            self._module.fail_json(msg='Required parameter \'automate_workspace\' is not specified')
         return self._api_url + '/' + url_str
 
 
@@ -71,6 +75,8 @@ class ManageIQAutomate(object):
             url = self.url()
 
         result, _info = fetch_url(self._module, url, None, self._headers, 'get')
+        if result is None:
+            self._module.fail_json(msg=_info['msg'])
         return json.loads(result.read())
 
 
@@ -321,15 +327,20 @@ class Workspace(ManageIQAutomate):
         """
             Set Retry
         """
+        retry_interval = dict_options.get('interval') or DEFAULT_RETRY_INTERVAL
+
         attributes = dict()
         attributes['object'] = 'root'
-        attributes['attributes'] = dict(ae_result='retry', ae_retry_limit=dict_options['interval'])
+        attributes['attributes'] = dict(ae_result='retry', ae_retry_interval=retry_interval)
 
         self.set_attributes(attributes)
         return self.set_or_commit()
 
 
     def set_encrypted_attribute(self, dict_options):
+        """
+            Set encrypted attribute
+        """
         encrypted_attribute = self.encrypt(dict_options)
         return dict(changed=True, value=encrypted_attribute)
 
