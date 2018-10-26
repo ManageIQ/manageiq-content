@@ -52,6 +52,8 @@ class ManageIQAutomate(object):
             The url to connect to the workspace
         """
         url_str = self._module.params['manageiq_connection']['automate_workspace']
+        if url_str is None:
+            self._module.fail_json(msg='Required parameter \'automate_workspace\' is not specified')
         return self._api_url + '/' + url_str
 
 
@@ -73,6 +75,8 @@ class ManageIQAutomate(object):
             url = self.url()
 
         result, _info = fetch_url(self._module, url, None, self._headers, 'get')
+        if result is None:
+            self._module.fail_json(msg=_info['msg'])
         return json.loads(result.read())
 
 
