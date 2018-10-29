@@ -24,7 +24,7 @@ class LaunchAnsibleJob
 
   def target
     vm = @handle.root['vm'] || vm_from_request
-    vm.name if vm
+    vm.try(:floating_ip) || vm.try(:ipaddresses).first if vm
   end
 
   def vm_from_request
