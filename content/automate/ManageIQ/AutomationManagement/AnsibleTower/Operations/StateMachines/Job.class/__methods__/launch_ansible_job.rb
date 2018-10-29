@@ -30,7 +30,7 @@ module ManageIQ
 
                 def target
                   vm = @handle.root['vm'] || vm_from_request
-                  vm.name if vm
+                  vm.try(:floating_ip_addresses).try(:first) || vm.try(:ipaddresses).try(:first) if vm
                 end
 
                 def vm_from_request

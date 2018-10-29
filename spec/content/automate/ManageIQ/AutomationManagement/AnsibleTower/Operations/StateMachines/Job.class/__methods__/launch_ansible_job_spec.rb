@@ -54,7 +54,8 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     current_object = Spec::Support::MiqAeMockObject.new(:job_template_name => job_template.name)
     current_object.parent = root_object
     service.object = current_object
-    job_args[:limit] = vm.name
+    job_args[:limit] = ip_addr
+    allow(svc_vm).to receive(:ipaddresses).and_return([ip_addr])
     expect(job_class).to receive(:create_job).with(anything, job_args).and_return(svc_job)
     described_class.new(service).main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
@@ -68,7 +69,8 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     current_object['ansible_tower_provider_name'] = manager.name
     current_object.parent = root_object
     service.object = current_object
-    job_args[:limit] = vm.name
+    job_args[:limit] = ip_addr
+    allow(svc_vm).to receive(:ipaddresses).and_return([ip_addr])
     expect(job_class).to receive(:create_job).with(anything, job_args).and_return(svc_job)
     described_class.new(service).main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
@@ -82,7 +84,8 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     current_object['dialog_ansible_tower_provider_name'] = manager.name
     current_object.parent = root_object
     service.object = current_object
-    job_args[:limit] = vm.name
+    job_args[:limit] = ip_addr
+    allow(svc_vm).to receive(:ipaddresses).and_return([ip_addr])
     expect(job_class).to receive(:create_job).with(anything, job_args).and_return(svc_job)
     described_class.new(service).main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
@@ -95,7 +98,8 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     current_object = Spec::Support::MiqAeMockObject.new(:job_template_id => job_template.id)
     current_object.parent = root_object
     service.object = current_object
-    job_args[:limit] = vm.name
+    job_args[:limit] = ip_addr
+    allow(svc_vm).to receive(:ipaddresses).and_return([ip_addr])
     expect(job_class).to receive(:create_job).with(anything, job_args).and_return(svc_job)
     described_class.new(service).main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
@@ -108,7 +112,8 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     current_object = Spec::Support::MiqAeMockObject.new(:job_template => svc_job_template)
     current_object.parent = root_object
     service.object = current_object
-    job_args[:limit] = vm.name
+    job_args[:limit] = ip_addr
+    allow(svc_vm).to receive(:ipaddresses).and_return([ip_addr])
     expect(job_class).to receive(:create_job).with(anything, job_args).and_return(svc_job)
     described_class.new(service).main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
@@ -119,10 +124,12 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     root_object[:job_template_name] = job_template.name
     ext_vars['x'] = '1'
     ext_vars['y'] = '2'
-    job_args[:limit] = vm.name
+    floating_ip = '2.3.4.5'
+    job_args[:limit] = floating_ip
     current_object = Spec::Support::MiqAeMockObject.new('param1' => 'x=1', 'param2' => 'y=2')
     current_object.parent = root_object
     service.object = current_object
+    allow(svc_vm).to receive(:floating_ip_addresses).and_return([floating_ip])
     expect(job_class).to receive(:create_job).once.with(anything, job_args).and_return(svc_job)
     described_class.new(service).main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
@@ -133,10 +140,11 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     root_object[:job_template_name] = job_template.name
     ext_vars['x'] = '1'
     ext_vars['y'] = '2'
-    job_args[:limit] = vm.name
+    job_args[:limit] = ip_addr
     current_object = Spec::Support::MiqAeMockObject.new('dialog_param_x' => '1', 'dialog_param_y' => '2')
     current_object.parent = root_object
     service.object = current_object
+    allow(svc_vm).to receive(:ipaddresses).and_return([ip_addr])
     expect(job_class).to receive(:create_job).once.with(anything, job_args).and_return(svc_job)
     described_class.new(service).main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
