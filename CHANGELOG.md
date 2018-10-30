@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+## Gaprindashvili-6
+
+### Added
+- Add state_machine_phase attribute to transformation state machines [(#402)](https://github.com/ManageIQ/manageiq-content/pull/402)
+- Change VMware URI to connect directly to ESXi [(#405)](https://github.com/ManageIQ/manageiq-content/pull/405)
+- Restore VM ownership and retirement when migrating [(#397)](https://github.com/ManageIQ/manageiq-content/pull/397)
+- Add support to apply right-size recommendation during transformation [(#417)](https://github.com/ManageIQ/manageiq-content/pull/417)
+
+### Fixed
+- Escape username of VMware host [(#407)](https://github.com/ManageIQ/manageiq-content/pull/407)
+- Updated requested method to fix vm_reconfigure via rest-api. [(#413)](https://github.com/ManageIQ/manageiq-content/pull/413)
+- Add storage profile support in vmware_best_fit_least_utilized method. [(#420)](https://github.com/ManageIQ/manageiq-content/pull/420)
+
 ## Gaprindashvili-5
 
 ### Added
