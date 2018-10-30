@@ -123,6 +123,7 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   shared_examples_for "main" do
     it "global summary test" do
       allow(svc_model_src_vm).to receive(:power_state).and_return("on")
+      allow(svc_model_task).to receive(:preflight_check).and_return(true)
       described_class.new(ae_service).main
       expect(svc_model_task.get_option(:source_vm_power_state)).to eq("on")
       expect(svc_model_task.get_option(:collapse_snapshots)).to be true
@@ -237,13 +238,7 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
 
     it "sets cancel_requested option if preflight check returns false" do
       allow(svc_model_task).to receive(:preflight_check).and_return(false)
-      described_class.new(ae_service).main
-      expect(svc_model_task.get_option('cancel_requested')).to eq(true)
-    end
-
-    it "raises if task preflight check raises" do
-      errormsg = 'Unexpected error'
-      allow(svc_model_task).to receive(:preflight_check).and_raise(errormsg)
+      errormsg = 'Preflight check has failed'
       expect { described_class.new(ae_service).main }.to raise_error(errormsg)
       expect(ae_service.get_state_var(:ae_state_progress)).to eq('message' => errormsg)
     end
