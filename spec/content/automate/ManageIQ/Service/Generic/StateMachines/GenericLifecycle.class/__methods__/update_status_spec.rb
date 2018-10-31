@@ -1,4 +1,5 @@
 require_domain_file
+require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/System/CommonMethods/Utils.class/__methods__/log_object.rb')
 
 describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::UpdateStatus do
   let(:admin) { FactoryGirl.create(:user_admin) }
@@ -22,15 +23,6 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
   let(:service_action) { 'Provision' }
   let(:service_object) { svc_service }
 
-  shared_examples_for "update_status_error" do
-    it "error" do
-      allow(svc_service).to receive(:destination).and_return(svc_service)
-      allow(ae_service).to receive(:inputs) { {'status' => "fred"} }
-
-      expect { described_class.new(ae_service).main }.to raise_error(errormsg)
-    end
-  end
-
   shared_examples_for "update_status_on_error" do
     it "on_error" do
       allow(svc_task).to receive(:destination).and_return(svc_service)
@@ -42,16 +34,20 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
     end
   end
 
-  context "invalid service_action" do
-    let(:errormsg) { 'Invalid service_action' }
-    let(:service_action) { 'fred' }
-    it_behaves_like "update_status_error"
+  context "Log_and_raise ERROR - " do
+    let(:service_action) { 'Not_Provision' }
+    it "Invalid service action " do
+      allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/ERROR - Invalid service action/, ae_service).and_raise(RuntimeError)
+      expect { described_class.new(ae_service).main }.to raise_error(RuntimeError)
+    end
   end
 
-  context "service not found" do
-    let(:errormsg) { 'Service not found' }
+  context "Log_and_raise " do
     let(:service_object) { nil }
-    it_behaves_like "update_status_error"
+    it "Service not found" do
+      allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/ERROR - Service not found/, ae_service).and_raise(RuntimeError)
+      expect { described_class.new(ae_service).main }.to raise_error(RuntimeError)
+    end
   end
 
   context "update_status" do
