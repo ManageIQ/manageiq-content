@@ -39,6 +39,7 @@ describe ManageIQ::Automate::System::CommonMethods::Utils::LogObject do
   it '.root' do
     expect(ae_service).to receive(:log).with('info', /Listing root Attributes/).exactly(log_header_footer_count).times
     expect(ae_service).to receive(:log).with('info', /   Attribute/).exactly(root_attr_count).times
+    expect(ae_service).to receive(:log).with('info', //).exactly(1).times
 
     # described_class.root(ae_service)
     ManageIQ::Automate::System::CommonMethods::Utils::LogObject.root(ae_service)
@@ -47,6 +48,7 @@ describe ManageIQ::Automate::System::CommonMethods::Utils::LogObject do
   it '.current' do
     expect(ae_service).to receive(:log).with('info', /Listing current Attributes/).exactly(log_header_footer_count).times
     expect(ae_service).to receive(:log).with('info', /   Attribute/).exactly(current_attr_count).times
+    expect(ae_service).to receive(:log).with('info', //).exactly(1).times
 
     # described_class.current(ae_service)
     ManageIQ::Automate::System::CommonMethods::Utils::LogObject.current(ae_service)
@@ -63,6 +65,7 @@ describe ManageIQ::Automate::System::CommonMethods::Utils::LogObject do
   it '.log' do
     expect(ae_service).to receive(:log).with('info', /Listing My Object Attributes/).exactly(log_header_footer_count).times
     expect(ae_service).to receive(:log).with('info', /   Attribute/).exactly(root_attr_count).times
+    expect(ae_service).to receive(:log).with('info', //).exactly(1).times
 
     # described_class.log(ae_service, root)
     ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log(root, 'My Object', ae_service)
@@ -144,16 +147,19 @@ describe ManageIQ::Automate::System::CommonMethods::Utils::LogObject do
       expect(ae_service).to receive(:log).with('info', /key:/).exactly(1).times
 
       expect(ae_service).to receive(:log).with('info', / VMDB Object Begin Attributes/).exactly(1).times
-      expect(ae_service).to receive(:log).with('info', /  Attribute:/).exactly(vm1.attributes.count).times
+      expect(ae_service).to receive(:log).with('info', /  /).exactly(vm1.attributes.count).times
       expect(ae_service).to receive(:log).with('info', / VMDB Object End Attributes/).exactly(1).times
+      expect(ae_service).to receive(:log).with('info', //).exactly(1).times
 
       expect(ae_service).to receive(:log).with('info', / VMDB Object Begin Associations/).exactly(1).times
       expect(ae_service).to receive(:log).with('info', /   Associations -/).exactly(MiqAeMethodService::MiqAeServiceVm.associations.count).times
       expect(ae_service).to receive(:log).with('info', / VMDB Object End Associations/).exactly(1).times
+      expect(ae_service).to receive(:log).with('info', //).exactly(1).times
 
       expect(ae_service).to receive(:log).with('info', / VMDB Object Begin Tags /).exactly(1).times
       expect(ae_service).to receive(:log).with('info', /    Category:/).exactly(vm1.tags.count).times
       expect(ae_service).to receive(:log).with('info', / VMDB Object End Tags/).exactly(1).times
+      expect(ae_service).to receive(:log).with('info', //).exactly(1).times
       # described_class.log_ar_objects('VMDB Object', ae_service)
       ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_ar_objects('VMDB Object', ae_service)
     end
@@ -168,16 +174,19 @@ describe ManageIQ::Automate::System::CommonMethods::Utils::LogObject do
       expect(ae_service).to receive(:log).with('info', /key:/).exactly(1).times
 
       expect(ae_service).to receive(:log).with('info', / My Database Object Begin Attributes/).exactly(1).times
-      expect(ae_service).to receive(:log).with('info', /  Attribute:/).exactly(vm1.attributes.count).times
+      expect(ae_service).to receive(:log).with('info', /  /).exactly(vm1.attributes.count).times
       expect(ae_service).to receive(:log).with('info', / My Database Object End Attributes/).exactly(1).times
+      expect(ae_service).to receive(:log).with('info', //).exactly(1).times
 
       expect(ae_service).to receive(:log).with('info', / My Database Object Begin Associations/).exactly(1).times
       expect(ae_service).to receive(:log).with('info', /   Associations -/).exactly(MiqAeMethodService::MiqAeServiceVm.associations.count).times
       expect(ae_service).to receive(:log).with('info', / My Database Object End Associations/).exactly(1).times
+      expect(ae_service).to receive(:log).with('info', //).exactly(1).times
 
       expect(ae_service).to receive(:log).with('info', / My Database Object Begin Tags /).exactly(1).times
       expect(ae_service).to receive(:log).with('info', /    Category:/).exactly(vm1.tags.count).times
       expect(ae_service).to receive(:log).with('info', / My Database Object End Tags/).exactly(1).times
+      expect(ae_service).to receive(:log).with('info', //).exactly(1).times
       # described_class.log_ar_objects('My Database Object', ae_service)
       ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_ar_objects('My Database Object', ae_service)
     end
