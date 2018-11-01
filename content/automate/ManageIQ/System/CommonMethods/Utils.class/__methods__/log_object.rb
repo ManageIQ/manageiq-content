@@ -72,6 +72,7 @@ module ManageIQ
               handle.log("info", "Listing #{log_prefix} Attributes - Begin")
               obj.attributes.sort.each { |k, v| handle.log("info", "   Attribute - #{k}: #{v}") }
               handle.log("info", "Listing #{log_prefix} Attributes - End")
+              handle.log("info", "")
             end
 
             def self.log_and_raise(message, handle = $evm)
@@ -100,9 +101,10 @@ module ManageIQ
             def self.attributes(obj, log_prefix, handle = $evm)
               handle.log("info", " #{log_prefix} Begin Attributes [object.attributes]")
               obj.attributes.sort.each do |k, v|
-                handle.log("info", "  Attribute:  #{k} = #{v.inspect}")
+                handle.log("info", "    #{k} = #{v.inspect}")
               end
               handle.log("info", " #{log_prefix} End Attributes [object.attributes]")
+              handle.log("info", "")
             end
 
             def self.associations(obj, log_prefix, handle = $evm)
@@ -112,6 +114,7 @@ module ManageIQ
                 handle.log("info", "   Associations - #{assc}")
               end
               handle.log("info", " #{log_prefix} End Associations [object.associations]")
+              handle.log("info", "")
             end
 
             def self.tags(obj, log_prefix, handle = $evm)
@@ -122,6 +125,7 @@ module ManageIQ
                 handle.log("info", "    Category:<#{tag_text.first.inspect}> Tag:<#{tag_text.last.inspect}>")
               end
               handle.log("info", " #{log_prefix} End Tags [object.tags]")
+              handle.log("info", "")
             end
           end
         end
