@@ -48,7 +48,7 @@ object:
       condition: 
       on_entry: validate_request
       on_exit: 
-      on_error: pending_request
+      on_error: deny_request
       max_retries: '100'
       max_time: 
   - field:
@@ -68,6 +68,6 @@ object:
       condition: 
       on_entry: approve_request
       on_exit: 
-      on_error: pending_request
+      on_error: deny_request
       max_retries: '100'
       max_time: 
