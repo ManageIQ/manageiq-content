@@ -5,11 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-##  Unreleased as of Sprint 97 Ending 2018-10-22
+##  Unreleased as of Sprint 98 Ending 2018-11-05
+
+### Added
+- Deny request if no conversion host is configured [(#455)](https://github.com/ManageIQ/manageiq-content/pull/455)
+
+## Gaprindashvili-6 - Released 2018-11-02
+
+### Added
+- Add state_machine_phase attribute to transformation state machines [(#402)](https://github.com/ManageIQ/manageiq-content/pull/402)
+- Change VMware URI to connect directly to ESXi [(#405)](https://github.com/ManageIQ/manageiq-content/pull/405)
+- Restore VM ownership and retirement when migrating [(#397)](https://github.com/ManageIQ/manageiq-content/pull/397)
+- Add support to apply right-size recommendation during transformation [(#417)](https://github.com/ManageIQ/manageiq-content/pull/417)
 
 ### Fixed
-- Modified Log_Object method to check if object is taggable. [(#446)](https://github.com/ManageIQ/manageiq-content/pull/446)
+- Escape username of VMware host [(#407)](https://github.com/ManageIQ/manageiq-content/pull/407)
+- Updated requested method to fix vm_reconfigure via rest-api. [(#413)](https://github.com/ManageIQ/manageiq-content/pull/413)
+- Add storage profile support in vmware_best_fit_least_utilized method. [(#420)](https://github.com/ManageIQ/manageiq-content/pull/420)
+
+##  Hammer Beta-2 - Released 2018-10-29
+
+### Fixed
 - Modified InspectMe method to check if object is taggable. [(#445)](https://github.com/ManageIQ/manageiq-content/pull/445)
+- Modified Log_Object method to check if object is taggable. [(#446)](https://github.com/ManageIQ/manageiq-content/pull/446)
 
 ##  Hammer Beta-1 - Released 2018-10-12
 
