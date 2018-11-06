@@ -24,7 +24,7 @@ module ManageIQ
           end
 
           def main
-            @task.set_option('cancel_requested', true) unless @task.preflight_check
+            raise 'Preflight check has failed' unless @task.preflight_check
             %w(task_options factory_config).each { |ci| send("populate_#{ci}") }
           rescue => e
             @handle.set_state_var(:ae_state_progress, 'message' => e.message)
