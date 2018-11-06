@@ -13,9 +13,7 @@ module ManageIQ
               end
 
               def main
-                msg = "Service: #{service.name} #{service_action} Starting"
-                @handle.log('info', msg)
-                @handle.create_notification(:level => 'info', :subject => service, :message => msg)
+                ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_notify(:info, "Service: #{service.name} #{service_action} Starting", service, @handle)
                 @handle.root['ae_result'] = 'ok'
               end
 
@@ -24,8 +22,7 @@ module ManageIQ
               def service
                 @handle.root["service"].tap do |service|
                   if service.nil?
-                    @handle.log(:error, 'Service is nil')
-                    raise 'Service not found'
+                    ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise("ERROR - Service not found", @handle)
                   end
                 end
               end
@@ -33,8 +30,7 @@ module ManageIQ
               def service_action
                 @handle.root["service_action"].tap do |action|
                   unless %w(Provision Retirement Reconfigure).include?(action)
-                    @handle.log(:error, "Invalid service action: #{action}")
-                    raise "Invalid service_action"
+                    ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise("ERROR - Invalid service action: #{action}", @handle)
                   end
                 end
               end
