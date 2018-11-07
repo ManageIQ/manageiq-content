@@ -23,19 +23,18 @@ module ManageIQ
           def vm
             @vm ||= @handle.root["vm"].tap do |vm|
               if vm.nil?
-                @handle.log(:error, 'vm is nil')
-                raise 'ERROR - vm object not passed in'
+                ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise("ERROR - vm object not passed in", @handle)
               end
             end
           end
 
           def validate
             if vm.retires_on.blank?
-              raise "ERROR - VM #{vm.name} has no retirement date - extension bypassed. No Action taken"
+              ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise("ERROR - VM #{vm.name} has no retirement date - extension bypassed. No Action taken", @handle)
             end
 
             if vm.retired
-              raise "ERROR - VM #{vm.name} is already retired - extension bypassed. No Action taken"
+              ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise("ERROR - VM #{vm.name} is already retired - extension bypassed. No Action taken", @handle)
             end
           end
 
