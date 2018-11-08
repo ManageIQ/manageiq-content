@@ -1,4 +1,5 @@
 require_domain_file
+require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/System/CommonMethods/Utils.class/__methods__/log_object.rb')
 
 describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::CheckCompleted do
   let(:admin) { FactoryGirl.create(:user_admin) }
@@ -26,14 +27,6 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
     end
   end
 
-  shared_examples_for "check_completed_error" do
-    it "check" do
-      allow(svc_service).to receive(:check_completed).and_return(status_and_message)
-
-      expect { described_class.new(ae_service).main }.to raise_error(errormsg)
-    end
-  end
-
   context "returns ok when job launching works" do
     let(:status_and_message) { [true, ""] }
     let(:ae_result) { "ok" }
@@ -44,26 +37,6 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
     let(:status_and_message) { [true, "error"] }
     let(:ae_result) { "error" }
     it_behaves_like "check_completed"
-  end
-
-  context "invalid service_action" do
-    let(:status_and_message) { [true, ""] }
-    let(:errormsg)           { 'Invalid service_action' }
-    let(:root_object) do
-      Spec::Support::MiqAeMockObject.new('service'        => svc_service,
-                                         'service_action' => 'fred')
-    end
-    it_behaves_like "check_completed_error"
-  end
-
-  context "service not found" do
-    let(:status_and_message) { [true, ""] }
-    let(:errormsg)           { 'Service not found' }
-    let(:root_object) do
-      Spec::Support::MiqAeMockObject.new('service_template_provision_task' => task,
-                                         'service_action'                  => 'Provision')
-    end
-    it_behaves_like "check_completed_error"
   end
 
   context "retry ttl" do
@@ -152,6 +125,22 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
         Spec::Support::MiqAeMockObject.new('service' => svc_service, 'service_action' => 'Provision', 'ae_state_max_retries' => 0)
       end
       it_behaves_like "#ttl"
+    end
+  end
+
+  context "Log_and_raise" do
+    let(:root_object) { Spec::Support::MiqAeMockObject.new('service' => svc_service, 'service_action' => 'Not_Provision') }
+    it "Invalid service action " do
+      allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/ERROR - Invalid service action/, ae_service).and_raise(RuntimeError)
+      expect { described_class.new(ae_service).main }.to raise_error(RuntimeError)
+    end
+  end
+
+  context "Log_and_raise" do
+    let(:svc_service) { nil }
+    it "Service not found" do
+      allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/ERROR - Service not found/, ae_service).and_raise(RuntimeError)
+      expect { described_class.new(ae_service).main }.to raise_error(RuntimeError)
     end
   end
 end
