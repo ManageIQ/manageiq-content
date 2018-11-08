@@ -1,4 +1,5 @@
 require_domain_file
+require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/System/CommonMethods/Utils.class/__methods__/log_object.rb')
 
 describe ManageIQ::Automate::System::Request::VmRetireExtend do
   let(:user) { FactoryGirl.create(:user_with_email_and_group) }
@@ -41,29 +42,27 @@ describe ManageIQ::Automate::System::Request::VmRetireExtend do
     end
   end
 
-  context "when vm retires_on is nil" do
-    it "does not update retires_on date" do
-      vm.update_attributes(:retires_on => nil)
-      errormsg = "ERROR - VM #{vm} has no retirement date - extension bypassed. No Action taken"
-      expect { described_class.new(ae_service).main }.to raise_error(errormsg)
-    end
-  end
-
-  context "when vm retired is true " do
-    it "does not update retires_on date" do
-      vm.update_attributes(:retired => true)
-      errormsg = "ERROR - VM #{vm} is already retired - extension bypassed. No Action taken"
-      expect { described_class.new(ae_service).main }.to raise_error(errormsg)
-    end
-  end
-
-  context "when there is no vm" do
-    let(:root_hash) { {} }
-    let(:svc_model_service) { nil }
+  context "Log_and_raise" do
     let(:vm) { nil }
-    it "raises error message" do
-      errormsg = 'ERROR - vm object not passed in'
-      expect { described_class.new(ae_service).main }.to raise_error(errormsg)
+    it "ERROR - vm object not passed in" do
+      allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/ERROR - vm object not passed in/, ae_service).and_raise(RuntimeError)
+      expect { described_class.new(ae_service).main }.to raise_error(RuntimeError)
+    end
+  end
+
+  context "Log_and_raise" do
+    it "ERROR - VM has no retirement date" do
+      vm.update_attributes(:retires_on => nil)
+      allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/ERROR - VM #{vm.name} has no retirement date - extension bypassed. No Action taken/, ae_service).and_raise(RuntimeError)
+      expect { described_class.new(ae_service).main }.to raise_error(RuntimeError)
+    end
+  end
+
+  context "Log_and_raise" do
+    it "ERROR - VM has no retirement date" do
+      vm.update_attributes(:retired => true)
+      allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/ERROR - VM #{vm.name} is already retired - extension bypassed. No Action taken/, ae_service).and_raise(RuntimeError)
+      expect { described_class.new(ae_service).main }.to raise_error(RuntimeError)
     end
   end
 end
