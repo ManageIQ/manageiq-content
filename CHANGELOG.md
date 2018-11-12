@@ -5,7 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-##  Hammer Beta-2
+## Hammer RC-1
+
+### Added
+- Deny request if no conversion host is configured [(#455)](https://github.com/ManageIQ/manageiq-content/pull/455)
+- Use task cancelation_status to trigger cancelation [(#457)](https://github.com/ManageIQ/manageiq-content/pull/457)
+
+### Fixed
+- Apply updates to the manageiq-automate Ansible role [(#454)](https://github.com/ManageIQ/manageiq-content/pull/454)
+
+##  Hammer Beta-2 - Released 2018-10-29
 
 ### Fixed
 - Modified InspectMe method to check if object is taggable. [(#445)](https://github.com/ManageIQ/manageiq-content/pull/445)
