@@ -30,6 +30,7 @@ describe "GOOGLE best fit" do
   end
 
   it "provision task object auto placement for cloud network" do
+    Zone.seed
     MiqServer.seed
     availability_zone.cloud_subnets << cloud_subnet
     ws.root
