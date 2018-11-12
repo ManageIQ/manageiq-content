@@ -25,6 +25,7 @@ module ManageIQ
 
           def main
             raise 'Preflight check has failed' unless @task.preflight_check
+            @task.set_option(:network_mappings, @task.network_mappings)
             %w(task_options factory_config).each { |ci| send("populate_#{ci}") }
           rescue => e
             @handle.set_state_var(:ae_state_progress, 'message' => e.message)
