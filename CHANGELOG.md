@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Use task cancelation_status to trigger cancelation [(#457)](https://github.com/ManageIQ/manageiq-content/pull/457)
 
 ### Fixed
-- Add manageiq automate changes [(#454)](https://github.com/ManageIQ/manageiq-content/pull/454)
+- Apply updates to the manageiq-automate Ansible role [(#454)](https://github.com/ManageIQ/manageiq-content/pull/454)
 
 ##  Hammer Beta-2 - Released 2018-10-29
 
