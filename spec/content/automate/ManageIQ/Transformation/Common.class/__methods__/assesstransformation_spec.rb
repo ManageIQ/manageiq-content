@@ -7,14 +7,14 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   let(:task) { FactoryGirl.create(:service_template_transformation_plan_task) }
   let(:src_ems_vmware) { FactoryGirl.create(:ems_vmware) }
   let(:src_cluster_vmware) { FactoryGirl.create(:ems_cluster, :ext_management_system => src_ems_vmware) }
-  let(:src_vm_vmware) { FactoryGirl.create(:vm_vmware, :ext_management_system => src_ems_vmware, :ems_cluster => src_cluster_vmware) }
+  let(:src_vm_vmware) { FactoryGirl.create(:vm_vmware, :ext_management_system => src_ems_vmware, :ems_cluster => src_cluster_vmware, :hardware => src_hardware) }
   let(:src_storage_1) { FactoryGirl.create(:storage) }
   let(:src_storage_2) { FactoryGirl.create(:storage) }
   let(:src_lan_1) { FactoryGirl.create(:lan) }
   let(:src_lan_2) { FactoryGirl.create(:lan) }
-  let(:hardware) { FactoryGirl.create(:hardware) }
-  let(:nic_1) { FactoryGirl.create(:guest_device_nic) }
-  let(:nic_2) { FactoryGirl.create(:guest_device_nic) }
+  let(:src_hardware) { FactoryGirl.create(:hardware, :nics => [src_nic_1, src_nic_2]) }
+  let(:src_nic_1) { FactoryGirl.create(:guest_device_nic, :lan => src_lan_1) }
+  let(:src_nic_2) { FactoryGirl.create(:guest_device_nic, :lan => src_lan_2) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_group) { MiqAeMethodService::MiqAeServiceMiqGroup.find(group.id) }
@@ -26,19 +26,19 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
   let(:svc_model_src_storage_2) { MiqAeMethodService::MiqAeServiceStorage.find(src_storage_2) }
   let(:svc_model_src_lan_1) { MiqAeMethodService::MiqAeServiceLan.find(src_lan_1) }
   let(:svc_model_src_lan_2) { MiqAeMethodService::MiqAeServiceLan.find(src_lan_2) }
-  let(:svc_model_hardware) { MiqAeMethodService::MiqAeServiceHardware.find(hardware) }
+  let(:svc_model_src_hardware) { MiqAeMethodService::MiqAeServiceHardware.find(src_hardware) }
   let(:svc_model_guest_device_1) { MiqAeMethodService::MiqAeServiceGuestDevice.find(guest_device_1) }
   let(:svc_model_guest_device_2) { MiqAeMethodService::MiqAeServiceGuestDevice.find(guest_device_2) }
-  let(:svc_model_nic_1) { MiqAeMethodService::MiqAeServiceGuestDevice.find(nic_1) }
-  let(:svc_model_nic_2) { MiqAeMethodService::MiqAeServiceGuestDevice.find(nic_2) }
+  let(:svc_model_src_nic_1) { MiqAeMethodService::MiqAeServiceGuestDevice.find(src_nic_1) }
+  let(:svc_model_src_nic_2) { MiqAeMethodService::MiqAeServiceGuestDevice.find(src_nic_2) }
 
   let(:disk_1) { instance_double("disk", :device_name => "Hard disk 1", :device_type => "disk", :filename => "[datastore12] test_vm/test_vm.vmdk", :size => 17_179_869_184) }
   let(:disk_2) { instance_double("disk", :device_name => "Hard disk 2", :device_type => "disk", :filename => "[datastore12] test_vm/test_vm-2.vmdk", :size => 17_179_869_184) }
 
   let(:virtv2v_networks) do
     [
-      { :source => svc_model_src_lan_1.name, :destination => svc_model_dst_lan_1.name, :mac_address => svc_model_nic_1.address },
-      { :source => svc_model_src_lan_2.name, :destination => svc_model_dst_lan_2.name, :mac_address => svc_model_nic_2.address },
+      { :source => svc_model_src_lan_1.name, :destination => svc_model_dst_lan_1.name, :mac_address => svc_model_src_nic_1.address },
+      { :source => svc_model_src_lan_2.name, :destination => svc_model_dst_lan_2.name, :mac_address => svc_model_src_nic_2.address },
     ]
   end
 
@@ -70,18 +70,18 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     allow(ManageIQ::Automate::Transformation::Common::Utils).to receive(:task).and_return(svc_model_task)
     allow(ManageIQ::Automate::Transformation::Common::Utils).to receive(:source_vm).and_return(svc_model_src_vm)
 
-    allow(svc_model_src_vm).to receive(:hardware).and_return(svc_model_hardware)
+    allow(svc_model_src_vm).to receive(:hardware).and_return(svc_model_src_hardware)
     allow(disk_1).to receive(:storage).and_return(svc_model_src_storage_1)
     allow(disk_2).to receive(:storage).and_return(svc_model_src_storage_2)
-    allow(svc_model_nic_1).to receive(:lan).and_return(svc_model_src_lan_1)
-    allow(svc_model_nic_2).to receive(:lan).and_return(svc_model_src_lan_2)
   end
 
   before(:each) do
+    ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@task, nil)
     ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@source_cluster, nil)
     ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@source_ems, nil)
     ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@destination_cluster, nil)
     ManageIQ::Automate::Transformation::Common::AssessTransformation.instance_variable_set(:@destination_ems, nil)
+    svc_model_task.set_option(:network_mappings, nil)
   end
 
   context "populate factory config" do
@@ -122,9 +122,11 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
 
   shared_examples_for "main" do
     it "global summary test" do
+      task.reload
       allow(svc_model_src_vm).to receive(:power_state).and_return("on")
       allow(svc_model_task).to receive(:preflight_check).and_return(true)
       described_class.new(ae_service).main
+      expect(svc_model_task[:options][:network_mappings]).to eq(task.network_mappings)
       expect(svc_model_task.get_option(:source_vm_power_state)).to eq("on")
       expect(svc_model_task.get_option(:collapse_snapshots)).to be true
       expect(svc_model_task.get_option(:power_off)).to be true
@@ -188,7 +190,7 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:svc_model_src_ems) { svc_model_src_ems_vmware }
 
-    let(:dst_ems) { FactoryGirl.create(:ems_openstack_infra) }
+    let(:dst_ems) { FactoryGirl.create(:ems_openstack) }
     let(:svc_model_dst_ems) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(dst_ems.id) }
     let(:dst_cloud_tenant) { FactoryGirl.create(:cloud_tenant, :ext_management_system => dst_ems) }
     let(:svc_model_dst_cloud_tenant) { MiqAeMethodService::MiqAeServiceCloudTenant.find(dst_cluster.id) }
