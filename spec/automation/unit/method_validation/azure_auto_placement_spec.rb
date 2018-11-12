@@ -26,6 +26,7 @@ describe "azure best fit" do
   end
 
   it "provision task object auto placement for cloud network" do
+    Zone.seed
     MiqServer.seed
     cloud_subnet
     resource_group
