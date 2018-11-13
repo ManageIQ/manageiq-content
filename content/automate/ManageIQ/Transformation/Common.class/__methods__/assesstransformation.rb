@@ -25,6 +25,8 @@ module ManageIQ
 
           def main
             raise 'Preflight check has failed' unless @task.preflight_check
+            # TODO(fdupont-redhat): Find why network mappings are not stored
+            # by call to preflight_check.
             @task.set_option(:network_mappings, @task.network_mappings)
             %w(task_options factory_config).each { |ci| send("populate_#{ci}") }
           rescue => e
