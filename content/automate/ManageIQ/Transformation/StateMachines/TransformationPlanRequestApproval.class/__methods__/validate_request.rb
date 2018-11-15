@@ -2,7 +2,6 @@ request = $evm.root['miq_request']
 
 unless request.validate_conversion_hosts
   $evm.object['reason'] = 'No conversion host configured'
-  request.message = 'No conversion host configured'
   exit MIQ_ABORT
 end
 
