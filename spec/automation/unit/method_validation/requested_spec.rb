@@ -244,7 +244,7 @@ describe "Quota Validation" do
     it "removes a disk " do
       setup_model("vmware_reconfigure")
       @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :request_type => :vm_reconfigure,\
-      :disk_remove => [{"disk_name" => disk.filename, "persistent" => true, "thin_provisioned" => false,\
+      :disk_remove => [{:disk_name => disk.filename, :persistent => true, :thin_provisioned => false,\
       "dependent" => true, "bootable" => false}]})
       ws = run_automate_method(reconfigure_attrs)
       check_results(ws.root['quota_requested'], -10.megabytes, 0, 1, 0.megabytes)
@@ -253,7 +253,7 @@ describe "Quota Validation" do
     it "remove a disk thats not found" do
       setup_model("vmware_reconfigure")
       @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :request_type => :vm_reconfigure,\
-      :disk_remove => [{"disk_name" => "not found", "persistent" => true, "thin_provisioned" => false,\
+      :disk_remove => [{:disk_name => "not found", :persistent => true, :thin_provisioned => false,\
       "dependent" => true, "bootable" => false}]})
       expect { run_automate_method(reconfigure_attrs) }.to raise_error(MiqAeException::UnknownMethodRc)
     end
