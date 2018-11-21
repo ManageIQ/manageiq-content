@@ -17,7 +17,7 @@ module ManageIQ
                   def main
                     @handle.log("info", "Starting Ansible Tower Pre-Provisioning")
                     examine_request(service)
-                    # modify_job_options(service)
+                    modify_job_options(service)
                   end
 
                   def task
@@ -46,8 +46,9 @@ module ManageIQ
                   def modify_job_options(service)
                     # Example how to programmatically modify job options:
                     job_options = service.job_options
-                    job_options[:limit] = 'someHost'
-                    job_options[:extra_vars]['flavor'] = 'm1.small'
+                    #job_options[:limit] = 'someHost'
+                    #job_options[:extra_vars]['flavor'] = 'm1.small'
+                    job_options[:extra_vars]['miq_service_id'] = service.id
 
                     # Important: set stack_options
                     service.job_options = job_options
