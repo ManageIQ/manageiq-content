@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+##  Unreleased as of Sprint 99 Ending 2018-11-19
+
+### Added
+- Use task cancelation_status to trigger cancelation [(#457)](https://github.com/ManageIQ/manageiq-content/pull/457)
+
+### Fixed
+- Fix TransformationPlanRequest approval - Set message [(#473)](https://github.com/ManageIQ/manageiq-content/pull/473)
+- Fix request denial [(#471)](https://github.com/ManageIQ/manageiq-content/pull/471)
+- Modified requested method for reconfigure disk_remove. [(#461)](https://github.com/ManageIQ/manageiq-content/pull/461)
+
 ##  Unreleased as of Sprint 98 Ending 2018-11-05
 
 ### Added
