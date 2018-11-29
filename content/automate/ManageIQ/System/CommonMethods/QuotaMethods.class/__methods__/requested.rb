@@ -165,9 +165,8 @@ def requested_storage(args_hash)
     if args_hash[:resource].options[:disk_remove]
       args_hash[:resource].options[:disk_remove].each do |disk|
         $evm.log(:info, "Reconfigure Disk Removal: #{disk.inspect}")
-        disk = HashWithIndifferentAccess.new(disk)
-        current_size = get_disk_size(disk[:disk_name])
-        $evm.log(:info, "Reconfigure Disk Removal Disk: <#{disk[:disk_name]}> Disk Size: <#{current_size.to_s(:human_size)}>")
+        current_size = get_disk_size(disk['disk_name'])
+        $evm.log(:info, "Reconfigure Disk Removal Disk: <#{disk['disk_name']}> Disk Size: <#{current_size.to_s(:human_size)}>")
         args_hash[:prov_value] -= current_size
       end
     end
