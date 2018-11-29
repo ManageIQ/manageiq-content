@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-## Hammer RC-1
+## Hammer RC-2
+
+### Fixed
+- Fix request denial [(#471)](https://github.com/ManageIQ/manageiq-content/pull/471)
+- Fix TransformationPlanRequest approval - Set message [(#473)](https://github.com/ManageIQ/manageiq-content/pull/473)
+- Modified requested method for reconfigure disk_remove. [(#461)](https://github.com/ManageIQ/manageiq-content/pull/461)
+- Changed disk_name to symbol in requested Quota method. [(#474)](https://github.com/ManageIQ/manageiq-content/pull/474)
+
+## Hammer RC-1 - Released 2018-11-16
 
 ### Added
 - Deny request if no conversion host is configured [(#455)](https://github.com/ManageIQ/manageiq-content/pull/455)
