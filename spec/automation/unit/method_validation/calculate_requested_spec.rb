@@ -212,7 +212,7 @@ describe "Quota Validation" do
     it "removes a disk " do
       setup_model("vmware_reconfigure")
       @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :request_type => :vm_reconfigure,\
-      :disk_remove => [{"disk_name" => "freds disk", "persistent" => true, "thin_provisioned" => false,\
+      :disk_remove => [{:disk_name => "freds disk", :persistent => true, :thin_provisioned => false,\
       "dependent" => true, "bootable" => false}]})
       ws = run_automate_method(reconfigure_attrs)
       check_results(ws.root['quota_requested'], 0, 0, 1, 0.megabytes)
