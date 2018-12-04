@@ -44,8 +44,12 @@ module ManageIQ
               @handle.set_state_var(:ae_state_progress, 'message' => 'Disks transformation succeeded.', 'percent' => 100)
             end
           rescue => e
-            @handle.set_state_var(:ae_state_progress, 'message' => e.message)
-            raise
+            if @handle.root['ae_state_retries'] > 1
+              @handle.set_state_var(:ae_state_progress, 'message' => e.message)
+              raise
+            else
+              set_retry
+            end
           end
         end
       end
