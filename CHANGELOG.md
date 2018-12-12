@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-## Gaprindashvili-6
+## Gaprindashvili-7
+
+### Fixed
+- Apply updates to the manageiq-automate Ansible role [(#454)](https://github.com/ManageIQ/manageiq-content/pull/454)
+- Disconnect storage when disconnecting a VM [(#472)](https://github.com/ManageIQ/manageiq-content/pull/472)
+
+## Gaprindashvili-6 - Released 2018-11-06
 
 ### Added
 - Add state_machine_phase attribute to transformation state machines [(#402)](https://github.com/ManageIQ/manageiq-content/pull/402)
@@ -18,7 +24,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Updated requested method to fix vm_reconfigure via rest-api. [(#413)](https://github.com/ManageIQ/manageiq-content/pull/413)
 - Add storage profile support in vmware_best_fit_least_utilized method. [(#420)](https://github.com/ManageIQ/manageiq-content/pull/420)
 
-## Gaprindashvili-5
+## Gaprindashvili-5 - Released 2018-09-07
 
 ### Added
 - Add support for pre/post-migration playbook [(#355)](https://github.com/ManageIQ/manageiq-content/pull/355)
