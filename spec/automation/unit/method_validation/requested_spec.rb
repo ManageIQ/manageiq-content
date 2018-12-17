@@ -241,6 +241,22 @@ describe "Quota Validation" do
       check_results(ws.root['quota_requested'], 10.megabytes, 2, 1, 4096.megabytes)
     end
 
+    it "resize 10 to 20 megabyte disk, difference is 10" do
+      # Disk_resize only supports increasing the size.
+      setup_model("vmware_reconfigure")
+      @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :request_type => :vm_reconfigure,\
+      :disk_resize => [{"disk_name" => disk.filename, "disk_size_in_mb" => 20}]})
+      ws = run_automate_method(reconfigure_attrs)
+      check_results(ws.root['quota_requested'], 10.megabytes, 0, 1, 0)
+    end
+
+    it "resize a disk thats not found" do
+      setup_model("vmware_reconfigure")
+      @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :request_type => :vm_reconfigure,\
+      :disk_resize => [{"disk_name" => "not found", "disk_size_in_mb" => 20}]})
+      expect { run_automate_method(reconfigure_attrs) }.to raise_error(MiqAeException::UnknownMethodRc)
+    end
+
     it "removes a disk " do
       setup_model("vmware_reconfigure")
       @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :request_type => :vm_reconfigure,\

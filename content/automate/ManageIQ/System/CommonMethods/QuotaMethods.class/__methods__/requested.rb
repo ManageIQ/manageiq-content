@@ -148,7 +148,7 @@ end
 
 def get_disk_size(disk_name)
   mydisk = $evm.vmdb('disk').find_by(:filename => disk_name)
-  raise "ERROR - Disk_name not found for Reconfiguration" if mydisk.nil?
+  raise "ERROR - #{disk_name} not found for Reconfiguration" if mydisk.nil?
   mydisk.size.to_i
 end
 
@@ -170,6 +170,13 @@ def requested_storage(args_hash)
         $evm.log(:info, "Reconfigure Disk Removal Disk: <#{disk[:disk_name]}> Disk Size: <#{current_size.to_s(:human_size)}>")
         args_hash[:prov_value] -= current_size
       end
+    end
+    args_hash[:resource].options[:disk_resize]&.each do |disk|
+      # Disk_resize only supports increasing the size.
+      $evm.log(:info, "Reconfigure Disk Resize:  #{disk.inspect}")
+      current_size = get_disk_size(disk['disk_name'])
+      $evm.log(:info, "Current disk size: #{current_size.to_s(:human_size)}")
+      args_hash[:prov_value] += disk['disk_size_in_mb'].to_i.megabytes - current_size
     end
   else
     vm_size = args_hash[:resource].vm_template.provisioned_storage
