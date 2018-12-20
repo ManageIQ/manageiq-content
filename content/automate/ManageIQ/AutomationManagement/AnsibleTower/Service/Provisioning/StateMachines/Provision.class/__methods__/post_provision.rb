@@ -42,7 +42,7 @@ module ManageIQ
 
                   def dump_job_outputs(job)
                     log_type = job.status == 'failed' ? 'error' : 'info'
-                    @handle.log(log_type, "Ansible Tower Job #{job.name} standard output: #{job.raw_stdout}")
+                    @handle.log(log_type, "Ansible Tower Job #{job.name} standard output: #{job.raw_stdout}") if job.respond_to?(:raw_stdout)
                   end
                 end
               end
