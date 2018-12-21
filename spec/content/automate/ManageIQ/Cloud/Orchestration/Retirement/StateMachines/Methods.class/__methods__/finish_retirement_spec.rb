@@ -1,8 +1,8 @@
 require_domain_file
 
 describe ManageIQ::Automate::Cloud::Orchestration::Retirement::StateMachines::Methods::FinishRetirement do
-  let(:stack)                 { FactoryGirl.create(:orchestration_stack_amazon) }
-  let(:service_orchestration) { FactoryGirl.create(:service_orchestration) }
+  let(:stack)                 { FactoryBot.create(:orchestration_stack_amazon) }
+  let(:service_orchestration) { FactoryBot.create(:service_orchestration) }
   let(:svc_model_service)     { MiqAeMethodService::MiqAeServiceService.find(service_orchestration.id) }
   let(:svc_model_stack)       { MiqAeMethodService::MiqAeServiceOrchestrationStack.find(stack.id) }
 

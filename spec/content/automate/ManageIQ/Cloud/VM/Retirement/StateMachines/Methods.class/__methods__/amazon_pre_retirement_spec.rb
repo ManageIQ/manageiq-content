@@ -2,22 +2,22 @@ require_domain_file
 
 describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::AmazonPreRetirement do
   let(:svc_vm)      { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }
-  let(:ems)         { FactoryGirl.create(:ems_amazon, :name => 'testEmsAmazon') }
+  let(:ems)         { FactoryBot.create(:ems_amazon, :name => 'testEmsAmazon') }
   let(:root_object) { Spec::Support::MiqAeMockObject.new(root_hash) }
   let(:root_hash)   { { 'vm' => svc_vm } }
   let(:vm) do
-    FactoryGirl.create(:vm_amazon, :ems_id          => ems.id,
+    FactoryBot.create(:vm_amazon, :ems_id          => ems.id,
                                    :name            => 'testVmAmazon',
                                    :raw_power_state => "running",
                                    :registered      => true)
   end
   let(:ebs_hardware) do
-    FactoryGirl.create(:hardware, :bitness             => 64,
+    FactoryBot.create(:hardware, :bitness             => 64,
                                   :virtualization_type => 'paravirtual',
                                   :root_device_type    => 'ebs')
   end
   let(:is_hardware) do
-    FactoryGirl.create(:hardware, :bitness             => 64,
+    FactoryBot.create(:hardware, :bitness             => 64,
                                   :virtualization_type => 'paravirtual',
                                   :root_device_type    => 'instance-store')
   end
@@ -57,7 +57,7 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::Amaz
 
     context '#nil EMS' do
       let(:vm) do
-        FactoryGirl.create(:vm_amazon, :name            => 'testVmAmazon',
+        FactoryBot.create(:vm_amazon, :name            => 'testVmAmazon',
                                        :raw_power_state => "running",
                                        :registered      => true)
       end

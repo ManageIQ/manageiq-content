@@ -25,10 +25,10 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableResource
 
   shared_examples_for "#having all of the resource groups" do
     let(:default_desc) { "<select>" }
-    let(:rgroup1) { FactoryGirl.create(:azure_resource_group) }
-    let(:rgroup2) { FactoryGirl.create(:azure_resource_group) }
+    let(:rgroup1) { FactoryBot.create(:azure_resource_group) }
+    let(:rgroup2) { FactoryBot.create(:azure_resource_group) }
     let(:ems) do
-      FactoryGirl.create(:ems_azure, :resource_groups => [rgroup1, rgroup2])
+      FactoryBot.create(:ems_azure, :resource_groups => [rgroup1, rgroup2])
     end
 
     it "finds all the resource groups and populates the list" do
@@ -48,7 +48,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableResource
   end
 
   context "workspace has service template other than orchestration" do
-    let(:service_template) { FactoryGirl.create(:service_template) }
+    let(:service_template) { FactoryBot.create(:service_template) }
 
     it_behaves_like "#having only default value"
   end
@@ -56,7 +56,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableResource
   context "workspace has orchestration service template" do
     context 'with orchestration_manager' do
       let(:service_template) do
-        FactoryGirl.create(:service_template_orchestration, :orchestration_manager => ems)
+        FactoryBot.create(:service_template_orchestration, :orchestration_manager => ems)
       end
 
       it_behaves_like "#having all of the resource groups"
@@ -64,7 +64,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableResource
 
     context 'without orchestration_manager' do
       let(:service_template) do
-        FactoryGirl.create(:service_template_orchestration)
+        FactoryBot.create(:service_template_orchestration)
       end
 
       it_behaves_like "#having only default value"
@@ -78,7 +78,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableResource
 
     context 'with orchestration_manager' do
       let(:service_template) do
-        FactoryGirl.create(:service_orchestration, :orchestration_manager => ems)
+        FactoryBot.create(:service_orchestration, :orchestration_manager => ems)
       end
 
       it_behaves_like "#having all of the resource groups"
@@ -86,7 +86,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableResource
 
     context 'without orchestration_manager' do
       let(:service_template) do
-        FactoryGirl.create(:service_orchestration)
+        FactoryBot.create(:service_orchestration)
       end
 
       it_behaves_like "#having only default value"

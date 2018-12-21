@@ -1,12 +1,12 @@
 require_domain_file
 
 describe ManageIQ::Automate::Cloud::Orchestration::Provisioning::StateMachines::Provision do
-  let(:request)               { FactoryGirl.create(:service_template_provision_request, :requester => user) }
-  let(:service_orchestration) { FactoryGirl.create(:service_orchestration) }
-  let(:user)                  { FactoryGirl.create(:user_with_group) }
+  let(:request)               { FactoryBot.create(:service_template_provision_request, :requester => user) }
+  let(:service_orchestration) { FactoryBot.create(:service_orchestration) }
+  let(:user)                  { FactoryBot.create(:user_with_group) }
 
   let(:miq_request_task) do
-    FactoryGirl.create(:miq_request_task,
+    FactoryBot.create(:miq_request_task,
                        :destination => service_orchestration,
                        :miq_request => request)
   end

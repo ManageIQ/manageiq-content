@@ -2,12 +2,12 @@ require_domain_file
 require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/System/CommonMethods/Utils.class/__methods__/log_object.rb')
 
 describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::Finish do
-  let(:admin) { FactoryGirl.create(:user_admin) }
-  let(:request) { FactoryGirl.create(:service_template_provision_request, :requester => admin) }
-  let(:ansible_tower_manager) { FactoryGirl.create(:automation_manager) }
-  let(:job_template) { FactoryGirl.create(:ansible_configuration_script, :manager => ansible_tower_manager) }
-  let(:service_ansible_tower) { FactoryGirl.create(:service_ansible_tower, :job_template => job_template) }
-  let(:task) { FactoryGirl.create(:service_template_provision_task, :destination => service_ansible_tower, :miq_request => request) }
+  let(:admin) { FactoryBot.create(:user_admin) }
+  let(:request) { FactoryBot.create(:service_template_provision_request, :requester => admin) }
+  let(:ansible_tower_manager) { FactoryBot.create(:automation_manager) }
+  let(:job_template) { FactoryBot.create(:ansible_configuration_script, :manager => ansible_tower_manager) }
+  let(:service_ansible_tower) { FactoryBot.create(:service_ansible_tower, :job_template => job_template) }
+  let(:task) { FactoryBot.create(:service_template_provision_task, :destination => service_ansible_tower, :miq_request => request) }
   let(:svc_task) { MiqAeMethodService::MiqAeServiceServiceTemplateProvisionTask.find(task.id) }
   let(:svc_service) { MiqAeMethodService::MiqAeServiceServiceAnsibleTower.find(service_ansible_tower.id) }
   let(:root_object) { Spec::Support::MiqAeMockObject.new('service' => svc_service, 'service_action' => 'Provision') }

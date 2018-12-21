@@ -1,8 +1,8 @@
 require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::InstallDrivers do
-  let(:operating_system) { FactoryGirl.create(:operating_system, :product_name => os_name) }
-  let(:vm)               { FactoryGirl.create(:vm_vmware, :operating_system => operating_system) }
+  let(:operating_system) { FactoryBot.create(:operating_system, :product_name => os_name) }
+  let(:vm)               { FactoryBot.create(:vm_vmware, :operating_system => operating_system) }
   let(:svc_model_vm)     { MiqAeMethodService::MiqAeServiceManageIQ_Providers_Vmware_InfraManager_Vm.find(vm.id) }
 
   let(:root_object) do

@@ -1,8 +1,8 @@
 require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Transform::StateMachines::ConfigureVmNetworks do
-  let(:user)        { FactoryGirl.create(:user_admin) }
-  let(:provider)    { FactoryGirl.create(:ems_redhat) }
+  let(:user)        { FactoryBot.create(:user_admin) }
+  let(:provider)    { FactoryBot.create(:ems_redhat) }
 
   let(:svc_model_user)     { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_provider) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_Redhat_InfraManager.find(provider.id) }

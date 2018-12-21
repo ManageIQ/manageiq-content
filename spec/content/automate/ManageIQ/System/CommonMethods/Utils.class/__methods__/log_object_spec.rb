@@ -1,8 +1,8 @@
 require_domain_file
 describe ManageIQ::Automate::System::CommonMethods::Utils::LogObject do
-  let(:user) { FactoryGirl.create(:user_with_email_and_group) }
+  let(:user) { FactoryBot.create(:user_with_email_and_group) }
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
-  let(:ems) { FactoryGirl.create(:ext_management_system) }
+  let(:ems) { FactoryBot.create(:ext_management_system) }
   let(:ar_object) { svc_model_user }
 
   let(:root) do
@@ -13,9 +13,9 @@ describe ManageIQ::Automate::System::CommonMethods::Utils::LogObject do
     )
   end
 
-  let(:small_environment_zone) { FactoryGirl.create(:small_environment) }
-  let(:parent_classification) { FactoryGirl.create(:classification, :description => "Environment", :name => "environment", :read_only => false) }
-  let(:classification)        { FactoryGirl.create(:classification, :name => "prod", :description => "Production", :parent => parent_classification, :read_only => true) }
+  let(:small_environment_zone) { FactoryBot.create(:small_environment) }
+  let(:parent_classification) { FactoryBot.create(:classification, :description => "Environment", :name => "environment", :read_only => false) }
+  let(:classification)        { FactoryBot.create(:classification, :name => "prod", :description => "Production", :parent => parent_classification, :read_only => true) }
   let(:vm1) do
     small_environment_zone
 

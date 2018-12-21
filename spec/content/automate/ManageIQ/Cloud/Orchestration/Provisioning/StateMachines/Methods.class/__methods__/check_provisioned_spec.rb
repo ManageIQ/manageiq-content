@@ -5,24 +5,24 @@ describe ManageIQ::Automate::Cloud::Orchestration::Provisioning::StateMachines::
   let(:deploy_reason)           { "deploy reason" }
   let(:failure_msg)             { "failure message" }
   let(:long_failure_msg)        { "t" * 300 }
-  let(:request)                 { FactoryGirl.create(:service_template_provision_request, :requester => user) }
-  let(:service_orchestration)   { FactoryGirl.create(:service_orchestration, :orchestration_manager => ems_amazon) }
-  let(:user)                    { FactoryGirl.create(:user_with_group) }
+  let(:request)                 { FactoryBot.create(:service_template_provision_request, :requester => user) }
+  let(:service_orchestration)   { FactoryBot.create(:service_orchestration, :orchestration_manager => ems_amazon) }
+  let(:user)                    { FactoryBot.create(:user_with_group) }
 
   let(:ems_amazon) do
-    ems = FactoryGirl.create(:ems_amazon, :last_refresh_date => Time.now.getlocal - 100)
-    ems.authentications << FactoryGirl.create(:authentication, :status => "Valid")
+    ems = FactoryBot.create(:ems_amazon, :last_refresh_date => Time.now.getlocal - 100)
+    ems.authentications << FactoryBot.create(:authentication, :status => "Valid")
     ems
   end
 
   let(:miq_request_task) do
-    FactoryGirl.create(:miq_request_task,
+    FactoryBot.create(:miq_request_task,
                        :destination => service_orchestration,
                        :miq_request => request)
   end
 
   let(:amazon_stack) do
-    FactoryGirl.create(:orchestration_stack_amazon)
+    FactoryBot.create(:orchestration_stack_amazon)
   end
 
   let(:svc_model_orchestration_manager) do

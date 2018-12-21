@@ -1,16 +1,16 @@
 describe "parse_event_stream" do
   let(:inst)          { "/System/Process/parse_event_stream" }
-  let(:user)          { FactoryGirl.create(:user_with_group) }
-  let(:ems)           { FactoryGirl.create(:ems_vmware_with_authentication, :zone => FactoryGirl.create(:zone)) }
-  let(:vm)            { FactoryGirl.create(:vm_vmware, :ext_management_system => ems) }
-  let(:miq_event)     { FactoryGirl.create(:miq_event, :event_type => "some_event") }
-  let(:request_event) { FactoryGirl.create(:request_event) }
-  let(:custom_event)  { FactoryGirl.create(:custom_event) }
+  let(:user)          { FactoryBot.create(:user_with_group) }
+  let(:ems)           { FactoryBot.create(:ems_vmware_with_authentication, :zone => FactoryBot.create(:zone)) }
+  let(:vm)            { FactoryBot.create(:vm_vmware, :ext_management_system => ems) }
+  let(:miq_event)     { FactoryBot.create(:miq_event, :event_type => "some_event") }
+  let(:request_event) { FactoryBot.create(:request_event) }
+  let(:custom_event)  { FactoryBot.create(:custom_event) }
   let(:ems_event) do
-    FactoryGirl.create(:ems_event, :vm_or_template => vm, :ext_management_system => ems)
+    FactoryBot.create(:ems_event, :vm_or_template => vm, :ext_management_system => ems)
   end
   let(:ems_event_no_source) do
-    FactoryGirl.create(:ems_event, :vm_or_template => vm, :ext_management_system => nil)
+    FactoryBot.create(:ems_event, :vm_or_template => vm, :ext_management_system => nil)
   end
 
   it "invalid event stream" do

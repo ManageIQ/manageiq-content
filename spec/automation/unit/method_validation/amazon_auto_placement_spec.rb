@@ -1,6 +1,6 @@
 describe "AMAZON best fit" do
 
-  let(:user) { FactoryGirl.create(:user_with_group) }
+  let(:user) { FactoryBot.create(:user_with_group) }
   let(:ws) do
     allow(User).to receive_messages(:server_timezone => "UTC")
     MiqAeEngine.instantiate("/System/Request/Call_Instance_With_Message?" \
@@ -10,16 +10,16 @@ describe "AMAZON best fit" do
   end
 
   let(:ems) do
-    FactoryGirl.create(:ems_amazon_with_authentication)
+    FactoryBot.create(:ems_amazon_with_authentication)
   end
 
   let(:vm_template) do
-    FactoryGirl.create(:template_amazon,
+    FactoryBot.create(:template_amazon,
                        :name                  => "template1",
                        :ext_management_system => ems)
   end
   let(:miq_provision) do
-    FactoryGirl.create(:miq_provision_amazon,
+    FactoryBot.create(:miq_provision_amazon,
                        :options => {:src_vm_id => vm_template.id},
                        :userid  => user.userid,
                        :state   => 'active',
@@ -27,23 +27,23 @@ describe "AMAZON best fit" do
   end
 
   let(:t2_small_flavor) do
-    FactoryGirl.create(:flavor_amazon, :ems_id                => ems.id,
+    FactoryBot.create(:flavor_amazon, :ems_id                => ems.id,
                                        :name                  => 't2.small',
                                        :cloud_subnet_required => true)
   end
 
   let(:m2_small_flavor) do
-    FactoryGirl.create(:flavor_amazon, :ems_id                => ems.id,
+    FactoryBot.create(:flavor_amazon, :ems_id                => ems.id,
                                        :name                  => 'm2.small',
                                        :cloud_subnet_required => false)
   end
 
   let(:cloud_network1) do
-    FactoryGirl.create(:cloud_network_amazon, :ems_id => ems.network_manager.id, :enabled => true)
+    FactoryBot.create(:cloud_network_amazon, :ems_id => ems.network_manager.id, :enabled => true)
   end
 
   let(:cloud_subnet1) do
-    FactoryGirl.create(:cloud_subnet_amazon, :ems_id => ems.network_manager.id, :cloud_network_id => cloud_network1.id)
+    FactoryBot.create(:cloud_subnet_amazon, :ems_id => ems.network_manager.id, :cloud_network_id => cloud_network1.id)
   end
 
   context "provision task object" do

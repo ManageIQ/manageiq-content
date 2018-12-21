@@ -1,8 +1,8 @@
 require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::CheckRemovedFromProvider do
-  let(:ems)  { FactoryGirl.create(:ems_vmware, :zone => FactoryGirl.create(:zone)) }
-  let(:vm) { FactoryGirl.create(:vm_vmware, :ems_id => ems.id) }
+  let(:ems)  { FactoryBot.create(:ems_vmware, :zone => FactoryBot.create(:zone)) }
+  let(:vm) { FactoryBot.create(:vm_vmware, :ems_id => ems.id) }
   let(:svc_model_vm) do
     MiqAeMethodService::MiqAeServiceVm.find(vm.id)
   end
@@ -45,14 +45,14 @@ describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::Chec
   end
 
   context "returns 'ok' if no ems and state var false" do
-    let(:vm) { FactoryGirl.create(:vm_vmware) }
+    let(:vm) { FactoryBot.create(:vm_vmware) }
     let(:ae_result) { "ok" }
     let(:removed_from_provider) { false }
     it_behaves_like "#state var"
   end
 
   context "returns 'ok' if state var true" do
-    let(:vm) { FactoryGirl.create(:vm_vmware) }
+    let(:vm) { FactoryBot.create(:vm_vmware) }
     let(:ae_result) { "ok" }
     let(:removed_from_provider) { true }
     it_behaves_like "#state var"

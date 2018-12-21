@@ -1,12 +1,12 @@
 require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Retirement::Email::VmRetireExtend do
-  let(:user) { FactoryGirl.create(:user_with_email_and_group) }
-  let(:zone) { FactoryGirl.create(:zone) }
-  let(:ems) { FactoryGirl.create(:ems_microsoft, :zone => zone, :tenant => Tenant.root_tenant) }
+  let(:user) { FactoryBot.create(:user_with_email_and_group) }
+  let(:zone) { FactoryBot.create(:zone) }
+  let(:ems) { FactoryBot.create(:ems_microsoft, :zone => zone, :tenant => Tenant.root_tenant) }
   let(:miq_server) { EvmSpecHelper.local_miq_server }
   let(:vm) do
-    FactoryGirl.create(:vm_microsoft,
+    FactoryBot.create(:vm_microsoft,
                        :raw_power_state => "PowerOff",
                        :retires_on      => Time.zone.now,
                        :evm_owner       => user,

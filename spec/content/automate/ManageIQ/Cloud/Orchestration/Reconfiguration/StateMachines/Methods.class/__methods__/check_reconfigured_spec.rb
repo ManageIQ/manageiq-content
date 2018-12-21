@@ -1,19 +1,19 @@
 require_domain_file
 
 describe ManageIQ::Automate::Cloud::Orchestration::Reconfiguration::StateMachines::Methods::CheckReconfigured do
-  let(:user)          { FactoryGirl.create(:user_with_group) }
-  let(:ems_amazon)    { FactoryGirl.create(:ems_amazon, :last_refresh_date => Time.now.getlocal - 100) }
-  let(:request)       { FactoryGirl.create(:service_reconfigure_request, :requester => user) }
-  let(:orch_template) { FactoryGirl.create(:orchestration_template) }
-  let(:serv_template) { FactoryGirl.create(:service_template_orchestration, :orchestration_template => orch_template) }
+  let(:user)          { FactoryBot.create(:user_with_group) }
+  let(:ems_amazon)    { FactoryBot.create(:ems_amazon, :last_refresh_date => Time.now.getlocal - 100) }
+  let(:request)       { FactoryBot.create(:service_reconfigure_request, :requester => user) }
+  let(:orch_template) { FactoryBot.create(:orchestration_template) }
+  let(:serv_template) { FactoryBot.create(:service_template_orchestration, :orchestration_template => orch_template) }
 
   let(:service_orchestration) do
-    FactoryGirl.create(:service_orchestration,
+    FactoryBot.create(:service_orchestration,
                        :orchestration_manager => ems_amazon,
                        :service_template      => serv_template)
   end
 
-  let(:miq_reconfigure_task) { FactoryGirl.create(:service_reconfigure_task, :request_type => 'service_reconfigure') }
+  let(:miq_reconfigure_task) { FactoryBot.create(:service_reconfigure_task, :request_type => 'service_reconfigure') }
   let(:svc_model_service)    { MiqAeMethodService::MiqAeServiceService.find(service_orchestration.id) }
 
   let(:svc_model_service_reconfigure_task) do

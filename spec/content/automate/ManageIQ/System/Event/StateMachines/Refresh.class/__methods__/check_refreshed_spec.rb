@@ -1,8 +1,8 @@
 require_domain_file
 
 describe ManageIQ::Automate::System::Event::StateMachines::Refresh::CheckRefreshed do
-  let(:event) { FactoryGirl.create(:event_stream) }
-  let(:task)  { FactoryGirl.create(:miq_task) }
+  let(:event) { FactoryBot.create(:event_stream) }
+  let(:task)  { FactoryBot.create(:miq_task) }
 
   let(:svc_event) { MiqAeMethodService::MiqAeServiceEventStream.find(event.id) }
   let(:svc_task)  { MiqAeMethodService::MiqAeServiceMiqTask.find(task.id) }

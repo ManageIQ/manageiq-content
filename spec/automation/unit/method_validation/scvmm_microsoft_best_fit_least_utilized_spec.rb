@@ -1,5 +1,5 @@
 describe "SCVMM microsoft_best_fit_least_utilized" do
-  let(:user) { FactoryGirl.create(:user_with_group) }
+  let(:user) { FactoryBot.create(:user_with_group) }
   let(:ws) do
     MiqAeEngine.instantiate("/System/Request/Call_Instance_With_Message?" \
                             "namespace=Infrastructure/VM/Provisioning&class=Placement" \
@@ -7,12 +7,12 @@ describe "SCVMM microsoft_best_fit_least_utilized" do
                             "MiqProvision::miq_provision=#{miq_provision.id}", user)
   end
   let(:vm_template) do
-    FactoryGirl.create(:template_microsoft,
+    FactoryBot.create(:template_microsoft,
                        :name                  => "template1",
-                       :ext_management_system => FactoryGirl.create(:ems_microsoft_with_authentication))
+                       :ext_management_system => FactoryBot.create(:ems_microsoft_with_authentication))
   end
   let(:miq_provision) do
-    FactoryGirl.create(:miq_provision_microsoft,
+    FactoryBot.create(:miq_provision_microsoft,
                        :options => {:src_vm_id      => vm_template.id,
                                     :placement_auto => [true, 1]},
                        :userid  => user.userid,
@@ -20,9 +20,9 @@ describe "SCVMM microsoft_best_fit_least_utilized" do
                        :status  => 'Ok')
   end
 
-  let(:host)       { FactoryGirl.create(:host_microsoft, :power_state => "on") }
-  let(:storage)    { FactoryGirl.create(:storage, :free_space => 10.gigabytes) }
-  let(:ro_storage) { FactoryGirl.create(:storage, :free_space => 20.gigabytes) }
+  let(:host)       { FactoryBot.create(:host_microsoft, :power_state => "on") }
+  let(:storage)    { FactoryBot.create(:storage, :free_space => 10.gigabytes) }
+  let(:ro_storage) { FactoryBot.create(:storage, :free_space => 20.gigabytes) }
 
   context "provision task object" do
     it "without host or storage will not set placement values" do

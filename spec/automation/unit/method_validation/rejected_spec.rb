@@ -1,6 +1,6 @@
 describe 'Quota rejected Validation' do
-  let(:admin) { FactoryGirl.create(:user_with_email_and_group, :name => 'admin', :userid => 'admin') }
-  let(:admin_approval) { FactoryGirl.create(:miq_approval, :approver => admin) }
+  let(:admin) { FactoryBot.create(:user_with_email_and_group, :name => 'admin', :userid => 'admin') }
+  let(:admin_approval) { FactoryBot.create(:miq_approval, :approver => admin) }
   let(:ws) do
     MiqAeEngine.instantiate("/System/Request/Call_Method?#{method}&#{args}", admin)
   end
@@ -13,11 +13,11 @@ describe 'Quota rejected Validation' do
   end
 
   let(:miq_server) { EvmSpecHelper.local_miq_server }
-  let(:ems) { FactoryGirl.create(:ems_vmware_with_authentication) }
-  let(:vm_template) { FactoryGirl.create(:template_vmware, :ext_management_system => ems) }
-  let(:vm) { FactoryGirl.create(:vm_vmware, :ext_management_system => ems) }
+  let(:ems) { FactoryBot.create(:ems_vmware_with_authentication) }
+  let(:vm_template) { FactoryBot.create(:template_vmware, :ext_management_system => ems) }
+  let(:vm) { FactoryBot.create(:vm_vmware, :ext_management_system => ems) }
   let(:miq_provision_request) do
-    FactoryGirl.create(:miq_provision_request,
+    FactoryBot.create(:miq_provision_request,
                        :provision_type => 'template',
                        :state => 'pending', :status => 'Ok',
                        :src_vm_id => vm_template.id,
@@ -26,7 +26,7 @@ describe 'Quota rejected Validation' do
 
   it 'Quota exceeded' do
     type = :automate_user_error
-    FactoryGirl.create(:notification_type, :name => type)
+    FactoryBot.create(:notification_type, :name => type)
 
     expect(Notification.count).to eq(0)
     miq_provision_request.miq_approvals = [admin_approval]

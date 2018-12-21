@@ -2,11 +2,11 @@ require_domain_file
 
 describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::PreRetirement do
   let(:svc_vm)      { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }
-  let(:ems)         { FactoryGirl.create(:ems_microsoft) }
+  let(:ems)         { FactoryBot.create(:ems_microsoft) }
   let(:root_object) { Spec::Support::MiqAeMockObject.new(root_hash) }
   let(:root_hash)   { { 'vm' => svc_vm } }
   let(:vm) do
-    FactoryGirl.create(:vm_microsoft, :ems_id => ems.id)
+    FactoryBot.create(:vm_microsoft, :ems_id => ems.id)
   end
 
   let(:ae_service) do
@@ -29,7 +29,7 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::PreR
   end
 
   context 'nil ems' do
-    let(:vm) { FactoryGirl.create(:vm_microsoft) }
+    let(:vm) { FactoryBot.create(:vm_microsoft) }
 
     it 'does not stop a vm without ems' do
       expect(svc_vm).to_not receive(:stop)

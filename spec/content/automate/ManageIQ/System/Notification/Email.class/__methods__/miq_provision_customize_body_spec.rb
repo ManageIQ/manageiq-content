@@ -25,28 +25,28 @@ describe ManageIQ::Automate::System::Notification::Email::MiqProvisionCustomizeB
 
   let(:miq_server) { EvmSpecHelper.local_miq_server }
   let(:svc_model_miq_server) { MiqAeMethodService::MiqAeServiceMiqServer.find(miq_server.id) }
-  let(:user) { FactoryGirl.create(:user_with_email_and_group) }
+  let(:user) { FactoryBot.create(:user_with_email_and_group) }
   let(:svc_vm) { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }
   let(:vm) do
-    FactoryGirl.create(:vm_vmware,
+    FactoryBot.create(:vm_vmware,
                        :evm_owner       => user,
                        :retires_on      => Time.zone.now + 30.days,
                        :retirement_warn => Time.zone.now + 7.days,
                        :ems_id          => ems.id)
   end
 
-  let(:ems) { FactoryGirl.create(:ems_vmware_with_authentication) }
-  let(:vm_template) { FactoryGirl.create(:template_vmware, :ext_management_system => ems) }
+  let(:ems) { FactoryBot.create(:ems_vmware_with_authentication) }
+  let(:vm_template) { FactoryBot.create(:template_vmware, :ext_management_system => ems) }
   let(:options) { {:src_vm_id => [vm_template.id, vm_template.name], :pass => 1} }
   let(:miq_provision_request) do
-    FactoryGirl.create(:miq_provision_request,
+    FactoryBot.create(:miq_provision_request,
                        :provision_type => 'template',
                        :state => 'pending', :status => 'Ok',
                        :src_vm_id => vm_template.id,
                        :requester => user)
   end
   let(:miq_provision) do
-    FactoryGirl.create(:miq_provision_vmware, :provision_type => 'template',
+    FactoryBot.create(:miq_provision_vmware, :provision_type => 'template',
                        :state => 'pending', :status => 'Ok',
                        :miq_request => miq_provision_request,
                        :vm => vm,

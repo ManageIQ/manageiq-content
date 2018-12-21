@@ -1,8 +1,8 @@
 require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::CreateVmImportRequest do
-  let(:user)        { FactoryGirl.create(:user_admin) }
-  let(:vm)          { FactoryGirl.create(:vm_vmware) }
+  let(:user)        { FactoryBot.create(:user_admin) }
+  let(:vm)          { FactoryBot.create(:vm_vmware) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_vm)   { MiqAeMethodService::MiqAeServiceManageIQ_Providers_Vmware_InfraManager_Vm.find(vm.id) }

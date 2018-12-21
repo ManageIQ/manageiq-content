@@ -157,7 +157,7 @@ describe "Quota Validation" do
 
   context "google service item flavor override" do
     let(:large_flavor) do
-      FactoryGirl.create(:flavor_google, :ems_id => @ems.id, :cloud_subnet_required => false,
+      FactoryBot.create(:flavor_google, :ems_id => @ems.id, :cloud_subnet_required => false,
                          :cpus => 6, :cpu_cores => 2, :memory => 4026)
     end
 
@@ -230,7 +230,7 @@ describe "Quota Validation" do
   end
 
   context "VmReconfig quota request" do
-    let(:disk) { FactoryGirl.create(:disk, :size_on_disk => 1024, :size => 10_485_760, :filename => "freds disk") }
+    let(:disk) { FactoryBot.create(:disk, :size_on_disk => 1024, :size => 10_485_760, :filename => "freds disk") }
     it "add 2 cpus and add 4096 memory " do
       setup_model("vmware_reconfigure")
       @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :cores_per_socket => 2,\

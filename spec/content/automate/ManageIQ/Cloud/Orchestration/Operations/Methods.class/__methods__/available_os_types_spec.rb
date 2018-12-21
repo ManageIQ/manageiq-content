@@ -3,14 +3,14 @@ require_domain_file
 describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableOsTypes do
   os_list = {'unknown' => '<Unknown>', 'linux' => 'Linux', 'windows' => 'Windows'}
   let(:service_template) do
-    hw1 = FactoryGirl.create(:hardware, :guest_os => 'windows')
-    img1 = FactoryGirl.create(:template_openstack, :uid_ems => 'uid1', :hardware => hw1)
+    hw1 = FactoryBot.create(:hardware, :guest_os => 'windows')
+    img1 = FactoryBot.create(:template_openstack, :uid_ems => 'uid1', :hardware => hw1)
 
-    hw2 = FactoryGirl.create(:hardware, :guest_os => 'linux')
-    img2 = FactoryGirl.create(:template_openstack, :uid_ems => 'uid2', :hardware => hw2)
+    hw2 = FactoryBot.create(:hardware, :guest_os => 'linux')
+    img2 = FactoryBot.create(:template_openstack, :uid_ems => 'uid2', :hardware => hw2)
 
-    ems = FactoryGirl.create(:ems_openstack, :miq_templates => [img1, img2])
-    FactoryGirl.create(:service_template_orchestration, :orchestration_manager => ems)
+    ems = FactoryBot.create(:ems_openstack, :miq_templates => [img1, img2])
+    FactoryBot.create(:service_template_orchestration, :orchestration_manager => ems)
   end
   let(:root_hash) do
     { 'service_template' => MiqAeMethodService::MiqAeServiceServiceTemplate.find(service_template.id) }

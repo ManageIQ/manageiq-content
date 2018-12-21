@@ -26,9 +26,9 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableFlavors 
 
   shared_examples_for "#having all flavors" do |service_type|
     let(:default_desc) { "<select>" }
-    let(:flavor1) { FactoryGirl.create(:flavor, :name => 'flavor1') }
-    let(:flavor2) { FactoryGirl.create(:flavor, :name => 'flavor2') }
-    let(:ems) { FactoryGirl.create(:ems_openstack, :flavors => [flavor1, flavor2]) }
+    let(:flavor1) { FactoryBot.create(:flavor, :name => 'flavor1') }
+    let(:flavor2) { FactoryBot.create(:flavor, :name => 'flavor2') }
+    let(:ems) { FactoryBot.create(:ems_openstack, :flavors => [flavor1, flavor2]) }
 
     let(:svc_model_flavor1) do
       MiqAeMethodService::MiqAeServiceFlavor.find(flavor1.id)
@@ -71,7 +71,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableFlavors 
   end
 
   context "workspace has service template other than orchestration" do
-    let(:service_template) { FactoryGirl.create(:service_template) }
+    let(:service_template) { FactoryBot.create(:service_template) }
 
     it_behaves_like "#having only default value"
   end
@@ -79,7 +79,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableFlavors 
   context "workspace has orchestration service template" do
     context 'with orchestration_manager' do
       let(:service_template) do
-        FactoryGirl.create(:service_template_orchestration, :orchestration_manager => ems)
+        FactoryBot.create(:service_template_orchestration, :orchestration_manager => ems)
       end
 
       it_behaves_like "#having all flavors", "service_template"
@@ -87,7 +87,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableFlavors 
 
     context 'without orchestration_manager' do
       let(:service_template) do
-        FactoryGirl.create(:service_template_orchestration)
+        FactoryBot.create(:service_template_orchestration)
       end
 
       it_behaves_like "#having only default value"
@@ -101,7 +101,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableFlavors 
 
     context 'with orchestration_manager' do
       let(:service) do
-        FactoryGirl.create(:service_orchestration, :orchestration_manager => ems)
+        FactoryBot.create(:service_orchestration, :orchestration_manager => ems)
       end
 
       it_behaves_like "#having all flavors", "service"
@@ -109,7 +109,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableFlavors 
 
     context 'without orchestration_manager' do
       let(:service) do
-        FactoryGirl.create(:service_orchestration)
+        FactoryBot.create(:service_orchestration)
       end
 
       it_behaves_like "#having only default value"

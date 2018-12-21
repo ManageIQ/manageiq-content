@@ -1,20 +1,20 @@
 require_domain_file
 
 describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableTenants do
-  let(:tenant1) { FactoryGirl.create(:cloud_tenant) }
-  let(:tenant2) { FactoryGirl.create(:cloud_tenant) }
-  let(:ems) { FactoryGirl.create(:ems_openstack, :cloud_tenants => [tenant1, tenant2]) }
+  let(:tenant1) { FactoryBot.create(:cloud_tenant) }
+  let(:tenant2) { FactoryBot.create(:cloud_tenant) }
+  let(:ems) { FactoryBot.create(:ems_openstack, :cloud_tenants => [tenant1, tenant2]) }
   let(:service_template_no_ems) do
-    FactoryGirl.create(:service_template_orchestration)
+    FactoryBot.create(:service_template_orchestration)
   end
   let(:service_template) do
-    FactoryGirl.create(:service_template_orchestration, :orchestration_manager => ems)
+    FactoryBot.create(:service_template_orchestration, :orchestration_manager => ems)
   end
   let(:service_no_ems) do
-    FactoryGirl.create(:service_orchestration)
+    FactoryBot.create(:service_orchestration)
   end
   let(:service) do
-    FactoryGirl.create(:service_orchestration, :orchestration_manager => ems)
+    FactoryBot.create(:service_orchestration, :orchestration_manager => ems)
   end
   let(:root_hash) do
     { 'service_template' => MiqAeMethodService::MiqAeServiceServiceTemplate.find(service_template.id) }
@@ -38,7 +38,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableTenants 
   end
 
   context "workspace has service template other than orchestration" do
-    let(:service_template) { FactoryGirl.create(:service_template) }
+    let(:service_template) { FactoryBot.create(:service_template) }
 
     it "provides only default value to the tenant list" do
       described_class.new(ae_service).main

@@ -2,19 +2,19 @@ require_domain_file
 require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Transformation/Common.class/__methods__/utils.rb')
 
 describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
-  let(:user) { FactoryGirl.create(:user_with_email_and_group) }
-  let(:group) { FactoryGirl.create(:miq_group) }
-  let(:task) { FactoryGirl.create(:service_template_transformation_plan_task) }
-  let(:src_ems_vmware) { FactoryGirl.create(:ems_vmware) }
-  let(:src_cluster_vmware) { FactoryGirl.create(:ems_cluster, :ext_management_system => src_ems_vmware) }
-  let(:src_vm_vmware) { FactoryGirl.create(:vm_vmware, :ext_management_system => src_ems_vmware, :ems_cluster => src_cluster_vmware) }
-  let(:src_storage_1) { FactoryGirl.create(:storage) }
-  let(:src_storage_2) { FactoryGirl.create(:storage) }
-  let(:src_lan_1) { FactoryGirl.create(:lan) }
-  let(:src_lan_2) { FactoryGirl.create(:lan) }
-  let(:hardware) { FactoryGirl.create(:hardware) }
-  let(:nic_1) { FactoryGirl.create(:guest_device_nic) }
-  let(:nic_2) { FactoryGirl.create(:guest_device_nic) }
+  let(:user) { FactoryBot.create(:user_with_email_and_group) }
+  let(:group) { FactoryBot.create(:miq_group) }
+  let(:task) { FactoryBot.create(:service_template_transformation_plan_task) }
+  let(:src_ems_vmware) { FactoryBot.create(:ems_vmware) }
+  let(:src_cluster_vmware) { FactoryBot.create(:ems_cluster, :ext_management_system => src_ems_vmware) }
+  let(:src_vm_vmware) { FactoryBot.create(:vm_vmware, :ext_management_system => src_ems_vmware, :ems_cluster => src_cluster_vmware) }
+  let(:src_storage_1) { FactoryBot.create(:storage) }
+  let(:src_storage_2) { FactoryBot.create(:storage) }
+  let(:src_lan_1) { FactoryBot.create(:lan) }
+  let(:src_lan_2) { FactoryBot.create(:lan) }
+  let(:hardware) { FactoryBot.create(:hardware) }
+  let(:nic_1) { FactoryBot.create(:guest_device_nic) }
+  let(:nic_2) { FactoryBot.create(:guest_device_nic) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_group) { MiqAeMethodService::MiqAeServiceMiqGroup.find(group.id) }
@@ -138,26 +138,26 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:svc_model_src_ems) { svc_model_src_ems_vmware }
 
-    let(:dst_ems) { FactoryGirl.create(:ems_redhat) }
+    let(:dst_ems) { FactoryBot.create(:ems_redhat) }
     let(:svc_model_dst_ems) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(dst_ems.id) }
-    let(:dst_cluster) { FactoryGirl.create(:ems_cluster, :ext_management_system => dst_ems) }
+    let(:dst_cluster) { FactoryBot.create(:ems_cluster, :ext_management_system => dst_ems) }
     let(:svc_model_dst_cluster) { MiqAeMethodService::MiqAeServiceEmsCluster.find(dst_cluster.id) }
-    let(:dst_storage) { FactoryGirl.create(:storage) }
+    let(:dst_storage) { FactoryBot.create(:storage) }
     let(:svc_model_dst_storage) { MiqAeMethodService::MiqAeServiceStorage.find(dst_storage.id) }
-    let(:dst_lan_1) { FactoryGirl.create(:lan) }
+    let(:dst_lan_1) { FactoryBot.create(:lan) }
     let(:svc_model_dst_lan_1) { MiqAeMethodService::MiqAeServiceLan.find(dst_lan_1.id) }
-    let(:dst_lan_2) { FactoryGirl.create(:lan) }
+    let(:dst_lan_2) { FactoryBot.create(:lan) }
     let(:svc_model_dst_lan_2) { MiqAeMethodService::MiqAeServiceLan.find(dst_lan_2.id) }
 
     let(:mapping) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :transformation_mapping,
         :transformation_mapping_items => [
-          FactoryGirl.create(:transformation_mapping_item, :source => src_cluster_vmware, :destination => dst_cluster),
-          FactoryGirl.create(:transformation_mapping_item, :source => src_storage_1, :destination => dst_storage),
-          FactoryGirl.create(:transformation_mapping_item, :source => src_storage_2, :destination => dst_storage),
-          FactoryGirl.create(:transformation_mapping_item, :source => src_lan_1, :destination => dst_lan_1),
-          FactoryGirl.create(:transformation_mapping_item, :source => src_lan_2, :destination => dst_lan_2)
+          FactoryBot.create(:transformation_mapping_item, :source => src_cluster_vmware, :destination => dst_cluster),
+          FactoryBot.create(:transformation_mapping_item, :source => src_storage_1, :destination => dst_storage),
+          FactoryBot.create(:transformation_mapping_item, :source => src_storage_2, :destination => dst_storage),
+          FactoryBot.create(:transformation_mapping_item, :source => src_lan_1, :destination => dst_lan_1),
+          FactoryBot.create(:transformation_mapping_item, :source => src_lan_2, :destination => dst_lan_2)
         ]
       )
     end
@@ -176,8 +176,8 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     end
 
     let(:plan) { ServiceTemplateTransformationPlan.create_catalog_item(catalog_item_options) }
-    let(:request) { FactoryGirl.create(:service_template_transformation_plan_request, :source => plan) }
-    let(:task) { FactoryGirl.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_vmware) }
+    let(:request) { FactoryBot.create(:service_template_transformation_plan_request, :source => plan) }
+    let(:task) { FactoryBot.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_vmware) }
 
     it_behaves_like "#populate_task_options"
     it_behaves_like "main"
@@ -188,26 +188,26 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     let(:svc_model_src_vm) { svc_model_src_vm_vmware }
     let(:svc_model_src_ems) { svc_model_src_ems_vmware }
 
-    let(:dst_ems) { FactoryGirl.create(:ems_openstack_infra) }
+    let(:dst_ems) { FactoryBot.create(:ems_openstack_infra) }
     let(:svc_model_dst_ems) { MiqAeMethodService::MiqAeServiceExtManagementSystem.find(dst_ems.id) }
-    let(:dst_cloud_tenant) { FactoryGirl.create(:cloud_tenant, :ext_management_system => dst_ems) }
+    let(:dst_cloud_tenant) { FactoryBot.create(:cloud_tenant, :ext_management_system => dst_ems) }
     let(:svc_model_dst_cloud_tenant) { MiqAeMethodService::MiqAeServiceCloudTenant.find(dst_cluster.id) }
-    let(:dst_cloud_volume_type) { FactoryGirl.create(:cloud_volume_type) }
+    let(:dst_cloud_volume_type) { FactoryBot.create(:cloud_volume_type) }
     let(:svc_model_dst_cloud_volume_type) { MiqAeMethodService::MiqAeServiceCloudVolumeType.find(dst_cloud_volume_type.id) }
-    let(:dst_cloud_network_1) { FactoryGirl.create(:cloud_network) }
+    let(:dst_cloud_network_1) { FactoryBot.create(:cloud_network) }
     let(:svc_model_cloud_network_1) { MiqAeMethodService::MiqAeServiceCloudNetwork.find(dst_cloud_network_1.id) }
-    let(:dst_cloud_network_2) { FactoryGirl.create(:cloud_network) }
+    let(:dst_cloud_network_2) { FactoryBot.create(:cloud_network) }
     let(:svc_model_cloud_network_1) { MiqAeMethodService::MiqAeServiceCloudNetwork.find(dst_cloud_network_2.id) }
 
     let(:mapping) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :transformation_mapping,
         :transformation_mapping_items => [
-          FactoryGirl.create(:transformation_mapping_item, :source => src_cluster_vmware, :destination => dst_cloud_tenant),
-          FactoryGirl.create(:transformation_mapping_item, :source => src_storage_1, :destination => dst_cloud_volume_type),
-          FactoryGirl.create(:transformation_mapping_item, :source => src_storage_2, :destination => dst_cloud_volume_type),
-          FactoryGirl.create(:transformation_mapping_item, :source => src_lan_1, :destination => dst_cloud_network_1),
-          FactoryGirl.create(:transformation_mapping_item, :source => src_lan_2, :destination => dst_cloud_network_2)
+          FactoryBot.create(:transformation_mapping_item, :source => src_cluster_vmware, :destination => dst_cloud_tenant),
+          FactoryBot.create(:transformation_mapping_item, :source => src_storage_1, :destination => dst_cloud_volume_type),
+          FactoryBot.create(:transformation_mapping_item, :source => src_storage_2, :destination => dst_cloud_volume_type),
+          FactoryBot.create(:transformation_mapping_item, :source => src_lan_1, :destination => dst_cloud_network_1),
+          FactoryBot.create(:transformation_mapping_item, :source => src_lan_2, :destination => dst_cloud_network_2)
         ]
       )
     end
@@ -226,8 +226,8 @@ describe ManageIQ::Automate::Transformation::Common::AssessTransformation do
     end
 
     let(:plan) { ServiceTemplateTransformationPlan.create_catalog_item(catalog_item_options) }
-    let(:request) { FactoryGirl.create(:service_template_transformation_plan_request, :source => plan) }
-    let(:task) { FactoryGirl.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_vmware) }
+    let(:request) { FactoryBot.create(:service_template_transformation_plan_request, :source => plan) }
+    let(:task) { FactoryBot.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_vmware) }
 
     it_behaves_like "#populate_task_options"
     it_behaves_like "main"

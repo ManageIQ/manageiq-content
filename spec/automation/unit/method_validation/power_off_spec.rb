@@ -3,11 +3,11 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', '..',
 
 describe "power_off Method Validation" do
   before(:each) do
-    @zone       = FactoryGirl.create(:zone)
-    @user       = FactoryGirl.create(:user_with_group)
-    @ems        = FactoryGirl.create(:ems_vmware, :zone => @zone)
-    @host       = FactoryGirl.create(:host)
-    @vm         = FactoryGirl.create(:vm_vmware, :host => @host,
+    @zone       = FactoryBot.create(:zone)
+    @user       = FactoryBot.create(:user_with_group)
+    @ems        = FactoryBot.create(:ems_vmware, :zone => @zone)
+    @host       = FactoryBot.create(:host)
+    @vm         = FactoryBot.create(:vm_vmware, :host => @host,
                  :ems_id => @ems.id, :name => "testVM2", :raw_power_state => "poweredOn")
   end
 

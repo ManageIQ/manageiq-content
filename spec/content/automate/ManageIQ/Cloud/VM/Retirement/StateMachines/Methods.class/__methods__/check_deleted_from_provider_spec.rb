@@ -2,8 +2,8 @@ require_domain_file
 
 describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::CheckDeletedFromProvider do
   let(:svc_vm)         { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }
-  let(:ems)            { FactoryGirl.create(:ems_vmware) }
-  let(:vm)             { FactoryGirl.create(:vm_vmware, :ems_id => ems.id) }
+  let(:ems)            { FactoryBot.create(:ems_vmware) }
+  let(:vm)             { FactoryBot.create(:vm_vmware, :ems_id => ems.id) }
   let(:root_object)    { Spec::Support::MiqAeMockObject.new(root_hash) }
   let(:root_hash)      { { 'vm' => svc_vm } }
 

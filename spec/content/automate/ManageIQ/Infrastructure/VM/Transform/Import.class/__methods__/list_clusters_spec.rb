@@ -1,7 +1,7 @@
 require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListClusters do
-  let(:provider) { FactoryGirl.create(:ems_redhat, :with_clusters) }
+  let(:provider) { FactoryBot.create(:ems_redhat, :with_clusters) }
 
   let(:root_object) do
     Spec::Support::MiqAeMockObject.new(

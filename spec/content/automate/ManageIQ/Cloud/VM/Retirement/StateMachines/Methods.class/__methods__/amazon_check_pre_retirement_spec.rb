@@ -2,22 +2,22 @@ require_domain_file
 
 describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::AmazonCheckPreRetirement do
   let(:svc_vm)      { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }
-  let(:ems)         { FactoryGirl.create(:ems_amazon, :name => 'testEmsAmazon') }
+  let(:ems)         { FactoryBot.create(:ems_amazon, :name => 'testEmsAmazon') }
   let(:root_object) { Spec::Support::MiqAeMockObject.new(root_hash) }
   let(:root_hash)   { { 'vm' => svc_vm } }
   let(:vm) do
-    FactoryGirl.create(:vm_amazon, :ems_id          => ems.id,
+    FactoryBot.create(:vm_amazon, :ems_id          => ems.id,
                                    :name            => 'testVmAmazon',
                                    :raw_power_state => "running",
                                    :registered      => true)
   end
   let(:ebs_hardware) do
-    FactoryGirl.create(:hardware, :bitness             => 64,
+    FactoryBot.create(:hardware, :bitness             => 64,
                                   :virtualization_type => 'paravirtual',
                                   :root_device_type    => 'ebs')
   end
   let(:is_hardware) do
-    FactoryGirl.create(:hardware, :bitness             => 64,
+    FactoryBot.create(:hardware, :bitness             => 64,
                                   :virtualization_type => 'paravirtual',
                                   :root_device_type    => 'instance-store')
   end
@@ -53,7 +53,7 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::Amaz
 
   context "returns 'ok' for stopped ebs instances" do
     let(:vm) do
-      FactoryGirl.create(:vm_amazon, :ems_id          => ems.id,
+      FactoryBot.create(:vm_amazon, :ems_id          => ems.id,
                                      :raw_power_state => "off",
                                      :registered      => true,
                                      :hardware        => ebs_hardware)
@@ -63,7 +63,7 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::Amaz
 
   context "returns 'ok' for ebs instance with unknown power state" do
     let(:vm) do
-      FactoryGirl.create(:vm_amazon, :ems_id          => ems.id,
+      FactoryBot.create(:vm_amazon, :ems_id          => ems.id,
                                      :raw_power_state => "unknown",
                                      :registered      => true,
                                      :hardware        => ebs_hardware)
@@ -73,7 +73,7 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::Amaz
 
   context "returns 'error' for VM template" do
     let(:vm) do
-      FactoryGirl.create(:template_amazon, :ems_id   => ems.id,
+      FactoryBot.create(:template_amazon, :ems_id   => ems.id,
                                            :hardware => ebs_hardware)
     end
     let(:svc_vm) { MiqAeMethodService::MiqAeServiceVmOrTemplate.find(vm.id) }
@@ -99,7 +99,7 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::Amaz
     end
 
     context '#nil ems' do
-      let(:vm)  { FactoryGirl.create(:vm_amazon, :name => 'testVmAmazon') }
+      let(:vm)  { FactoryBot.create(:vm_amazon, :name => 'testVmAmazon') }
       let(:ems) {}
       it_behaves_like 'ae_method'
     end

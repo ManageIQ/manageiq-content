@@ -24,7 +24,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableVdcNetwo
   end
 
   context "workspace has service template other than orchestration" do
-    let(:service_template) { FactoryGirl.create(:service_template) }
+    let(:service_template) { FactoryBot.create(:service_template) }
     let(:root_hash) do
       { 'service_template' => MiqAeMethodService::MiqAeServiceServiceTemplate.find(service_template.id) }
     end
@@ -39,9 +39,9 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableVdcNetwo
 
   shared_examples "orchestration manager" do
     context "no VDC network" do
-      let(:vapp_net1) { FactoryGirl.create(:cloud_network_vmware_vapp, :ems_ref => "vapp_net1") }
+      let(:vapp_net1) { FactoryBot.create(:cloud_network_vmware_vapp, :ems_ref => "vapp_net1") }
       let(:ems) do
-        FactoryGirl.create(:ems_vmware_cloud) do |ems|
+        FactoryBot.create(:ems_vmware_cloud) do |ems|
           ems.cloud_networks << vapp_net1
         end
       end
@@ -55,9 +55,9 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableVdcNetwo
     end
 
     context "single VDC network" do
-      let(:vdc_net1) { FactoryGirl.create(:cloud_network_vmware_vdc, :ems_ref => "ref1") }
+      let(:vdc_net1) { FactoryBot.create(:cloud_network_vmware_vdc, :ems_ref => "ref1") }
       let(:ems) do
-        FactoryGirl.create(:ems_vmware_cloud) do |ems|
+        FactoryBot.create(:ems_vmware_cloud) do |ems|
           ems.cloud_networks << vdc_net1
         end
       end
@@ -74,10 +74,10 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableVdcNetwo
     end
 
     context "with multiple VDC networks" do
-      let(:vdc_net2) { FactoryGirl.create(:cloud_network_vmware_vdc, :ems_ref => "ref2") }
-      let(:vdc_net3) { FactoryGirl.create(:cloud_network_vmware_vdc, :ems_ref => "ref3") }
+      let(:vdc_net2) { FactoryBot.create(:cloud_network_vmware_vdc, :ems_ref => "ref2") }
+      let(:vdc_net3) { FactoryBot.create(:cloud_network_vmware_vdc, :ems_ref => "ref3") }
       let(:ems) do
-        FactoryGirl.create(:ems_vmware_cloud) do |ems|
+        FactoryBot.create(:ems_vmware_cloud) do |ems|
           ems.cloud_networks << vdc_net2
           ems.cloud_networks << vdc_net3
         end
@@ -96,11 +96,11 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableVdcNetwo
     end
 
     context "with VDC and vApp networks" do
-      let(:vdc_net4) { FactoryGirl.create(:cloud_network_vmware_vdc, :ems_ref => "ref4") }
-      let(:vdc_net5) { FactoryGirl.create(:cloud_network_vmware_vdc, :ems_ref => "ref5") }
-      let(:vapp_net2) { FactoryGirl.create(:cloud_network_vmware_vapp, :ems_ref => "vapp_net2") }
+      let(:vdc_net4) { FactoryBot.create(:cloud_network_vmware_vdc, :ems_ref => "ref4") }
+      let(:vdc_net5) { FactoryBot.create(:cloud_network_vmware_vdc, :ems_ref => "ref5") }
+      let(:vapp_net2) { FactoryBot.create(:cloud_network_vmware_vapp, :ems_ref => "vapp_net2") }
       let(:ems) do
-        FactoryGirl.create(:ems_vmware_cloud) do |ems|
+        FactoryBot.create(:ems_vmware_cloud) do |ems|
           ems.cloud_networks << vdc_net4
           ems.cloud_networks << vdc_net5
           ems.cloud_networks << vapp_net2
@@ -134,7 +134,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableVdcNetwo
 
   describe "workspace has orchestration service template" do
     let(:service_template) do
-      FactoryGirl.create(:service_template_orchestration, :orchestration_manager => ems)
+      FactoryBot.create(:service_template_orchestration, :orchestration_manager => ems)
     end
 
     let(:root_hash) do
@@ -146,7 +146,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableVdcNetwo
 
   context "workspace has orchestration service" do
     let(:service_orchestration) do
-      FactoryGirl.create(:service_orchestration, :orchestration_manager => ems)
+      FactoryBot.create(:service_orchestration, :orchestration_manager => ems)
     end
 
     let(:root_hash) do

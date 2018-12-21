@@ -1,9 +1,9 @@
 require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::VMRetirement::UpdateRetirementStatus do
-  let(:user) { FactoryGirl.create(:user_with_group) }
+  let(:user) { FactoryBot.create(:user_with_group) }
   let(:miq_server) { EvmSpecHelper.local_miq_server }
-  let(:vm) { FactoryGirl.create(:vm_vmware, :ems_id => FactoryGirl.create(:ems_vmware).id, :evm_owner => user) }
+  let(:vm) { FactoryBot.create(:vm_vmware, :ems_id => FactoryBot.create(:ems_vmware).id, :evm_owner => user) }
   let(:root_hash) do
     { }
   end
@@ -20,11 +20,11 @@ describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::VMRe
 
   context "with a stp request object" do
     let(:miq_request_task) do
-      FactoryGirl.create(:miq_request_task,
+      FactoryBot.create(:miq_request_task,
                          :miq_request => request, :state => 'fred')
     end
     let(:request) do
-      FactoryGirl.create(:vm_retire_request, :requester => user)
+      FactoryBot.create(:vm_retire_request, :requester => user)
     end
     let(:svc_model_miq_request_task) { MiqAeMethodService::MiqAeServiceMiqRequestTask.find(miq_request_task.id) }
     let(:svc_model_request) do

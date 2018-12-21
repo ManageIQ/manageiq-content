@@ -1,7 +1,7 @@
 describe 'vmreconfigure_request_approved method' do
   let(:miq_server) { EvmSpecHelper.local_miq_server }
-  let(:request)    { FactoryGirl.create(:vm_reconfigure_request, :requester => user) }
-  let(:user)       { FactoryGirl.create(:user_with_email_and_group) }
+  let(:request)    { FactoryBot.create(:vm_reconfigure_request, :requester => user) }
+  let(:user)       { FactoryBot.create(:user_with_email_and_group) }
 
   it 'sends email' do
     expect(GenericMailer).to receive(:deliver).with(:automation_notification,

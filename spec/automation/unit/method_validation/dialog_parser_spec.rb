@@ -2,8 +2,8 @@ describe "DialogParser Automate Method" do
   include Spec::Support::ServiceTemplateHelper
 
   before(:each) do
-    @root_stp = FactoryGirl.create(:service_template_provision_task)
-    @user = FactoryGirl.create(:user_with_group)
+    @root_stp = FactoryBot.create(:service_template_provision_task)
+    @user = FactoryBot.create(:user_with_group)
   end
 
   def run_automate_method
@@ -17,7 +17,7 @@ describe "DialogParser Automate Method" do
   end
 
   def create_tags
-    FactoryGirl.create(:classification_department_with_tags)
+    FactoryBot.create(:classification_department_with_tags)
     @array_name = "Array::dialog_tag_0_department"
     @dept_ids = Classification.find_by_description('Department').children.collect do |x|
       "Classification::#{x.id}"
@@ -30,7 +30,7 @@ describe "DialogParser Automate Method" do
     @vm_array_name = "Array::dialog_vm_array"
     @vm_id_array   = []
     @vm_name_array = []
-    [FactoryGirl.create(:vm), FactoryGirl.create(:vm)].each do |vm|
+    [FactoryBot.create(:vm), FactoryBot.create(:vm)].each do |vm|
       @vm_id_array << "Vm::#{vm.id}"
       @vm_name_array << vm.name
     end

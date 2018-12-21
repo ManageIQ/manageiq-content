@@ -2,15 +2,15 @@ require_domain_file
 
 describe ManageIQ::Automate::Service::Retirement::StateMachines::
 ServiceRetirement::UpdateServiceRetirementStatus do
-  let(:user)                  { FactoryGirl.create(:user_with_group) }
+  let(:user)                  { FactoryBot.create(:user_with_group) }
   let(:miq_server)            { EvmSpecHelper.local_miq_server }
   let(:miq_request_task) do
-    FactoryGirl.create(:miq_request_task,
+    FactoryBot.create(:miq_request_task,
                        :miq_request => request, :state => 'fred')
   end
 
   let(:request) do
-    FactoryGirl.create(:service_retire_request, :requester => user)
+    FactoryBot.create(:service_retire_request, :requester => user)
   end
 
   let(:ae_service) do

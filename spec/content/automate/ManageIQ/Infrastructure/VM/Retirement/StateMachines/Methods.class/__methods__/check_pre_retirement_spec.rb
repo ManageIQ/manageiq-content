@@ -1,11 +1,11 @@
 require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::CheckPreRetirement do
-  let(:user) { FactoryGirl.create(:user_with_group) }
-  let(:zone) { FactoryGirl.create(:zone) }
-  let(:ems) { FactoryGirl.create(:ems_microsoft, :zone => zone) }
+  let(:user) { FactoryBot.create(:user_with_group) }
+  let(:zone) { FactoryBot.create(:zone) }
+  let(:ems) { FactoryBot.create(:ems_microsoft, :zone => zone) }
   let(:vm) do
-    FactoryGirl.create(:vm_microsoft,
+    FactoryBot.create(:vm_microsoft,
                        :raw_power_state => "PowerOff",
                        :ems_id          => ems.id)
   end
@@ -77,7 +77,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::Chec
 
     context "no ems" do
       let(:vm) do
-        FactoryGirl.create(:vm_microsoft, :raw_power_state => "PowerOff")
+        FactoryBot.create(:vm_microsoft, :raw_power_state => "PowerOff")
       end
       it_behaves_like "#ae_result nil"
     end

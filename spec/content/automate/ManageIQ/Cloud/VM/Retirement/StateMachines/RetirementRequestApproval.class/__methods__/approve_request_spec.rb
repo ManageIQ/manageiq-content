@@ -2,7 +2,7 @@ require_domain_file
 
 describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::RetirementRequestApproval::ApproveRequest do
   let(:svc_request) { MiqAeMethodService::MiqAeServiceMiqProvisionRequest.find(request.id) }
-  let(:request)     { FactoryGirl.create(:miq_provision_request, :with_approval) }
+  let(:request)     { FactoryBot.create(:miq_provision_request, :with_approval) }
   let(:root_object) { Spec::Support::MiqAeMockObject.new(root_hash) }
   let(:root_hash)   { { 'miq_request' => svc_request } }
 

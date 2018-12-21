@@ -1,9 +1,9 @@
 describe "openstack_check_pre_retirement Method Validation" do
   before(:each) do
-    @zone = FactoryGirl.create(:zone)
-    @user = FactoryGirl.create(:user_with_group)
-    @ems  = FactoryGirl.create(:ems_vmware, :zone => @zone)
-    @vm   = FactoryGirl.create(:vm_openstack,
+    @zone = FactoryBot.create(:zone)
+    @user = FactoryBot.create(:user_with_group)
+    @ems  = FactoryBot.create(:ems_vmware, :zone => @zone)
+    @vm   = FactoryBot.create(:vm_openstack,
                                :name => "OOO",     :raw_power_state => "ACTIVE",
                                :ems_id => @ems.id, :registered => true)
     @ins  = "/Cloud/VM/Retirement/StateMachines/Methods/CheckPreRetirement"

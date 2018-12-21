@@ -1,7 +1,7 @@
 require_domain_file
 
 describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::RemoveFromProvider do
-  let(:zone)        { FactoryGirl.create(:zone) }
+  let(:zone)        { FactoryBot.create(:zone) }
   let(:svc_vm)      { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }
   let(:root_hash)   { { 'vm' => svc_vm } }
   let(:root_object) { Spec::Support::MiqAeMockObject.new(root_hash) }
@@ -42,7 +42,7 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::Remo
     end
 
     context "without ems" do
-      let(:vm) { FactoryGirl.create(:vm_vmware) }
+      let(:vm) { FactoryBot.create(:vm_vmware) }
 
       it "skips removing" do
         expect(ae_service).to receive(:log).with('info', "Skipping remove from provider for Instance:<#{svc_vm.try(:name)}> on provider:<>")
@@ -53,15 +53,15 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::Remo
   end
 
   context "Infrastructure" do
-    let(:ems) { FactoryGirl.create(:ems_vmware, :zone => zone) }
-    let(:vm) { FactoryGirl.create(:vm_vmware, :ems_id => ems.id) }
+    let(:ems) { FactoryBot.create(:ems_vmware, :zone => zone) }
+    let(:vm) { FactoryBot.create(:vm_vmware, :ems_id => ems.id) }
 
     it_behaves_like 'ae_method'
   end
 
   context "Cloud" do
-    let(:ems) { FactoryGirl.create(:ems_google, :zone => zone) }
-    let(:vm) { FactoryGirl.create(:vm_google, :ems_id => ems.id) }
+    let(:ems) { FactoryBot.create(:ems_google, :zone => zone) }
+    let(:vm) { FactoryBot.create(:vm_google, :ems_id => ems.id) }
 
     it_behaves_like 'ae_method'
   end

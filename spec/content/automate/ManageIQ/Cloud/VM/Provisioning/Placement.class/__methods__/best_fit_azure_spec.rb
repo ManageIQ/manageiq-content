@@ -2,13 +2,13 @@ require_domain_file
 
 describe ManageIQ::Automate::Cloud::VM::Provisioning::Placement::BestFitAzure do
   let(:root_object)    { Spec::Support::MiqAeMockObject.new.tap { |ro| ro["miq_provision"] = svc_provision } }
-  let(:ems)            { FactoryGirl.create(:ems_azure_with_authentication) }
-  let(:network)        { FactoryGirl.create(:cloud_network) }
-  let(:subnet)         { FactoryGirl.create(:cloud_subnet) }
+  let(:ems)            { FactoryBot.create(:ems_azure_with_authentication) }
+  let(:network)        { FactoryBot.create(:cloud_network) }
+  let(:subnet)         { FactoryBot.create(:cloud_subnet) }
   let(:prov_options)   { { :src_vm_id => vm_template.id } }
-  let(:miq_provision)  { FactoryGirl.create(:miq_provision, :options => prov_options) }
-  let(:vm_template)    { FactoryGirl.create(:template_azure, :ext_management_system => ems) }
-  let(:resource_group) { FactoryGirl.create(:resource_group) }
+  let(:miq_provision)  { FactoryBot.create(:miq_provision, :options => prov_options) }
+  let(:vm_template)    { FactoryBot.create(:template_azure, :ext_management_system => ems) }
+  let(:resource_group) { FactoryBot.create(:resource_group) }
 
   let(:ae_service) do
     Spec::Support::MiqAeMockService.new(root_object).tap do |service|

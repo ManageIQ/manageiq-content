@@ -7,16 +7,16 @@ describe "update_provision_status" do
     "#{instance}?#{namespace}&#{klass}&#{method}"
   end
 
-  let(:user) { FactoryGirl.create(:user_with_group) }
+  let(:user) { FactoryBot.create(:user_with_group) }
   let(:ws) { MiqAeEngine.instantiate("#{build_resolve_path}&#{@args}", user) }
   let(:miq_server) { EvmSpecHelper.local_miq_server }
 
   context "with a provision request object" do
-    let(:ems)   { FactoryGirl.create(:ems_amazon_with_authentication) }
-    let(:vm_template) { FactoryGirl.create(:template_amazon, :ext_management_system => ems) }
+    let(:ems)   { FactoryBot.create(:ems_amazon_with_authentication) }
+    let(:vm_template) { FactoryBot.create(:template_amazon, :ext_management_system => ems) }
     let(:options) { {:src_vm_id => [vm_template.id, vm_template.name], :pass => 1} }
     let(:miq_provision_request) do
-      FactoryGirl.create(:miq_provision_request,
+      FactoryBot.create(:miq_provision_request,
                          :provision_type => 'template',
                          :state => 'pending', :status => 'Ok',
                          :src_vm_id => vm_template.id,
@@ -24,7 +24,7 @@ describe "update_provision_status" do
     end
 
     let(:provision) do
-      FactoryGirl.create(:miq_provision_amazon, :provision_type => 'template',
+      FactoryBot.create(:miq_provision_amazon, :provision_type => 'template',
                          :state => 'pending', :status => 'Ok',
                          :miq_request => miq_provision_request,
                          :options => options, :userid => user.userid)
@@ -49,7 +49,7 @@ describe "update_provision_status" do
     end
     it "method succeeds with error" do
       type = :automate_user_error
-      FactoryGirl.create(:notification_type, :name => type)
+      FactoryBot.create(:notification_type, :name => type)
 
       @args = "status=fred&ae_result=error&MiqProvision::miq_provision=#{provision.id}&" \
               "MiqServer::miq_server=#{miq_server.id}"

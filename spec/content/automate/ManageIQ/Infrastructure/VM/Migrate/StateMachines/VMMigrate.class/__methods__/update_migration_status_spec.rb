@@ -2,14 +2,14 @@ require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Migrate::StateMachines::UpdateMigrationStatus do
   let(:miq_server) { EvmSpecHelper.local_miq_server }
-  let(:user) { FactoryGirl.create(:user_with_email_and_group) }
+  let(:user) { FactoryBot.create(:user_with_email_and_group) }
   let(:miq_request_task) do
-    FactoryGirl.create(:miq_request_task, :miq_request => request,
+    FactoryBot.create(:miq_request_task, :miq_request => request,
                        :source => vm, :state => 'fred')
   end
-  let(:request) { FactoryGirl.create(:vm_migrate_request, :requester => user) }
-  let(:ems) { FactoryGirl.create(:ems_vmware, :zone => FactoryGirl.create(:zone)) }
-  let(:vm) { FactoryGirl.create(:vm_vmware, :ems_id => ems.id, :evm_owner => user) }
+  let(:request) { FactoryBot.create(:vm_migrate_request, :requester => user) }
+  let(:ems) { FactoryBot.create(:ems_vmware, :zone => FactoryBot.create(:zone)) }
+  let(:vm) { FactoryBot.create(:vm_vmware, :ems_id => ems.id, :evm_owner => user) }
   let(:svc_model_miq_server) { MiqAeMethodService::MiqAeServiceMiqServer.find(miq_server.id) }
   let(:root_hash) do
     { 'vm_migrate_task' => MiqAeMethodService::MiqAeServiceMiqRequestTask.find(miq_request_task.id) }

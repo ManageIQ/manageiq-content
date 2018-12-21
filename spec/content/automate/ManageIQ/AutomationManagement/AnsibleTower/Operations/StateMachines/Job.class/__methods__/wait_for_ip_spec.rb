@@ -1,8 +1,8 @@
 require_domain_file
 
 describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::StateMachines::Job::WaitForIP do
-  let(:user) { FactoryGirl.create(:user_with_group) }
-  let(:vm) { FactoryGirl.create(:vm) }
+  let(:user) { FactoryBot.create(:user_with_group) }
+  let(:vm) { FactoryBot.create(:vm) }
   let(:klass) { MiqAeMethodService::MiqAeServiceVm }
   let(:svc_vm) { klass.find(vm.id) }
   let(:ip_addr) { ['1.1.1.1'] }

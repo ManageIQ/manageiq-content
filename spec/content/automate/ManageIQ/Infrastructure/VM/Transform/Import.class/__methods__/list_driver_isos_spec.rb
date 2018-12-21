@@ -17,7 +17,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListDriverIs
   end
 
   context 'with ISO domain added' do
-    let!(:provider) { FactoryGirl.create(:ems_redhat, :with_clusters, :iso_datastore => iso_datastore) }
+    let!(:provider) { FactoryBot.create(:ems_redhat, :with_clusters, :iso_datastore => iso_datastore) }
     let!(:iso_datastore) do
       iso_images = %w(
         virtio-win-1.9.0.iso
@@ -31,8 +31,8 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListDriverIs
         another-random-image.iso
         rhev-tools-setup.iso
         oVirt-toolsSetup-4.2-4.fc25.iso
-      ).map { |iso| FactoryGirl.create(:iso_image, :name => iso) }
-      FactoryGirl.create(:iso_datastore, :iso_images => iso_images)
+      ).map { |iso| FactoryBot.create(:iso_image, :name => iso) }
+      FactoryBot.create(:iso_datastore, :iso_images => iso_images)
     end
 
     it "should list iso images of selected infra provider's iso datastore" do
@@ -59,7 +59,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListDriverIs
   end
 
   context 'without ISO domain' do
-    let!(:provider) { FactoryGirl.create(:ems_redhat, :with_clusters) }
+    let!(:provider) { FactoryBot.create(:ems_redhat, :with_clusters) }
     let(:iso_domain) { nil }
 
     it 'should list informative message' do
