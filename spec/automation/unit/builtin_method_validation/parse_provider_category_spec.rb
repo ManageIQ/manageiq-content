@@ -1,48 +1,48 @@
 describe "parse_provider_category" do
-  let(:infra_ems)        { FactoryGirl.create(:ems_vmware_with_authentication) }
-  let(:infra_vm)         { FactoryGirl.create(:vm_vmware, :ems_id => infra_ems.id, :evm_owner => user) }
-  let(:migrate_request)  { FactoryGirl.create(:vm_migrate_request, :requester => user) }
-  let(:user)             { FactoryGirl.create(:user_with_group) }
+  let(:infra_ems)        { FactoryBot.create(:ems_vmware_with_authentication) }
+  let(:infra_vm)         { FactoryBot.create(:vm_vmware, :ems_id => infra_ems.id, :evm_owner => user) }
+  let(:migrate_request)  { FactoryBot.create(:vm_migrate_request, :requester => user) }
+  let(:user)             { FactoryBot.create(:user_with_group) }
   let(:inst)             { "/System/Process/parse_provider_category" }
-  let(:orch_retire_task) { FactoryGirl.create(:orchestration_stack_retire_task) }
+  let(:orch_retire_task) { FactoryBot.create(:orchestration_stack_retire_task) }
 
   let(:infra_miq_request_task) do
-    FactoryGirl.create(:miq_request_task, :miq_request => migrate_request, :source => infra_vm)
+    FactoryBot.create(:miq_request_task, :miq_request => migrate_request, :source => infra_vm)
   end
 
   let(:infra_vm_template) do
-    FactoryGirl.create(:template_microsoft,
+    FactoryBot.create(:template_microsoft,
                        :name                  => "template1",
                        :ext_management_system => infra_ems)
   end
 
   let(:infra_miq_provision) do
-    FactoryGirl.create(:miq_provision_microsoft,
+    FactoryBot.create(:miq_provision_microsoft,
                        :options => {:src_vm_id => infra_vm_template.id},
                        :userid  => user.userid,
                        :status  => 'Ok')
   end
 
   let(:infra_miq_provision_request) do
-    FactoryGirl.create(:miq_provision_request,
+    FactoryBot.create(:miq_provision_request,
                        :provision_type => 'template',
                        :state => 'pending', :status => 'Ok',
                        :src_vm_id => infra_vm_template.id,
                        :requester => user)
   end
 
-  let(:cloud_ems) { FactoryGirl.create(:ems_amazon_with_authentication) }
-  let(:cloud_vm)  { FactoryGirl.create(:vm_amazon, :ems_id => cloud_ems.id, :evm_owner => user) }
-  let(:stack)     { FactoryGirl.create(:orchestration_stack_amazon, :ext_management_system => cloud_ems) }
+  let(:cloud_ems) { FactoryBot.create(:ems_amazon_with_authentication) }
+  let(:cloud_vm)  { FactoryBot.create(:vm_amazon, :ems_id => cloud_ems.id, :evm_owner => user) }
+  let(:stack)     { FactoryBot.create(:orchestration_stack_amazon, :ext_management_system => cloud_ems) }
 
   let(:cloud_vm_template) do
-    FactoryGirl.create(:template_amazon,
+    FactoryBot.create(:template_amazon,
                        :name                  => "template1",
                        :ext_management_system => cloud_ems)
   end
 
   let(:cloud_miq_provision) do
-    FactoryGirl.create(:miq_provision_amazon,
+    FactoryBot.create(:miq_provision_amazon,
                        :options => {:src_vm_id => cloud_vm_template.id},
                        :userid  => user.userid,
                        :state   => 'active',

@@ -1,15 +1,15 @@
 require_domain_file
 
 describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Service::Provisioning::StateMachines::Provision::CheckProvisioned do
-  let(:admin) { FactoryGirl.create(:user_admin) }
-  let(:request) { FactoryGirl.create(:service_template_provision_request, :requester => admin) }
-  let(:service_ansible_tower) { FactoryGirl.create(:service_ansible_tower) }
-  let(:task) { FactoryGirl.create(:service_template_provision_task, :destination => service_ansible_tower, :miq_request => request) }
+  let(:admin) { FactoryBot.create(:user_admin) }
+  let(:request) { FactoryBot.create(:service_template_provision_request, :requester => admin) }
+  let(:service_ansible_tower) { FactoryBot.create(:service_ansible_tower) }
+  let(:task) { FactoryBot.create(:service_template_provision_task, :destination => service_ansible_tower, :miq_request => request) }
   let(:svc_task) { MiqAeMethodService::MiqAeServiceServiceTemplateProvisionTask.find(task.id) }
   let(:root_object) { Spec::Support::MiqAeMockObject.new('service_template_provision_task' => svc_task) }
   let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
   let(:job_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_AutomationManager_Job }
-  let(:job) { FactoryGirl.create(:ansible_tower_job) }
+  let(:job) { FactoryBot.create(:ansible_tower_job) }
   let(:ok_status) { %w(create_complete ok) }
   let(:running_status) { %w(running ok) }
   let(:bad_status) { %w(create_failed bad) }

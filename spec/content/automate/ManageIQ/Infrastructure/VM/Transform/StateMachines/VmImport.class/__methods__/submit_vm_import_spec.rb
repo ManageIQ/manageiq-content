@@ -1,9 +1,9 @@
 require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Transform::StateMachines::SubmitVmImport do
-  let(:user)        { FactoryGirl.create(:user_admin) }
-  let(:vm)          { FactoryGirl.create(:vm_vmware) }
-  let(:provider)    { FactoryGirl.create(:ems_redhat) }
+  let(:user)        { FactoryBot.create(:user_admin) }
+  let(:vm)          { FactoryBot.create(:vm_vmware) }
+  let(:provider)    { FactoryBot.create(:ems_redhat) }
 
   let(:svc_model_user)     { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_vm)       { MiqAeMethodService::MiqAeServiceManageIQ_Providers_Vmware_InfraManager_Vm.find(vm.id) }

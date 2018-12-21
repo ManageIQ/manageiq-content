@@ -1,9 +1,9 @@
 require_domain_file
 
 describe ManageIQ::Automate::System::Event::StateMachines::Refresh::TargetRefresh do
-  let(:ems)         { FactoryGirl.create(:ems_vmware) }
-  let(:vm)          { FactoryGirl.create(:vm_vmware, :ext_management_system => ems) }
-  let(:event)       { FactoryGirl.create(:ems_event, :vm_or_template => vm) }
+  let(:ems)         { FactoryBot.create(:ems_vmware) }
+  let(:vm)          { FactoryBot.create(:vm_vmware, :ext_management_system => ems) }
+  let(:event)       { FactoryBot.create(:ems_event, :vm_or_template => vm) }
   let(:svc_event)   { MiqAeMethodService::MiqAeServiceEventStream.find(event.id) }
   let(:root_object) { Spec::Support::MiqAeMockObject.new('event_stream' => event) }
   let(:ae_service) do

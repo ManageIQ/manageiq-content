@@ -1,9 +1,9 @@
 require_domain_file
 
 describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::AvailableCredentials do
-  let(:ansible_manager) { FactoryGirl.create(:automation_manager_ansible_tower) }
+  let(:ansible_manager) { FactoryBot.create(:automation_manager_ansible_tower) }
   let(:job_template) do
-    FactoryGirl.create(:ansible_configuration_script, :manager => ansible_manager)
+    FactoryBot.create(:ansible_configuration_script, :manager => ansible_manager)
   end
   let(:root_object) do
     Spec::Support::MiqAeMockObject.new('service_template' => svc_service_template)
@@ -22,7 +22,7 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Ava
   end
   let(:ra) { {:action => 'Provision', :configuration_template => job_template} }
   let(:svc_template) do
-    FactoryGirl.create(:service_template_ansible_playbook).tap do |st|
+    FactoryBot.create(:service_template_ansible_playbook).tap do |st|
       st.resource_actions.build(ra)
       st.save
     end
@@ -31,16 +31,16 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Ava
     MiqAeMethodService::MiqAeServiceServiceTemplate.find(svc_template.id)
   end
   let(:mach_cred1) do
-    FactoryGirl.create(:ansible_machine_credential, :resource => ansible_manager)
+    FactoryBot.create(:ansible_machine_credential, :resource => ansible_manager)
   end
   let(:mach_cred2) do
-    FactoryGirl.create(:ansible_machine_credential, :resource => ansible_manager)
+    FactoryBot.create(:ansible_machine_credential, :resource => ansible_manager)
   end
   let(:net_cred1) do
-    FactoryGirl.create(:ansible_network_credential, :resource => ansible_manager)
+    FactoryBot.create(:ansible_network_credential, :resource => ansible_manager)
   end
   let(:net_cred2) do
-    FactoryGirl.create(:ansible_network_credential, :resource => ansible_manager)
+    FactoryBot.create(:ansible_network_credential, :resource => ansible_manager)
   end
 
   shared_examples_for "#having only default value" do
@@ -93,7 +93,7 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Ava
     end
 
     context "no service template" do
-      let(:ansible_manager) { FactoryGirl.create(:embedded_automation_manager_ansible) }
+      let(:ansible_manager) { FactoryBot.create(:embedded_automation_manager_ansible) }
       let(:root_object) do
         Spec::Support::MiqAeMockObject.new
       end

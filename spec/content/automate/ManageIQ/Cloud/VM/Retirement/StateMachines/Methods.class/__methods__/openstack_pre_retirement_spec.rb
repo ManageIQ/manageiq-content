@@ -2,8 +2,8 @@ require_domain_file
 
 describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::OpenstackPreRetirement do
   let(:svc_vm)         { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }
-  let(:ems)            { FactoryGirl.create(:ems_vmware) }
-  let(:vm)             { FactoryGirl.create(:vm_vmware, :ems_id => ems.id) }
+  let(:ems)            { FactoryBot.create(:ems_vmware) }
+  let(:vm)             { FactoryBot.create(:vm_vmware, :ems_id => ems.id) }
   let(:root_object)    { Spec::Support::MiqAeMockObject.new(root_hash) }
   let(:root_hash)      { { 'vm' => svc_vm } }
 
@@ -29,7 +29,7 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::Open
     end
 
     context 'poweredOff vm' do
-      let(:vm) { FactoryGirl.create(:vm_vmware, :ems_id => ems.id, :raw_power_state => 'poweredOff') }
+      let(:vm) { FactoryBot.create(:vm_vmware, :ems_id => ems.id, :raw_power_state => 'poweredOff') }
       it_behaves_like 'Not calling suspend'
     end
 
@@ -39,7 +39,7 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::Open
     end
 
     context 'nil ems' do
-      let(:vm) { FactoryGirl.create(:vm_vmware) }
+      let(:vm) { FactoryBot.create(:vm_vmware) }
       it_behaves_like 'Not calling suspend'
     end
   end

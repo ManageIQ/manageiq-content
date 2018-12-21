@@ -9,15 +9,15 @@ describe "task_finished_status" do
     "#{instance}?#{namespace}&#{klass}&#{method}"
   end
 
-  let(:user) { FactoryGirl.create(:user_with_group) }
+  let(:user) { FactoryBot.create(:user_with_group) }
   let(:ws) { MiqAeEngine.instantiate("#{build_resolve_path}&#{@args}", user) }
   let(:miq_server) { EvmSpecHelper.local_miq_server }
-  let(:ems) { FactoryGirl.create(:ems_vmware_with_authentication) }
-  let(:vm_template) { FactoryGirl.create(:template_vmware, :ext_management_system => ems) }
-  let(:vm) { FactoryGirl.create(:vm_vmware, :ext_management_system => ems) }
+  let(:ems) { FactoryBot.create(:ems_vmware_with_authentication) }
+  let(:vm_template) { FactoryBot.create(:template_vmware, :ext_management_system => ems) }
+  let(:vm) { FactoryBot.create(:vm_vmware, :ext_management_system => ems) }
   let(:options) { {:src_vm_id => [vm_template.id, vm_template.name], :pass => 1} }
   let(:miq_provision_request) do
-    FactoryGirl.create(:miq_provision_request,
+    FactoryBot.create(:miq_provision_request,
                        :provision_type => 'template',
                        :state => 'pending', :status => 'Ok',
                        :src_vm_id => vm_template.id,
@@ -25,7 +25,7 @@ describe "task_finished_status" do
   end
 
   let(:provision) do
-    FactoryGirl.create(:miq_provision_vmware, :provision_type => 'template',
+    FactoryBot.create(:miq_provision_vmware, :provision_type => 'template',
                        :state => 'pending', :status => 'Ok',
                        :miq_request => miq_provision_request,
                        :options => options, :userid => user.userid, :vm => vm)
@@ -33,7 +33,7 @@ describe "task_finished_status" do
 
   it "miq_provision method succeeds" do
     type = :automate_vm_provisioned
-    FactoryGirl.create(:notification_type, :name => type)
+    FactoryBot.create(:notification_type, :name => type)
 
     msg = "[#{miq_server.name}] VM [] Provisioned Successfully"
     @args = "status=fred&ae_result=ok&MiqProvision::miq_provision=#{provision.id}&" \

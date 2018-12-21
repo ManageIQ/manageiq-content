@@ -2,10 +2,10 @@ require_domain_file
 require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Transformation/Common.class/__methods__/utils.rb')
 
 describe ManageIQ::Automate::Transformation::Common::AcquireTransformationHost do
-  let(:user) { FactoryGirl.create(:user_with_email_and_group) }
-  let(:task) { FactoryGirl.create(:service_template_transformation_plan_task) }
+  let(:user) { FactoryBot.create(:user_with_email_and_group) }
+  let(:task) { FactoryBot.create(:service_template_transformation_plan_task) }
   let(:vm) { FactoryBot.create(:vm_or_template) }
-  let(:conversion_host) { FactoryGirl.create(:conversion_host, :resource => vm) }
+  let(:conversion_host) { FactoryBot.create(:conversion_host, :resource => vm) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_task) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask.find(task.id) }

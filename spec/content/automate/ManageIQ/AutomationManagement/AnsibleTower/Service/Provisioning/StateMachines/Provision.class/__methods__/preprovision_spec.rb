@@ -1,10 +1,10 @@
 require_domain_file
 
 describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Service::Provisioning::StateMachines::Provision::Preprovision do
-  let(:ansible_tower_manager) { FactoryGirl.create(:configuration_manager) }
-  let(:job_template) { FactoryGirl.create(:ansible_configuration_script, :manager => ansible_tower_manager) }
-  let(:service_ansible_tower) { FactoryGirl.create(:service_ansible_tower, :job_template => job_template) }
-  let(:task) { FactoryGirl.create(:service_template_provision_task, :destination => service_ansible_tower) }
+  let(:ansible_tower_manager) { FactoryBot.create(:configuration_manager) }
+  let(:job_template) { FactoryBot.create(:ansible_configuration_script, :manager => ansible_tower_manager) }
+  let(:service_ansible_tower) { FactoryBot.create(:service_ansible_tower, :job_template => job_template) }
+  let(:task) { FactoryBot.create(:service_template_provision_task, :destination => service_ansible_tower) }
   let(:svc_task) { MiqAeMethodService::MiqAeServiceServiceTemplateProvisionTask.find(task.id) }
   let(:root_object) { Spec::Support::MiqAeMockObject.new('service_template_provision_task' => svc_task) }
   let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }

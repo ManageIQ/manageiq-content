@@ -2,10 +2,10 @@ require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListStorages do
   let(:provider) do
-    FactoryGirl.create(:ems_redhat, :hosts => [FactoryGirl.create(:host_redhat, :storage_redhat, :storage_count => 3)])
+    FactoryBot.create(:ems_redhat, :hosts => [FactoryBot.create(:host_redhat, :storage_redhat, :storage_count => 3)])
   end
 
-  let(:vm) { FactoryGirl.create(:vm) }
+  let(:vm) { FactoryBot.create(:vm) }
 
   let(:root_object) do
     Spec::Support::MiqAeMockObject.new(

@@ -1,7 +1,7 @@
 require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListTagNames do
-  let(:provider) { FactoryGirl.create(:ems_redhat) }
+  let(:provider) { FactoryBot.create(:ems_redhat) }
 
   let(:root_object) do
     Spec::Support::MiqAeMockObject.new(
@@ -19,7 +19,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListTagNames
   end
 
   def create_tags
-    FactoryGirl.create(:classification_department_with_tags)
+    FactoryBot.create(:classification_department_with_tags)
   end
 
   it 'should return list of categories' do

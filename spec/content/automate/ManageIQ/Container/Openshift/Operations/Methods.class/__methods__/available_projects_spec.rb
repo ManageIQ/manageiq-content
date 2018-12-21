@@ -12,8 +12,8 @@ describe ManageIQ::Automate::Container::Openshift::Operations::AvailableProjects
       service.object = current_object
     end
   end
-  let(:container_template) { FactoryGirl.create(:container_template, :name => 'my-template', :ems_id => ems.id) }
-  let(:ems) { FactoryGirl.create(:ems_openshift) }
+  let(:container_template) { FactoryBot.create(:container_template, :name => 'my-template', :ems_id => ems.id) }
+  let(:ems) { FactoryBot.create(:ems_openshift) }
 
   shared_examples_for "#having only default value" do
     let(:default_desc_blank) { "<none>" }
@@ -27,7 +27,7 @@ describe ManageIQ::Automate::Container::Openshift::Operations::AvailableProjects
   end
 
   shared_examples_for "#having the only project" do
-    let(:project) { FactoryGirl.create(:container_project, :name => 'my-project', :ems_id => ems.id) }
+    let(:project) { FactoryBot.create(:container_project, :name => 'my-project', :ems_id => ems.id) }
 
     it "finds the only project and set it as the only item in the list" do
       project
@@ -40,8 +40,8 @@ describe ManageIQ::Automate::Container::Openshift::Operations::AvailableProjects
 
   shared_examples_for "#having all projects" do
     let(:default_desc) { "<select>" }
-    let(:project1) { FactoryGirl.create(:container_project, :name => 'my-project1', :ems_id => ems.id) }
-    let(:project2) { FactoryGirl.create(:container_project, :name => 'my-project2', :ems_id => ems.id) }
+    let(:project1) { FactoryBot.create(:container_project, :name => 'my-project1', :ems_id => ems.id) }
+    let(:project2) { FactoryBot.create(:container_project, :name => 'my-project2', :ems_id => ems.id) }
 
     it "finds all of the projects and populates the list" do
       project1
@@ -64,14 +64,14 @@ describe ManageIQ::Automate::Container::Openshift::Operations::AvailableProjects
   end
 
   context "workspace has service template other than container" do
-    let(:service_template) { FactoryGirl.create(:service_template) }
+    let(:service_template) { FactoryBot.create(:service_template) }
 
     it_behaves_like "#having only default value"
   end
 
   context "workspace has container template service template" do
     let(:service_template) do
-      FactoryGirl.create(:service_template_container_template).tap do |service_template|
+      FactoryBot.create(:service_template_container_template).tap do |service_template|
         allow(ServiceTemplate).to receive(:find).with(service_template.id).and_return(service_template)
         allow(service_template).to receive(:container_template).and_return(container_template)
       end

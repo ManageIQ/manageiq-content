@@ -1,9 +1,9 @@
 describe "azure_pre_retirement Method Validation" do
   before do
-    @user = FactoryGirl.create(:user_with_group)
-    @zone = FactoryGirl.create(:zone)
-    @ems  = FactoryGirl.create(:ems_azure, :zone => @zone)
-    @vm   = FactoryGirl.create(:vm_azure,
+    @user = FactoryBot.create(:user_with_group)
+    @zone = FactoryBot.create(:zone)
+    @ems  = FactoryBot.create(:ems_azure, :zone => @zone)
+    @vm   = FactoryBot.create(:vm_azure,
                                :name => "AZURE",   :raw_power_state => "VM Running",
                                :ems_id => @ems.id, :registered => true)
     @ins  = "/Cloud/VM/Retirement/StateMachines/Methods/PreRetirement"

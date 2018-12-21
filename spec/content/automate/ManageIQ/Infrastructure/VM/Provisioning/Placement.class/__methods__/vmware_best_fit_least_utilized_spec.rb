@@ -2,11 +2,11 @@ require_domain_file
 require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/System/CommonMethods/Utils.class/__methods__/log_object.rb')
 
 describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::VmwareBestFitLeastUtilized do
-  let(:datacenter)  { FactoryGirl.create(:datacenter, :ext_management_system => ems) }
-  let(:ems)         { FactoryGirl.create(:ems_vmware_with_authentication) }
-  let(:ems_cluster) { FactoryGirl.create(:ems_cluster, :ext_management_system => ems) }
+  let(:datacenter)  { FactoryBot.create(:datacenter, :ext_management_system => ems) }
+  let(:ems)         { FactoryBot.create(:ems_vmware_with_authentication) }
+  let(:ems_cluster) { FactoryBot.create(:ems_cluster, :ext_management_system => ems) }
   let(:miq_provision) do
-    FactoryGirl.create(:miq_provision_vmware,
+    FactoryBot.create(:miq_provision_vmware,
                        :options      => {:src_vm_id => vm_template.id, :placement_auto => [true, 1]},
                        :userid       => user.userid,
                        :source       => vm_template,
@@ -14,8 +14,8 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
                        :state        => 'active',
                        :status       => 'Ok')
   end
-  let(:user)        { FactoryGirl.create(:user_with_group) }
-  let(:vm_template) { FactoryGirl.create(:template_vmware, :ext_management_system => ems) }
+  let(:user)        { FactoryBot.create(:user_with_group) }
+  let(:vm_template) { FactoryBot.create(:template_vmware, :ext_management_system => ems) }
 
   let(:svc_miq_provision) { MiqAeMethodService::MiqAeServiceMiqProvision.find(miq_provision.id) }
   let(:root_object) { Spec::Support::MiqAeMockObject.new(:miq_provision => svc_miq_provision) }
@@ -34,19 +34,19 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
   end
 
   context "Auto placement" do
-    let(:storages) { Array.new(4) { |r| FactoryGirl.create(:storage, :free_space => 1000 * (r + 1)) } }
-    let(:ro_storage) { FactoryGirl.create(:storage, :free_space => 10_000) }
-    let(:storage_profile) { FactoryGirl.create(:storage_profile) }
+    let(:storages) { Array.new(4) { |r| FactoryBot.create(:storage, :free_space => 1000 * (r + 1)) } }
+    let(:ro_storage) { FactoryBot.create(:storage, :free_space => 10_000) }
+    let(:storage_profile) { FactoryBot.create(:storage_profile) }
 
-    let(:vms) { Array.new(5) { FactoryGirl.create(:vm_vmware) } }
+    let(:vms) { Array.new(5) { FactoryBot.create(:vm_vmware) } }
 
     # host1 has two small  storages and 2 vms
     # host2 has two larger storages and 3 vms
     # host3 has one larger read-only datastore and one smaller writable datastore
-    let(:host1) { FactoryGirl.create(:host_vmware, :storages => storages[0..1], :vms => vms[2..3], :ext_management_system => ems) }
-    let(:host2) { FactoryGirl.create(:host_vmware, :storages => storages[0..1], :vms => vms[2..4], :ext_management_system => ems) }
-    let(:host3) { FactoryGirl.create(:host_vmware, :storages => [ro_storage, storages[2]], :vms => vms[2..4], :ext_management_system => ems) }
-    let(:host4) { FactoryGirl.create(:host_vmware, :storages => storages[0..2], :vms => vms[2..4], :ext_management_system => ems) }
+    let(:host1) { FactoryBot.create(:host_vmware, :storages => storages[0..1], :vms => vms[2..3], :ext_management_system => ems) }
+    let(:host2) { FactoryBot.create(:host_vmware, :storages => storages[0..1], :vms => vms[2..4], :ext_management_system => ems) }
+    let(:host3) { FactoryBot.create(:host_vmware, :storages => [ro_storage, storages[2]], :vms => vms[2..4], :ext_management_system => ems) }
+    let(:host4) { FactoryBot.create(:host_vmware, :storages => storages[0..2], :vms => vms[2..4], :ext_management_system => ems) }
 
     let(:host_struct) do
       [MiqHashStruct.new(:id => host1.id, :evm_object_class => host1.class.base_class.name.to_sym),

@@ -2,12 +2,12 @@ require_domain_file
 
 describe ManageIQ::Automate::Cloud::VM::Provisioning::Placement::BestFitGoogle do
   let(:root_object)    { Spec::Support::MiqAeMockObject.new.tap { |ro| ro["miq_provision"] = svc_provision } }
-  let(:ems)            { FactoryGirl.create(:ems_google_with_authentication) }
-  let(:network)        { FactoryGirl.create(:cloud_network) }
+  let(:ems)            { FactoryBot.create(:ems_google_with_authentication) }
+  let(:network)        { FactoryBot.create(:cloud_network) }
   let(:prov_options)   { { :src_vm_id => vm_template.id } }
-  let(:miq_provision)  { FactoryGirl.create(:miq_provision, :options => prov_options) }
-  let(:vm_template)    { FactoryGirl.create(:template_google, :ext_management_system => ems) }
-  let(:availability_zone) { FactoryGirl.create(:availability_zone) }
+  let(:miq_provision)  { FactoryBot.create(:miq_provision, :options => prov_options) }
+  let(:vm_template)    { FactoryBot.create(:template_google, :ext_management_system => ems) }
+  let(:availability_zone) { FactoryBot.create(:availability_zone) }
 
   let(:ae_service) do
     Spec::Support::MiqAeMockService.new(root_object).tap do |service|

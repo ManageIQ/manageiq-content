@@ -7,7 +7,7 @@ describe ManageIQ::Automate::System::Request::Inspectme do
       'current' => current_object
     )
   end
-  let(:user) { FactoryGirl.create(:user_with_email_and_group) }
+  let(:user) { FactoryBot.create(:user_with_email_and_group) }
   let(:current_object) { Spec::Support::MiqAeMockObject.new('a' => 1, 'b' => 2) }
   let(:ae_service) do
     Spec::Support::MiqAeMockService.new(root).tap do |service|

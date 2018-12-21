@@ -4,7 +4,7 @@ describe ManageIQ::Automate::Cloud::VM::Provisioning::Profile::VmDialogNamePrefi
   let(:platform)        { 'test_platform' }
   let(:root_hash)       { { 'platform' => platform } }
   let(:root_object)     { Spec::Support::MiqAeMockObject.new(root_hash) }
-  let(:vm_template)     { FactoryGirl.create(:template_amazon) }
+  let(:vm_template)     { FactoryBot.create(:template_amazon) }
   let(:svc_vm_template) { MiqAeMethodService::MiqAeServiceVmOrTemplate.find(vm_template.id) }
 
   let(:ae_service) do

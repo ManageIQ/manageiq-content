@@ -1,14 +1,14 @@
 describe "GOOGLE best fit" do
-  let(:availability_zone) { FactoryGirl.create(:availability_zone_google) }
-  let(:cloud_network)     { FactoryGirl.create(:cloud_network_google, :ems_id => ems.network_manager.id, :enabled => true) }
-  let(:cloud_subnet)      { FactoryGirl.create(:cloud_subnet_google, :cloud_network_id => cloud_network.id) }
+  let(:availability_zone) { FactoryBot.create(:availability_zone_google) }
+  let(:cloud_network)     { FactoryBot.create(:cloud_network_google, :ems_id => ems.network_manager.id, :enabled => true) }
+  let(:cloud_subnet)      { FactoryBot.create(:cloud_subnet_google, :cloud_network_id => cloud_network.id) }
   let(:ems)               do
-    FactoryGirl.create(:ems_google_with_authentication,
+    FactoryBot.create(:ems_google_with_authentication,
                        :availability_zones => [availability_zone])
   end
-  let(:m2_small_flavor)   { FactoryGirl.create(:flavor_google, :ems_id => ems.id, :cloud_subnet_required => false) }
+  let(:m2_small_flavor)   { FactoryBot.create(:flavor_google, :ems_id => ems.id, :cloud_subnet_required => false) }
   let(:miq_provision)     do
-    FactoryGirl.create(:miq_provision_google,
+    FactoryBot.create(:miq_provision_google,
                        :options => options,
                        :userid  => user.userid,
                        :state   => 'active',
@@ -19,8 +19,8 @@ describe "GOOGLE best fit" do
      :placement_auto => [true, 1],
      :instance_type  => [m2_small_flavor.id, m2_small_flavor.name]}
   end
-  let(:user)              { FactoryGirl.create(:user_with_group) }
-  let(:vm_template)       { FactoryGirl.create(:template_google, :ext_management_system => ems) }
+  let(:user)              { FactoryBot.create(:user_with_group) }
+  let(:vm_template)       { FactoryBot.create(:template_google, :ext_management_system => ems) }
 
   let(:ws) do
     MiqAeEngine.instantiate("/System/Request/Call_Instance_With_Message?" \

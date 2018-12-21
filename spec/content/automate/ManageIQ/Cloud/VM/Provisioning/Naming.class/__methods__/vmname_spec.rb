@@ -1,19 +1,19 @@
 require_domain_file
 
 describe ManageIQ::Automate::Cloud::VM::Provisioning::Naming::VmName do
-  let(:template) { FactoryGirl.create(:template) }
+  let(:template) { FactoryBot.create(:template) }
   let(:provision) { MiqProvision.new }
   let(:root_object) { Spec::Support::MiqAeMockObject.new.tap { |ro| ro["miq_provision"] = provision } }
   let(:service) { Spec::Support::MiqAeMockService.new(root_object).tap { |s| s.object = {'vm_prefix' => "abc"} } }
-  let(:classification) { FactoryGirl.create(:classification, :tag => tag, :name => "environment") }
+  let(:classification) { FactoryBot.create(:classification, :tag => tag, :name => "environment") }
   let(:classification2) do
-    FactoryGirl.create(:classification,
+    FactoryBot.create(:classification,
                        :tag    => tag2,
                        :parent => classification,
                        :name   => "prod")
   end
-  let(:tag) { FactoryGirl.create(:tag, :name => "/managed/environment") }
-  let(:tag2) { FactoryGirl.create(:tag, :name => "/managed/environment/production") }
+  let(:tag) { FactoryBot.create(:tag, :name => "/managed/environment") }
+  let(:tag2) { FactoryBot.create(:tag, :name => "/managed/environment/production") }
 
   context "#main" do
     before do

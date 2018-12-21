@@ -1,5 +1,5 @@
 describe "Orchestration retirement state machine Methods Validation" do
-  let(:user) { FactoryGirl.create(:user_with_group) }
+  let(:user) { FactoryBot.create(:user_with_group) }
   let(:ws) do
     @ae_state   = {'stack_exists_in_provider' => stack_in_provider}
     MiqAeEngine.instantiate("/Cloud/Orchestration/Retirement/StateMachines/Methods/#{method_name}?" \
@@ -8,7 +8,7 @@ describe "Orchestration retirement state machine Methods Validation" do
   end
 
   let(:stack) do
-    FactoryGirl.create(:orchestration_stack_cloud)
+    FactoryBot.create(:orchestration_stack_cloud)
   end
 
   let(:stack_in_provider) { true }

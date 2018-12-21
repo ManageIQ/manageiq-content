@@ -1,12 +1,12 @@
 require_domain_file
 
 describe ManageIQ::Automate::Cloud::Orchestration::Reconfiguration::StateMachines::PostReconfigure do
-  let(:request)               { FactoryGirl.create(:service_template_provision_request, :requester => user) }
-  let(:service_orchestration) { FactoryGirl.create(:service_orchestration) }
-  let(:user)                  { FactoryGirl.create(:user_with_group) }
-  let(:output)                { FactoryGirl.create(:orchestration_stack_output, :key => 'key', :value => 'value') }
-  let(:orchestration_stack)   { FactoryGirl.create(:orchestration_stack_amazon, :name => "name", :outputs => [output]) }
-  let(:miq_request_task)      { FactoryGirl.create(:service_reconfigure_task, :request_type => 'service_reconfigure') }
+  let(:request)               { FactoryBot.create(:service_template_provision_request, :requester => user) }
+  let(:service_orchestration) { FactoryBot.create(:service_orchestration) }
+  let(:user)                  { FactoryBot.create(:user_with_group) }
+  let(:output)                { FactoryBot.create(:orchestration_stack_output, :key => 'key', :value => 'value') }
+  let(:orchestration_stack)   { FactoryBot.create(:orchestration_stack_amazon, :name => "name", :outputs => [output]) }
+  let(:miq_request_task)      { FactoryBot.create(:service_reconfigure_task, :request_type => 'service_reconfigure') }
 
   let(:root_hash) do
     { 'service_template' => MiqAeMethodService::MiqAeServiceService.find(service_orchestration.id) }

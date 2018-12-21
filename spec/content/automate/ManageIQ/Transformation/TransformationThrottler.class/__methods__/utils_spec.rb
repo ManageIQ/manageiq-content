@@ -1,24 +1,24 @@
 require_domain_file
 
 describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
-  let(:user) { FactoryGirl.create(:user_with_email_and_group) }
-  let(:automation_task) { FactoryGirl.create(:automation_task) }
-  let(:automation_request_1) { FactoryGirl.create(:automation_request) }
-  let(:automation_request_2) { FactoryGirl.create(:automation_request) }
-  let(:automation_request_3) { FactoryGirl.create(:automation_request) }
-  let(:src_cluster) { FactoryGirl.create(:ems_cluster) }
-  let(:src_vm_1) { FactoryGirl.create(:vm_or_template, :ems_cluster => src_cluster) }
-  let(:src_vm_2) { FactoryGirl.create(:vm_or_template, :ems_cluster => src_cluster) }
-  let(:src_vm_3) { FactoryGirl.create(:vm_or_template, :ems_cluster => src_cluster) }
-  let(:dst_ems_1) { FactoryGirl.create(:ext_management_system) }
-  let(:dst_ems_2) { FactoryGirl.create(:ext_management_system) }
-  let(:dst_cluster) { FactoryGirl.create(:ems_cluster, :ext_management_system => dst_ems_1) }
-  let(:dst_host_1) { FactoryGirl.create(:host, :ext_management_system => dst_ems_1) }
-  let(:dst_host_2) { FactoryGirl.create(:host, :ext_management_system => dst_ems_1) }
-  let(:dst_host_3) { FactoryGirl.create(:host, :ext_management_system => dst_ems_2) }
-  let(:conversion_host_1) { FactoryGirl.create(:conversion_host, :resource => dst_host_1) }
-  let(:conversion_host_2) { FactoryGirl.create(:conversion_host, :resource => dst_host_2) }
-  let(:conversion_host_3) { FactoryGirl.create(:conversion_host, :resource => dst_host_3) }
+  let(:user) { FactoryBot.create(:user_with_email_and_group) }
+  let(:automation_task) { FactoryBot.create(:automation_task) }
+  let(:automation_request_1) { FactoryBot.create(:automation_request) }
+  let(:automation_request_2) { FactoryBot.create(:automation_request) }
+  let(:automation_request_3) { FactoryBot.create(:automation_request) }
+  let(:src_cluster) { FactoryBot.create(:ems_cluster) }
+  let(:src_vm_1) { FactoryBot.create(:vm_or_template, :ems_cluster => src_cluster) }
+  let(:src_vm_2) { FactoryBot.create(:vm_or_template, :ems_cluster => src_cluster) }
+  let(:src_vm_3) { FactoryBot.create(:vm_or_template, :ems_cluster => src_cluster) }
+  let(:dst_ems_1) { FactoryBot.create(:ext_management_system) }
+  let(:dst_ems_2) { FactoryBot.create(:ext_management_system) }
+  let(:dst_cluster) { FactoryBot.create(:ems_cluster, :ext_management_system => dst_ems_1) }
+  let(:dst_host_1) { FactoryBot.create(:host, :ext_management_system => dst_ems_1) }
+  let(:dst_host_2) { FactoryBot.create(:host, :ext_management_system => dst_ems_1) }
+  let(:dst_host_3) { FactoryBot.create(:host, :ext_management_system => dst_ems_2) }
+  let(:conversion_host_1) { FactoryBot.create(:conversion_host, :resource => dst_host_1) }
+  let(:conversion_host_2) { FactoryBot.create(:conversion_host, :resource => dst_host_2) }
+  let(:conversion_host_3) { FactoryBot.create(:conversion_host, :resource => dst_host_3) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_automation_task) { MiqAeMethodService::MiqAeServiceAutomationTask.find(automation_task.id) }
@@ -40,10 +40,10 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
   let(:svc_model_conversion_host_3) { MiqAeMethodService::MiqAeServiceConversionHost.find(conversion_host_3.id) }
 
   let(:mapping) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :transformation_mapping,
       :transformation_mapping_items => [
-        FactoryGirl.create(:transformation_mapping_item, :source => src_cluster, :destination => dst_cluster),
+        FactoryBot.create(:transformation_mapping_item, :source => src_cluster, :destination => dst_cluster),
       ]
     )
   end
@@ -64,10 +64,10 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
   end
 
   let(:plan) { ServiceTemplateTransformationPlan.create_catalog_item(catalog_item_options) }
-  let(:request) { FactoryGirl.create(:service_template_transformation_plan_request, :source => plan) }
-  let(:transformation_task_1) { FactoryGirl.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_1) }
-  let(:transformation_task_2) { FactoryGirl.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_2) }
-  let(:transformation_task_3) { FactoryGirl.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_3) }
+  let(:request) { FactoryBot.create(:service_template_transformation_plan_request, :source => plan) }
+  let(:transformation_task_1) { FactoryBot.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_1) }
+  let(:transformation_task_2) { FactoryBot.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_2) }
+  let(:transformation_task_3) { FactoryBot.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_3) }
 
   let(:root) do
     Spec::Support::MiqAeMockObject.new(
@@ -218,7 +218,7 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
 
   context "#launch" do
     it "with default values" do
-      user_admin = FactoryGirl.create(:user, :userid => 'admin')
+      user_admin = FactoryBot.create(:user, :userid => 'admin')
       expect(ae_service).to receive(:execute).with(
         :create_automation_request,
         {

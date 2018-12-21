@@ -2,17 +2,17 @@ require_domain_file
 
 describe ManageIQ::Automate::Service::Provisioning::StateMachines::
           ServiceProvision_Template::UpdateServiceProvisionStatus do
-  let(:user)                  { FactoryGirl.create(:user_with_group) }
+  let(:user)                  { FactoryBot.create(:user_with_group) }
   let(:miq_server)            { EvmSpecHelper.local_miq_server }
-  let(:service_orchestration) { FactoryGirl.create(:service_orchestration) }
+  let(:service_orchestration) { FactoryBot.create(:service_orchestration) }
 
   let(:miq_request_task) do
-    FactoryGirl.create(:miq_request_task, :destination => service_orchestration,
+    FactoryBot.create(:miq_request_task, :destination => service_orchestration,
                        :miq_request => request, :state => 'fred')
   end
 
   let(:request) do
-    FactoryGirl.create(:service_template_provision_request, :requester => user)
+    FactoryBot.create(:service_template_provision_request, :requester => user)
   end
 
   let(:ae_service) do

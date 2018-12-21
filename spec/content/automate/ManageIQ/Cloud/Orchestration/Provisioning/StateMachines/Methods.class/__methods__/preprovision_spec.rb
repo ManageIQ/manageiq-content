@@ -1,20 +1,20 @@
 require_domain_file
 
 describe ManageIQ::Automate::Cloud::Orchestration::Provisioning::StateMachines::PreProvision do
-  let(:request)                 { FactoryGirl.create(:service_template_provision_request, :requester => user) }
-  let(:user)                    { FactoryGirl.create(:user_with_group) }
-  let(:ems_amazon)              { FactoryGirl.create(:ems_amazon) }
-  let(:orchestration_template)  { FactoryGirl.create(:orchestration_template) }
+  let(:request)                 { FactoryBot.create(:service_template_provision_request, :requester => user) }
+  let(:user)                    { FactoryBot.create(:user_with_group) }
+  let(:ems_amazon)              { FactoryBot.create(:ems_amazon) }
+  let(:orchestration_template)  { FactoryBot.create(:orchestration_template) }
 
   let(:service_orchestration) do
-    FactoryGirl.create(:service_orchestration,
+    FactoryBot.create(:service_orchestration,
                        :orchestration_manager  => ems_amazon,
                        :orchestration_template => orchestration_template,
                        :stack_name             => 'stack_name')
   end
 
   let(:miq_request_task) do
-    FactoryGirl.create(:miq_request_task,
+    FactoryBot.create(:miq_request_task,
                        :destination => service_orchestration,
                        :miq_request => request)
   end

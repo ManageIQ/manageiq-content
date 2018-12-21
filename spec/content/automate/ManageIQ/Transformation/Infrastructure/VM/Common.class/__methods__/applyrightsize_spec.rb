@@ -2,12 +2,12 @@ require_domain_file
 require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Transformation/Common.class/__methods__/utils.rb')
 
 describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::ApplyRightSize do
-  let(:user) { FactoryGirl.create(:user_with_email_and_group) }
-  let(:group) { FactoryGirl.create(:miq_group) }
-  let(:task) { FactoryGirl.create(:service_template_transformation_plan_task) }
-  let(:src_vm_vmware) { FactoryGirl.create(:vm_vmware) }
-  let(:dst_vm_redhat) { FactoryGirl.create(:vm_redhat) }
-  let(:dst_ems_redhat) { FactoryGirl.create(:ems_redhat) }
+  let(:user) { FactoryBot.create(:user_with_email_and_group) }
+  let(:group) { FactoryBot.create(:miq_group) }
+  let(:task) { FactoryBot.create(:service_template_transformation_plan_task) }
+  let(:src_vm_vmware) { FactoryBot.create(:vm_vmware) }
+  let(:dst_vm_redhat) { FactoryBot.create(:vm_redhat) }
+  let(:dst_ems_redhat) { FactoryBot.create(:ems_redhat) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_group) { MiqAeMethodService::MiqAeServiceMiqGroup.find(group.id) }

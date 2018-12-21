@@ -1,13 +1,13 @@
 require_domain_file
 
 describe ManageIQ::Automate::System::Event::EmsEvent::RHEVM::UpdateVmImportStatus do
-  let(:user)       { FactoryGirl.create(:user_with_group) }
+  let(:user)       { FactoryBot.create(:user_with_group) }
   let(:miq_server) { EvmSpecHelper.local_miq_server }
-  let(:ems)        { FactoryGirl.create(:ems_redhat) }
-  let(:vm)         { FactoryGirl.create(:vm_redhat) }
+  let(:ems)        { FactoryBot.create(:ems_redhat) }
+  let(:vm)         { FactoryBot.create(:vm_redhat) }
 
   let(:ems_event) do
-    FactoryGirl.create(:ems_event, :vm_or_template => vm, :ext_management_system => ems)
+    FactoryBot.create(:ems_event, :vm_or_template => vm, :ext_management_system => ems)
   end
   let(:svc_model_miq_server) { MiqAeMethodService::MiqAeServiceMiqServer.find(miq_server.id) }
   let(:svc_model_user)       { MiqAeMethodService::MiqAeServiceUser.find(user.id) }

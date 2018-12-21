@@ -17,15 +17,15 @@ describe ManageIQ::Automate::System::Request::OrderAnsiblePlaybook do
 
   let(:ip1) { "1.1.1.94" }
 
-  let(:vm) { FactoryGirl.create(:vm_vmware, :name => 'fred') }
+  let(:vm) { FactoryBot.create(:vm_vmware, :name => 'fred') }
   let(:svc_vm) { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }
 
-  let(:svc_template) { FactoryGirl.create(:service_template_ansible_playbook, :name => 'fred') }
+  let(:svc_template) { FactoryBot.create(:service_template_ansible_playbook, :name => 'fred') }
   let(:svc_service_template) do
     MiqAeMethodService::MiqAeServiceServiceTemplate.find(svc_template.id)
   end
 
-  let(:miq_request) { FactoryGirl.create(:service_template_provision_request) }
+  let(:miq_request) { FactoryBot.create(:service_template_provision_request) }
   let(:svc_miq_request) do
     MiqAeMethodService::MiqAeServiceMiqRequest.find(miq_request.id)
   end

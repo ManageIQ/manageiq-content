@@ -2,15 +2,15 @@ require_domain_file
 require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Transformation/Common.class/__methods__/utils.rb')
 
 describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::RestoreVmAttributes do
-  let(:user) { FactoryGirl.create(:user_with_email_and_group) }
-  let(:group) { FactoryGirl.create(:miq_group) }
-  let(:task) { FactoryGirl.create(:service_template_transformation_plan_task) }
-  let(:src_vm_vmware) { FactoryGirl.create(:vm_vmware) }
-  let(:dst_vm_redhat) { FactoryGirl.create(:vm_redhat) }
-  let(:dst_vm_openstack) { FactoryGirl.create(:vm_openstack) }
-  let(:service) { FactoryGirl.create(:service) }
-  let!(:parent_classification) { FactoryGirl.create(:classification, :name => "environment", :description => "Environment") }
-  let!(:classification) { FactoryGirl.create(:classification, :name => "prod", :description => "Production", :parent => parent_classification) }
+  let(:user) { FactoryBot.create(:user_with_email_and_group) }
+  let(:group) { FactoryBot.create(:miq_group) }
+  let(:task) { FactoryBot.create(:service_template_transformation_plan_task) }
+  let(:src_vm_vmware) { FactoryBot.create(:vm_vmware) }
+  let(:dst_vm_redhat) { FactoryBot.create(:vm_redhat) }
+  let(:dst_vm_openstack) { FactoryBot.create(:vm_openstack) }
+  let(:service) { FactoryBot.create(:service) }
+  let!(:parent_classification) { FactoryBot.create(:classification, :name => "environment", :description => "Environment") }
+  let!(:classification) { FactoryBot.create(:classification, :name => "prod", :description => "Production", :parent => parent_classification) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_group) { MiqAeMethodService::MiqAeServiceMiqGroup.find(group.id) }

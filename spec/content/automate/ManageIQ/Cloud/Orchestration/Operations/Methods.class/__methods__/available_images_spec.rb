@@ -25,8 +25,8 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableImages d
   end
 
   shared_examples_for "#having the only image" do
-    let(:img1) { FactoryGirl.create(:template_openstack, :uid_ems => 'uid1') }
-    let(:ems) { FactoryGirl.create(:ems_openstack, :miq_templates => [img1]) }
+    let(:img1) { FactoryBot.create(:template_openstack, :uid_ems => 'uid1') }
+    let(:ems) { FactoryBot.create(:ems_openstack, :miq_templates => [img1]) }
 
     it "finds the only image and set it as the only item in the list" do
       described_class.new(ae_service).main
@@ -40,11 +40,11 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableImages d
 
   shared_examples_for "#having all images" do
     let(:default_desc) { "<select>" }
-    let(:hw1) { FactoryGirl.create(:hardware, :guest_os => 'windows') }
-    let(:hw2) { FactoryGirl.create(:hardware, :guest_os => 'linux') }
-    let(:img1) { FactoryGirl.create(:template_openstack, :uid_ems => 'uid1', :hardware => hw1) }
-    let(:img2) { FactoryGirl.create(:template_openstack, :uid_ems => 'uid2', :hardware => hw2) }
-    let(:ems) { FactoryGirl.create(:ems_openstack, :miq_templates => [img1, img2]) }
+    let(:hw1) { FactoryBot.create(:hardware, :guest_os => 'windows') }
+    let(:hw2) { FactoryBot.create(:hardware, :guest_os => 'linux') }
+    let(:img1) { FactoryBot.create(:template_openstack, :uid_ems => 'uid1', :hardware => hw1) }
+    let(:img2) { FactoryBot.create(:template_openstack, :uid_ems => 'uid2', :hardware => hw2) }
+    let(:ems) { FactoryBot.create(:ems_openstack, :miq_templates => [img1, img2]) }
 
     it "finds all of the images and populates the list" do
       described_class.new(ae_service).main
@@ -65,7 +65,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableImages d
   end
 
   context "workspace has service template other than orchestration" do
-    let(:service_template) { FactoryGirl.create(:service_template) }
+    let(:service_template) { FactoryBot.create(:service_template) }
 
     it_behaves_like "#having only default value"
   end
@@ -73,7 +73,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableImages d
   context "workspace has orchestration service template" do
     context "with Orchestration Manager" do
       let(:service_template) do
-        FactoryGirl.create(:service_template_orchestration, :orchestration_manager => ems)
+        FactoryBot.create(:service_template_orchestration, :orchestration_manager => ems)
       end
 
       context "with all images" do
@@ -87,7 +87,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableImages d
 
     context "without Orchestration Manager" do
       let(:service_template) do
-        FactoryGirl.create(:service_template_orchestration)
+        FactoryBot.create(:service_template_orchestration)
       end
 
       it_behaves_like "#having only default value"
@@ -101,7 +101,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableImages d
 
     context "with Orchestration Manager" do
       let(:service_template) do
-        FactoryGirl.create(:service_orchestration, :orchestration_manager => ems)
+        FactoryBot.create(:service_orchestration, :orchestration_manager => ems)
       end
 
       context "with all images" do
@@ -114,7 +114,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Operations::AvailableImages d
     end
 
     context "without Orchestration Manager" do
-      let(:service_template) { FactoryGirl.create(:service_orchestration) }
+      let(:service_template) { FactoryBot.create(:service_orchestration) }
 
       it_behaves_like "#having only default value"
     end

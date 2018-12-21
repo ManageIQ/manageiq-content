@@ -2,13 +2,13 @@ require_domain_file
 
 describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::StateMachines::Job::WaitForCompletion do
   let(:job_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_AutomationManager_Job }
-  let(:user) { FactoryGirl.create(:user_with_group) }
-  let(:vm) { FactoryGirl.create(:vm) }
+  let(:user) { FactoryBot.create(:user_with_group) }
+  let(:vm) { FactoryBot.create(:vm) }
   let(:svc_vm) { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }
-  let(:job_template) { FactoryGirl.create(:configuration_script) }
+  let(:job_template) { FactoryBot.create(:configuration_script) }
   let(:svc_job_template) { MiqAeMethodService::MiqAeServiceConfigurationScript.find(job_template.id) }
   let(:ip_addr) { '1.1.1.1' }
-  let(:job) { FactoryGirl.create(:ansible_tower_job) }
+  let(:job) { FactoryBot.create(:ansible_tower_job) }
   let(:svc_job) { job_class.find(job.id) }
   let(:persist_state_hash) { {:ansible_job_id => svc_job.id} }
   let(:service) { Spec::Support::MiqAeMockService.new(Spec::Support::MiqAeMockObject.new({}), persist_state_hash) }

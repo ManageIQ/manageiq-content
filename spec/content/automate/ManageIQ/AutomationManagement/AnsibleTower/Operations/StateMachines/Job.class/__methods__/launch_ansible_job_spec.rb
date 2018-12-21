@@ -3,16 +3,16 @@ require_domain_file
 describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::StateMachines::Job::LaunchAnsibleJob do
   let(:job_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_AutomationManager_Job }
   let(:jt_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_AutomationManager_ConfigurationScript }
-  let(:user) { FactoryGirl.create(:user_with_group) }
-  let(:vm) { FactoryGirl.create(:vm) }
-  let(:manager) { FactoryGirl.create(:automation_manager_ansible_tower, :name => "AT1") }
+  let(:user) { FactoryBot.create(:user_with_group) }
+  let(:vm) { FactoryBot.create(:vm) }
+  let(:manager) { FactoryBot.create(:automation_manager_ansible_tower, :name => "AT1") }
   let(:svc_vm) { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }
   let(:job_template) do
-    FactoryGirl.create(:ansible_configuration_script, :manager_id => manager.id)
+    FactoryBot.create(:ansible_configuration_script, :manager_id => manager.id)
   end
   let(:svc_job_template) { jt_class.find(job_template.id) }
   let(:ip_addr) { '1.1.1.1' }
-  let(:job) { FactoryGirl.create(:ansible_tower_job) }
+  let(:job) { FactoryBot.create(:ansible_tower_job) }
   let(:svc_job) { job_class.find(job.id) }
   let(:current_object) { Spec::Support::MiqAeMockObject.new('a' => 1, 'b' => 2) }
   let(:root_object) { Spec::Support::MiqAeMockObject.new('param1' => "x=X", 'param2' => "y=Y") }
@@ -24,11 +24,11 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
   let(:service) { Spec::Support::MiqAeMockService.new(root_object) }
 
   let(:ems) do
-    FactoryGirl.create(:ems_amazon_with_authentication)
+    FactoryBot.create(:ems_amazon_with_authentication)
   end
 
   let(:vm_template) do
-    FactoryGirl.create(:template_amazon,
+    FactoryBot.create(:template_amazon,
                        :name                  => "template1",
                        :ext_management_system => ems)
   end
@@ -38,7 +38,7 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
   end
 
   let(:miq_provision) do
-    FactoryGirl.create(:miq_provision_amazon,
+    FactoryBot.create(:miq_provision_amazon,
                        :options => prov_options,
                        :userid  => user.userid,
                        :state   => 'active',

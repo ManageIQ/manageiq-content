@@ -2,20 +2,20 @@ require_domain_file
 require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Transformation/Common.class/__methods__/utils.rb')
 
 describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::CheckVmInInventory do
-  let(:user) { FactoryGirl.create(:user_with_email_and_group) }
-  let(:src_vm_vmware) { FactoryGirl.create(:vm_vmware, :ext_management_system => src_ems, :ems_cluster => src_cluster) }
-  let(:dst_vm_redhat) { FactoryGirl.create(:vm_redhat, :ext_management_system => dst_ems) }
-  let(:dst_vm_openstack) { FactoryGirl.create(:vm_openstack, :ext_management_system => dst_ems) }
-  let(:src_ems) { FactoryGirl.create(:ext_management_system) }
-  let(:src_cluster) { FactoryGirl.create(:ems_cluster, :ext_management_system => src_ems) }
-  let(:dst_ems) { FactoryGirl.create(:ext_management_system) }
-  let(:dst_cluster) { FactoryGirl.create(:ems_cluster, :ext_management_system => dst_ems) }
+  let(:user) { FactoryBot.create(:user_with_email_and_group) }
+  let(:src_vm_vmware) { FactoryBot.create(:vm_vmware, :ext_management_system => src_ems, :ems_cluster => src_cluster) }
+  let(:dst_vm_redhat) { FactoryBot.create(:vm_redhat, :ext_management_system => dst_ems) }
+  let(:dst_vm_openstack) { FactoryBot.create(:vm_openstack, :ext_management_system => dst_ems) }
+  let(:src_ems) { FactoryBot.create(:ext_management_system) }
+  let(:src_cluster) { FactoryBot.create(:ems_cluster, :ext_management_system => src_ems) }
+  let(:dst_ems) { FactoryBot.create(:ext_management_system) }
+  let(:dst_cluster) { FactoryBot.create(:ems_cluster, :ext_management_system => dst_ems) }
 
   let(:mapping) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :transformation_mapping,
       :transformation_mapping_items => [
-        FactoryGirl.create(:transformation_mapping_item, :source => src_cluster, :destination => dst_cluster)
+        FactoryBot.create(:transformation_mapping_item, :source => src_cluster, :destination => dst_cluster)
       ]
     )
   end
@@ -34,8 +34,8 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::CheckVm
   end
 
   let(:plan) { ServiceTemplateTransformationPlan.create_catalog_item(catalog_item_options) }
-  let(:request) { FactoryGirl.create(:service_template_transformation_plan_request, :source => plan) }
-  let(:task) { FactoryGirl.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_vmware) }
+  let(:request) { FactoryBot.create(:service_template_transformation_plan_request, :source => plan) }
+  let(:task) { FactoryBot.create(:service_template_transformation_plan_task, :miq_request => request, :request_type => 'transformation_plan', :source => src_vm_vmware) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
   let(:svc_model_task) { MiqAeMethodService::MiqAeServiceServiceTemplateTransformationPlanTask.find(task.id) }

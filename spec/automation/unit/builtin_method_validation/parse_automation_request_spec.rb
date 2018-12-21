@@ -1,6 +1,6 @@
 
 describe "parse_automation_request" do
-  let(:user) { FactoryGirl.create(:user_with_group) }
+  let(:user) { FactoryBot.create(:user_with_group) }
   let(:inst) { "/System/Process/parse_automation_request" }
 
   it "for miq_provision request" do
