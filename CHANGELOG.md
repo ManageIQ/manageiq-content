@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+##  Unreleased as of Sprint 101 Ending 2018-12-17
+
+### Added
+- Added Quota calculations for reconfigure resize disks [(#436)](https://github.com/ManageIQ/manageiq-content/pull/436)
+
+### Fixed
+- [V2V] Allow a retry to let virt-v2v start [(#479)](https://github.com/ManageIQ/manageiq-content/pull/479)
+
 ##  Unreleased as of Sprint 100 Ending 2018-12-03
 
 ### Fixed
