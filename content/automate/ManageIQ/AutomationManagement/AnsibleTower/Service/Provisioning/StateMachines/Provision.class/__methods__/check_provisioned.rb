@@ -51,7 +51,7 @@ module ManageIQ
                     when /failed$/, /canceled$/
                       @handle.root['ae_result'] = 'error'
                       @handle.root['ae_reason'] = reason
-                      @handle.log('error', "Ansible Tower Job #{job.name} standard output: #{job.raw_stdout}")
+                      @handle.log('error', "Ansible Tower Job #{job.name} standard output: #{job.raw_stdout}") if job.respond_to?(:raw_stdout)
                     else
                       # job not done yet in provider
                       @handle.root['ae_result']         = 'retry'
