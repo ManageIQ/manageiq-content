@@ -10,51 +10,38 @@ module ManageIQ
               end
 
               def main
-                @handle.log('info', "Checking if all service resources have been retired.")
-                check_all_service_resources
+                @handle.log('info', "Checking if all service tasks have been retired.")
+                check_all_service_tasks
               end
 
               private
 
-              def service
-                @service ||= @handle.root['service'].tap do |obj|
-                  if obj.nil?
-                    @handle.log(:error, 'Service object not provided')
-                    raise 'Service object has not been provided'
-                  end
-                end
-              end
+              def check_all_service_tasks
+                task = @handle.root['service_retire_task']
+                task_status = task['status']
+                result = task.statemachine_task_status
 
-              def check_all_service_resources
-                if all_service_resources_done?
-                  @handle.root['ae_result'] = 'ok'
-                else
-                  @handle.log('info', "Service: #{service.name} resource is not retired, setting retry.")
-                  @handle.root['ae_result'] = 'retry'
+                @handle.log('info', "Service RetireCheck with <#{result}> for state <#{task.state}> and status <#{task_status}>")
+
+                if task.miq_request_tasks.all? { |t| t.state == 'finished' }
+                  result = 'ok'
+                  @handle.log('info', "Child tasks finished.")
+                end
+
+                case result
+                when 'error'
+                  @handle.root['ae_result'] = 'error'
+                  reason = @handle.root['service_retire_task'].message
+                  reason = reason[7..-1] if reason[0..6] == 'Error: '
+                  @handle.root['ae_reason'] = reason
+                when 'retry'
+                  @handle.log('info', "Service task #{task.description} is not retired, setting retry.")
+                  @handle.root['ae_result']         = 'retry'
                   @handle.root['ae_retry_interval'] = '1.minute'
+                when 'ok'
+                  # Bump State
+                  @handle.root['ae_result'] = 'ok'
                 end
-              end
-
-              def check_service_resource_retirement(sr)
-                return 'ignore' unless process?(sr)
-                @handle.log('info', "Checking if service resource for service: #{service.name} resource ID: #{sr.id} is retired")
-                if sr.resource.retired?
-                  @handle.log('info', "resource: #{sr.resource.name} is already retired.")
-                  'ok'
-                else
-                  @handle.log('info', "resource: #{sr.resource.name} is not retired, setting retry.")
-                  'retry'
-                end
-              end
-
-              def process?(sr)
-                return false if sr.resource.nil?
-                return false if sr.resource_type == "Service" && @handle.vmdb(:service).find(sr[:resource_id]).has_parent
-                sr.resource.respond_to?(:retired?)
-              end
-
-              def all_service_resources_done?
-                service.service_resources.all? { |sr| %w(ok ignore).include?(check_service_resource_retirement(sr)) }
               end
             end
           end
