@@ -5,56 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-##  Unreleased as of Sprint 101 Ending 2018-12-17
-
-### Added
-- Added Quota calculations for reconfigure resize disks [(#436)](https://github.com/ManageIQ/manageiq-content/pull/436)
-
-### Fixed
-- [V2V] Allow a retry to let virt-v2v start [(#479)](https://github.com/ManageIQ/manageiq-content/pull/479)
-
-##  Unreleased as of Sprint 100 Ending 2018-12-03
-
-### Fixed
-- Disconnect storage when disconnecting a VM [(#472)](https://github.com/ManageIQ/manageiq-content/pull/472)
-
-##  Unreleased as of Sprint 99 Ending 2018-11-19
-
-### Added
-- Use task cancelation_status to trigger cancelation [(#457)](https://github.com/ManageIQ/manageiq-content/pull/457)
-
-### Fixed
-- Fix TransformationPlanRequest approval - Set message [(#473)](https://github.com/ManageIQ/manageiq-content/pull/473)
-- Fix request denial [(#471)](https://github.com/ManageIQ/manageiq-content/pull/471)
-- Modified requested method for reconfigure disk_remove. [(#461)](https://github.com/ManageIQ/manageiq-content/pull/461)
-
-##  Unreleased as of Sprint 98 Ending 2018-11-05
+## Hammer-1
 
 ### Added
 - Deny request if no conversion host is configured [(#455)](https://github.com/ManageIQ/manageiq-content/pull/455)
-
-## Gaprindashvili-6 - Released 2018-11-02
-
-### Added
-- Add state_machine_phase attribute to transformation state machines [(#402)](https://github.com/ManageIQ/manageiq-content/pull/402)
-- Change VMware URI to connect directly to ESXi [(#405)](https://github.com/ManageIQ/manageiq-content/pull/405)
-- Restore VM ownership and retirement when migrating [(#397)](https://github.com/ManageIQ/manageiq-content/pull/397)
-- Add support to apply right-size recommendation during transformation [(#417)](https://github.com/ManageIQ/manageiq-content/pull/417)
-
-### Fixed
-- Escape username of VMware host [(#407)](https://github.com/ManageIQ/manageiq-content/pull/407)
-- Updated requested method to fix vm_reconfigure via rest-api. [(#413)](https://github.com/ManageIQ/manageiq-content/pull/413)
-- Add storage profile support in vmware_best_fit_least_utilized method. [(#420)](https://github.com/ManageIQ/manageiq-content/pull/420)
-
-##  Hammer Beta-2 - Released 2018-10-29
-
-### Fixed
-- Modified InspectMe method to check if object is taggable. [(#445)](https://github.com/ManageIQ/manageiq-content/pull/445)
-- Modified Log_Object method to check if object is taggable. [(#446)](https://github.com/ManageIQ/manageiq-content/pull/446)
-
-##  Hammer Beta-1 - Released 2018-10-12
-
-### Added
+- Use task cancelation_status to trigger cancelation [(#457)](https://github.com/ManageIQ/manageiq-content/pull/457)
 - Use embedded log method. [(#427)](https://github.com/ManageIQ/manageiq-content/pull/427)
 - Adding log_and_notify method into log_object embedded method. [(#423)](https://github.com/ManageIQ/manageiq-content/pull/423)
 - Transformation throttling - Base components [(#418)](https://github.com/ManageIQ/manageiq-content/pull/418)
@@ -98,11 +53,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Add policy event triggers for Hawkular [(#201)](https://github.com/ManageIQ/manageiq-content/pull/201)
 - v2v: Extend 'VM Transform' dialog to select VMs by tag [(#200)](https://github.com/ManageIQ/manageiq-content/pull/200)
 - Add support to apply right-size recommendation during transformation [(#417)](https://github.com/ManageIQ/manageiq-content/pull/417)
+- [V2V] Allow a retry to let virt-v2v start [(#479)](https://github.com/ManageIQ/manageiq-content/pull/479)
 
 ### Changed
 - Changed validate_quota method to check individual quota items [(#375)](https://github.com/ManageIQ/manageiq-content/pull/375)
 
 ### Fixed
+- Fix request denial [(#471)](https://github.com/ManageIQ/manageiq-content/pull/471)
+- Fix TransformationPlanRequest approval - Set message [(#473)](https://github.com/ManageIQ/manageiq-content/pull/473)
+- Modified requested method for reconfigure disk_remove. [(#461)](https://github.com/ManageIQ/manageiq-content/pull/461)
+- Changed disk_name to symbol in requested Quota method. [(#474)](https://github.com/ManageIQ/manageiq-content/pull/474)
+- Apply updates to the manageiq-automate Ansible role [(#454)](https://github.com/ManageIQ/manageiq-content/pull/454)
+- Modified InspectMe method to check if object is taggable. [(#445)](https://github.com/ManageIQ/manageiq-content/pull/445)
+- Modified Log_Object method to check if object is taggable. [(#446)](https://github.com/ManageIQ/manageiq-content/pull/446)
 - Add storage profile support in vmware_best_fit_least_utilized method. [(#420)](https://github.com/ManageIQ/manageiq-content/pull/420)
 - Updated requested method to fix vm_reconfigure via rest-api. [(#413)](https://github.com/ManageIQ/manageiq-content/pull/413)
 - Do not check instance variables in specs for Transformation - Common - Utils [(#410)](https://github.com/ManageIQ/manageiq-content/pull/410)
@@ -118,6 +81,26 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Add tests for orchestration stack retirement [(#437)](https://github.com/ManageIQ/manageiq-content/pull/437)
 - Keep the encrypted value as is when creating service provision request. [(#435)](https://github.com/ManageIQ/manageiq-content/pull/435)
 - Fix userid in transformation throttler launch [(#439)](https://github.com/ManageIQ/manageiq-content/pull/439)
+- Disconnect storage when disconnecting a VM [(#472)](https://github.com/ManageIQ/manageiq-content/pull/472)
+- #raw_stdout does not exist for workflow template job. [(#491)](https://github.com/ManageIQ/manageiq-content/pull/491)
+
+##  Unreleased as of Sprint 101 Ending 2018-12-17
+
+### Added
+- Added Quota calculations for reconfigure resize disks [(#436)](https://github.com/ManageIQ/manageiq-content/pull/436)
+
+## Gaprindashvili-6 - Released 2018-11-02
+
+### Added
+- Add state_machine_phase attribute to transformation state machines [(#402)](https://github.com/ManageIQ/manageiq-content/pull/402)
+- Change VMware URI to connect directly to ESXi [(#405)](https://github.com/ManageIQ/manageiq-content/pull/405)
+- Restore VM ownership and retirement when migrating [(#397)](https://github.com/ManageIQ/manageiq-content/pull/397)
+- Add support to apply right-size recommendation during transformation [(#417)](https://github.com/ManageIQ/manageiq-content/pull/417)
+
+### Fixed
+- Escape username of VMware host [(#407)](https://github.com/ManageIQ/manageiq-content/pull/407)
+- Updated requested method to fix vm_reconfigure via rest-api. [(#413)](https://github.com/ManageIQ/manageiq-content/pull/413)
+- Add storage profile support in vmware_best_fit_least_utilized method. [(#420)](https://github.com/ManageIQ/manageiq-content/pull/420)
 
 ## Gaprindashvili-5 - Released 2018-09-07
 
