@@ -26,6 +26,9 @@ module ManageIQ
                 if task.miq_request_tasks.all? { |t| t.state == 'finished' }
                   result = 'ok'
                   @handle.log('info', "Child tasks finished.")
+                else
+                  result = 'retry'
+                  @handle.log('info', "Not all child tasks finished.")
                 end
 
                 case result
