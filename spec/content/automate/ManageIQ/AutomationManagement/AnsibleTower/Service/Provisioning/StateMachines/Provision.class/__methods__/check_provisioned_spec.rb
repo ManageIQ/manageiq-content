@@ -12,54 +12,74 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Service::Provis
   let(:job) { FactoryBot.create(:ansible_tower_job) }
   let(:workflow_job_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_AutomationManager_WorkflowJob }
   let(:workflow_job) { FactoryBot.create(:ansible_tower_workflow_job) }
-  let(:ok_status) { %w(create_complete ok) }
-  let(:running_status) { %w(running ok) }
-  let(:bad_status) { %w(create_failed bad) }
 
-  describe 'check provision status' do
-    before { allow_any_instance_of(ServiceAnsibleTower).to receive(:job).and_return(job) }
-
-    context 'ansible tower job completed' do
-      before { allow_any_instance_of(job_class).to receive(:normalized_live_status).and_return(ok_status) }
-      it "refreshes the job status" do
-        expect(job).to receive(:refresh_ems)
-        described_class.new(ae_service).main
-        expect(ae_service.root['ae_result']).to eq('ok')
-      end
+  shared_examples_for "check_provisioned" do
+    it "check" do
+      expect_any_instance_of(ServiceAnsibleTower).to receive(:job).and_return(job_type)
+      expect_any_instance_of(job_class_type).to receive(:normalized_live_status).with(no_args).and_return(status)
+      described_class.new(ae_service).main
+      expect(ae_service.root['ae_result']).to eq(result)
+      expect(ae_service.root['ae_reason']).to eq(reason)
     end
+  end
 
-    context 'ansible tower job is running' do
-      before { allow_any_instance_of(job_class).to receive(:normalized_live_status).and_return(running_status) }
-      it "retries the step" do
-        described_class.new(ae_service).main
-        expect(ae_service.root['ae_result']).to eq('retry')
-      end
-    end
+  context "ansible tower job completed" do
+    before { expect(job).to receive(:refresh_ems) }
+    let(:status) { %w(create_complete ok) }
+    let(:job_type) { job }
+    let(:job_class_type) { job_class }
+    let(:result) { 'ok' }
+    let(:reason) { nil }
+    it_behaves_like "check_provisioned"
+  end
 
-    context 'ansible tower job failed' do
-      before { allow_any_instance_of(job_class).to receive(:normalized_live_status).and_return(bad_status) }
-      it "signals error" do
-        expect(job).to receive(:refresh_ems)
-        expect(job).to receive(:raw_stdout)
-        described_class.new(ae_service).main
-        expect(ae_service.root['ae_result']).to eq('error')
-        expect(ae_service.root['ae_reason']).to eq('bad')
-      end
-    end
+  context "ansible tower job is running" do
+    let(:status) { %w(running ok) }
+    let(:job_type) { job }
+    let(:job_class_type) { job_class }
+    let(:result) { 'retry' }
+    let(:reason) { nil }
+    it_behaves_like "check_provisioned"
+  end
 
-    context 'ansible tower workflow job failed' do
-      before do
-        allow_any_instance_of(ServiceAnsibleTower).to receive(:job).and_return(workflow_job)
-        allow_any_instance_of(workflow_job_class).to receive(:normalized_live_status).and_return(bad_status)
-      end
+  context "ansible tower job failed" do
+    before { expect(job).to receive(:refresh_ems) }
+    before { expect(job).to receive(:raw_stdout) }
+    let(:status) { %w(create_failed bad) }
+    let(:job_type) { job }
+    let(:job_class_type) { job_class }
+    let(:result) { 'error' }
+    let(:reason) { 'bad' }
+    it_behaves_like "check_provisioned"
+  end
 
-      it "signals error" do
-        expect(workflow_job).to receive(:refresh_ems)
-        expect(workflow_job).not_to receive(:raw_stdout)
-        described_class.new(ae_service).main
-        expect(ae_service.root['ae_result']).to eq('error')
-        expect(ae_service.root['ae_reason']).to eq('bad')
-      end
-    end
+  context "ansible tower workflow job completed" do
+    before { expect(workflow_job).to receive(:refresh_ems) }
+    let(:status) { %w(create_complete ok) }
+    let(:job_type) { workflow_job }
+    let(:job_class_type) { workflow_job_class }
+    let(:result) { 'ok' }
+    let(:reason) { nil }
+    it_behaves_like "check_provisioned"
+  end
+
+  context "ansible tower workflow job is running" do
+    let(:status) { %w(running ok) }
+    let(:job_type) { workflow_job }
+    let(:job_class_type) { workflow_job_class }
+    let(:result) { 'retry' }
+    let(:reason) { nil }
+    it_behaves_like "check_provisioned"
+  end
+
+  context "ansible tower workflow job failed" do
+    before { expect(workflow_job).to receive(:refresh_ems) }
+    before { expect(workflow_job).not_to receive(:raw_stdout) }
+    let(:status) { %w(create_failed bad) }
+    let(:job_type) { workflow_job }
+    let(:job_class_type) { workflow_job_class }
+    let(:result) { 'error' }
+    let(:reason) { 'bad' }
+    it_behaves_like "check_provisioned"
   end
 end
