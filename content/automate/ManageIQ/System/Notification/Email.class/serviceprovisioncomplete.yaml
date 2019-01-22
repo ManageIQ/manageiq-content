@@ -9,7 +9,7 @@ object:
     description: 
   fields:
   - to:
-      value: "${/#miq_provision.miq_request.get_option(:owner_email)} || ${/#miq_provision.miq_request.requester.email}
-        || ${/Configuration/Email/Default#default_recipient}"
+      value: "${/#service_template_provision_task.miq_request.get_option(:owner_email)}
+        || ${/#service_template_provision_task.miq_request.requester.email} || ${/Configuration/Email/Default#default_recipient}"
   - mail_method:
       value: "#stop_email"
