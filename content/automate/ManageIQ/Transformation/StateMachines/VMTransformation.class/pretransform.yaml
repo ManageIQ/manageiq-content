@@ -10,16 +10,16 @@ object:
   fields:
   - State2:
       value: "/Transformation/StateMachines/Ansible/TransformationPlaybook?transformation_hook=pre"
-      on_entry: /Transformation/TransformationThrottler.Watch ; /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight
-        => 30, description         => "Run pre-migration playbook")
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 30, description         =>
+        "Run pre-migration playbook")
       on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 30, description         =>
         "Run pre-migration playbook")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 30, description         =>
         "Run pre-migration playbook")
   - State5:
       value: "/Transformation/Infrastructure/VM/Common/PowerOff"
-      on_entry: /Transformation/TransformationThrottler.Watch ; /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight
-        => 40, description => "Power off", task_message => "Pre-migration")
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Power off", task_message => "Pre-migration")
       on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
         => "Power off", task_message => "Pre-migration")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
@@ -27,8 +27,8 @@ object:
       max_retries: '20'
   - State8:
       value: "/Transformation/Infrastructure/VM/Common/CollapseSnapshots"
-      on_entry: /Transformation/TransformationThrottler.Watch ; /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight
-        => 40, description => "Collapse Snapshots", task_message => "Pre-migration")
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Collapse Snapshots", task_message => "Pre-migration")
       on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
         => "Collapse Snapshots", task_message => "Pre-migration")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
