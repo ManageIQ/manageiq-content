@@ -5,15 +5,8 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Naming::VmName do
   let(:provision) { MiqProvision.new }
   let(:root_object) { Spec::Support::MiqAeMockObject.new.tap { |ro| ro["miq_provision"] = provision } }
   let(:service) { Spec::Support::MiqAeMockService.new(root_object).tap { |s| s.object = {'vm_prefix' => "abc"} } }
-  let(:classification) { FactoryBot.create(:classification, :tag => tag, :name => "environment") }
-  let(:classification2) do
-    FactoryBot.create(:classification,
-                       :tag    => tag2,
-                       :parent => classification,
-                       :name   => "prod")
-  end
-  let(:tag) { FactoryBot.create(:tag, :name => "/managed/environment") }
-  let(:tag2) { FactoryBot.create(:tag, :name => "/managed/environment/production") }
+  let(:classification) { FactoryBot.create(:classification, :name => "environment", :description => "category") }
+  let(:classification2) { FactoryBot.create(:classification_tag, :parent => classification, :name   => "production") }
 
   context "#main" do
     before do
