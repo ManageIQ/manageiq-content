@@ -19,14 +19,14 @@ module ManageIQ
                 service = task.destination
 
                 begin
-                  stack = service.deploy_orchestration_stack
+                  job = service.deploy_orchestration_stack
                   @handle.log("info",
-                              "Stack #{service.stack_name} with reference id (#{stack.ems_ref}) is being created")
+                              "Orchestration provisioning job with id (#{job.id}) is being created")
                 rescue => err
                   @handle.root['ae_result'] = 'error'
                   @handle.root['ae_reason'] = err.message
                   task.miq_request.user_message = err.message
-                  @handle.log("error", "Stack #{service.stack_name} creation failed. Reason: #{err.message}")
+                  @handle.log("error", "Orchestration provisioning job creation failed. Reason: #{err.message}")
                 end
               end
             end
