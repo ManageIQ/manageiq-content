@@ -47,6 +47,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
     let(:host2) { FactoryBot.create(:host_vmware, :storages => storages[0..1], :vms => vms[2..4], :ext_management_system => ems) }
     let(:host3) { FactoryBot.create(:host_vmware, :storages => [ro_storage, storages[2]], :vms => vms[2..4], :ext_management_system => ems) }
     let(:host4) { FactoryBot.create(:host_vmware, :storages => storages[0..2], :vms => vms[2..4], :ext_management_system => ems) }
+    let(:host5) { FactoryBot.create(:host_vmware, :storages => [ro_storage, storages[2]], :vms => vms[2..4], :ext_management_system => ems) }
 
     let(:host_struct) do
       [MiqHashStruct.new(:id => host1.id, :evm_object_class => host1.class.base_class.name.to_sym),
@@ -57,6 +58,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
     let(:svc_host2) { MiqAeMethodService::MiqAeServiceHost.find(host2.id) }
     let(:svc_host3) { MiqAeMethodService::MiqAeServiceHost.find(host3.id) }
     let(:svc_host4) { MiqAeMethodService::MiqAeServiceHost.find(host4.id) }
+    let(:svc_host5) { MiqAeMethodService::MiqAeServiceHost.find(host5.id) }
 
     let(:svc_storages) { storages.collect { |s| MiqAeMethodService::MiqAeServiceStorage.find(s.id) } }
     let(:svc_host_struct) { [svc_host1, svc_host2, svc_host4] }
@@ -83,18 +85,59 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
         described_class.new(ae_service).main
       end
 
-      it "selects largest storage that is writable" do
-        allow(svc_miq_provision).to receive(:eligible_hosts).and_return([svc_host3])
-        allow(svc_miq_provision).to receive(:eligible_storages).and_return(svc_host3.storages)
+      context "with all storages accessible" do
+        it "selects largest storage that is writable" do
+          allow(svc_miq_provision).to receive(:eligible_hosts).and_return([svc_host3])
+          allow(svc_miq_provision).to receive(:eligible_storages).and_return(svc_host3.storages)
 
-        expect(svc_miq_provision).to receive(:set_host).with(svc_host3)
-        allow(svc_miq_provision).to receive(:set_storage) do |s|
-          # ro_storage is larger but read-only, so it should select storages[2]
-          expect(s.id).to eq(storages[2].id)
-          expect(s.name).to eq(storages[2].name)
+          expect(svc_miq_provision).to receive(:set_host).with(svc_host3)
+          allow(svc_miq_provision).to receive(:set_storage) do |s|
+            # ro_storage is larger but read-only, so it should select storages[2]
+            expect(s.id).to eq(storages[2].id)
+            expect(s.name).to eq(storages[2].name)
+          end
+
+          described_class.new(ae_service).main
         end
+      end
 
-        described_class.new(ae_service).main
+      context "with no storages accessible" do
+        before do
+          HostStorage.where(:host_id => host5.id, :storage_id => ro_storage.id).update(:accessible => false)
+          HostStorage.where(:host_id => host5.id, :storage_id => storages[2].id).update(:accessible => false)
+        end
+        it "selects nothing" do
+          allow(svc_miq_provision).to receive(:eligible_hosts).and_return([svc_host5])
+          allow(svc_miq_provision).to receive(:eligible_storages).and_return(svc_host5.storages)
+
+          expect(svc_miq_provision).not_to receive(:set_host)
+          allow(svc_miq_provision).to receive(:set_storage) do |s|
+            # both ro_storage and storages[2] are inaccessible
+            expect(s.id).to eq(nil)
+            expect(s.name).to eq(nil)
+          end
+
+          described_class.new(ae_service).main
+        end
+      end
+
+      context "with the writable storage inaccessible" do
+        before do
+          HostStorage.where(:host_id => host5.id, :storage_id => storages[2].id).update(:accessible => false)
+        end
+        it "selects ro storage" do
+          allow(svc_miq_provision).to receive(:eligible_hosts).and_return([svc_host5])
+          allow(svc_miq_provision).to receive(:eligible_storages).and_return(svc_host5.storages)
+
+          expect(svc_miq_provision).to receive(:set_host).with(svc_host5)
+          allow(svc_miq_provision).to receive(:set_storage) do |s|
+            # storages[2] is inaccessible so it should select the ro
+            expect(s.id).to eq(ro_storage.id)
+            expect(s.name).to eq(ro_storage.name)
+          end
+
+          described_class.new(ae_service).main
+        end
       end
 
       it "selects the storage in the storage profile" do
