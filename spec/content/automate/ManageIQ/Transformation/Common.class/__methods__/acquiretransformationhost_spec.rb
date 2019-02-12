@@ -4,7 +4,7 @@ require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Tra
 describe ManageIQ::Automate::Transformation::Common::AcquireTransformationHost do
   let(:user) { FactoryBot.create(:user_with_email_and_group) }
   let(:task) { FactoryBot.create(:service_template_transformation_plan_task) }
-  let(:vm) { FactoryBot.create(:vm_or_template) }
+  let(:vm) { FactoryBot.create(:vm_openstack) }
   let(:conversion_host) { FactoryBot.create(:conversion_host, :resource => vm) }
 
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }

@@ -10,12 +10,12 @@ describe ManageIQ::Automate::Transformation::TransformationThrottler::Utils do
   let(:src_vm_1) { FactoryBot.create(:vm_or_template, :ems_cluster => src_cluster) }
   let(:src_vm_2) { FactoryBot.create(:vm_or_template, :ems_cluster => src_cluster) }
   let(:src_vm_3) { FactoryBot.create(:vm_or_template, :ems_cluster => src_cluster) }
-  let(:dst_ems_1) { FactoryBot.create(:ext_management_system) }
-  let(:dst_ems_2) { FactoryBot.create(:ext_management_system) }
+  let(:dst_ems_1) { FactoryBot.create(:ext_management_system, :api_version => '4.2.4') }
+  let(:dst_ems_2) { FactoryBot.create(:ext_management_system, :api_version => '4.2.4') }
   let(:dst_cluster) { FactoryBot.create(:ems_cluster, :ext_management_system => dst_ems_1) }
-  let(:dst_host_1) { FactoryBot.create(:host, :ext_management_system => dst_ems_1) }
-  let(:dst_host_2) { FactoryBot.create(:host, :ext_management_system => dst_ems_1) }
-  let(:dst_host_3) { FactoryBot.create(:host, :ext_management_system => dst_ems_2) }
+  let(:dst_host_1) { FactoryBot.create(:host_redhat, :ext_management_system => dst_ems_1) }
+  let(:dst_host_2) { FactoryBot.create(:host_redhat, :ext_management_system => dst_ems_1) }
+  let(:dst_host_3) { FactoryBot.create(:host_redhat, :ext_management_system => dst_ems_2) }
   let(:conversion_host_1) { FactoryBot.create(:conversion_host, :resource => dst_host_1) }
   let(:conversion_host_2) { FactoryBot.create(:conversion_host, :resource => dst_host_2) }
   let(:conversion_host_3) { FactoryBot.create(:conversion_host, :resource => dst_host_3) }
