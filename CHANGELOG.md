@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-## Hammer-2
+##  Unreleased as of Sprint 105 Ending 2019-02-18
+
+### Fixed
+- Add specs for storage_hosts that are inaccessible [(#506)](https://github.com/ManageIQ/manageiq-content/pull/506)
+
+## Hammer-2 - Released 2019-02-07
 
 ### Added
 - Add handler for compute.instance.update [(#497)](https://github.com/ManageIQ/manageiq-content/pull/497)
