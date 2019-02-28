@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+## Hammer-3
+
+### Fixed
+- Fix missing word in provisioning mail's subject and body [(#484)](https://github.com/ManageIQ/manageiq-content/pull/484)
+
 ##  Unreleased as of Sprint 105 Ending 2019-02-18
 
 ### Fixed
@@ -19,7 +24,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Fixed
 - #raw_stdout does not exist for workflow template job. [(#491)](https://github.com/ManageIQ/manageiq-content/pull/491)
-- Fix missing word in provisioning mail's subject and body [(#484)](https://github.com/ManageIQ/manageiq-content/pull/484)
 
 ## Hammer-1 - Released 2019-01-15
 
