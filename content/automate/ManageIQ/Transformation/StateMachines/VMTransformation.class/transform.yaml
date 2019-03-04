@@ -10,16 +10,16 @@ object:
   fields:
   - State2:
       value: "/Transformation/Common/VMTransform"
-      on_entry: /Transformation/TransformationThrottler.Watch ; /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight
-        => 5, description => "Convert disks", task_message => "Migrating")
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
+        => "Convert disks", task_message => "Migrating")
       on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
         => "Convert disks", task_message => "Migrating")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
         => "Convert disks", task_message => "Migrating")
   - State5:
       value: "/Transformation/Common/VMCheckTransformed"
-      on_entry: /Transformation/TransformationThrottler.Watch ; /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight
-        => 80, description => "Convert disks", task_message => "Migrating")
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 80, description
+        => "Convert disks", task_message => "Migrating")
       on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 80, description
         => "Convert disks", task_message => "Migrating")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 80, description
@@ -27,8 +27,8 @@ object:
       max_retries: '1500'
   - State8:
       value: "/Transformation/Infrastructure/VM/Common/CheckVmInInventory"
-      on_entry: /Transformation/TransformationThrottler.Watch ; /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight
-        => 15, description => "Refresh inventory", task_message => "Migrating")
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 15, description
+        => "Refresh inventory", task_message => "Migrating")
       on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 15, description
         => "Refresh inventory", task_message => "Migrating")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 15, description

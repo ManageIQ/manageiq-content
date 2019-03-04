@@ -1,7 +1,7 @@
 require_domain_file
 require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Transformation/Common.class/__methods__/utils.rb')
 
-describe ManageIQ::Automate::Transformation::Common::AcquireTransformationHost do
+describe ManageIQ::Automate::Transformation::Common::PreflightCheck do
   let(:user) { FactoryBot.create(:user_with_email_and_group) }
   let(:task) { FactoryBot.create(:service_template_transformation_plan_task) }
   let(:vm) { FactoryBot.create(:vm_openstack) }
@@ -33,33 +33,20 @@ describe ManageIQ::Automate::Transformation::Common::AcquireTransformationHost d
   end
 
   context "#main" do
-    it "without transformation host" do
-      allow(svc_model_task).to receive(:conversion_host).and_return(nil)
+    it "retries when preflight check not done" do
+      allow(svc_model_task).to receive(:state).and_return('active')
       described_class.new(ae_service).main
       expect(ae_service.root['ae_result']).to eq('retry')
       expect(ae_service.root['ae_retry_server_affinity']).to eq(true)
       expect(ae_service.root['ae_retry_interval']).to eq(15.seconds)
     end
 
-    it "with transformation host" do
-      allow(svc_model_task).to receive(:conversion_host).and_return(svc_model_conversion_host)
+    it "stops retrying when preflight check passed" do
+      allow(svc_model_task).to receive(:state).and_return('migrate')
       described_class.new(ae_service).main
       expect(ae_service.root['ae_result']).to be_nil
       expect(ae_service.root['ae_retry_server_affinity']).to be_nil
       expect(ae_service.root['ae_retry_interval']).to be_nil
-    end
-  end
-
-  context "catchall exception rescue" do
-    let(:svc_model_src_vm) { svc_model_src_vm_vmware }
-
-    before do
-      allow(svc_model_task).to receive(:conversion_host).and_raise(StandardError, 'kaboom')
-    end
-
-    it "forcefully raise" do
-      expect { described_class.new(ae_service).main }.to raise_error('kaboom')
-      expect(ae_service.get_state_var(:ae_state_progress)).to eq('message' => 'kaboom')
     end
   end
 end
