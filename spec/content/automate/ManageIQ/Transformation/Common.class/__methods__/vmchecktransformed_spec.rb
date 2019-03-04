@@ -42,7 +42,6 @@ describe ManageIQ::Automate::Transformation::Common::VMCheckTransformed do
 
       it "returns a message stating conversion has not started" do
         svc_model_task[:options][:virtv2v_disks] = virtv2v_disks
-        allow(svc_model_task).to receive(:get_conversion_state).and_return(true)
         allow(svc_model_task).to receive(:get_option).with(:virtv2v_status).and_return('active')
         described_class.new(ae_service).main
         expect(ae_service.get_state_var(:ae_state_progress)).to eq('message' => 'Disks transformation is initializing.', 'percent' => 1.0)
@@ -60,7 +59,6 @@ describe ManageIQ::Automate::Transformation::Common::VMCheckTransformed do
 
       it "returns a message stating conversion has not started" do
         svc_model_task[:options][:virtv2v_disks] = virtv2v_disks
-        allow(svc_model_task).to receive(:get_conversion_state).and_return(true)
         allow(svc_model_task).to receive(:get_option).with(:virtv2v_status).and_return('active')
         described_class.new(ae_service).main
         expect(ae_service.get_state_var(:ae_state_progress)).to eq('message' => 'Converting disk 2 / 2 [43.75%].', 'percent' => 43.75)
@@ -71,7 +69,6 @@ describe ManageIQ::Automate::Transformation::Common::VMCheckTransformed do
     context "conversion has failed" do
       it "raises with a message stating conversion has failed" do
         ae_service.root['ae_state_retries'] = 2
-        allow(svc_model_task).to receive(:get_conversion_state).and_return(true)
         allow(svc_model_task).to receive(:get_option).with(:virtv2v_status).and_return('failed')
         errormsg = 'Disks transformation failed.'
         expect { described_class.new(ae_service).main }.to raise_error(errormsg)
@@ -81,28 +78,9 @@ describe ManageIQ::Automate::Transformation::Common::VMCheckTransformed do
 
     context "conversion has successfuly finished" do
       it "returns a message stating conversion succeeded" do
-        allow(svc_model_task).to receive(:get_conversion_state).and_return(true)
         allow(svc_model_task).to receive(:get_option).with(:virtv2v_status).and_return('succeeded')
         described_class.new(ae_service).main
         expect(ae_service.get_state_var(:ae_state_progress)).to eq('message' => 'Disks transformation succeeded.', 'percent' => 100)
-      end
-    end
-
-    context "get_conversion_state fails" do
-      it "sets retry if ae_state_retries is less than or equal to 1" do
-        errormsg = 'Unexpected error'
-        allow(svc_model_task).to receive(:get_conversion_state).and_raise(errormsg)
-        ae_service.root['ae_state_retries'] = 1
-        described_class.new(ae_service).main
-        expect(ae_service.root['ae_result']).to eq('retry')
-      end
-
-      it "raises if ae_state_retries is greater than 2" do
-        errormsg = 'Unexpected error'
-        allow(svc_model_task).to receive(:get_conversion_state).and_raise(errormsg)
-        ae_service.root['ae_state_retries'] = 2
-        expect { described_class.new(ae_service).main }.to raise_error(errormsg)
-        expect(ae_service.get_state_var(:ae_state_progress)).to eq('message' => errormsg)
       end
     end
   end
