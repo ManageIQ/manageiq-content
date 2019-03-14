@@ -13,7 +13,6 @@ module ManageIQ
 
               def main
                 return if @source_vm.power_state == 'off'
-                raise "VM '#{@source_vm.name} is powered on, but we are not allowed to shut it down. Aborting." unless @task.get_option(:power_off)
                 if @handle.state_var_exist?(:vm_shutdown_in_progress)
                   @source_vm.stop if @handle.root['ae_state_retries'].to_i > 10
                 else
