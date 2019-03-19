@@ -9,10 +9,10 @@ object:
     description: 
   fields:
   - to:
-      value: "${/#vm.owner.email} || ${/#miq_request.get_option(:owner_email)} ||
-        ${/#miq_request.requester.email} || ${/Configuration/Email/Default#default_recipient}"
+      value: "${/#orchestration_stack_retire_task.miq_request.requester.email} ||
+        ${/Configuration/Email/Default#default_recipient}"
   - subject:
-      value: 'Stack Retirement Alert for : ${/#orchestration_stack}.'
+      value: 'Stack Retirement Alert for : ${/#orchestration_stack.name}.'
   - body:
-      value: 'Hello,<br/><br/>Your Stack named : ${/#orchestration_stack} has been
-        retired.<br/><br/> Thank you<br/> ${#signature}'
+      value: 'Hello,<br/><br/>Your Stack named : ${/#orchestration_stack.name} has
+        been retired.<br/><br/> Thank you<br/> ${#signature}'
