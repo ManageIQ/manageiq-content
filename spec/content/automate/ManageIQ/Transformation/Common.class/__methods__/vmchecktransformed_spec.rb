@@ -68,9 +68,10 @@ describe ManageIQ::Automate::Transformation::Common::VMCheckTransformed do
 
     context "conversion has failed" do
       it "raises with a message stating conversion has failed" do
+        errormsg = 'virtv2v failed somehow'
         ae_service.root['ae_state_retries'] = 2
         allow(svc_model_task).to receive(:get_option).with(:virtv2v_status).and_return('failed')
-        errormsg = 'Disks transformation failed.'
+        allow(svc_model_task).to receive(:get_option).with(:virtv2v_message).and_return(errormsg)
         expect { described_class.new(ae_service).main }.to raise_error(errormsg)
         expect(ae_service.get_state_var(:ae_state_progress)).to eq('message' => errormsg)
       end

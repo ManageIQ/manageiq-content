@@ -36,8 +36,8 @@ module ManageIQ
               @handle.set_state_var(:ae_state_progress, 'message' => message, 'percent' => percent.round(2))
               set_retry
             when 'failed'
-              @handle.set_state_var(:ae_state_progress, 'message' => 'Disks transformation failed.')
-              raise "Disks transformation failed."
+              message = @task.get_option(:virtv2v_message)
+              raise message
             when 'succeeded'
               @handle.set_state_var(:ae_state_progress, 'message' => 'Disks transformation succeeded.', 'percent' => 100)
             end
