@@ -5,16 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-##  Unreleased as of Sprint 107 Ending 2019-03-18
-
-### Removed
-- [V2V] Remove check on power_off variable [(#513)](https://github.com/ManageIQ/manageiq-content/pull/513)
-- [V2V] Remove SetDescription state [(#509)](https://github.com/ManageIQ/manageiq-content/pull/509)
-
-##  Unreleased as of Sprint 106 Ending 2019-03-04
+## Hammer-4
 
 ### Added
 - v2v Throttling moved to backend [(#504)](https://github.com/ManageIQ/manageiq-content/pull/504)
+
+### Fixed
+- [V2V] Remove check on power_off variable [(#513)](https://github.com/ManageIQ/manageiq-content/pull/513)
+
+##  Unreleased as of Sprint 107 Ending 2019-03-18
+
+### Removed
+- [V2V] Remove SetDescription state [(#509)](https://github.com/ManageIQ/manageiq-content/pull/509)
 
 ## Hammer-3
 
