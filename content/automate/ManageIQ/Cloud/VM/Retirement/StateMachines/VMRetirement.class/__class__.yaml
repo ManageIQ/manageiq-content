@@ -259,7 +259,7 @@ object:
       datatype: string
       priority: 13
       owner: 
-      default_value: "/Cloud/VM/Retirement/Email/vm_retirement_emails?event=vm_retired"
+      default_value: "/System/Notification/Email/CloudVmRetired?event=vm_retired"
       substitute: true
       message: create
       visibility: 

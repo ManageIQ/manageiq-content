@@ -9,8 +9,7 @@ object:
     description: 
   fields:
   - to:
-      value: "${/#vm.owner.email} ||${/#miq_provision.miq_request.get_option(:owner_email)}
-        || ${/#miq_provision.miq_request.requester.email} || ${/Configuration/Email/Default#default_recipient}"
+      value: "${/#vm_retire_task.miq_request.requester.email} || ${/Configuration/Email/Default#default_recipient}"
   - subject:
       value: 'Your Virtual Machine : ${/#vm} has been retired.'
   - body:
