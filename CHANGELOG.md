@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+## Hammer-4
+
+### Added
+- v2v Throttling moved to backend [(#504)](https://github.com/ManageIQ/manageiq-content/pull/504)
+
+### Fixed
+- [V2V] Remove check on power_off variable [(#513)](https://github.com/ManageIQ/manageiq-content/pull/513)
+
 ## Hammer-3
 
 ### Fixed
