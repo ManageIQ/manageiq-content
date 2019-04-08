@@ -66,6 +66,15 @@ module ManageIQ
                   end
                 end
 
+                def ansible_vars_from_ws_values(ext_vars)
+                  options = @handle.root["miq_provision"].try(:options) || {}
+                  ws_values = options[:ws_values] || {}
+                  ws_values.each_with_object(ext_vars) do |(key, value), hash|
+                    match_data = ANSIBLE_DIALOG_VAR_REGEX.match(key.to_s)
+                    hash[match_data[1]] = value if match_data
+                  end
+                end
+
                 def var_search(obj, name)
                   return nil unless obj
                   obj.attributes.key?(name) ? obj.attributes[name] : var_search(obj.parent, name)
