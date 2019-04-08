@@ -1,3 +1,4 @@
+dist: xenial
 language: ruby
 rvm:
 - 2.4.5
@@ -5,7 +6,7 @@ rvm:
 sudo: false
 cache: bundler
 addons:
-  postgresql: '9.5'
+  postgresql: '10'
 bundler_args: "--no-deployment"
 before_script: bundle exec rake spec:setup
 install: bin/setup
