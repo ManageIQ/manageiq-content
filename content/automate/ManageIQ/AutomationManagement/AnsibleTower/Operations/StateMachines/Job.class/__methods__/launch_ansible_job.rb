@@ -116,7 +116,8 @@ module ManageIQ
 
                 def extra_variables
                   result = ansible_vars_from_objects(@handle.object, {})
-                  ansible_vars_from_options(result)
+                  result = ansible_vars_from_options(result)
+                  ansible_vars_from_ws_values(result)
                 end
 
                 def run(job_template, target)
