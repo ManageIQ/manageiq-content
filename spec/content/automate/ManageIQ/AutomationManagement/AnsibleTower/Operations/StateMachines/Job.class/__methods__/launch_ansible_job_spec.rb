@@ -165,4 +165,17 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     described_class.new(service).main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
   end
+
+  it "get dialog parameters from ws_values" do
+    prov_options[:ws_values] = {}
+    prov_options[:ws_values][:dialog_param_name] = 'fred'
+    ext_vars['name'] = 'fred'
+    root = Spec::Support::MiqAeMockObject.new(:job_template_name => job_template.name)
+    root[:miq_provision] = svc_provision
+    service = Spec::Support::MiqAeMockService.new(root)
+    service.object = root
+    expect(job_class).to receive(:create_job).once.with(anything, job_args).and_return(svc_job)
+    described_class.new(service).main
+    expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
+  end
 end
