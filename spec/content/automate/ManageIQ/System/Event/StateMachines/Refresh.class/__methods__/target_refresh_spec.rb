@@ -19,7 +19,16 @@ describe ManageIQ::Automate::System::Event::StateMachines::Refresh::TargetRefres
 
   it 'when refresh target is specified' do
     described_class.new(ae_service).main
-    expect(ae_service.get_state_var(:refresh_task_id)).to be_truthy
+
+    expect(MiqQueue.count).to eq(1)
+
+    queue_item = MiqQueue.first
+    expect(queue_item).not_to        be_nil
+    expect(queue_item.data.count).to eq(1)
+
+    target_klass, target_id = queue_item.data.first
+    expect(target_klass).to eq(vm.class.name)
+    expect(target_id).to    eq(vm.id)
   end
 
   it 'when refresh target is not specified' do
@@ -29,6 +38,8 @@ describe ManageIQ::Automate::System::Event::StateMachines::Refresh::TargetRefres
 
   it 'when specified target does not exist' do
     ae_service.object['refresh_target'] = 'src_host'
-    expect { described_class.new(ae_service).main }.to raise_error(RuntimeError, "Refresh task not created")
+    described_class.new(ae_service).main
+
+    expect(MiqQueue.count).to eq(0)
   end
 end

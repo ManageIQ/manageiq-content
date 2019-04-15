@@ -1,44 +1,36 @@
 require_domain_file
 
 describe ManageIQ::Automate::System::Event::StateMachines::Refresh::CheckRefreshed do
-  let(:event) { FactoryBot.create(:event_stream) }
-  let(:task)  { FactoryBot.create(:miq_task) }
-
-  let(:svc_event) { MiqAeMethodService::MiqAeServiceEventStream.find(event.id) }
-  let(:svc_task)  { MiqAeMethodService::MiqAeServiceMiqTask.find(task.id) }
+  let(:ems)             { FactoryBot.create(:ems_vmware) }
+  let(:vm)              { FactoryBot.create(:vm_vmware, :ext_management_system => ems) }
+  let(:event_timestamp) { Time.now.utc }
+  let(:event)           { FactoryBot.create(:event_stream, :vm => vm, :ext_management_system => ems, :timestamp => event_timestamp) }
+  let(:svc_event)       { MiqAeMethodService::MiqAeServiceEventStream.find(event.id) }
+  let(:root_object)     { Spec::Support::MiqAeMockObject.new('event_stream' => event) }
 
   let(:ae_service) do
-    Spec::Support::MiqAeMockService.new(Spec::Support::MiqAeMockObject.new({})).tap do |service|
+    Spec::Support::MiqAeMockService.new(root_object).tap do |service|
       current_object = Spec::Support::MiqAeMockObject.new
       current_object.parent = Spec::Support::MiqAeMockObject.new({})
       service.object = current_object
     end
   end
 
-  it 'when task is finished with "ok"' do
-    ae_service.set_state_var(:refresh_task_id, [task.id])
-    task.update_attributes(:state => 'Finished')
+  it 'when event object is not found' do
+    ae_service.root['event_stream'] = nil
+    expect { described_class.new(ae_service).main }.to raise_error(RuntimeError, "Event object not found")
+  end
+
+  it 'when ems is refreshed after the event' do
+    ems.update_attributes(:last_inventory_date => event_timestamp + 1.minute)
     described_class.new(ae_service).main
     expect(ae_service.root['ae_result']).to eq('ok')
   end
 
-  it 'when task is finished with "error"' do
-    ae_service.set_state_var(:refresh_task_id, [task.id])
-    task.update_attributes(:state => 'Finished', :status => 'Timeout')
-    described_class.new(ae_service).main
-    expect(ae_service.root['ae_result']).to eq('error')
-  end
-
-  it 'when task is active' do
-    ae_service.set_state_var(:refresh_task_id, [task.id])
-    task.update_attributes(:state => 'Active')
+  it 'when ems is not refreshed after the event' do
+    ems.update_attributes(:last_inventory_date => event_timestamp - 1.minute)
     described_class.new(ae_service).main
     expect(ae_service.root['ae_result']).to eq('retry')
     expect(ae_service.root['ae_retry_interval']).to eq('1.minute')
-  end
-
-  it 'when specified task does not exist' do
-    ae_service.set_state_var(:refresh_task_id, [99])
-    expect { described_class.new(ae_service).main }.to raise_error('Refresh task with id: 99 not found')
   end
 end
