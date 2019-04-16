@@ -1,0 +1,36 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: default
+    inherits: 
+    description: 
+  fields:
+  - PreProvision:
+      value: "/PhysicalInfrastructure/PhysicalServer/Provisioning/StateMachines/Methods/PreProvision#${/#physical_server_provision_task.source.emstype}"
+      on_entry: update_provision_status(status => "Executing PreProvision")
+      on_exit: update_provision_status(status => "Executed PreProvision")
+      on_error: update_provision_status(status => "Errored PreProvision")
+      max_retries: '100'
+  - Provision:
+      value: "/PhysicalInfrastructure/PhysicalServer/Provisioning/StateMachines/Methods/Provision#${/#physical_server_provision_task.source.emstype}"
+      on_entry: update_provision_status(status => "Started Provisioning")
+      on_exit: update_provision_status(status => "Done Provisioning")
+      on_error: update_provision_status(status => "Errored while Provisioning")
+      max_retries: '100'
+  - CheckProvision:
+      value: "/PhysicalInfrastructure/PhysicalServer/Provisioning/StateMachines/Methods/CheckProvision#${/#physical_server_provision_task.source.emstype}"
+      on_entry: update_provision_status(status => "Checking if Provisioning Done")
+      on_exit: update_provision_status(status => "Provisioning Completed")
+      on_error: update_provision_status(status => "Provisioning Errored")
+      max_retries: '100'
+  - PostProvision:
+      value: "/PhysicalInfrastructure/PhysicalServer/Provisioning/StateMachines/Methods/PostProvision#${/#physical_server_provision_task.source.emstype}"
+      on_entry: update_provision_status(status => "Executing PostProvision")
+      on_exit: update_provision_status(status => "Executed PostProvision")
+      on_error: update_provision_status(status => "Errored PostProvision")
+      max_retries: '100'
+  - Finished:
+      on_exit: update_provision_status(status => "Provisioning Finished")
