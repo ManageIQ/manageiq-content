@@ -16,9 +16,7 @@ module ManageIQ
               end
 
               def main
-                task_id = event.refresh(refresh_target, true)
-                raise "Refresh task not created" if task_id.blank?
-                @handle.set_state_var(:refresh_task_id, task_id)
+                event.refresh(refresh_target, false)
               end
 
               private
