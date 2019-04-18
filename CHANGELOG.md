@@ -5,7 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-## Hammer-4
+## Hammer-5
+
+### Added
+- [V2V] Expose virt-v2v-wrapper error message in progress.states [(#514)](https://github.com/ManageIQ/manageiq-content/pull/514)
+
+### Fixed
+- Fixed State Machine and Instances for Vm Retirement. [(#515)](https://github.com/ManageIQ/manageiq-content/pull/515)
+
+### Removed
+- [V2V] Remove SetDescription state [(#509)](https://github.com/ManageIQ/manageiq-content/pull/509)
+
+## Hammer-4 - Released 2019-03-29
 
 ### Added
 - v2v Throttling moved to backend [(#504)](https://github.com/ManageIQ/manageiq-content/pull/504)
@@ -15,10 +26,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ##  Unreleased as of Sprint 107 Ending 2019-03-18
 
-### Removed
-- [V2V] Remove SetDescription state [(#509)](https://github.com/ManageIQ/manageiq-content/pull/509)
-
-## Hammer-3
+## Hammer-3 - Released 2019-03-06
 
 ### Fixed
 - Fix missing word in provisioning mail's subject and body [(#484)](https://github.com/ManageIQ/manageiq-content/pull/484)
