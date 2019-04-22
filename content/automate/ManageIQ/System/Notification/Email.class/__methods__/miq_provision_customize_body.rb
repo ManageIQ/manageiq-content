@@ -21,7 +21,7 @@ module ManageIQ
               signature = @handle.object['signature']
               # VM Provisioned Email Body
               body = "Hello,"
-              body += "<br/><br/>Your request to provision a Virtual Machine was approved and completed on #{@time}"
+              body += "<br/><br/>Your request to provision a Virtual Machine was approved and completed on #{time}"
               body += "<br/><br/>Virtual Machine #{vm}<b> will be available in approximately 15 minutes</b>. "
               body += "<br/><br/>For Windows VM access is available via RDP and for Linux VM access is available via putty/ssh, etc."
               body += " Or you can use the Console Access feature found in the detail view of your VM. "
