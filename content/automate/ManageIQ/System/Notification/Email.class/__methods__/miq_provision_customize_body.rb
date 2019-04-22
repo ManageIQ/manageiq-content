@@ -54,7 +54,7 @@ module ManageIQ
             end
 
             def time
-              @time ||= Time.zone.now.strftime('%A, %B %d, %Y at %I:%M%p').to_s
+              @time ||= Time.zone.now.strftime('%A, %B %d, %Y at %I:%M%p')
             end
 
             def vm
