@@ -55,8 +55,11 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     current_object.parent = root_object
     service.object = current_object
     job_args[:limit] = vm.name
-    expect(job_class).to receive(:create_job).with(anything, job_args).and_return(svc_job)
-    described_class.new(service).main
+
+    expect(svc_job_template).to receive(:create_job).with(job_args).and_return(svc_job)
+    launch_ansible_job = described_class.new(service)
+    expect(launch_ansible_job).to receive(:job_template_by_name).and_return(svc_job_template)
+    launch_ansible_job.main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
   end
 
@@ -69,8 +72,11 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     current_object.parent = root_object
     service.object = current_object
     job_args[:limit] = vm.name
-    expect(job_class).to receive(:create_job).with(anything, job_args).and_return(svc_job)
-    described_class.new(service).main
+
+    expect(svc_job_template).to receive(:create_job).with(job_args).and_return(svc_job)
+    launch_ansible_job = described_class.new(service)
+    expect(launch_ansible_job).to receive(:job_template_by_provider).and_return(svc_job_template)
+    launch_ansible_job.main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
   end
 
@@ -83,8 +89,11 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     current_object.parent = root_object
     service.object = current_object
     job_args[:limit] = vm.name
-    expect(job_class).to receive(:create_job).with(anything, job_args).and_return(svc_job)
-    described_class.new(service).main
+
+    expect(svc_job_template).to receive(:create_job).with(job_args).and_return(svc_job)
+    launch_ansible_job = described_class.new(service)
+    expect(launch_ansible_job).to receive(:job_template_by_provider).and_return(svc_job_template)
+    launch_ansible_job.main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
   end
 
@@ -96,8 +105,11 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     current_object.parent = root_object
     service.object = current_object
     job_args[:limit] = vm.name
-    expect(job_class).to receive(:create_job).with(anything, job_args).and_return(svc_job)
-    described_class.new(service).main
+
+    expect(svc_job_template).to receive(:create_job).with(job_args).and_return(svc_job)
+    launch_ansible_job = described_class.new(service)
+    expect(launch_ansible_job).to receive(:job_template_by_id).and_return(svc_job_template)
+    launch_ansible_job.main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
   end
 
@@ -109,7 +121,8 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     current_object.parent = root_object
     service.object = current_object
     job_args[:limit] = vm.name
-    expect(job_class).to receive(:create_job).with(anything, job_args).and_return(svc_job)
+
+    expect(svc_job_template).to receive(:create_job).with(job_args).and_return(svc_job)
     described_class.new(service).main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
   end
@@ -123,8 +136,11 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     current_object = Spec::Support::MiqAeMockObject.new('param1' => 'x=1', 'param2' => 'y=2')
     current_object.parent = root_object
     service.object = current_object
-    expect(job_class).to receive(:create_job).once.with(anything, job_args).and_return(svc_job)
-    described_class.new(service).main
+
+    expect(svc_job_template).to receive(:create_job).with(job_args).and_return(svc_job)
+    launch_ansible_job = described_class.new(service)
+    expect(launch_ansible_job).to receive(:job_template_by_name).and_return(svc_job_template)
+    launch_ansible_job.main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
   end
 
@@ -137,8 +153,11 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     current_object = Spec::Support::MiqAeMockObject.new('dialog_param_x' => '1', 'dialog_param_y' => '2')
     current_object.parent = root_object
     service.object = current_object
-    expect(job_class).to receive(:create_job).once.with(anything, job_args).and_return(svc_job)
-    described_class.new(service).main
+
+    expect(svc_job_template).to receive(:create_job).with(job_args).and_return(svc_job)
+    launch_ansible_job = described_class.new(service)
+    expect(launch_ansible_job).to receive(:job_template_by_name).and_return(svc_job_template)
+    launch_ansible_job.main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
   end
 
@@ -149,8 +168,11 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     current_object = Spec::Support::MiqAeMockObject.new('param1' => 'x=1', 'param2' => 'y=2')
     current_object.parent = root_object
     service.object = current_object
-    expect(job_class).to receive(:create_job).once.with(anything, job_args).and_return(svc_job)
-    described_class.new(service).main
+
+    expect(svc_job_template).to receive(:create_job).with(job_args).and_return(svc_job)
+    launch_ansible_job = described_class.new(service)
+    expect(launch_ansible_job).to receive(:job_template_by_name).and_return(svc_job_template)
+    launch_ansible_job.main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
   end
 
@@ -161,8 +183,10 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     root[:miq_provision] = svc_provision
     service = Spec::Support::MiqAeMockService.new(root)
     service.object = root
-    expect(job_class).to receive(:create_job).once.with(anything, job_args).and_return(svc_job)
-    described_class.new(service).main
+    expect(svc_job_template).to receive(:create_job).with(job_args).and_return(svc_job)
+    launch_ansible_job = described_class.new(service)
+    expect(launch_ansible_job).to receive(:job_template_by_name).and_return(svc_job_template)
+    launch_ansible_job.main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
   end
 
@@ -174,8 +198,33 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     root[:miq_provision] = svc_provision
     service = Spec::Support::MiqAeMockService.new(root)
     service.object = root
-    expect(job_class).to receive(:create_job).once.with(anything, job_args).and_return(svc_job)
-    described_class.new(service).main
+
+    expect(svc_job_template).to receive(:create_job).with(job_args).and_return(svc_job)
+    launch_ansible_job = described_class.new(service)
+    expect(launch_ansible_job).to receive(:job_template_by_name).and_return(svc_job_template)
+    launch_ansible_job.main
     expect(service.get_state_var(:ansible_job_id)).to eq(job.id)
+  end
+
+  describe "workflow template" do
+    let(:workflow_job_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_AutomationManager_WorkflowJob }
+    let(:workflow_jt_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_AutomationManager_ConfigurationWorkflow }
+    let(:workflow_job) { FactoryBot.create(:ansible_tower_workflow_job) }
+    let(:svc_workflow_job) { workflow_job_class.find(workflow_job.id) }
+    let(:workflow_template) { FactoryBot.create(:configuration_workflow, :manager_id => manager.id) }
+    let(:svc_workflow_template) { workflow_jt_class.find(workflow_template.id) }
+
+    it "run a workflow job using workflow template object" do
+      ext_vars['x'] = 'X'
+      ext_vars['y'] = 'Y'
+      root_object['vm'] = svc_vm
+      current_object = Spec::Support::MiqAeMockObject.new(:job_template => svc_workflow_template)
+      current_object.parent = root_object
+      service.object = current_object
+      job_args[:limit] = vm.name
+      expect(svc_workflow_template).to receive(:create_job).with(job_args).and_return(svc_workflow_job)
+      described_class.new(service).main
+      expect(service.get_state_var(:ansible_job_id)).to eq(svc_workflow_job.id)
+    end
   end
 end
