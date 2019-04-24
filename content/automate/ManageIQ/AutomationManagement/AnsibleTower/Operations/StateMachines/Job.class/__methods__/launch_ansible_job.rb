@@ -14,8 +14,7 @@ module ManageIQ
               class LaunchAnsibleJob
                 ANSIBLE_VAR_REGEX = Regexp.new(/(.*)=(.*$)/)
                 ANSIBLE_DIALOG_VAR_REGEX = Regexp.new(/dialog_param_(.*)/)
-                SCRIPT_CLASS = 'ManageIQ_Providers_AnsibleTower_AutomationManager_ConfigurationScript'.freeze
-                JOB_CLASS = 'ManageIQ_Providers_AnsibleTower_AutomationManager_Job'.freeze
+                SCRIPT_CLASS = 'ManageIQ_Providers_ExternalAutomationManager_ConfigurationScript'.freeze
                 MANAGER_CLASS = 'ManageIQ_Providers_AnsibleTower_AutomationManager'.freeze
 
                 def initialize(handle = $evm)
@@ -116,7 +115,7 @@ module ManageIQ
                   args[:limit] = target if target
                   @handle.log(:info, "Job Arguments #{args}")
 
-                  job = @handle.vmdb(JOB_CLASS).create_job(job_template, args)
+                  job = job_template.create_job(args)
 
                   @handle.log(:info, "Scheduled Job ID: #{job.id} Ansible Job ID: #{job.ems_ref}")
                   @handle.set_state_var(:ansible_job_id, job.id)

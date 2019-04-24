@@ -10,7 +10,7 @@ module ManageIQ
           module StateMachines
             module Job
               class WaitForCompletion
-                JOB_CLASS = 'ManageIQ_Providers_AnsibleTower_AutomationManager_Job'.freeze
+                JOB_CLASS = 'ManageIQ_Providers_AutomationManager_OrchestrationStack'.freeze
                 def initialize(handle = $evm)
                   @handle = handle
                 end
