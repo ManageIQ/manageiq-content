@@ -6,7 +6,8 @@ ServiceRetirement::UpdateServiceRetirementStatus do
   let(:miq_server)            { EvmSpecHelper.local_miq_server }
   let(:miq_request_task) do
     FactoryBot.create(:miq_request_task,
-                       :miq_request => request, :state => 'fred')
+                      :miq_request => request,
+                      :state       => 'active')
   end
 
   let(:request) do
@@ -40,7 +41,7 @@ ServiceRetirement::UpdateServiceRetirementStatus do
     end
 
     before do
-      allow(ae_service).to receive(:inputs) { {'status' => "fred"} }
+      allow(ae_service).to receive(:inputs) { {'status' => "active"} }
       ae_service.root['ae_result'] = 'ok'
     end
 
@@ -51,7 +52,7 @@ ServiceRetirement::UpdateServiceRetirementStatus do
 
     it "request message set properly" do
       described_class.new(ae_service).main
-      msg = "Server [#{miq_server.name}] Step [] Status [fred] Message [] "
+      msg = "Server [#{miq_server.name}] Step [] Status [active] Message [] "
       expect(svc_model_request.reload.message).to eq(msg)
     end
 
@@ -59,6 +60,20 @@ ServiceRetirement::UpdateServiceRetirementStatus do
       ae_service.root['ae_result'] = "error"
       expect(ae_service).to receive(:create_notification)
       described_class.new(ae_service).main
+    end
+  end
+
+  context "without a service retire task" do
+    let(:root_hash)   { {} }
+    let(:root_object) do
+      obj = Spec::Support::MiqAeMockObject.new(root_hash)
+      obj["miq_server"] = svc_model_miq_server
+      obj
+    end
+
+    it "Task not provided" do
+      described_class.new(ae_service).main
+      expect { described_class.new(ae_service).main }.not_to raise_error
     end
   end
 end
