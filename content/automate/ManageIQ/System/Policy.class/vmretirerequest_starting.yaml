@@ -7,8 +7,4 @@ object:
     name: VmRetireRequest_starting
     inherits: 
     description: 
-  fields:
-  - rel4:
-      value: "/System/Process/parse_provider_category"
-  - rel5:
-      value: "/${/#ae_provider_category}/VM/Lifecycle/Retirement?vm_id=${process#vm_id} "
+  fields: []
