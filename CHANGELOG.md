@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-## Hammer-5
+## Hammer-6
+
+### Fixed
+- VM Retirement Request - clear values from vmretire_request_starting instance. [(#532)](https://github.com/ManageIQ/manageiq-content/pull/532)
+
+## Hammer-5 - Released 2019-04-23
 
 ### Added
 - [V2V] Expose virt-v2v-wrapper error message in progress.states [(#514)](https://github.com/ManageIQ/manageiq-content/pull/514)
