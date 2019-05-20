@@ -214,7 +214,7 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     let(:workflow_template) { FactoryBot.create(:configuration_workflow, :manager_id => manager.id) }
     let(:svc_workflow_template) { workflow_jt_class.find(workflow_template.id) }
 
-    it "run a workflow job using workflow template object" do
+    before do
       ext_vars['x'] = 'X'
       ext_vars['y'] = 'Y'
       root_object['vm'] = svc_vm
@@ -222,7 +222,19 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
       current_object.parent = root_object
       service.object = current_object
       job_args[:limit] = vm.name
+    end
+
+    it "run a workflow job using workflow template object" do
       expect(svc_workflow_template).to receive(:create_job).with(job_args).and_return(svc_workflow_job)
+      described_class.new(service).main
+      expect(service.get_state_var(:ansible_job_id)).to eq(svc_workflow_job.id)
+    end
+
+    it "call TemplateRunner with specified zone" do
+      root_object['zone'] = 'some_zone'
+      miq_job = double("TemplateRunner", :wait_on_ansible_job => svc_workflow_job, :signal => nil)
+      runner_class = ManageIQ::Providers::AnsibleTower::AutomationManager::TemplateRunner
+      expect(runner_class).to receive(:create_job).with(hash_including(:zone => 'some_zone')).and_return(miq_job)
       described_class.new(service).main
       expect(service.get_state_var(:ansible_job_id)).to eq(svc_workflow_job.id)
     end
