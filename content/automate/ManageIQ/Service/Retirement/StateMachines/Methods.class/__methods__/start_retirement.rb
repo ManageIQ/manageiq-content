@@ -20,6 +20,12 @@ if service.retiring?
   exit MIQ_ABORT
 end
 
+unless $evm.root['service_retire_task']
+  $evm.log(:error, "Service retire task not found")
+  $evm.log(:error, "The old style retirement is incompatible with the new retirement state machine.")
+  exit(MIQ_ABORT)
+end
+
 $evm.create_notification(:type => :service_retiring, :subject => service)
 service.start_retirement
 

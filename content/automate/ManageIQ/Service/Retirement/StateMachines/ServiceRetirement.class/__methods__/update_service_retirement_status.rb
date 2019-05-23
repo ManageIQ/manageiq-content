@@ -16,7 +16,7 @@ module ManageIQ
 
                 if @handle.root['ae_result'] == "error"
                   @handle.create_notification(:level   => "error",
-                                              :subject => task.miq_request,
+                                              :subject => task.try(:miq_request),
                                               :message => "Service Retire Error: #{updated_message}")
                   @handle.log(:error, "Service Retire Error: #{updated_message}")
                 end
