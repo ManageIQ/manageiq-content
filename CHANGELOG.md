@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-## Hammer-6
+##  Unreleased as of Sprint 112 Ending 2019-05-27
+
+### Fixed
+- Support flavors for catalog bundles with Orchestration [(#535)](https://github.com/ManageIQ/manageiq-content/pull/535)
+
+## Hammer-6 - Released 2019-05-22
 
 ### Fixed
 - VM Retirement Request - clear values from vmretire_request_starting instance. [(#532)](https://github.com/ManageIQ/manageiq-content/pull/532)
@@ -28,8 +33,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Fixed
 - [V2V] Remove check on power_off variable [(#513)](https://github.com/ManageIQ/manageiq-content/pull/513)
-
-##  Unreleased as of Sprint 107 Ending 2019-03-18
 
 ## Hammer-3 - Released 2019-03-06
 
