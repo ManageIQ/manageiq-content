@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+## Hammer-7
+
+### Fixed
+- Change refresh target to src_vm_or_dest_host for DrsMigrateVM_Task_Complete [(#531)](https://github.com/ManageIQ/manageiq-content/pull/531)
+- Fix Service Retirement requests leaving the Service as 'retiring'. [(#530)](https://github.com/ManageIQ/manageiq-content/pull/530)
+
 ##  Unreleased as of Sprint 112 Ending 2019-05-27
 
 ### Fixed
