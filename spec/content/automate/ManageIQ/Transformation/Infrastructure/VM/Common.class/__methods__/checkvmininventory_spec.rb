@@ -6,9 +6,9 @@ describe ManageIQ::Automate::Transformation::Infrastructure::VM::Common::CheckVm
   let(:src_vm_vmware) { FactoryBot.create(:vm_vmware, :ext_management_system => src_ems, :ems_cluster => src_cluster) }
   let(:dst_vm_redhat) { FactoryBot.create(:vm_redhat, :ext_management_system => dst_ems) }
   let(:dst_vm_openstack) { FactoryBot.create(:vm_openstack, :ext_management_system => dst_ems) }
-  let(:src_ems) { FactoryBot.create(:ext_management_system) }
+  let(:src_ems) { FactoryBot.create(:ems_vmware) }
   let(:src_cluster) { FactoryBot.create(:ems_cluster, :ext_management_system => src_ems) }
-  let(:dst_ems) { FactoryBot.create(:ext_management_system) }
+  let(:dst_ems) { FactoryBot.create(:ems_redhat) }
   let(:dst_cluster) { FactoryBot.create(:ems_cluster, :ext_management_system => dst_ems) }
 
   let(:mapping) do
