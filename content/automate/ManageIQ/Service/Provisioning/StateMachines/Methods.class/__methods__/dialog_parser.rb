@@ -1,3 +1,4 @@
+SPECIAL_PASSWORD_FIELDS = [:root_password, :sysprep_password, :sysprep_domain_password, :sysprep_admin_password].freeze
 
 def vmdb_object_from_array_entry(entry)
   model, id = entry.split("::")
@@ -53,7 +54,7 @@ def add_password_value(sequence, option_key, value, options_hash)
 end
 
 def special_password?(option_key)
-  [:root_password, :sysprep_password, :sysprep_domain_password, :sysprep_admin_password].include?(option_key) ? true : false
+  SPECIAL_PASSWORD_FIELDS.include?(option_key) ? true : false
 end
 
 def option_hash_value(dialog_key, dialog_value, options_hash)
