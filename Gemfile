@@ -4,6 +4,8 @@ gemspec
 
 # Load Gemfile with dependencies from manageiq
 manageiq_gemfile = File.expand_path("spec/manageiq/Gemfile", __dir__)
+
+gem 'manageiq-automation_engine', :github => "jrafanie/manageiq-automation_engine", :branch => "rails-5-1"
 if File.exist?(manageiq_gemfile)
   eval_gemfile(manageiq_gemfile)
 else
