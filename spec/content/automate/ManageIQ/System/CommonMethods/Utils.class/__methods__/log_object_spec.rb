@@ -2,7 +2,7 @@ require_domain_file
 describe ManageIQ::Automate::System::CommonMethods::Utils::LogObject do
   let(:user) { FactoryBot.create(:user_with_email_and_group) }
   let(:svc_model_user) { MiqAeMethodService::MiqAeServiceUser.find(user.id) }
-  let(:ems) { FactoryBot.create(:ext_management_system) }
+  let(:ems) { FactoryBot.create(:ems_vmware) }
   let(:ar_object) { svc_model_user }
 
   let(:root) do
