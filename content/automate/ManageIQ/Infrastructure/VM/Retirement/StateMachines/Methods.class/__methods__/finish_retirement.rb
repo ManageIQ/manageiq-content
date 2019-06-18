@@ -3,5 +3,7 @@
 #
 
 vm = $evm.root['vm']
-vm.finish_retirement if vm
-$evm.create_notification(:type => :vm_retired, :subject => vm) if vm
+if vm && !vm.retired?
+ vm.finish_retirement
+ $evm.create_notification(:type => :vm_retired, :subject => vm)
+end
