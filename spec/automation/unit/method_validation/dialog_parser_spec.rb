@@ -104,6 +104,17 @@ describe "DialogParser Automate Method" do
       expect(pdo).to eql(parsed_dialog_options_hash)
     end
 
+    it "with provisioing dialog password" do
+      dialog_hash = {'password::dialog_root_password' => "v2:{i7uvqmb1Dr6WAxCpakNE9w==}"}
+      parsed_dialog_options_hash = {0 => {:"password::dialog_root_password" => "v2:{i7uvqmb1Dr6WAxCpakNE9w==}",
+                                          :"password::root_password"        => "v2:{i7uvqmb1Dr6WAxCpakNE9w==}",
+                                          :root_password                    => "v2:{i7uvqmb1Dr6WAxCpakNE9w==}"}}
+      setup_and_run_method(dialog_hash)
+      pdo = load_options
+
+      expect(pdo).to eql(parsed_dialog_options_hash)
+    end
+
     it "with no dialogs set" do
       @root_stp.options = @root_stp.options.merge(:dialog => {})
       @root_stp.save
