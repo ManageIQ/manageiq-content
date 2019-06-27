@@ -17,10 +17,15 @@ module ManageIQ
 
             private
 
+            def orchestration_manager_from_bundle(service)
+              service.service_templates.detect(&:orchestration_manager).try(:orchestration_manager) if service.respond_to?(:service_templates)
+            end
+
             def fetch_list_data
               service = @handle.root.attributes["service_template"] || @handle.root.attributes["service"]
-              flavors = service.try(:orchestration_manager).try(:flavors)
 
+              orch_mgr = service.try(:orchestration_manager) || orchestration_manager_from_bundle(service)
+              flavors = orch_mgr.try(:flavors)
               flavor_list = {}
               flavors.each { |f| flavor_list[f.name] = f.name } if flavors
 

@@ -1,3 +1,4 @@
+PROVISION_DIALOG_PASSWORD_FIELDS = [:root_password, :sysprep_password, :sysprep_domain_password, :sysprep_admin_password].freeze
 
 def vmdb_object_from_array_entry(entry)
   model, id = entry.split("::")
@@ -46,6 +47,14 @@ def add_password_value(sequence, option_key, value, options_hash)
   prefixed_option_key = 'password::dialog_' + option_key
   add_hash_value(sequence, stripped_option_key.to_sym, value, options_hash)
   add_hash_value(sequence, prefixed_option_key.to_sym, value, options_hash)
+
+  if provision_dialog_password?(option_key.to_sym)
+    add_hash_value(sequence, option_key.to_sym, value, options_hash)
+  end
+end
+
+def provision_dialog_password?(option_key)
+  PROVISION_DIALOG_PASSWORD_FIELDS.include?(option_key) ? true : false
 end
 
 def option_hash_value(dialog_key, dialog_value, options_hash)

@@ -16,6 +16,7 @@ module ManageIQ
                 ANSIBLE_DIALOG_VAR_REGEX = Regexp.new(/dialog_param_(.*)/)
                 SCRIPT_CLASS = 'ManageIQ_Providers_ExternalAutomationManager_ConfigurationScript'.freeze
                 MANAGER_CLASS = 'ManageIQ_Providers_AnsibleTower_AutomationManager'.freeze
+                TEMPLATE_RUNNER_CLASS = 'ManageIQ_Providers_AnsibleTower_AutomationManager_TemplateRunner'.freeze
 
                 def initialize(handle = $evm)
                   @handle = handle
@@ -119,13 +120,30 @@ module ManageIQ
                   ansible_vars_from_ws_values(result)
                 end
 
+                def zone_from_request
+                  @handle.root["zone"]
+                end
+
+                def create_job_in_zone(options)
+                  opts = options.merge(
+                    :name                => "Launch Ansible job with template: #{job_template.name}",
+                    :ansible_template_id => job_template.id,
+                    :userid              => @handle.root['user']&.id || 'system',
+                    :zone                => zone_from_request
+                  )
+                  opts[:log_output] ||= 'on_error'
+                  miq_job = @handle.vmdb(TEMPLATE_RUNNER_CLASS).create_job(opts)
+                  miq_job.signal(:start, :priority => 20)
+                  miq_job.wait_on_ansible_job
+                end
+
                 def run(job_template, target)
                   @handle.log(:info, "Processing Job Template #{job_template.name}")
                   args = {:extra_vars => extra_variables}
                   args[:limit] = target if target
                   @handle.log(:info, "Job Arguments #{args}")
 
-                  job = job_template.create_job(args)
+                  job = zone_from_request.blank? ? job_template.create_job(args) : create_job_in_zone(args)
 
                   @handle.log(:info, "Scheduled Job ID: #{job.id} Ansible Job ID: #{job.ems_ref}")
                   @handle.set_state_var(:ansible_job_id, job.id)

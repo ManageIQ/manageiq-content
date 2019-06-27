@@ -1,37 +1,43 @@
 require 'simplecov'
 SimpleCov.start
 
-require 'manageiq-content'
+if ENV["TRAVIS"] || ENV['CI']
+  require 'coveralls'
+  Coveralls.wear!('rails') { add_filter("/spec/") }
+end
 
-# Reset only the ManageIQ automate domain when testing.
-ENV["AUTOMATE_DOMAINS"] = "ManageIQ"
+ENV["RAILS_ENV"] ||= 'test'
+ENV["AUTOMATE_DOMAINS"] = "ManageIQ" # Reset only the ManageIQ automate domain when testing.
+
+require File.expand_path('manageiq/config/environment', __dir__)
+require 'rspec/rails'
 
 def require_domain_file
-  spec_name = caller_locations.first.path
+  spec_name = caller_locations(1..1).first.path
   file_name = spec_name.sub("spec/", "").sub("_spec.rb", ".rb")
-
   AutomateClassDefinitionHook.require_with_hook(file_name)
 end
 
-def domain_file
-  caller_locations(1..1).first.path.sub("spec/", "").sub("_spec.rb", ".rb")
-end
-
+# Requires supporting ruby files
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 Dir[ManageIQ::AutomationEngine::Engine.root.join("spec/support/**/*.rb")].each { |f| require f }
 Dir[ManageIQ::Content::Engine.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
   config.include Spec::Support::AutomationHelper
+  config.include Spec::Support::RakeTaskExampleGroup, :type => :rake_task
 
-  config.around(:example) do |ex|
-    begin
-      ex.run
-    rescue SystemExit => e
-      STDERR.puts
-      STDERR.puts "Kernel.exit called from:"
-      STDERR.puts e.backtrace
-      exit 1
-    end
+  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.use_transactional_fixtures = true
+  config.use_instantiated_fixtures  = false
+
+  config.expect_with :rspec do |c|
+    c.syntax = :expect
+  end
+
+  config.mock_with :rspec do |c|
+    c.allow_message_expectations_on_nil = false
+    c.syntax = :expect
   end
 
   config.before(:suite) do
@@ -41,9 +47,36 @@ RSpec.configure do |config|
     MiqAeDatastore.reset_to_defaults
   end
 
+  config.before do
+    EmsRefresh.try(:debug_failures=, true)
+  end
+
+  config.around(:each) do |ex|
+    begin
+      EvmSpecHelper.clear_caches { ex.run }
+    rescue SystemExit => e
+      STDERR.puts
+      STDERR.puts "Kernel.exit called from:"
+      STDERR.puts e.backtrace
+      exit 1
+    end
+  end
+
   config.after(:suite) do
     MiqAeDatastore.reset
   end
+
+  unless ENV['CI']
+    # File store for --only-failures option
+    config.example_status_persistence_file_path = Rails.root.join('tmp', 'rspec_example_store.txt')
+  end
+
+  if config.backtrace_exclusion_patterns.delete(%r{/lib\d*/ruby/})
+    config.backtrace_exclusion_patterns << %r{/lib\d*/ruby/[0-9]}
+  end
+
+  config.backtrace_exclusion_patterns << %r{/spec/spec_helper}
+  config.backtrace_exclusion_patterns << %r{/spec/support/evm_spec_helper}
 end
 
 module AutomateClassDefinitionHook
