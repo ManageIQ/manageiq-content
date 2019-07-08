@@ -88,8 +88,10 @@ module ManageIQ
                   @handle.log("info", "Check refresh status of stack (#{service.stack_name})")
 
                   if refresh_may_have_completed?(service)
-                    @handle.root['ae_result'] = @handle.get_state_var('update_result')
-                    @handle.root['ae_reason'] = @handle.get_state_var('update_reason')
+                    @handle.root['ae_result'] = 'ok'
+                    @handle.root['ae_reason'] = ''
+                    @handle.set_state_var('update_result', @handle.root['ae_result'])
+                    @handle.set_state_var('update_reason', @handle.root['ae_reason'])
                   else
                     @handle.root['ae_result']         = 'retry'
                     @handle.root['ae_retry_interval'] = '30.seconds'

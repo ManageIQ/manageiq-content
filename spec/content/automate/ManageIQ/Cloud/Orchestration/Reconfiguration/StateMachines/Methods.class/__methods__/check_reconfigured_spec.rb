@@ -43,8 +43,8 @@ describe ManageIQ::Automate::Cloud::Orchestration::Reconfiguration::StateMachine
   end
 
   context "with a service" do
-    let(:update_result) { 'ae_result' }
-    let(:update_reason) { 'ae_reason' }
+    let(:update_result) { 'ok' }
+    let(:update_reason) { '' }
 
     before do
       allow(svc_model_service_reconfigure_task).to receive(:source).and_return(svc_model_service)
@@ -57,7 +57,6 @@ describe ManageIQ::Automate::Cloud::Orchestration::Reconfiguration::StateMachine
         ae_service.set_state_var('update_result', update_result)
         ae_service.set_state_var('update_reason', update_reason)
 
-        expect(svc_model_service_reconfigure_task).to receive(:user_message=).with(update_reason)
         described_class.new(ae_service).main
         expect(ae_service.root['ae_result']).to eq(update_result)
         expect(ae_service.root['ae_reason']).to eq(update_reason)
@@ -95,7 +94,6 @@ describe ManageIQ::Automate::Cloud::Orchestration::Reconfiguration::StateMachine
         allow(svc_model_service).to receive(:orchestration_stack_status)
           .and_return(['rollback_complete', update_reason])
 
-        expect(svc_model_service_reconfigure_task).to receive(:user_message=).with(update_reason)
         described_class.new(ae_service).main
         expect(ae_service.get_state_var('update_result')).to eq('error')
         expect(ae_service.get_state_var('update_reason')).to eq(update_reason)
