@@ -5,7 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-## Hammer-9
+## Ivanchuk Beta1
+
+### Fixed
+- Support flavors for catalog bundles with Orchestration [(#535)](https://github.com/ManageIQ/manageiq-content/pull/535)
+- Add specs for storage_hosts that are inaccessible [(#506)](https://github.com/ManageIQ/manageiq-content/pull/506)
+- #raw_stdout does not exist for workflow template job. [(#491)](https://github.com/ManageIQ/manageiq-content/pull/491)
+
+## Hammer-9 - Released 2019-07-23
 
 ### Fixed
 - Fix check_reconfigured ae_result to prevent retry loop and failure. [(#548)](https://github.com/ManageIQ/manageiq-content/pull/548)
@@ -15,11 +22,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ### Fixed
 - Change refresh target to src_vm_or_dest_host for DrsMigrateVM_Task_Complete [(#531)](https://github.com/ManageIQ/manageiq-content/pull/531)
 - Fix Service Retirement requests leaving the Service as 'retiring'. [(#530)](https://github.com/ManageIQ/manageiq-content/pull/530)
-
-##  Unreleased as of Sprint 112 Ending 2019-05-27
-
-### Fixed
-- Support flavors for catalog bundles with Orchestration [(#535)](https://github.com/ManageIQ/manageiq-content/pull/535)
 
 ## Hammer-6 - Released 2019-05-22
 
@@ -50,20 +52,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ### Fixed
 - Fix missing word in provisioning mail's subject and body [(#484)](https://github.com/ManageIQ/manageiq-content/pull/484)
 
-##  Unreleased as of Sprint 105 Ending 2019-02-18
-
-### Fixed
-- Add specs for storage_hosts that are inaccessible [(#506)](https://github.com/ManageIQ/manageiq-content/pull/506)
-
 ## Hammer-2 - Released 2019-02-07
 
 ### Added
 - Add handler for compute.instance.update [(#497)](https://github.com/ManageIQ/manageiq-content/pull/497)
-
-## Unreleased as of Sprint 102 ending 2019-01-07
-
-### Fixed
-- #raw_stdout does not exist for workflow template job. [(#491)](https://github.com/ManageIQ/manageiq-content/pull/491)
 
 ## Hammer-1 - Released 2019-01-15
 
