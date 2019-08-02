@@ -110,10 +110,16 @@ class ManageIQAutomate(object):
     def exists(self, path):
         """
             Validate all passed objects before attempting to set or get values from them
+
+            Wrap all reduced values in quotes so the bool() method will not
+            return a False on falsey values
         """
         list_path = path.split("|")
+        str = None
         try:
-            return bool(reduce(operator.getitem, list_path, self._target))
+            reduced_str = reduce(operator.getitem, list_path, self._target)
+            str = "%s" % (reduced_str)
+            return bool(str)
         except KeyError as error:
             return False
 
