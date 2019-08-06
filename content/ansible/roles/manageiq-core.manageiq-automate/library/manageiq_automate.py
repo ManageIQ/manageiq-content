@@ -371,7 +371,7 @@ class Workspace(ManageIQAutomate):
 
         obj = dict_options['object']
         if self.object_exists(dict_options):
-            for new_attribute, new_value in new_attributes.iteritems():
+            for new_attribute, new_value in new_attributes.items():
                 self._target['workspace']['input']['objects'][obj][new_attribute] = new_value
                 if self._target['workspace']['output']['objects'].get(obj) is None:
                     self._target['workspace']['output']['objects'][obj] = dict()
@@ -486,11 +486,11 @@ def main():
 
     workspace = Workspace(module, module.params['workspace'])
 
-    for key, value in boolean_opts.iteritems():
+    for key, value in boolean_opts.items():
         if value:
             result = getattr(workspace, key)()
             module.exit_json(**result)
-    for key, value in argument_opts.iteritems():
+    for key, value in argument_opts.items():
         if value:
             result = getattr(workspace, key)(value)
             module.exit_json(**result)
