@@ -29,7 +29,7 @@ module ManageIQ
             return if target_host.blank?
             service_dialog_options = {
               :credential => service_template.options[:config_info][:provision][:credential_id],
-              :hosts => target_host.ipaddresses.first
+              :hosts      => target_host.ipaddresses.first
             }
             service_request = @handle.execute(:create_service_provision_request, service_template, service_dialog_options)
             task.set_option("#{transformation_hook}_ansible_playbook_service_request_id".to_sym, service_request.id)
