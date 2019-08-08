@@ -28,7 +28,7 @@ module ManageIQ
             target_host = target_host(task, transformation_hook)
             return if target_host.blank?
             service_dialog_options = {
-              :credential => service_template.options[:config_info][:provision][:credential_id],
+              :credential => service_template.config_info[:provision][:credential_id],
               :hosts      => target_host.ipaddresses.first
             }
             service_request = @handle.execute(:create_service_provision_request, service_template, service_dialog_options)
