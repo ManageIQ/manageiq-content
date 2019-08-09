@@ -42,7 +42,7 @@ describe ManageIQ::Automate::Transformation::Ansible::LaunchPlaybookAsAService d
           :credential_id => credential.id
         }
       }
-     }
+    }
   end
 
   let(:service_template_ansible_playbook_pre) { ServiceTemplateAnsiblePlaybook.create_catalog_item(ansible_playbook_pre_catalog_item_options, user) }
@@ -65,7 +65,7 @@ describe ManageIQ::Automate::Transformation::Ansible::LaunchPlaybookAsAService d
       :config_info => {
         :transformation_mapping_id => mapping.id,
         :pre_service_id            => service_template_ansible_playbook_pre.id,
-        :post_service_id            => service_template_ansible_playbook_post.id,
+        :post_service_id           => service_template_ansible_playbook_post.id,
         :actions                   => [
           {:vm_id => src_vm_vmware.id.to_s, :pre_service => true, :post_service => true}
         ],
@@ -125,7 +125,7 @@ describe ManageIQ::Automate::Transformation::Ansible::LaunchPlaybookAsAService d
     it "creates a service provision request and store the request id in task" do
       service_dialog_options = {
         :credential => credential.id,
-        :hosts => "10.0.0.1"
+        :hosts      => "10.0.0.1"
       }
       expect(ae_service).to receive(:execute).with(:create_service_provision_request, same_class_and_id(svc_model_service_template_ansible_playbook_pre), service_dialog_options)
       described_class.new(ae_service).main
