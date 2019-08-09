@@ -1,7 +1,7 @@
-#! /usr/bin/python
+#! /usr/libexec/platform-python -s
 
 from __future__ import (absolute_import, division, print_function)
-import os
+import os,functools
 
 __metaclass__ = type
 
@@ -117,7 +117,7 @@ class ManageIQAutomate(object):
         list_path = path.split("|")
         str = None
         try:
-            reduced_str = reduce(operator.getitem, list_path, self._target)
+            reduced_str = functools.reduce(operator.getitem, list_path, self._target)
             str = "%s" % (reduced_str)
             return bool(str)
         except KeyError as error:
@@ -377,7 +377,7 @@ class Workspace(ManageIQAutomate):
 
         obj = dict_options['object']
         if self.object_exists(dict_options):
-            for new_attribute, new_value in new_attributes.iteritems():
+            for new_attribute, new_value in new_attributes.items():
                 self._target['workspace']['input']['objects'][obj][new_attribute] = new_value
                 if self._target['workspace']['output']['objects'].get(obj) is None:
                     self._target['workspace']['output']['objects'][obj] = dict()
@@ -492,11 +492,11 @@ def main():
 
     workspace = Workspace(module, module.params['workspace'])
 
-    for key, value in boolean_opts.iteritems():
+    for key, value in boolean_opts.items():
         if value:
             result = getattr(workspace, key)()
             module.exit_json(**result)
-    for key, value in argument_opts.iteritems():
+    for key, value in argument_opts.items():
         if value:
             result = getattr(workspace, key)(value)
             module.exit_json(**result)
