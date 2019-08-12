@@ -1,4 +1,5 @@
 require_domain_file
+require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Transformation/Common.class/__methods__/utils.rb')
 
 describe ManageIQ::Automate::Transformation::Ansible::LaunchPlaybookAsAService do
   let(:user) { FactoryBot.create(:user_with_email_and_group) }
@@ -87,7 +88,6 @@ describe ManageIQ::Automate::Transformation::Ansible::LaunchPlaybookAsAService d
     Spec::Support::MiqAeMockObject.new(
       'current'                                   => current_object,
       'user'                                      => svc_model_user,
-      'service_template_transformation_plan_task' => svc_model_transformation_plan_task,
       'state_machine_phase'                       => 'transformation'
     )
   end
@@ -102,22 +102,33 @@ describe ManageIQ::Automate::Transformation::Ansible::LaunchPlaybookAsAService d
   end
 
   before do
-    allow(ae_service).to receive(:execute).and_return(svc_model_ansible_playbook_pre_service_request)
+    allow(ManageIQ::Automate::Transformation::Common::Utils).to receive(:task).and_return(svc_model_transformation_plan_task)
+    allow(ManageIQ::Automate::Transformation::Common::Utils).to receive(:source_vm).and_return(svc_model_src_vm_vmware)
+    allow(ManageIQ::Automate::Transformation::Common::Utils).to receive(:destination_vm).and_return(svc_model_dst_vm_redhat)
     allow(ae_service).to receive(:inputs).and_return('transformation_hook' => 'pre')
+    allow(ae_service).to receive(:execute).and_return(svc_model_ansible_playbook_pre_service_request)
+    allow(svc_model_src_vm_vmware).to receive(:refresh).with(no_args).and_return(nil)
     svc_model_transformation_plan_task.set_option(:destination_vm_id, dst_vm_redhat.id)
   end
 
   describe "target_host" do
     it "returns source vm for pre migration" do
-      expect(described_class.new(ae_service).target_host(svc_model_transformation_plan_task, "pre").id).to eq(svc_model_src_vm_vmware.id)
+      expect(described_class.new(ae_service).target_host.id).to eq(svc_model_src_vm_vmware.id)
     end
 
     it "returns destination vm for post migration" do
-      expect(described_class.new(ae_service).target_host(svc_model_transformation_plan_task, "post").id).to eq(svc_model_dst_vm_redhat.id)
+      allow(ae_service).to receive(:inputs).and_return('transformation_hook' => 'post')
+      expect(described_class.new(ae_service).target_host.id).to eq(svc_model_dst_vm_redhat.id)
     end
   end
 
   describe "main" do
+    it "retries if target vm has no ip address" do
+      src_hardware.networks = []
+      described_class.new(ae_service).main
+      expect(ae_service.root['ae_result']).to eq('retry')
+    end
+
     it "creates a service provision request and store the request id in task" do
       service_dialog_options = {
         :credential => credential.id,
