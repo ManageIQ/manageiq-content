@@ -18,7 +18,7 @@ object:
       datatype: string
       priority: 1
       owner: 
-      default_value: hammer-9
+      default_value: hammer-10
       substitute: true
       message: create
       visibility: 
