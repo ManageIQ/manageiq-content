@@ -1,9 +1,5 @@
 require_domain_file
 
-RSpec::Matchers.define :same_class_and_id do |obj|
-  match { |actual| actual.class == obj.class && actual.id == obj.id }
-end
-
 describe ManageIQ::Automate::Transformation::Ansible::LaunchPlaybookAsAService do
   let(:user) { FactoryBot.create(:user_with_email_and_group) }
   let(:group) { FactoryBot.create(:miq_group) }
@@ -127,7 +123,7 @@ describe ManageIQ::Automate::Transformation::Ansible::LaunchPlaybookAsAService d
         :credential => credential.id,
         :hosts      => "10.0.0.1"
       }
-      expect(ae_service).to receive(:execute).with(:create_service_provision_request, same_class_and_id(svc_model_service_template_ansible_playbook_pre), service_dialog_options)
+      expect(ae_service).to receive(:execute).with(:create_service_provision_request, svc_model_service_template_ansible_playbook_pre, service_dialog_options)
       described_class.new(ae_service).main
       expect(svc_model_transformation_plan_task.options[:pre_ansible_playbook_service_request_id]).to eq(svc_model_ansible_playbook_pre_service_request.id)
     end
