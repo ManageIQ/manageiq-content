@@ -86,9 +86,9 @@ describe ManageIQ::Automate::Transformation::Ansible::LaunchPlaybookAsAService d
 
   let(:root) do
     Spec::Support::MiqAeMockObject.new(
-      'current'                                   => current_object,
-      'user'                                      => svc_model_user,
-      'state_machine_phase'                       => 'transformation'
+      'current'             => current_object,
+      'user'                => svc_model_user,
+      'state_machine_phase' => 'transformation'
     )
   end
 

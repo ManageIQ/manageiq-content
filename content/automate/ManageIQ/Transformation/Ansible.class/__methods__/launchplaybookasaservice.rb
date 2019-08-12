@@ -32,10 +32,12 @@ module ManageIQ
 
           def main
             return if @transformation_hook == '_'
+
             service_template = @task.send("#{@transformation_hook}_ansible_playbook_service_template")
             return if service_template.nil?
             return if target_host.blank?
             return unless ipaddress_available
+
             service_dialog_options = {
               :credential => service_template.config_info[:provision][:credential_id],
               :hosts      => target_host.ipaddresses.first
