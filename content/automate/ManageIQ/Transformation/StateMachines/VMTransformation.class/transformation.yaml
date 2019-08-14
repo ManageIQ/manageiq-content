@@ -13,13 +13,13 @@ object:
   - cleanup_state_machine:
       value: "/Transformation/StateMachines/VMTransformation/TransformationCleanup"
   - State5:
-      value: "/Transformation/Common/WaitForHandover"
+      value: "/Transformation/Common/PreflightCheck"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
-        => "Waiting for Handover", task_message => "Pre-migration")
+        => "Waiting for PreflightCheck", task_message => "Pre-migration")
       on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
-        => "Waiting for Handover", task_message => "Pre-migration")
+        => "Waiting for PreflightCheck", task_message => "Pre-migration")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
-        => "Waiting for Handover", task_message => "Pre-migration")
+        => "Waiting for PreflightCheck", task_message => "Pre-migration")
       max_retries: '86400'
   - State8:
       value: "/Transformation/StateMachines/VMTransformation/PreTransform?state_ancestry=${#state_ancestry}/${#ae_state}"
