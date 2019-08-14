@@ -1,7 +1,7 @@
 require_domain_file
 require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Transformation/Common.class/__methods__/utils.rb')
 
-describe ManageIQ::Automate::Transformation::Common::WaitForHandover do
+describe ManageIQ::Automate::Transformation::Common::PreflightCheck do
   let(:user) { FactoryBot.create(:user_with_email_and_group) }
   let(:task) { FactoryBot.create(:service_template_transformation_plan_task) }
   let(:vm) { FactoryBot.create(:vm_openstack) }
@@ -41,17 +41,8 @@ describe ManageIQ::Automate::Transformation::Common::WaitForHandover do
       expect(ae_service.root['ae_retry_interval']).to eq(15.seconds)
     end
 
-    it "retries when preflight check passed and handover is not done" do
+    it "stops retrying when preflight check passed" do
       allow(svc_model_task).to receive(:state).and_return('migrate')
-      described_class.new(ae_service).main
-      expect(ae_service.root['ae_result']).to eq('retry')
-      expect(ae_service.root['ae_retry_server_affinity']).to eq(true)
-      expect(ae_service.root['ae_retry_interval']).to eq(15.seconds)
-    end
-
-    it "stops retrying when preflight check passed and handover is done" do
-      allow(svc_model_task).to receive(:state).and_return('migrate')
-      svc_model_task.set_option(:workflow_runner, 'automate')
       described_class.new(ae_service).main
       expect(ae_service.root['ae_result']).to be_nil
       expect(ae_service.root['ae_retry_server_affinity']).to be_nil
