@@ -9,6 +9,8 @@ object:
     scope: instance
     language: ruby
     location: inline
+    embedded_methods:
+    - "/Transformation/Common/Utils"
     options: {}
   inputs:
   - field:
