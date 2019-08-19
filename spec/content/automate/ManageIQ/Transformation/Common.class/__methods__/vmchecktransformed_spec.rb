@@ -29,6 +29,7 @@ describe ManageIQ::Automate::Transformation::Common::VMCheckTransformed do
 
   before do
     allow(ManageIQ::Automate::Transformation::Common::Utils).to receive(:task).and_return(svc_model_task)
+    allow(svc_model_task).to receive(:get_conversion_state)
   end
 
   describe "#main" do
