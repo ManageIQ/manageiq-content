@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-## Ivanchuk-Beta2
+## Unreleased as of Sprint 118 - 2019-08-19
+
+### Fixed
+- Vm retirement is processed by VmRetireRequest state machine. [(#552)](https://github.com/ManageIQ/manageiq-content/pull/552)
+
+## Ivanchuk-Beta2 - Released 2019-08-15
 
 ### Fixed
 - manageiq-core.manageiq-automate Wrap all values in quotes [(#555)](https://github.com/ManageIQ/manageiq-content/pull/555)
