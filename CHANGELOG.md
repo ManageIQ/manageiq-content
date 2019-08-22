@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+## Ivanchuk RC1
+
+### Added
+- Changes for Python 3 compatibility (CFME 5.11/RHEL8) [(#557)](https://github.com/ManageIQ/manageiq-content/pull/557)
+
 ## Unreleased as of Sprint 118 - 2019-08-19
 
 ### Fixed
