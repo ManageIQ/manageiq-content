@@ -21,14 +21,6 @@ object:
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
         => "Waiting for Handover", task_message => "Pre-migration")
       max_retries: '86400'
-  - State8:
-      value: "/Transformation/StateMachines/VMTransformation/PreTransform?state_ancestry=${#state_ancestry}/${#ae_state}"
-      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 2, description
-        => "Pre Transform VM")
-      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 2, description
-        => "Pre Transform VM")
-      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 2, description
-        => "Pre Transform VM")
   - State11:
       value: "/Transformation/StateMachines/VMTransformation/Transform?state_ancestry=${#state_ancestry}/${#ae_state}"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 85, description
