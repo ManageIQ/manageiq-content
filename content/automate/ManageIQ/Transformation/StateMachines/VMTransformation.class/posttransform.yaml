@@ -8,14 +8,6 @@ object:
     inherits: 
     description: 
   fields:
-  - State2:
-      value: "/Transformation/Infrastructure/VM/Common/ApplyRightSize"
-      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
-        => "Apply Right-Size Recommendation", task_message => "Migrating")
-      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
-        => "Apply Right-Size Recommendation", task_message => "Migrating")
-      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
-        => "Apply Right-Size Recommendation", task_message => "Migrating")
   - State5:
       value: "/Transformation/Infrastructure/VM/Common/PowerOn"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
