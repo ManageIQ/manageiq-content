@@ -7,30 +7,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ## Ivanchuk-1
 
-### Fixed
-- [V2V] Remove check of task.options\[:collapse_snapshots] [(#564)](https://github.com/ManageIQ/manageiq-content/pull/564)
-
-## Ivanchuk RC1 - Released 2019-08-27
-
 ### Added
 - Changes for Python 3 compatibility [(#557)](https://github.com/ManageIQ/manageiq-content/pull/557)
+
+### Fixed
+- [V2V] Remove check of task.options\[:collapse_snapshots] [(#564)](https://github.com/ManageIQ/manageiq-content/pull/564)
+- Support flavors for catalog bundles with Orchestration [(#535)](https://github.com/ManageIQ/manageiq-content/pull/535)
+- Add specs for storage_hosts that are inaccessible [(#506)](https://github.com/ManageIQ/manageiq-content/pull/506)
+- #raw_stdout does not exist for workflow template job. [(#491)](https://github.com/ManageIQ/manageiq-content/pull/491)
+- manageiq-core.manageiq-automate Wrap all values in quotes [(#555)](https://github.com/ManageIQ/manageiq-content/pull/555)
 
 ## Unreleased as of Sprint 118 - 2019-08-19
 
 ### Fixed
 - Vm retirement is processed by VmRetireRequest state machine. [(#552)](https://github.com/ManageIQ/manageiq-content/pull/552)
-
-## Ivanchuk-Beta2 - Released 2019-08-15
-
-### Fixed
-- manageiq-core.manageiq-automate Wrap all values in quotes [(#555)](https://github.com/ManageIQ/manageiq-content/pull/555)
-
-## Ivanchuk-Beta1 - Released 2019-07-29 
-
-### Fixed
-- Support flavors for catalog bundles with Orchestration [(#535)](https://github.com/ManageIQ/manageiq-content/pull/535)
-- Add specs for storage_hosts that are inaccessible [(#506)](https://github.com/ManageIQ/manageiq-content/pull/506)
-- #raw_stdout does not exist for workflow template job. [(#491)](https://github.com/ManageIQ/manageiq-content/pull/491)
 
 ## Hammer-9 - Released 2019-07-23
 
