@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-## Ivanchuk RC1
+## Ivanchuk-1
+
+### Fixed
+- [V2V] Remove check of task.options\[:collapse_snapshots] [(#564)](https://github.com/ManageIQ/manageiq-content/pull/564)
+
+## Ivanchuk RC1 - Released 2019-08-27
 
 ### Added
 - Changes for Python 3 compatibility [(#557)](https://github.com/ManageIQ/manageiq-content/pull/557)
