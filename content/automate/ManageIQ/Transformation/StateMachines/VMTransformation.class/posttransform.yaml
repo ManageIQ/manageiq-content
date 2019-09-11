@@ -33,14 +33,6 @@ object:
         "Run post-migration playbook")
       on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description         =>
         "Run post-migration playbook")
-  - State14:
-      value: "/Transformation/Infrastructure/VM/Common/RestoreVmAttributes"
-      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
-        => "Restore VM Attributes", task_message => "Migrating")
-      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
-        => "Restore VM Attributes", task_message => "Migrating")
-      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
-        => "Restore VM Attributes", task_message => "Migrating")
   - State17:
       value: "/Transformation/Common/SetMigrated"
       on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 5, description
