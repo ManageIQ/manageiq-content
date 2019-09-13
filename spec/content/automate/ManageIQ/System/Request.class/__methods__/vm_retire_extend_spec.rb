@@ -52,7 +52,7 @@ describe ManageIQ::Automate::System::Request::VmRetireExtend do
 
   context "Log_and_raise" do
     it "ERROR - VM has no retirement date" do
-      vm.update_attributes(:retires_on => nil)
+      vm.update(:retires_on => nil)
       allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/ERROR - VM #{vm.name} has no retirement date - extension bypassed. No Action taken/, ae_service).and_raise(RuntimeError)
       expect { described_class.new(ae_service).main }.to raise_error(RuntimeError)
     end
@@ -60,7 +60,7 @@ describe ManageIQ::Automate::System::Request::VmRetireExtend do
 
   context "Log_and_raise" do
     it "ERROR - VM has no retirement date" do
-      vm.update_attributes(:retired => true)
+      vm.update(:retired => true)
       allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/ERROR - VM #{vm.name} is already retired - extension bypassed. No Action taken/, ae_service).and_raise(RuntimeError)
       expect { described_class.new(ae_service).main }.to raise_error(RuntimeError)
     end

@@ -30,7 +30,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Migrate::StateMachines::Checkmi
 
     shared_examples_for "#task_status" do
       it "checks for return_status and interval" do
-        miq_request_task.update_attributes(:state => state, :status => status)
+        miq_request_task.update(:state => state, :status => status)
         allow(ae_service).to receive(:inputs) { {'state' => state} }
         described_class.new(ae_service).main
         expect(ae_service.root['ae_result']).to eq(return_status)

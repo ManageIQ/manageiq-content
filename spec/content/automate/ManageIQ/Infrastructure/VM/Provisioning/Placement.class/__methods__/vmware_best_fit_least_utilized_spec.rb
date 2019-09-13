@@ -28,7 +28,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
   end
 
   it 'requires source vm in miq_provision' do
-    miq_provision.update_attributes(:source => nil)
+    miq_provision.update(:source => nil)
     allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/VM not specified/, ae_service).and_raise(RuntimeError)
     expect { described_class.new(ae_service).main }.to raise_error(RuntimeError)
   end
@@ -142,7 +142,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
 
       it "selects the storage in the storage profile" do
         options = miq_provision.options.merge(:placement_storage_profile => storage_profile.id)
-        miq_provision.update_attributes(:options => options)
+        miq_provision.update(:options => options)
         storages[2].storage_profiles = [storage_profile]
 
         allow(svc_miq_provision).to receive(:eligible_hosts).and_return(svc_host_struct)
@@ -180,7 +180,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
       end
 
       it "selects a host not in maintenance" do
-        host1.update_attributes(:maintenance => true)
+        host1.update(:maintenance => true)
 
         allow(svc_miq_provision).to receive(:eligible_hosts).and_return(svc_host_struct)
         allow(svc_miq_provision).to receive(:eligible_storages).and_return(svc_storages)

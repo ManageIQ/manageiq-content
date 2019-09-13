@@ -23,7 +23,7 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::PreR
   end
 
   it 'does not stop a vm in \'powered_off\' state' do
-    vm.update_attributes(:raw_power_state => "PowerOff")
+    vm.update(:raw_power_state => "PowerOff")
     expect(svc_vm).to_not receive(:stop)
     described_class.new(ae_service).main
   end

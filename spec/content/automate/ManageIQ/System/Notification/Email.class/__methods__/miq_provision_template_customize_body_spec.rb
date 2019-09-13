@@ -68,7 +68,7 @@ describe ManageIQ::Automate::System::Notification::Email::MiqProvisionTemplateCu
   end
 
   it "No Retirement will be retired in Body" do
-    vm.update_attributes!(:retires_on => nil)
+    vm.update!(:retires_on => nil)
     allow(svc_miq_provision).to receive(:vm).and_return(svc_vm)
     allow(svc_vm).to receive(:show_url).and_return(vm_url)
 
@@ -77,7 +77,7 @@ describe ManageIQ::Automate::System::Notification::Email::MiqProvisionTemplateCu
   end
 
   it "No Retirement warning in Body" do
-    vm.update_attributes!(:retirement_warn => nil)
+    vm.update!(:retirement_warn => nil)
     allow(svc_miq_provision).to receive(:vm).and_return(svc_vm)
     allow(svc_vm).to receive(:show_url).and_return(vm_url)
 

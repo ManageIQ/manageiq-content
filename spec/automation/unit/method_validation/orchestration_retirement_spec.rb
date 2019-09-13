@@ -22,12 +22,12 @@ describe "Orchestration retirement state machine Methods Validation" do
     end
 
     it "aborts if stack is already retired" do
-      stack.update_attributes(:retired => true)
+      stack.update(:retired => true)
       expect { ws }.to raise_error(MiqAeException::AbortInstantiation, 'Method exited with rc=MIQ_ABORT')
     end
 
     it "aborts if stack is retiring" do
-      stack.update_attributes(:retirement_state => 'retiring')
+      stack.update(:retirement_state => 'retiring')
       expect { ws }.to raise_error(MiqAeException::AbortInstantiation, 'Method exited with rc=MIQ_ABORT')
     end
   end

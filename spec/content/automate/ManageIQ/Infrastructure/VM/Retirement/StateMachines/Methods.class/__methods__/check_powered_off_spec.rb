@@ -37,7 +37,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::Chec
 
   shared_examples_for "#vm power state" do
     it "check" do
-      vm.update_attributes(:raw_power_state => raw_power_state)
+      vm.update(:raw_power_state => raw_power_state)
       svc_model_vm
       described_class.new(ae_service).main
       expect(ae_service.root['vm'].power_state).to eq(power_state)

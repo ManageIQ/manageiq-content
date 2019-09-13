@@ -22,13 +22,13 @@ describe ManageIQ::Automate::System::Event::StateMachines::Refresh::CheckRefresh
   end
 
   it 'when ems is refreshed after the event' do
-    ems.update_attributes(:last_inventory_date => event_timestamp + 1.minute)
+    ems.update(:last_inventory_date => event_timestamp + 1.minute)
     described_class.new(ae_service).main
     expect(ae_service.root['ae_result']).to eq('ok')
   end
 
   it 'when ems is not refreshed after the event' do
-    ems.update_attributes(:last_inventory_date => event_timestamp - 1.minute)
+    ems.update(:last_inventory_date => event_timestamp - 1.minute)
     described_class.new(ae_service).main
     expect(ae_service.root['ae_result']).to eq('retry')
     expect(ae_service.root['ae_retry_interval']).to eq('1.minute')

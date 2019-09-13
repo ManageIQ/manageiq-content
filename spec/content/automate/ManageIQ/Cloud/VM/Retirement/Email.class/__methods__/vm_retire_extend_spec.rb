@@ -60,7 +60,7 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::Email::VmRetireExtend do
   context "when vm retires_on is nil" do
     it "does not update retires_on date" do
       ae_service.object[:vm_retire_extend_days] = 7
-      vm.update_attributes(:retires_on => nil)
+      vm.update(:retires_on => nil)
       expect(ae_service).not_to receive(:execute)
       described_class.new(ae_service).main
       expect(ae_service.root['ae_result']).to eq(nil)
@@ -70,7 +70,7 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::Email::VmRetireExtend do
   context "when vm retired is true " do
     it "does not update retires_on date" do
       ae_service.object[:vm_retire_extend_days] = 7
-      vm.update_attributes(:retired => true)
+      vm.update(:retired => true)
       expect(ae_service).not_to receive(:execute)
       described_class.new(ae_service).main
       expect(ae_service.root['ae_result']).to eq(nil)

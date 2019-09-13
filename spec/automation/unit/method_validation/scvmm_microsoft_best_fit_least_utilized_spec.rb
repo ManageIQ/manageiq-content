@@ -67,7 +67,7 @@ describe "SCVMM microsoft_best_fit_least_utilized" do
         end
 
         it "will not set placement values when placement_auto is false" do
-          miq_provision.update_attributes(:options => miq_provision.options.merge(:placement_auto => [false, 0]))
+          miq_provision.update(:options => miq_provision.options.merge(:placement_auto => [false, 0]))
           ws.root
           miq_provision.reload
 
@@ -97,7 +97,7 @@ describe "SCVMM microsoft_best_fit_least_utilized" do
         end
 
         it "selects a host not in maintenance" do
-          host.update_attributes(:maintenance => true)
+          host.update(:maintenance => true)
 
           ws.root
           miq_provision.reload
