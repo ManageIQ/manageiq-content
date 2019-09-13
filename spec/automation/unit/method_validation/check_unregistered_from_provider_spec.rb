@@ -19,7 +19,7 @@ describe "check_unregistered_from_provider Method Validation" do
   end
 
   it "returns 'retry' if the vm is still connected to ems" do
-    @vm.update_attributes(:host => @host, :ems_id => @ems.id,
+    @vm.update(:host => @host, :ems_id => @ems.id,
                           :registered => true)
     allow_any_instance_of(Vm).to receive(:refresh_ems)
     expect(ws.root['ae_result']).to eql("retry")

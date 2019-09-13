@@ -15,7 +15,7 @@ describe "azure_pre_retirement Method Validation" do
   end
 
   it "does not call suspend for powered off instances" do
-    @vm.update_attributes(:raw_power_state => 'VM Stopped')
+    @vm.update(:raw_power_state => 'VM Stopped')
     MiqAeEngine.instantiate("#{@ins}?Vm::vm=#{@vm.id}#Azure", @user)
     expect(MiqQueue.exists?(:method_name => 'stop', :instance_id => @vm.id, :role => 'ems_operations')).to be_falsey
   end

@@ -16,7 +16,7 @@ describe "openstack_check_pre_retirement Method Validation" do
   end
 
   it "returns 'ok' for stopped instances" do
-    @vm.update_attributes(:raw_power_state => "SHUTOFF")
+    @vm.update(:raw_power_state => "SHUTOFF")
     ws = MiqAeEngine.instantiate("#{@ins}?Vm::vm=#{@vm.id}#openstack", @user)
     expect(ws.root['ae_result']).to eq('ok')
     expect(ws.root['vm'].power_state).to eq('off')

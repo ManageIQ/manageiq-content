@@ -122,7 +122,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Provisioning::StateMachines::
       ae_service.set_state_var('deploy_result', 'error')
       allow(svc_model_service)
         .to receive(:orchestration_stack_status) { ['check_status_failed', 'stack does not exist'] }
-      amazon_stack.update_attributes(:ems_ref => nil)
+      amazon_stack.update(:ems_ref => nil)
       described_class.new(ae_service).main
       expect(ae_service.root['ae_result']).to eq('error')
     end

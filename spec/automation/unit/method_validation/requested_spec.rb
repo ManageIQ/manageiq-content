@@ -233,7 +233,7 @@ describe "Quota Validation" do
     let(:disk) { FactoryBot.create(:disk, :size_on_disk => 1024, :size => 10_485_760, :filename => "freds disk") }
     it "add 2 cpus and add 4096 memory " do
       setup_model("vmware_reconfigure")
-      @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :cores_per_socket => 2,\
+      @reconfigure_request.update(:options => {:src_ids => [@vm_vmware.id], :cores_per_socket => 2,\
       :number_of_sockets => 2, :number_of_cpus => 4, :vm_memory => 8192, :request_type => :vm_reconfigure,\
       :disk_add => [{"disk_size_in_mb" => "10", "persistent" => true, "thin_provisioned" => true,\
       "dependent" => true, "bootable" => false}]})
@@ -244,7 +244,7 @@ describe "Quota Validation" do
     it "resize 10 to 20 megabyte disk, difference is 10" do
       # Disk_resize only supports increasing the size.
       setup_model("vmware_reconfigure")
-      @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :request_type => :vm_reconfigure,\
+      @reconfigure_request.update(:options => {:src_ids => [@vm_vmware.id], :request_type => :vm_reconfigure,\
       :disk_resize => [{"disk_name" => disk.filename, "disk_size_in_mb" => 20}]})
       ws = run_automate_method(reconfigure_attrs)
       check_results(ws.root['quota_requested'], 10.megabytes, 0, 1, 0)
@@ -252,14 +252,14 @@ describe "Quota Validation" do
 
     it "resize a disk thats not found" do
       setup_model("vmware_reconfigure")
-      @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :request_type => :vm_reconfigure,\
+      @reconfigure_request.update(:options => {:src_ids => [@vm_vmware.id], :request_type => :vm_reconfigure,\
       :disk_resize => [{"disk_name" => "not found", "disk_size_in_mb" => 20}]})
       expect { run_automate_method(reconfigure_attrs) }.to raise_error(MiqAeException::UnknownMethodRc)
     end
 
     it "removes a disk " do
       setup_model("vmware_reconfigure")
-      @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :request_type => :vm_reconfigure,\
+      @reconfigure_request.update(:options => {:src_ids => [@vm_vmware.id], :request_type => :vm_reconfigure,\
       :disk_remove => [{:disk_name => disk.filename, :persistent => true, :thin_provisioned => false,\
       "dependent" => true, "bootable" => false}]})
       ws = run_automate_method(reconfigure_attrs)
@@ -268,7 +268,7 @@ describe "Quota Validation" do
 
     it "remove a disk thats not found" do
       setup_model("vmware_reconfigure")
-      @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :request_type => :vm_reconfigure,\
+      @reconfigure_request.update(:options => {:src_ids => [@vm_vmware.id], :request_type => :vm_reconfigure,\
       :disk_remove => [{:disk_name => "not found", :persistent => true, :thin_provisioned => false,\
       "dependent" => true, "bootable" => false}]})
       expect { run_automate_method(reconfigure_attrs) }.to raise_error(MiqAeException::UnknownMethodRc)
@@ -276,7 +276,7 @@ describe "Quota Validation" do
 
     it "minus 1 cpu and minus 2048 memory" do
       setup_model("vmware_reconfigure")
-      @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :cores_per_socket => 1,\
+      @reconfigure_request.update(:options => {:src_ids => [@vm_vmware.id], :cores_per_socket => 1,\
       :number_of_sockets => 1, :number_of_cpus => 1, :vm_memory => 2048, :request_type => :vm_reconfigure})
       ws = run_automate_method(reconfigure_attrs)
       check_results(ws.root['quota_requested'], 0, -1, 1, -2048.megabytes)
@@ -284,7 +284,7 @@ describe "Quota Validation" do
 
     it "no change" do
       setup_model("vmware_reconfigure")
-      @reconfigure_request.update_attributes(:options => {:src_ids => [@vm_vmware.id], :cores_per_socket => 2,\
+      @reconfigure_request.update(:options => {:src_ids => [@vm_vmware.id], :cores_per_socket => 2,\
       :number_of_sockets => 1, :number_of_cpus => 2, :vm_memory => 4096, :request_type => :vm_reconfigure})
       ws = run_automate_method(reconfigure_attrs)
       check_results(ws.root['quota_requested'], 0, 0, 1, 0.megabytes)
