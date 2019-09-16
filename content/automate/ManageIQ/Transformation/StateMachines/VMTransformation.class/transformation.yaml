@@ -12,7 +12,4 @@ object:
       value: transformation
   - State5:
       value: "/Transformation/Common/WaitForHandover"
-      on_entry: "/System/CommonMethods/MiqAe.WeightedUpdateStatus"
-      on_exit: "/System/CommonMethods/MiqAe.WeightedUpdateStatus"
-      on_error: "/System/CommonMethods/MiqAe.WeightedUpdateStatus"
       max_retries: '86400'
