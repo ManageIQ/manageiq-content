@@ -1,16 +1,43 @@
-#
-# Description: Get quota source.
-#
+# frozen_string_literal: true
 
-@miq_request = $evm.root['miq_request']
-$evm.root['quota_source_type'] = $evm.parent['quota_source_type'] || $evm.object['quota_source_type']
+#
+# Description: Get Quota Source
+#
+module ManageIQ
+  module Automate
+    module System
+      module CommonMethods
+        module QuotaMethods
+          class QuotaSource
+            def initialize(handle = $evm)
+              @handle = handle
+            end
 
-case $evm.root['quota_source_type'].downcase
-when 'group'
-  $evm.root['quota_source'] = @miq_request.requester.current_group
-when 'user'
-  $evm.root['quota_source'] = @miq_request.requester
-else
-  $evm.root['quota_source'] = @miq_request.tenant
-  $evm.root['quota_source_type'] = 'tenant'
+            def main
+              quota_source
+            end
+
+            private
+
+            def quota_source
+              @miq_request = @handle.root['miq_request']
+              @handle.root['quota_source_type'] = @handle.parent['quota_source_type'] || @handle.object['quota_source_type']
+
+              case @handle.root['quota_source_type'].downcase
+              when 'group'
+                @handle.root['quota_source'] = @miq_request.requester.current_group
+              when 'user'
+                @handle.root['quota_source'] = @miq_request.requester
+              else
+                @handle.root['quota_source'] = @miq_request.tenant
+                @handle.root['quota_source_type'] = 'tenant'
+              end
+            end
+          end
+        end
+      end
+    end
+  end
 end
+
+ManageIQ::Automate::System::CommonMethods::QuotaMethods::QuotaSource.new.main
