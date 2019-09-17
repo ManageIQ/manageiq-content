@@ -10,25 +10,6 @@ object:
   fields:
   - state_machine_phase:
       value: transformation
-  - cleanup_state_machine:
-      value: "/Transformation/StateMachines/VMTransformation/TransformationCleanup"
   - State5:
       value: "/Transformation/Common/WaitForHandover"
-      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
-        => "Waiting for Handover", task_message => "Pre-migration")
-      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
-        => "Waiting for Handover", task_message => "Pre-migration")
-      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
-        => "Waiting for Handover", task_message => "Pre-migration")
       max_retries: '86400'
-  - State14:
-      value: "/Transformation/StateMachines/VMTransformation/PostTransform?state_ancestry=${#state_ancestry}/${#ae_state}"
-      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 10, description
-        => "Post Transform VM")
-      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 10, description
-        => "Post Transform VM")
-      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 10, description
-        => "Post Transform VM")
-  - State17:
-      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 1, description
-        => "Virtual machine migrated", task_message => "Migration complete")
