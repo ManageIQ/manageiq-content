@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-## Ivanchuk-1
+## Unreleased as of Spritn 120 ending 2019-09-16
+
+### Fixed
+- Move V2V Automate Functionality into Core [(#570)](https://github.com/ManageIQ/manageiq-content/pull/570)
+
+## Ivanchuk-1 - Released 2019-09-18
 
 ### Added
 - Changes for Python 3 compatibility [(#557)](https://github.com/ManageIQ/manageiq-content/pull/557)
