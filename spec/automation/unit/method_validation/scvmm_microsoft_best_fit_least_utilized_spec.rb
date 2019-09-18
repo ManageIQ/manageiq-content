@@ -1,5 +1,5 @@
 describe "SCVMM microsoft_best_fit_least_utilized" do
-  let(:user) { FactoryBot.create(:user_with_group) }
+  let(:user) { FactoryBot.create(:user_with_group, :settings => {:display => {:timezone => 'UTC'}}) }
   let(:ws) do
     MiqAeEngine.instantiate("/System/Request/Call_Instance_With_Message?" \
                             "namespace=Infrastructure/VM/Provisioning&class=Placement" \
@@ -29,7 +29,7 @@ describe "SCVMM microsoft_best_fit_least_utilized" do
       ws.root
       miq_provision.reload
 
-      expect(miq_provision.options[:placement_host_name]).to be_nil
+      expect(miq_provision.options[:placement_host_name]).to eq([nil, nil])
       expect(miq_provision.options[:placement_ds_name]).to   be_nil
     end
 
@@ -45,17 +45,13 @@ describe "SCVMM microsoft_best_fit_least_utilized" do
         ws.root
         miq_provision.reload
 
-        expect(miq_provision.options[:placement_host_name]).to be_nil
+        expect(miq_provision.options[:placement_host_name]).to eq([nil, nil])
         expect(miq_provision.options[:placement_ds_name]).to   be_nil
       end
 
       context "with storage" do
         before do
           host.storages << storage
-          storage_struct = MiqHashStruct.new(:id               => storage.id,
-                                             :evm_object_class => storage.class.base_class.name.to_sym)
-          allow_any_instance_of(ManageIQ::Providers::Microsoft::InfraManager::ProvisionWorkflow)
-            .to receive(:allowed_storages).and_return([storage_struct])
         end
 
         it "will set placement values" do
@@ -80,18 +76,11 @@ describe "SCVMM microsoft_best_fit_least_utilized" do
         before do
           host.storages << [ro_storage, storage]
           HostStorage.where(:host_id => host.id, :storage_id => ro_storage.id).update(:read_only => true)
-
-          evm_object_class = storage.class.base_class.name.to_sym
-          storage_struct = [MiqHashStruct.new(:id => ro_storage.id, :evm_object_class => evm_object_class),
-                            MiqHashStruct.new(:id => storage.id,    :evm_object_class => evm_object_class)]
-          allow_any_instance_of(ManageIQ::Providers::Microsoft::InfraManager::ProvisionWorkflow)
-            .to receive(:allowed_storages).and_return(storage_struct)
         end
 
         it "picks the largest writable datastore" do
           ws.root
           miq_provision.reload
-
           expect(miq_provision.options[:placement_host_name]).to eq([host.id, host.name])
           expect(miq_provision.options[:placement_ds_name]).to   eq([storage.id, storage.name])
         end
@@ -101,7 +90,7 @@ describe "SCVMM microsoft_best_fit_least_utilized" do
 
           ws.root
           miq_provision.reload
-          expect(miq_provision.options[:placement_host_name]).to be_nil
+          expect(miq_provision.options[:placement_host_name]).to eq([nil, nil])
           expect(miq_provision.options[:placement_ds_name]).to   be_nil
         end
       end
