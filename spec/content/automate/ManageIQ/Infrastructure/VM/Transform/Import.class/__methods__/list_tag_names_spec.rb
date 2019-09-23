@@ -33,7 +33,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListTagNames
     expect(ae_service.object['visible']).to eq(true)
 
     tag_names = { nil => '<None>' }
-    Classification.find_by_name('department').entries.each do |tag|
+    Classification.lookup_by_name('department').entries.each do |tag|
       tag_names[tag.name] = tag.description
     end
 
