@@ -11,6 +11,7 @@ module ManageIQ
           def set_retry
             @handle.root['ae_result'] = 'retry'
             @handle.root['ae_retry_server_affinity'] = true
+            @handle.root['ae_retry_interval'] = '1.minutes'
             @handle.log(:info, "Disk transformation is not finished. Checking in #{@handle.root['ae_retry_interval']}")
           end
 
