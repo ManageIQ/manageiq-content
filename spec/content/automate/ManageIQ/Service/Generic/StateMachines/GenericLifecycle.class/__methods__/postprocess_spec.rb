@@ -3,7 +3,7 @@ require_domain_file
 describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::PostProcess do
   let(:admin) { FactoryBot.create(:user_admin) }
   let(:request) { FactoryBot.create(:service_template_provision_request, :requester => admin) }
-  let(:ansible_tower_manager) { FactoryBot.create(:automation_manager) }
+  let(:ansible_tower_manager) { FactoryBot.create(:automation_manager_ansible_tower) }
   let(:job_template) { FactoryBot.create(:ansible_configuration_script, :manager => ansible_tower_manager) }
   let(:service_ansible_tower) { FactoryBot.create(:service_ansible_tower, :job_template => job_template) }
   let(:task) { FactoryBot.create(:service_template_provision_task, :destination => service_ansible_tower, :miq_request => request) }

@@ -4,7 +4,7 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Service::Provis
   let(:admin) { FactoryBot.create(:user_admin) }
   let(:request) { FactoryBot.create(:service_template_provision_request, :requester => admin) }
   let(:job_class) { ManageIQ::Providers::AnsibleTower::AutomationManager::Job }
-  let(:ansible_tower_manager) { FactoryBot.create(:automation_manager) }
+  let(:ansible_tower_manager) { FactoryBot.create(:automation_manager_ansible_tower) }
   let(:job_template) { FactoryBot.create(:ansible_configuration_script, :manager => ansible_tower_manager) }
   let(:service_ansible_tower) { FactoryBot.create(:service_ansible_tower, :job_template => job_template, :evm_owner => FactoryBot.create(:user_with_group)) }
   let(:job) { FactoryBot.create(:ansible_tower_job) }
