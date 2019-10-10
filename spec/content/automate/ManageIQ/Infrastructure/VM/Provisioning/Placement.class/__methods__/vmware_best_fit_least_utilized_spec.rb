@@ -14,7 +14,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
                        :state        => 'active',
                        :status       => 'Ok')
   end
-  let(:user)        { FactoryBot.create(:user_with_group) }
+  let(:user)        { FactoryBot.create(:user_with_group, :settings => {:display => {:timezone => 'UTC'}}) }
   let(:vm_template) { FactoryBot.create(:template_vmware, :ext_management_system => ems) }
 
   let(:svc_miq_provision) { MiqAeMethodService::MiqAeServiceMiqProvision.find(miq_provision.id) }
@@ -48,11 +48,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
     let(:host3) { FactoryBot.create(:host_vmware, :storages => [ro_storage, storages[2]], :vms => vms[2..4], :ext_management_system => ems) }
     let(:host4) { FactoryBot.create(:host_vmware, :storages => storages[0..2], :vms => vms[2..4], :ext_management_system => ems) }
     let(:host5) { FactoryBot.create(:host_vmware, :storages => [ro_storage, storages[2]], :vms => vms[2..4], :ext_management_system => ems) }
-
-    let(:host_struct) do
-      [MiqHashStruct.new(:id => host1.id, :evm_object_class => host1.class.base_class.name.to_sym),
-       MiqHashStruct.new(:id => host2.id, :evm_object_class => host2.class.base_class.name.to_sym)]
-    end
+    let(:host_struct) { [host1, host2, host4] }
 
     let(:svc_host1) { MiqAeMethodService::MiqAeServiceHost.find(host1.id) }
     let(:svc_host2) { MiqAeMethodService::MiqAeServiceHost.find(host2.id) }
@@ -70,14 +66,12 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
         host4.ems_cluster = ems_cluster
         datacenter.with_relationship_type("ems_metadata") { datacenter.add_child(ems_cluster) }
         HostStorage.where(:host_id => host3.id, :storage_id => ro_storage.id).update(:read_only => true)
+        allow_any_instance_of(ManageIQ::Providers::Vmware::InfraManager::ProvisionWorkflow)
+          .to receive(:find_all_ems_of_type).with(Host).and_return(host_struct)
       end
 
       it "selects a host with fewer vms and a storage with more free space" do
-        allow(svc_miq_provision).to receive(:eligible_hosts).and_return(svc_host_struct)
-        allow(svc_miq_provision).to receive(:eligible_storages).and_return(svc_storages)
-
-        expect(svc_miq_provision).to receive(:set_host).with(svc_host1)
-        allow(svc_miq_provision).to receive(:set_storage) do |s|
+        expect(svc_miq_provision).to receive(:set_storage) do |s|
           expect(s.id).to eq(svc_host1.storages[1].id)
           expect(s.name).to eq(svc_host1.storages[1].name)
         end
@@ -86,12 +80,10 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
       end
 
       context "with all storages accessible" do
-        it "selects largest storage that is writable" do
-          allow(svc_miq_provision).to receive(:eligible_hosts).and_return([svc_host3])
-          allow(svc_miq_provision).to receive(:eligible_storages).and_return(svc_host3.storages)
+        let(:host_struct) { [host3] }
 
-          expect(svc_miq_provision).to receive(:set_host).with(svc_host3)
-          allow(svc_miq_provision).to receive(:set_storage) do |s|
+        it "selects largest storage that is writable" do
+          expect(svc_miq_provision).to receive(:set_storage) do |s|
             # ro_storage is larger but read-only, so it should select storages[2]
             expect(s.id).to eq(storages[2].id)
             expect(s.name).to eq(storages[2].name)
@@ -102,35 +94,30 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
       end
 
       context "with no storages accessible" do
+        let(:host_struct) { [host5] }
+
         before do
           HostStorage.where(:host_id => host5.id, :storage_id => ro_storage.id).update(:accessible => false)
           HostStorage.where(:host_id => host5.id, :storage_id => storages[2].id).update(:accessible => false)
         end
-        it "selects nothing" do
-          allow(svc_miq_provision).to receive(:eligible_hosts).and_return([svc_host5])
-          allow(svc_miq_provision).to receive(:eligible_storages).and_return(svc_host5.storages)
 
-          expect(svc_miq_provision).not_to receive(:set_host)
-          allow(svc_miq_provision).to receive(:set_storage) do |s|
-            # both ro_storage and storages[2] are inaccessible
-            expect(s.id).to eq(nil)
-            expect(s.name).to eq(nil)
-          end
+        it "selects nothing" do
+          # both ro_storage and storages[2] are inaccessible
+          expect(svc_miq_provision).to_not receive(:set_storage)
 
           described_class.new(ae_service).main
         end
       end
 
       context "with the writable storage inaccessible" do
+        let(:host_struct) { [host5] }
+
         before do
           HostStorage.where(:host_id => host5.id, :storage_id => storages[2].id).update(:accessible => false)
         end
-        it "selects ro storage" do
-          allow(svc_miq_provision).to receive(:eligible_hosts).and_return([svc_host5])
-          allow(svc_miq_provision).to receive(:eligible_storages).and_return(svc_host5.storages)
 
-          expect(svc_miq_provision).to receive(:set_host).with(svc_host5)
-          allow(svc_miq_provision).to receive(:set_storage) do |s|
+        it "selects ro storage" do
+          expect(svc_miq_provision).to receive(:set_storage) do |s|
             # storages[2] is inaccessible so it should select the ro
             expect(s.id).to eq(ro_storage.id)
             expect(s.name).to eq(ro_storage.name)
@@ -145,11 +132,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
         miq_provision.update(:options => options)
         storages[2].storage_profiles = [storage_profile]
 
-        allow(svc_miq_provision).to receive(:eligible_hosts).and_return(svc_host_struct)
-        allow(svc_miq_provision).to receive(:eligible_storages).and_return(svc_storages)
-
-        expect(svc_miq_provision).to receive(:set_host).with(svc_host4)
-        allow(svc_miq_provision).to receive(:set_storage) do |s|
+        expect(svc_miq_provision).to receive(:set_storage) do |s|
           expect(s.id).to eq(svc_host4.storages[2].id)
           expect(s.name).to eq(svc_host4.storages[2].name)
         end
@@ -164,14 +147,12 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
           datacenter.add_child(host1)
           datacenter.add_child(host2)
         end
+        allow_any_instance_of(MiqRequestWorkflow)
+          .to receive(:find_all_ems_of_type).with(Host).and_return(host_struct)
       end
 
       it "selects a host with fewer vms and a storage with more free space" do
-        allow(svc_miq_provision).to receive(:eligible_hosts).and_return(svc_host_struct)
-        allow(svc_miq_provision).to receive(:eligible_storages).and_return(svc_storages)
-
-        expect(svc_miq_provision).to receive(:set_host).with(svc_host1)
-        allow(svc_miq_provision).to receive(:set_storage) do |s|
+        expect(svc_miq_provision).to receive(:set_storage) do |s|
           expect(s.id).to eq(svc_host1.storages[1].id)
           expect(s.name).to eq(svc_host1.storages[1].name)
         end
@@ -182,11 +163,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Provisioning::Placement::Vmware
       it "selects a host not in maintenance" do
         host1.update(:maintenance => true)
 
-        allow(svc_miq_provision).to receive(:eligible_hosts).and_return(svc_host_struct)
-        allow(svc_miq_provision).to receive(:eligible_storages).and_return(svc_storages)
-
-        expect(svc_miq_provision).to receive(:set_host).with(svc_host2)
-        allow(svc_miq_provision).to receive(:set_storage) do |s|
+        expect(svc_miq_provision).to receive(:set_storage) do |s|
           expect(s.id).to eq(svc_host2.storages[1].id)
           expect(s.name).to eq(svc_host2.storages[1].name)
         end
