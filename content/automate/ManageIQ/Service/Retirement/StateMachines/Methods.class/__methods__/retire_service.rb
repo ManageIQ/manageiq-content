@@ -1,5 +1,5 @@
 #
-# Description: This method attempts to retire all of the vms under this top level service
+# Description: Placeholder method for custom automation
 #
 
-$evm.root["service"].retire_service_resources
+# service = $evm.root["service"]
