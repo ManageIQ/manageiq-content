@@ -5,7 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
-## Unreleased as of Spritn 120 ending 2019-09-16
+## Unreleased as of Sprint 123 ending 2019-10-28
+
+### Added
+* Remove call to retire_service_resources from retire_service method [(#590)](https://github.com/ManageIQ/manageiq-content/pull/590)
+* Test ruby 2.5.7/2.6.5 see: ManageIQ/manageiq#19414 [(#591)](https://github.com/ManageIQ/manageiq-content/pull/591)
+
+## Unreleased as of Sprint 122 ending 2019-10-14
+
+### Added
+* AzureStack events for targeted refresh [(#588)](https://github.com/ManageIQ/manageiq-content/pull/588)
+* Eligible storages for placement methods [(#578)](https://github.com/ManageIQ/manageiq-content/pull/578)
+
+
+### Fixed
+- use :automation_manager_ansible_tower instead of :automation_manager [(#586)](https://github.com/ManageIQ/manageiq-content/pull/586)
+- Switch to call lookup_by_* methods [(#584)](https://github.com/ManageIQ/manageiq-content/pull/584)
+
+## Unreleased as of Sprint 120 ending 2019-09-16
 
 ### Fixed
 - Move V2V Automate Functionality into Core [(#570)](https://github.com/ManageIQ/manageiq-content/pull/570)
