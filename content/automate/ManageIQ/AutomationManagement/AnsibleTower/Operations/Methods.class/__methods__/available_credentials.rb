@@ -25,7 +25,7 @@ module ManageIQ
               # for reconfig and retire use service
               # Or use the embedded_ansible_provider
               service = @handle.root['service_template'] || @handle.root['service']
-              service.try(:job_template, 'Provision').try(:manager) || embedded_ansible_provider
+              service.try(:playbook, 'Provision').try(:manager) || embedded_ansible_provider
             end
 
             def embedded_ansible_provider
