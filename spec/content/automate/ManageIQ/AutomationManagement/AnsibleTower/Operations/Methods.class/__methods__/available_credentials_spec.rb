@@ -1,9 +1,9 @@
 require_domain_file
 
 describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::AvailableCredentials do
-  let(:ansible_manager) { FactoryBot.create(:automation_manager_ansible_tower) }
-  let(:job_template) do
-    FactoryBot.create(:ansible_configuration_script, :manager => ansible_manager)
+  let(:ansible_manager) { FactoryBot.create(:embedded_automation_manager_ansible) }
+  let(:playbook) do
+    FactoryBot.create(:embedded_playbook, :manager => ansible_manager)
   end
   let(:root_object) do
     Spec::Support::MiqAeMockObject.new('service_template' => svc_service_template)
@@ -20,27 +20,24 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Ava
       service.inputs = method_args
     end
   end
-  let(:ra) { {:action => 'Provision', :configuration_template => job_template} }
+  let(:options) { {:config_info => {:provision => {:playbook_id => playbook.id}}} }
   let(:svc_template) do
-    FactoryBot.create(:service_template_ansible_playbook).tap do |st|
-      st.resource_actions.build(ra)
-      st.save
-    end
+    FactoryBot.create(:service_template_ansible_playbook, :options => options)
   end
   let(:svc_service_template) do
     MiqAeMethodService::MiqAeServiceServiceTemplate.find(svc_template.id)
   end
   let(:mach_cred1) do
-    FactoryBot.create(:ansible_machine_credential, :resource => ansible_manager)
+    FactoryBot.create(:embedded_ansible_machine_credential, :resource => ansible_manager)
   end
   let(:mach_cred2) do
-    FactoryBot.create(:ansible_machine_credential, :resource => ansible_manager)
+    FactoryBot.create(:embedded_ansible_machine_credential, :resource => ansible_manager)
   end
   let(:net_cred1) do
-    FactoryBot.create(:ansible_network_credential, :resource => ansible_manager)
+    FactoryBot.create(:embedded_ansible_network_credential, :resource => ansible_manager)
   end
   let(:net_cred2) do
-    FactoryBot.create(:ansible_network_credential, :resource => ansible_manager)
+    FactoryBot.create(:embedded_ansible_network_credential, :resource => ansible_manager)
   end
 
   shared_examples_for "#having only default value" do
@@ -76,7 +73,7 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Ava
 
     context "machine" do
       let(:credential_type) do
-        "ManageIQ::Providers::AnsibleTower::AutomationManager::MachineCredential"
+        "ManageIQ::Providers::EmbeddedAnsible::AutomationManager::MachineCredential"
       end
       let(:valid_ids) { [mach_cred1.id, mach_cred2.id, nil] }
 
@@ -85,7 +82,7 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Ava
 
     context "network" do
       let(:credential_type) do
-        "ManageIQ::Providers::AnsibleTower::AutomationManager::NetworkCredential"
+        "ManageIQ::Providers::EmbeddedAnsible::AutomationManager::NetworkCredential"
       end
       let(:valid_ids) { [net_cred1.id, net_cred2.id, nil] }
 
@@ -98,7 +95,7 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Ava
         Spec::Support::MiqAeMockObject.new
       end
       let(:credential_type) do
-        "ManageIQ::Providers::AnsibleTower::AutomationManager::MachineCredential"
+        "ManageIQ::Providers::EmbeddedAnsible::AutomationManager::MachineCredential"
       end
       let(:method_args) do
         { 'credential_type' => credential_type, 'embedded_ansible' => true }
