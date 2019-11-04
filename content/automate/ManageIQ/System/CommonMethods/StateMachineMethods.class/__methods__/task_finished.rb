@@ -1,22 +1,53 @@
-#
-# Description: Set finished message for provision object.
-#
+# frozen_string_literal: true
 
-prov_obj_name = $evm.root['vmdb_object_type']
-@task = $evm.root[prov_obj_name]
-final_message = "[#{$evm.root['miq_server'].name}] "
+#
+# Description: Set finished message for provision object
+#
+module ManageIQ
+  module Automate
+    module System
+      module CommonMethods
+        module StateMachineMethods
+          class TaskFinished
+            def initialize(handle = $evm)
+              @handle = handle
+            end
 
-case $evm.root['vmdb_object_type']
-when 'service_template_provision_task'
-  final_message += "Service [#{@task.destination.name}] Provisioned Successfully"
-  $evm.create_notification(:type => :automate_service_provisioned, :subject => @task.destination) if @task.miq_request_task.nil?
-when 'miq_provision'
-  final_message += "VM [#{@task.get_option(:vm_target_name)}] "
-  final_message += "IP [#{@task.vm.ipaddresses.first}] " if @task.vm && !@task.vm.ipaddresses.blank?
-  final_message += "Provisioned Successfully"
-  $evm.create_notification(:type => :automate_vm_provisioned, :subject => @task.vm)
-else
-  final_message += $evm.inputs['message']
+            def main
+              task_finished
+            end
+
+            private
+
+            def task
+              prov_obj_name = @handle.root['vmdb_object_type']
+              @handle.root[prov_obj_name]
+            end
+
+            def task_finished
+              final_message = "[#{@handle.root['miq_server'].name}] "
+
+              case @handle.root['vmdb_object_type']
+              when 'service_template_provision_task'
+                final_message += "Service [#{task.destination.name}] Provisioned Successfully"
+                @handle.create_notification(:type => :automate_service_provisioned, :subject => task.destination) if task.miq_request_task.nil?
+              when 'miq_provision'
+                final_message += "VM [#{task.get_option(:vm_target_name)}] "
+                final_message += "IP [#{task.vm.ipaddresses.first}] " if task.vm&.ipaddresses.present?
+                final_message += "Provisioned Successfully"
+                @handle.create_notification(:type => :automate_vm_provisioned, :subject => task.vm)
+              else
+                final_message += @handle.inputs['message']
+              end
+
+              task.miq_request.user_message = final_message
+              task.finished(final_message)
+            end
+          end
+        end
+      end
+    end
+  end
 end
-@task.miq_request.user_message = final_message
-@task.finished(final_message)
+
+ManageIQ::Automate::System::CommonMethods::StateMachineMethods::TaskFinished.new.main
