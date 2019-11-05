@@ -2,10 +2,31 @@
 # Description: This method removes the Service from the VMDB database
 #
 
-service = $evm.root['service']
+module ManageIQ
+  module Automate
+    module Service
+      module Retirement
+        module StateMachines
+          module Methods
+            class DeleteServiceFromVmdb
+              def initialize(handle = $evm)
+                @handle = handle
+              end
 
-if service
-  $evm.log('info', "Deleting Service <#{service.name}> from VMDB")
-  service.remove_from_vmdb
-  $evm.root['service'] = nil
+              def main
+                service = @handle.root['service']
+                if service
+                  @handle.log('info', "Deleting Service <#{service.name}> from VMDB")
+                  service.remove_from_vmdb
+                  @handle.root['service'] = nil
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
 end
+
+ManageIQ::Automate::Service::Retirement::StateMachines::Methods::DeleteServiceFromVmdb.new.main
