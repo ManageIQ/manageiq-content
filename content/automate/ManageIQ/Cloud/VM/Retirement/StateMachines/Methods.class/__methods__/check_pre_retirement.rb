@@ -1,26 +1,57 @@
+# / Cloud / VM / Retirement / StateMachines / CheckPreRetirement
+
 #
-# Description: This method checks to see if the instance has been powered off or suspended
+# Description: This method checks to see if the VM has been powered off or suspended
 #
 
-# Get vm from root object
-vm = $evm.root['vm']
-ems = vm.ext_management_system if vm
+module ManageIQ
+  module Automate
+    module Cloud
+      module VM
+        module Retirement
+          module StateMachines
+            class CheckPreRetirement
+              def initialize(handle = $evm)
+                @handle = handle
+              end
 
-if vm.nil? || ems.nil?
-  $evm.log('info', "Skipping check pre retirement for Instance:<#{vm.try(:name)}> on EMS:<#{ems.try(:name)}>")
-  exit MIQ_OK
+              def main
+                # Get vm from root object
+                vm = @handle.root['vm']
+
+                check_power_state(vm)
+              end
+
+              def check_power_state(vm)
+                ems = vm.ext_management_system if vm
+                if vm.nil? || ems.nil?
+                  @handle.log('info', "Skipping check pre retirement for VM:<#{vm.try(:name)}> "\
+                                      "on EMS:<#{ems.try(:name)}>")
+                  return
+                end
+
+                power_state = vm.power_state
+                @handle.log('info', "VM:<#{vm.name}> on Provider:<#{ems.name}> has Power State:<#{power_state}>")
+
+                # If VM is powered off or suspended exit
+
+                if %w[off suspended unknown].include?(power_state)
+                  # Bump State
+                  @handle.root['ae_result'] = 'ok'
+                elsif power_state == "never"
+                  # If never then this VM is a template so exit the retirement state machine
+                  @handle.root['ae_result'] = 'error'
+                else
+                  @handle.root['ae_result'] = 'retry'
+                  @handle.root['ae_retry_interval'] = '60.seconds'
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
 end
 
-power_state = vm.power_state
-$evm.log('info', "Instance:<#{vm.name}> on EMS:<#{ems.name}> has Power State:<#{power_state}>")
-# If VM is powered off, suspended or unknown exit
-if %w(off suspended unknown).include?(power_state)
-  # Bump State
-  $evm.root['ae_result'] = 'ok'
-elsif power_state == "never"
-  # If never then this VM is a template so exit the retirement state machine
-  $evm.root['ae_result'] = 'error'
-else
-  $evm.root['ae_result'] = 'retry'
-  $evm.root['ae_retry_interval'] = '60.seconds'
-end
+ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::CheckPreRetirement.new.main
