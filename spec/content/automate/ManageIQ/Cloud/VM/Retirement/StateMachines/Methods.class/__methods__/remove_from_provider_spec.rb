@@ -41,6 +41,13 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::Remo
       expect(ae_service.get_state_var('vm_removed_from_provider')).to be_truthy
     end
 
+    it "unregister a vm" do
+      ae_service.inputs['removal_type'] = 'unregister'
+      expect(ae_service).to receive(:log).with('info', "Unregistering Instance:<#{vm.name}> from provider:<#{ems.name}>")
+      expect { described_class.new(ae_service).main }.to_not raise_error
+      expect(ae_service.get_state_var('vm_removed_from_provider')).to be_truthy
+    end
+
     context "without ems" do
       let(:vm) { FactoryBot.create(:vm_vmware) }
 
