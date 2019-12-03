@@ -1,0 +1,28 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: TransformationPlaybook
+    inherits: 
+    description: 
+  fields:
+  - State2:
+      value: "/Transformation/Ansible/LaunchPlaybookAsAService?transformation_hook=${#transformation_hook}"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 20, description
+        => "Launch ${#transformation_hook} migration playbook", task_message => "Migrating")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 20, description
+        => "Launch ${#transformation_hook} migration playbook", task_message => "Migrating")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 20, description
+        => "Launch ${#transformation_hook} migration playbook", task_message => "Migrating")
+      max_retries: '60'
+  - State5:
+      value: "/Transformation/Ansible/CheckPlaybookAsAService?transformation_hook=${#transformation_hook}"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 80, description
+        => "Check ${#transformation_hook} migration playbook", task_message => "Migrating")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 80, description
+        => "Check ${#transformation_hook} migration playbook", task_message => "Migrating")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 80, description
+        => "Check ${#transformation_hook} migration playbook", task_message => "Migrating")
+      max_retries: '1500'
