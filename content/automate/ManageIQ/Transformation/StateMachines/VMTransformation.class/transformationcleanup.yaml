@@ -1,0 +1,37 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: TransformationCleanup
+    inherits: 
+    description: 
+  fields:
+  - state_machine_phase:
+      value: cleanup
+  - State2:
+      value: "/Transformation/Common/KillVirtV2V"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Interrupt virt-v2v", task_message => "Cleanup")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Interrupt virt-v2v", task_message => "Cleanup")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Interrupt virt-v2v", task_message => "Cleanup")
+  - State5:
+      value: "/Transformation/Infrastructure/VM/Common/PowerOn"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 10, description
+        => "Power-on VM", task_message => "Cleanup")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 10, description
+        => "Power-on VM", task_message => "Cleanup")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 10, description
+        => "Power-on VM", task_message => "Cleanup")
+  - State8:
+      value: "/Transformation/Infrastructure/VM/Common/CheckPoweredOn"
+      on_entry: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Power-on VM", task_message => "Cleanup")
+      on_exit: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Power-on VM", task_message => "Cleanup")
+      on_error: /System/CommonMethods/MiqAe.WeightedUpdateStatus(weight => 40, description
+        => "Power-on VM", task_message => "Cleanup")
+      max_retries: '200'
