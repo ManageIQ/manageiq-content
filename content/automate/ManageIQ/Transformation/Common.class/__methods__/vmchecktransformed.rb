@@ -30,7 +30,6 @@ module ManageIQ
           end
 
           def main
-            @task.get_conversion_state
             case @task.get_option(:virtv2v_status)
             when 'active'
               message, percent = update_total_percentage
