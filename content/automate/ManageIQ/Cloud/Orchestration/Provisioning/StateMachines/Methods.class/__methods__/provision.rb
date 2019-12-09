@@ -17,6 +17,7 @@ module ManageIQ
 
                 task = @handle.root["service_template_provision_task"]
                 service = task.destination
+                service.set_automate_timeout(@handle.field_timeout, 'provision')
 
                 begin
                   stack = service.deploy_orchestration_stack
