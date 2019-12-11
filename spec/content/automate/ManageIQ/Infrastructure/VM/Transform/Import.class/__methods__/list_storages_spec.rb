@@ -2,7 +2,7 @@ require_domain_file
 
 describe ManageIQ::Automate::Infrastructure::VM::Transform::Import::ListStorages do
   let(:provider) do
-    FactoryBot.create(:ems_redhat, :hosts => [FactoryBot.create(:host_redhat, :storage_redhat, :storage_count => 3)])
+    FactoryBot.create(:ems_redhat, :with_storages_redhat, :storage_count => 3)
   end
 
   let(:vm) { FactoryBot.create(:vm) }
