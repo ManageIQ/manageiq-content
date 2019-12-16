@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 
+## Ivanchuk-2
+
+### Added
+* Add handling vnic events for rhev [(#582)](https://github.com/ManageIQ/manageiq-content/pull/582)
+
+### Changed
+* [V2V] Remove CollapseSnapshots state and methods [(#566)](https://github.com/ManageIQ/manageiq-content/pull/566)
+* [V2V] Remove PreMigration Ansible playbook [(#567)](https://github.com/ManageIQ/manageiq-content/pull/567)
+* [V2V] Manage handover between core and automate [(#561)](https://github.com/ManageIQ/manageiq-content/pull/561)
+* [V2V] Remove PowerOff state [(#568)](https://github.com/ManageIQ/manageiq-content/pull/568)
+* [V2V] Remove VMTransform and VMCheckTransformed states [(#569)](https://github.com/ManageIQ/manageiq-content/pull/569)
+* Move V2V Automate Functionality into Core [(#570)](https://github.com/ManageIQ/manageiq-content/pull/570)
+* [V2] Remove ApplyRightSize state [(#572)](https://github.com/ManageIQ/manageiq-content/pull/572)
+* [V2V] Remove RestoreVmAttributes state [(#573)](https://github.com/ManageIQ/manageiq-content/pull/573)
+* [V2V] Remove TransformationHost code [(#574)](https://github.com/ManageIQ/manageiq-content/pull/574)
+* [V2V] Remove PowerOn and CheckPoweredOn states [(#575)](https://github.com/ManageIQ/manageiq-content/pull/575)
+* [V2V] Remove Ansible Playbook content [(#576)](https://github.com/ManageIQ/manageiq-content/pull/576)
+* [V2V] Remove SetMigrated state. Cleanup state machine. [(#579)](https://github.com/ManageIQ/manageiq-content/pull/579)
+
+
 ## Ivanchuk-1
 
 ### Added
