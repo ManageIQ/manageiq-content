@@ -16,6 +16,7 @@ module ManageIQ
                 @handle.log("info", "Starting execute")
 
                 begin
+                  service.set_automate_timeout(@handle.field_timeout, service_action)
                   service.execute(service_action)
                   @handle.root['ae_result'] = 'ok'
                   @handle.log("info", "Ending execute")
