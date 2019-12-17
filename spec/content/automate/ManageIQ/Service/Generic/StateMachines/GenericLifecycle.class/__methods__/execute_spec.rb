@@ -10,7 +10,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
   let(:svc_task) { MiqAeMethodService::MiqAeServiceServiceTemplateProvisionTask.find(task.id) }
   let(:svc_service) { MiqAeMethodService::MiqAeServiceServiceAnsibleTower.find(service_ansible_tower.id) }
   let(:root_object) { Spec::Support::MiqAeMockObject.new('service' => svc_service, 'service_action' => 'Provision') }
-  let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
+  let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object).tap { |s| allow(s).to receive(:field_timeout).and_return(8) } }
   let(:error_msg) { "failed" }
 
   shared_examples_for "execute_errors" do
