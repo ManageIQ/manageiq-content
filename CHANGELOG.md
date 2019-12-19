@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Unreleased as of Sprint 125 ending 2019-11-25
+### Changed
+- Refactor finish_retirement method for Service Retirement. [(#602)](https://github.com/ManageIQ/manageiq-content/pull/602)
+- Refactor start_retirement method for Service Retirement. [(#601)](https://github.com/ManageIQ/manageiq-content/pull/601)
+- Refactor start_retirement method for Infra VM Retirement. [(#600)](https://github.com/ManageIQ/manageiq-content/pull/600)
+
+## Unreleased as of Sprint 124 ending 2019-11-11
+### Added
+- Optionally symlink spec/manageiq during bin/setup [(#608)](https://github.com/ManageIQ/manageiq-content/pull/608)
+- Added test for removefromprovider method for Cloud Vm Retirement. [(#605)](https://github.com/ManageIQ/manageiq-content/pull/605)
+
+### Changed
+- Refactor approve_request method for Infra VM Retirement Approval. [(#607)](https://github.com/ManageIQ/manageiq-content/pull/607)
+- Refactor deleteservicefrom_vmdb method for Service Retirement. [(#603)](https://github.com/ManageIQ/manageiq-content/pull/603)
+- Refactor finish_retirement method for Infra VM Retirement. [(#599)](https://github.com/ManageIQ/manageiq-content/pull/599)
+- Refactor deletefromvmdb method for Infra VM Retirement. [(#597)](https://github.com/ManageIQ/manageiq-content/pull/597)
+- Cleanup after Ansible runner integration [(#594)](https://github.com/ManageIQ/manageiq-content/pull/594)
+- Removing poweroff and checkpower_off methods in Retirement class. [(#593)](https://github.com/ManageIQ/manageiq-content/pull/593)
 
 ## Unreleased as of Sprint 123 ending 2019-10-28
 
