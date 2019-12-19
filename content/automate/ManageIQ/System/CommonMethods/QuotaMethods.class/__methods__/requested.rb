@@ -347,6 +347,9 @@ def get_dialog_options_hash(dialog_options)
         $evm.log(:info, "Recalculating cloud flavor based on dialog overrides")
       end
     else
+      next unless /^dialog_(?<option_key>.*)/i =~ k
+
+      set_hash_value(0, option_key.downcase.to_sym, v, options_hash)
       set_hash_value(0, k.downcase.to_sym, v, options_hash)
     end
   end
@@ -356,6 +359,8 @@ end
 
 def set_hash_value(sequence_id, option_key, value, options_hash)
   return if value.blank?
+
+  value = value.to_i.megabytes if option_key.to_s.downcase.include?('vm_memory')
   $evm.log(:info, "Adding seq_id: #{sequence_id} key: #{option_key.inspect} value: #{value.inspect} to options_hash")
   options_hash[sequence_id][option_key] = value
 end
