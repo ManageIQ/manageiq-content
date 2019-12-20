@@ -16,6 +16,13 @@ module ManageIQ
 
               private
 
+              def log_task_info(task)
+                @handle.log('info', "Service Retire Task <#{task.id}> <#{task.description}> is not retired, setting retry.")
+                task.miq_request_tasks.each do |t|
+                  @handle.log('info', "  Service Retire Task <#{task.id}> is waiting on <#{t.request_type}> Task <#{t.id}> <#{t.description}>") if t.state != 'finished'
+                end
+              end
+
               def check_all_service_tasks
                 task = @handle.root['service_retire_task']
                 task_status = task['status']
@@ -35,7 +42,7 @@ module ManageIQ
                   reason = reason[7..-1] if reason[0..6] == 'Error: '
                   @handle.root['ae_reason'] = reason
                 when 'retry'
-                  @handle.log('info', "Service task #{task.description} is not retired, setting retry.")
+                  log_task_info(task)
                   @handle.root['ae_result']         = 'retry'
                   @handle.root['ae_retry_interval'] = '1.minute'
                 when 'ok'
