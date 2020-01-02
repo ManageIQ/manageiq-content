@@ -4,7 +4,7 @@ describe ManageIQ::Automate::Service::Retirement::StateMachines::Methods::CheckS
   let(:admin) { FactoryBot.create(:user_admin) }
   let(:request) { FactoryBot.create(:service_retire_request, :requester => admin) }
   let(:service) { FactoryBot.create(:service) }
-  let(:task) { FactoryBot.create(:service_retire_task, :destination => service, :miq_request => request) }
+  let(:task) { FactoryBot.create(:service_retire_task, :destination => service, :miq_request => request, :message => 'fred') }
   let(:svc_task) { MiqAeMethodService::MiqAeServiceServiceRetireTask.find(task.id) }
   let(:svc_service) { MiqAeMethodService::MiqAeServiceService.find(service.id) }
   let(:root_object) do
@@ -29,6 +29,16 @@ describe ManageIQ::Automate::Service::Retirement::StateMachines::Methods::CheckS
       described_class.new(ae_service).main
 
       expect(ae_service.root['ae_result']).to eq('ok')
+    end
+  end
+
+  context " with error task" do
+    it "check" do
+      task.miq_request_tasks << FactoryBot.create(:service_retire_task, :miq_request => request, :state => 'pending')
+      expect(svc_task).to receive(:statemachine_task_status).and_return('error')
+      described_class.new(ae_service).main
+
+      expect(ae_service.root['ae_result']).to eq('error')
     end
   end
 end
