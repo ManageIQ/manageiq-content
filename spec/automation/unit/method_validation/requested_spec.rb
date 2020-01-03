@@ -103,12 +103,12 @@ describe "Quota Validation" do
     it_behaves_like "requested"
   end
 
-  context "vmware service item with dialog override vm_memory = 2147483648" do
+  context "vmware service item with dialog override vm_memory = 2048" do
     let(:result_counts_hash) do
       {:storage => 512.megabytes, :cpu => 4, :vms => 1, :memory => 2.gigabytes}
     end
     let(:result_dialog) do
-      {"dialog_option_0_vm_memory" => "2147483648"}
+      {"dialog_option_0_vm_memory" => "2048"}
     end
     it_behaves_like "requested"
   end
