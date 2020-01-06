@@ -6,6 +6,7 @@ $evm.log("info", "Starting Orchestration Reconfiguration")
 
 task = $evm.root["service_reconfigure_task"]
 service = task.source
+service.set_automate_timeout(@handle.field_timeout, 'reconfigure')
 
 begin
   service.update_orchestration_stack
