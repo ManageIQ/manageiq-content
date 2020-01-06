@@ -34,6 +34,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Provisioning::StateMachines::
       current_object = Spec::Support::MiqAeMockObject.new
       current_object.parent = root_object
       service.object = current_object
+      allow(service).to receive(:field_timeout).and_return(8)
     end
   end
 
