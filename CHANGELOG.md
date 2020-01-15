@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Unreleased as of Sprint 127 ending 2020-01-06
+### Added
+- Add RedHat domain content for 8 existing methods to ManageIQ. [(#624)](https://github.com/ManageIQ/manageiq-content/pull/624)
+- Add RedHat domain content for Namespace "Integration" to ManageIQ. [(#622)](https://github.com/ManageIQ/manageiq-content/pull/622)
+- Add RedHat domain content for 3 new placement methods to ManageIQ. [(#623)](https://github.com/ManageIQ/manageiq-content/pull/623)
+
+### Changed
+- Add better logging to check_service_retire method. [(#619)](https://github.com/ManageIQ/manageiq-content/pull/619)
+- Fix for Quota validation issue with service dialog memory values. [(#620)](https://github.com/ManageIQ/manageiq-content/pull/620)
+- Save automate timeout value for service.execute step into service's options hash [(#611)](https://github.com/ManageIQ/manageiq-content/pull/611)
+- Use automate timeout when execution_ttl is not set for an orchestration service [(#618)](https://github.com/ManageIQ/manageiq-content/pull/618)
+
+
 ## Unreleased as of Sprint 125 ending 2019-11-25
 ### Changed
 - Refactor finish_retirement method for Service Retirement. [(#602)](https://github.com/ManageIQ/manageiq-content/pull/602)
