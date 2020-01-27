@@ -13,25 +13,6 @@ describe "Orchestration retirement state machine Methods Validation" do
 
   let(:stack_in_provider) { true }
 
-  describe "#start_retirement" do
-    let(:method_name) { "StartRetirement" }
-
-    it "starts a retirement request" do
-      ws
-      expect(OrchestrationStack.where(:id => stack.id).first.retirement_state).to eq('retiring')
-    end
-
-    it "aborts if stack is already retired" do
-      stack.update(:retired => true)
-      expect { ws }.to raise_error(MiqAeException::AbortInstantiation, 'Method exited with rc=MIQ_ABORT')
-    end
-
-    it "aborts if stack is retiring" do
-      stack.update(:retirement_state => 'retiring')
-      expect { ws }.to raise_error(MiqAeException::AbortInstantiation, 'Method exited with rc=MIQ_ABORT')
-    end
-  end
-
   describe "#remove_from_provider" do
     let(:method_name) { "RemoveFromProvider" }
 
