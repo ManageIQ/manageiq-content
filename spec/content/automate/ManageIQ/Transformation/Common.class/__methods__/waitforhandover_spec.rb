@@ -57,5 +57,11 @@ describe ManageIQ::Automate::Transformation::Common::WaitForHandover do
       expect(ae_service.root['ae_retry_server_affinity']).to be_nil
       expect(ae_service.root['ae_retry_interval']).to be_nil
     end
+
+    it "raises if task failed" do
+      allow(svc_model_task).to receive(:state).and_return('finished')
+      svc_model.set_option(:progress => { :status => 'error' })
+      expect { described_class.new(ae_service).main }.to raise_error('Migration failed')
+    end
   end
 end

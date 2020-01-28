@@ -14,6 +14,8 @@ module ManageIQ
               @handle.root['ae_result'] = 'retry'
               @handle.root['ae_retry_server_affinity'] = true
               @handle.root['ae_retry_interval'] = 15.seconds
+            else
+              raise 'Migration failed' if @task.get_option(:progress)[:status] == "error"
             end
           end
         end
