@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Unreleased as of Sprint 128 ending 2020-01-20
+### Added
+* Add an automate event for DrsMigrateVM_Task [(#625)](https://github.com/ManageIQ/manageiq-content/pull/625)
+
 ## Unreleased as of Sprint 127 ending 2020-01-06
 ### Added
 - Add RedHat domain content for 8 existing methods to ManageIQ. [(#624)](https://github.com/ManageIQ/manageiq-content/pull/624)
