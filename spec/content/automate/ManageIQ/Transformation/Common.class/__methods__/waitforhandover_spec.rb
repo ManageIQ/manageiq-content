@@ -60,7 +60,7 @@ describe ManageIQ::Automate::Transformation::Common::WaitForHandover do
 
     it "raises if task failed" do
       allow(svc_model_task).to receive(:state).and_return('finished')
-      svc_model_task.set_option(:progress => {:status => 'error'})
+      svc_model_task.set_option(:progress, :status => 'error')
       expect { described_class.new(ae_service).main }.to raise_error('Migration failed')
     end
   end
