@@ -52,7 +52,7 @@ describe ManageIQ::Automate::Transformation::Common::WaitForHandover do
     it "stops retrying when preflight check passed and handover is done" do
       allow(svc_model_task).to receive(:state).and_return('migrate')
       svc_model_task.set_option(:workflow_runner, 'automate')
-      svc_model_task.set_option(:progress, {:status => 'ok'})
+      svc_model_task.set_option(:progress, :status => 'ok')
       described_class.new(ae_service).main
       expect(ae_service.root['ae_result']).to be_nil
       expect(ae_service.root['ae_retry_server_affinity']).to be_nil
