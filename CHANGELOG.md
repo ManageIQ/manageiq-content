@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Unreleased as of Sprint 129 ending 2020-02-03
+### Added
+* Save automate timeout in to a service options hash. [(#636)](https://github.com/ManageIQ/manageiq-content/pull/636)
+
+### Changed
+* [V2V] Fix cancellation process [(#634)](https://github.com/ManageIQ/manageiq-content/pull/634)
+* Refactor start_retirement method for Cloud Orchestration Retirement. [(#615)](https://github.com/ManageIQ/manageiq-content/pull/615)
+* Refactor microsoft_best_fit_least_utilized method for VM Placement. [(#626)](https://github.com/ManageIQ/manageiq-content/pull/626)
+* Refactor redhat_best_fit_cluster method for VM Placement. [(#629)](https://github.com/ManageIQ/manageiq-content/pull/629)
+
+
 ## Unreleased as of Sprint 128 ending 2020-01-20
 ### Added
 * Add an automate event for DrsMigrateVM_Task [(#625)](https://github.com/ManageIQ/manageiq-content/pull/625)
