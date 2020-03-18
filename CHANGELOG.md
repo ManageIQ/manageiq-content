@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Ivanchuk-4
+
+### Added
+* Eligible storages for placement methods [(#578)](https://github.com/ManageIQ/manageiq-content/pull/578)
+* Add an automate event for DrsMigrateVM_Task [(#625)](https://github.com/ManageIQ/manageiq-content/pull/625)
+
+### Fixed
+*-* Move V2V Automate Functionality into Core [(#570)](https://github.com/ManageIQ/manageiq-content/pull/570)
+* [V2V] Fix cancellation process [(#634)](https://github.com/ManageIQ/manageiq-content/pull/634)
+
+## Ivanchuk-3
+
+### Added
+* Save automate timeout in to a service options hash. [(#636)](https://github.com/ManageIQ/manageiq-content/pull/636)
+
+### Fixed
+* Cleanup after Ansible runner integration [(#594)](https://github.com/ManageIQ/manageiq-content/pull/594)
+* Save automate timeout value for service.execute step into service's options hash [(#611)](https://github.com/ManageIQ/manageiq-content/pull/611)
+* Use automate timeout when execution_ttl is not set for an orchestration service [(#618)](https://github.com/ManageIQ/manageiq-content/pull/618)
 
 ## Ivanchuk-2
 
