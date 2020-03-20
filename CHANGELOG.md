@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Unreleased as of Sprint 131 ending 2020-03-02
+### Changed
+* Removed all deprecated email components from Service namespace. [(#639)](https://github.com/ManageIQ/manageiq-content/pull/639)
+* Removed all deprecated email components from Infrastructure namespace. [(#640)](https://github.com/ManageIQ/manageiq-content/pull/640)
+* Removed all deprecated email components from Cloud namespace. [(#641)](https://github.com/ManageIQ/manageiq-content/pull/641)
+* Removed all deprecated email components from AutomationManagement. [(#642)](https://github.com/ManageIQ/manageiq-content/pull/642)
+
 ## Unreleased as of Sprint 129 ending 2020-02-03
 ### Added
 * Save automate timeout in to a service options hash. [(#636)](https://github.com/ManageIQ/manageiq-content/pull/636)
