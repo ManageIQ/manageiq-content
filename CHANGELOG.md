@@ -4,73 +4,41 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
-## Unreleased as of Sprint 129 ending 2020-02-03
+## Jansa-1 Alpha-1
+
 ### Added
 * Save automate timeout in to a service options hash. [(#636)](https://github.com/ManageIQ/manageiq-content/pull/636)
+* Add an automate event for DrsMigrateVM_Task [(#625)](https://github.com/ManageIQ/manageiq-content/pull/625)
+- Add RedHat domain content for 8 existing methods to ManageIQ. [(#624)](https://github.com/ManageIQ/manageiq-content/pull/624)
+- Add RedHat domain content for Namespace "Integration" to ManageIQ. [(#622)](https://github.com/ManageIQ/manageiq-content/pull/622)
+- Add RedHat domain content for 3 new placement methods to ManageIQ. [(#623)](https://github.com/ManageIQ/manageiq-content/pull/623)
+- Optionally symlink spec/manageiq during bin/setup [(#608)](https://github.com/ManageIQ/manageiq-content/pull/608)
+- Added test for removefromprovider method for Cloud Vm Retirement. [(#605)](https://github.com/ManageIQ/manageiq-content/pull/605)
+* Remove call to retire_service_resources from retire_service method [(#590)](https://github.com/ManageIQ/manageiq-content/pull/590)
+* Test ruby 2.5.7/2.6.5 see: ManageIQ/manageiq#19414 [(#591)](https://github.com/ManageIQ/manageiq-content/pull/591)
+* AzureStack events for targeted refresh [(#588)](https://github.com/ManageIQ/manageiq-content/pull/588)
+* Eligible storages for placement methods [(#578)](https://github.com/ManageIQ/manageiq-content/pull/578)
 
-### Changed
+### Changed or Fixed
 * [V2V] Fix cancellation process [(#634)](https://github.com/ManageIQ/manageiq-content/pull/634)
 * Refactor start_retirement method for Cloud Orchestration Retirement. [(#615)](https://github.com/ManageIQ/manageiq-content/pull/615)
 * Refactor microsoft_best_fit_least_utilized method for VM Placement. [(#626)](https://github.com/ManageIQ/manageiq-content/pull/626)
 * Refactor redhat_best_fit_cluster method for VM Placement. [(#629)](https://github.com/ManageIQ/manageiq-content/pull/629)
-
-
-## Unreleased as of Sprint 128 ending 2020-01-20
-### Added
-* Add an automate event for DrsMigrateVM_Task [(#625)](https://github.com/ManageIQ/manageiq-content/pull/625)
-
-## Unreleased as of Sprint 127 ending 2020-01-06
-### Added
-- Add RedHat domain content for 8 existing methods to ManageIQ. [(#624)](https://github.com/ManageIQ/manageiq-content/pull/624)
-- Add RedHat domain content for Namespace "Integration" to ManageIQ. [(#622)](https://github.com/ManageIQ/manageiq-content/pull/622)
-- Add RedHat domain content for 3 new placement methods to ManageIQ. [(#623)](https://github.com/ManageIQ/manageiq-content/pull/623)
-
-### Changed
 - Add better logging to check_service_retire method. [(#619)](https://github.com/ManageIQ/manageiq-content/pull/619)
 - Fix for Quota validation issue with service dialog memory values. [(#620)](https://github.com/ManageIQ/manageiq-content/pull/620)
 - Save automate timeout value for service.execute step into service's options hash [(#611)](https://github.com/ManageIQ/manageiq-content/pull/611)
 - Use automate timeout when execution_ttl is not set for an orchestration service [(#618)](https://github.com/ManageIQ/manageiq-content/pull/618)
-
-
-## Unreleased as of Sprint 125 ending 2019-11-25
-### Changed
 - Refactor finish_retirement method for Service Retirement. [(#602)](https://github.com/ManageIQ/manageiq-content/pull/602)
 - Refactor start_retirement method for Service Retirement. [(#601)](https://github.com/ManageIQ/manageiq-content/pull/601)
 - Refactor start_retirement method for Infra VM Retirement. [(#600)](https://github.com/ManageIQ/manageiq-content/pull/600)
-
-## Unreleased as of Sprint 124 ending 2019-11-11
-### Added
-- Optionally symlink spec/manageiq during bin/setup [(#608)](https://github.com/ManageIQ/manageiq-content/pull/608)
-- Added test for removefromprovider method for Cloud Vm Retirement. [(#605)](https://github.com/ManageIQ/manageiq-content/pull/605)
-
-### Changed
 - Refactor approve_request method for Infra VM Retirement Approval. [(#607)](https://github.com/ManageIQ/manageiq-content/pull/607)
 - Refactor deleteservicefrom_vmdb method for Service Retirement. [(#603)](https://github.com/ManageIQ/manageiq-content/pull/603)
 - Refactor finish_retirement method for Infra VM Retirement. [(#599)](https://github.com/ManageIQ/manageiq-content/pull/599)
 - Refactor deletefromvmdb method for Infra VM Retirement. [(#597)](https://github.com/ManageIQ/manageiq-content/pull/597)
 - Cleanup after Ansible runner integration [(#594)](https://github.com/ManageIQ/manageiq-content/pull/594)
 - Removing poweroff and checkpower_off methods in Retirement class. [(#593)](https://github.com/ManageIQ/manageiq-content/pull/593)
-
-## Unreleased as of Sprint 123 ending 2019-10-28
-
-### Added
-* Remove call to retire_service_resources from retire_service method [(#590)](https://github.com/ManageIQ/manageiq-content/pull/590)
-* Test ruby 2.5.7/2.6.5 see: ManageIQ/manageiq#19414 [(#591)](https://github.com/ManageIQ/manageiq-content/pull/591)
-
-## Unreleased as of Sprint 122 ending 2019-10-14
-
-### Added
-* AzureStack events for targeted refresh [(#588)](https://github.com/ManageIQ/manageiq-content/pull/588)
-* Eligible storages for placement methods [(#578)](https://github.com/ManageIQ/manageiq-content/pull/578)
-
-
-### Fixed
 - use :automation_manager_ansible_tower instead of :automation_manager [(#586)](https://github.com/ManageIQ/manageiq-content/pull/586)
 - Switch to call lookup_by_* methods [(#584)](https://github.com/ManageIQ/manageiq-content/pull/584)
-
-## Unreleased as of Sprint 120 ending 2019-09-16
-
-### Fixed
 - Move V2V Automate Functionality into Core [(#570)](https://github.com/ManageIQ/manageiq-content/pull/570)
 
 ## Ivanchuk-1 - Released 2019-09-18
