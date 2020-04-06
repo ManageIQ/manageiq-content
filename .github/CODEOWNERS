@@ -3,8 +3,4 @@
 
 # These owners will be the default owners for everything in
 # the repo. Unless a later match takes precedence.
-*                                          @tinaafitz @lfu
-
-/content/ansible/                          @syncrou @mkanoor
-/content/automate/ManageIQ/Transformation/ @fdupont-redhat @gmcculloug
-/content/automate/ManageIQ/System/Event/   @lfu @gmcculloug
+* @tinaafitz @lfu
