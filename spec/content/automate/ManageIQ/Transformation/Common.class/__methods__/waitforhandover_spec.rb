@@ -41,6 +41,13 @@ describe ManageIQ::Automate::Transformation::Common::WaitForHandover do
       expect(ae_service.root['ae_retry_interval']).to eq(15.seconds)
     end
 
+    it "raises when preflight check failed" do
+      allow(svc_model_task).to receive(:state).and_return('active')
+      svc_model_task.set_option(:workflow_runner, 'automate')
+      svc_model_task.set_option(:progress, :status => 'error')
+      expect { described_class.new(ae_service).main }.to raise_error('Migration failed')
+    end
+
     it "retries when preflight check passed and handover is not done" do
       allow(svc_model_task).to receive(:state).and_return('migrate')
       described_class.new(ae_service).main
