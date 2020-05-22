@@ -1,0 +1,133 @@
+---
+object_type: method
+version: 1.0
+object:
+  attributes:
+    name: send_email
+    display_name: 
+    description: 
+    scope: instance
+    language: ruby
+    location: builtin
+    data: ''
+  inputs:
+  - field:
+      aetype: 
+      name: to
+      display_name: 
+      datatype: 
+      priority: 1
+      owner: 
+      default_value: 
+      substitute: false
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: 
+      name: from
+      display_name: 
+      datatype: string
+      priority: 2
+      owner: 
+      default_value: 
+      substitute: false
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: 
+      name: subject
+      display_name: 
+      datatype: string
+      priority: 3
+      owner: 
+      default_value: 
+      substitute: false
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: 
+      name: body
+      display_name: 
+      datatype: string
+      priority: 4
+      owner: 
+      default_value: 
+      substitute: false
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: 
+      name: cc
+      display_name: 
+      datatype: array
+      priority: 5
+      owner: 
+      default_value: 
+      substitute: false
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
+  - field:
+      aetype: 
+      name: bcc
+      display_name: 
+      datatype: array
+      priority: 6
+      owner: 
+      default_value: 
+      substitute: false
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: 
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
