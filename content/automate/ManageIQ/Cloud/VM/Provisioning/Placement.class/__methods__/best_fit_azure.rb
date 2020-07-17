@@ -43,11 +43,10 @@ module ManageIQ
 
               def default_cloud_subnet
                 cloud_subnet = prov.eligible_cloud_subnets.first
+                raise "No cloud subnets found for cloud network" unless cloud_subnet
 
-                if cloud_subnet
-                  prov.set_cloud_subnet(cloud_subnet)
-                  @handle.log("info", "Selected Cloud Subnet: #{cloud_subnet.name}")
-                end
+                prov.set_cloud_subnet(cloud_subnet)
+                @handle.log("info", "Selected Cloud Subnet: #{cloud_subnet.name}")
               end
 
               def default_resource_group
