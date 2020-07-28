@@ -5,7 +5,7 @@ object:
   attributes:
     name: check_provisioned
     display_name: CheckProvisioned
-    description: 
+    description:
     scope: instance
     language: ruby
     location: inline

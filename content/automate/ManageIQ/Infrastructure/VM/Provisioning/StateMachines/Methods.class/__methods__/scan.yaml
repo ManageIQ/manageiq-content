@@ -5,7 +5,7 @@ object:
   attributes:
     name: scan
     display_name: Scan
-    description: 
+    description:
     scope: instance
     language: ruby
     location: inline

@@ -5,9 +5,9 @@ object:
   attributes:
     name: ManageIQ
     description: Base domain
-    display_name: 
+    display_name:
     priority: 0
     enabled: true
     tenant_id: 1
     source: system
-    top_level_namespace: 
+    top_level_namespace:
