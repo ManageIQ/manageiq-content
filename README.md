@@ -1,7 +1,7 @@
 # ManageIQ Content
 
 [![Gem Version](https://badge.fury.io/rb/manageiq-content.svg)](http://badge.fury.io/rb/manageiq-content)
-[![Build Status](https://travis-ci.org/ManageIQ/manageiq-content.svg?branch=master)](https://travis-ci.org/ManageIQ/manageiq-content)
+[![Build Status](https://travis-ci.com/ManageIQ/manageiq-content.svg?branch=master)](https://travis-ci.com/ManageIQ/manageiq-content)
 [![Code Climate](https://codeclimate.com/github/ManageIQ/manageiq-content.svg)](https://codeclimate.com/github/ManageIQ/manageiq-content)
 [![Test Coverage](https://codeclimate.com/github/ManageIQ/manageiq-content/badges/coverage.svg)](https://codeclimate.com/github/ManageIQ/manageiq-content/coverage)
 [![security](https://hakiri.io/github/ManageIQ/manageiq-content/master.svg)](https://hakiri.io/github/ManageIQ/manageiq-content/master)
