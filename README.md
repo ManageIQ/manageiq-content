@@ -1,41 +1,34 @@
-# ManageIQ Content
+# ManageIQ::Content
 
-[![Gem Version](https://badge.fury.io/rb/manageiq-content.svg)](http://badge.fury.io/rb/manageiq-content)
 [![Build Status](https://travis-ci.com/ManageIQ/manageiq-content.svg?branch=master)](https://travis-ci.com/ManageIQ/manageiq-content)
-[![Code Climate](https://codeclimate.com/github/ManageIQ/manageiq-content.svg)](https://codeclimate.com/github/ManageIQ/manageiq-content)
-[![Test Coverage](https://codeclimate.com/github/ManageIQ/manageiq-content/badges/coverage.svg)](https://codeclimate.com/github/ManageIQ/manageiq-content/coverage)
-[![security](https://hakiri.io/github/ManageIQ/manageiq-content/master.svg)](https://hakiri.io/github/ManageIQ/manageiq-content/master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/bc6773f3e24fd6323a5c/maintainability)](https://codeclimate.com/github/ManageIQ/manageiq-content/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/bc6773f3e24fd6323a5c/test_coverage)](https://codeclimate.com/github/ManageIQ/manageiq-content/test_coverage)
+[![Security](https://hakiri.io/github/ManageIQ/manageiq-content/master.svg)](https://hakiri.io/github/ManageIQ/manageiq-content/master)
 
 [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ManageIQ/manageiq/automate?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Default ManageIQ content.
+Content plugin for ManageIQ.
+
+## Notes on content
 
 At present, this repo contains only the ManageIQ automate domain.  In the future,
 more content will be extracted from the ManageIQ/manageiq repo such as dialogs,
 reports, and policies.
 
-## Contributing
+## Development
 
-First, you will need to set up your repo for development.
+See the section on plugins in the [ManageIQ Developer Setup](http://manageiq.org/docs/guides/developer_setup/plugins)
 
-1. Clone the repo.
-2. Set up the ManageIQ application in the spec/manageiq directory.  This can be
-   done in one of two ways.
-   - Run `bin/setup`.  This command will do a shallow clone of ManageIQ into spec/manageiq,
-     and also prepare any files for setup.
-   - Create a symlink from spec/manageiq to a local source checkout of ManageIQ.
-     This is especially useful if you will be modifying ManageIQ itself at the
-     same time.
-3. `bundle`
-4. `bundle exec rake spec:setup`
-
-Now you are ready to begin development.  You can run the specs with
-`bundle exec rake`.
-
-Please be sure to add specs for any new automate methods you create, and follow
-the [ManageIQ development guidelines](https://github.com/ManageIQ/guides/blob/master/coding_style_and_standards.md).
-Thanks for your contribution!
+For quick local setup run `bin/setup`, which will clone the core ManageIQ repository under the *spec* directory and setup necessary config files. If you have already cloned it, you can run `bin/update` to bring the core ManageIQ code up to date.
 
 ## License
 
-The gem is available as open source under the terms of the [Apache License 2.0](LICENSE.txt).
+The gem is available as open source under the terms of the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
