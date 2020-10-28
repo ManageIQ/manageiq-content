@@ -1,4 +1,4 @@
-describe "YAML files" do
+describe "YAML files", :clean_yaml => true do
   it "should be programatically generated" do
     yaml_files = ManageIQ::Content::Engine.root.join("content/**/*.yaml")
     invalid_files = Dir.glob(yaml_files).sort.select do |f|

@@ -30,6 +30,7 @@ RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.use_transactional_fixtures = true
   config.use_instantiated_fixtures  = false
+  config.filter_run_excluding(:clean_yaml) if ENV['CI'].nil? && Psych.libyaml_version[1] > 1 # 0.1.x only
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
