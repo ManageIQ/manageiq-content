@@ -3,8 +3,6 @@ Rake::Task[:release].clear
 desc "Release a new project version"
 task :release do
   require 'pathname'
-  require 'yaml'
-  require 'more_core_extensions/core_ext/hash/nested'
 
   version = ENV["RELEASE_VERSION"]
   if version.nil? || version.empty?
@@ -22,9 +20,10 @@ task :release do
 
   # Modify the automate domain version
   ae_file = root.join("content/automate/ManageIQ/System/About.class/__class__.yaml")
-  content = YAML.load_file(ae_file)
-  content.store_path("object", "schema", 0, "field", "default_value", version)
-  File.write(ae_file, content.to_yaml)
+  # NOTE: We are intentionally not using YAML here due to differences in libyaml
+  #   versions outputting the files differently, ultimately causing failures in
+  #   clean_yaml_spec.rb
+  ae_file.write(ae_file.read.sub(/default_value:.+/, "default_value: #{version}"))
 
   # Create the commit and tag
   exit $?.exitstatus unless system("git add #{ae_file}")
