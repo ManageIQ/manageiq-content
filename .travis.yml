@@ -1,4 +1,7 @@
 ---
+before_install:
+- sudo apt-get -y install libyaml-dev
+
 language: ruby
 cache: bundler
 rvm:
