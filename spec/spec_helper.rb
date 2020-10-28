@@ -9,6 +9,7 @@ Dir[File.join(__dir__, "support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
   config.include Spec::Support::AutomationHelper
+  config.filter_run_excluding(:clean_yaml) if Psych.libyaml_version[1] > 1 # 0.1.x only
 
   config.before(:suite) do
     puts "** Resetting #{ENV["AUTOMATE_DOMAINS"]} domain(s)"
