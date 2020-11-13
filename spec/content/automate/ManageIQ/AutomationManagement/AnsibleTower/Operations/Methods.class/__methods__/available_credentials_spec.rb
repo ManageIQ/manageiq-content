@@ -1,7 +1,7 @@
 require_domain_file
 
 describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::AvailableCredentials do
-  let(:ansible_manager) { FactoryBot.create(:embedded_automation_manager_ansible) }
+  let(:ansible_manager) { FactoryBot.create(:provider_embedded_ansible).automation_manager }
   let(:playbook) do
     FactoryBot.create(:embedded_playbook, :manager => ansible_manager)
   end
@@ -90,7 +90,6 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Ava
     end
 
     context "no service template" do
-      let(:ansible_manager) { FactoryBot.create(:embedded_automation_manager_ansible) }
       let(:root_object) do
         Spec::Support::MiqAeMockObject.new
       end
