@@ -53,7 +53,7 @@ module ManageIQ
                 def fetch_job(job_id)
                   job = @handle.vmdb(JOB_CLASS).find(job_id)
                   if job.nil?
-                    @handle.log(:error, 'Ansible job with id : #{job_id} not found')
+                    @handle.log(:error, "Ansible job with id: #{job_id} not found")
                     exit(MIQ_ERROR)
                   end
                   job
