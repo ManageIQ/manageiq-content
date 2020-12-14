@@ -1,7 +1,7 @@
 describe "Quota Validation" do
   include Spec::Support::QuotaHelper
 
-  def run_automate_method(attrs, used, requested)
+  def run_automate_method(used, requested)
     attrs = []
     attrs << "MiqRequest::miq_request=#{@miq_provision_request.id}&" \
              "quota_limit_max_yaml=#{@quota_limit_max}&" \
@@ -16,15 +16,6 @@ describe "Quota Validation" do
 
   let(:used) { YAML.dump(:storage => 32_768, :vms => 2, :cpu => 2, :memory => 4096) }
   let(:requested) { YAML.dump(:storage => 10_240, :vms => 1, :cpu => 1, :memory => 1024) }
-
-  def attrs
-    ["MiqProvisionRequest::miq_provision_request=#{@miq_provision_request.id}&"]
-  end
-
-  def reconfigure_attrs
-    ["MiqRequest::miq_request=#{@reconfigure_request.id}&"\
-    "vmdb_object_type=VmReconfigureRequest?"]
-  end
 
   before do
     setup_model
@@ -42,7 +33,7 @@ describe "Quota Validation" do
       it "check" do
         @quota_limit_warn = quota_warn
         @quota_limit_max = quota_max
-        ws = run_automate_method(attrs, used, requested)
+        ws = run_automate_method(used, requested)
         expect(ws.root['ae_result']).to eq(quota_result)
         @miq_request.reload
         expect(@miq_request.options[quota_type]).to eql(err_msg)
@@ -162,7 +153,7 @@ describe "Quota Validation" do
         setup_model("vmware_reconfigure")
         @quota_limit_warn = YAML.dump(:storage => 0, :vms => 0, :cpu => 0, :memory => 0)
         @quota_limit_max = quota_max
-        ws = run_automate_method(reconfigure_attrs, used, requested)
+        ws = run_automate_method(used, requested)
         expect(ws.root['ae_result']).to eq(quota_result)
         expect(ws.root['check_quota']).to eq(quota_check)
         @miq_request.reload
