@@ -63,6 +63,13 @@ describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::Meth
     let(:ems) { FactoryBot.create(:ems_vmware, :zone => zone) }
     let(:vm) { FactoryBot.create(:vm_vmware, :ems_id => ems.id) }
 
+    it "removes a vm provisioned by OVF template" do
+      ae_service.inputs['removal_type'] = 'remove_from_disk'
+      vm.add_to_service(FactoryBot.create(:service_ovf))
+      expect { described_class.new(ae_service).main }.to_not raise_error
+      expect(ae_service.get_state_var('vm_removed_from_provider')).to be_truthy
+    end
+
     it_behaves_like 'ae_method'
   end
 

@@ -36,7 +36,7 @@ module ManageIQ
 
                   case @handle.inputs['removal_type'].try(:downcase)
                   when "remove_from_disk"
-                    remove_from_disk if @vm.miq_provision || @vm.tagged_with?(category, tag)
+                    remove_from_disk if @vm.miq_provision || @vm.service || @vm.tagged_with?(category, tag)
                   when "unregister"
                     unregister
                   else
