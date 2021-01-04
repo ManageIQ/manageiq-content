@@ -11,7 +11,7 @@ describe "check_unregistered_from_provider Method Validation" do
     @ins  = "/Infrastructure/VM/Retirement/StateMachines/Methods/CheckRemovedFromProvider"
   end
 
-  let(:ws) { MiqAeEngine.instantiate("#{@ins}?Vm::vm=#{@vm.id}&ae_state_data=#{URI.escape(YAML.dump(@ae_state))}", @user) }
+  let(:ws) { MiqAeEngine.instantiate("#{@ins}?Vm::vm=#{@vm.id}&ae_state_data=#{CGI.escape(YAML.dump(@ae_state))}", @user) }
 
   it "returns 'ok' if the vm is not connected to a ems" do
     expect(ws.root['vm']['registered']).to  eql(false)
