@@ -1,9 +1,9 @@
 # ManageIQ::Content
 
-[![Build Status](https://travis-ci.com/ManageIQ/manageiq-content.svg?branch=master)](https://travis-ci.com/ManageIQ/manageiq-content)
+[![Build Status](https://travis-ci.com/ManageIQ/manageiq-content.svg?branch=lasker)](https://travis-ci.com/ManageIQ/manageiq-content)
 [![Maintainability](https://api.codeclimate.com/v1/badges/bc6773f3e24fd6323a5c/maintainability)](https://codeclimate.com/github/ManageIQ/manageiq-content/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/bc6773f3e24fd6323a5c/test_coverage)](https://codeclimate.com/github/ManageIQ/manageiq-content/test_coverage)
-[![Security](https://hakiri.io/github/ManageIQ/manageiq-content/master.svg)](https://hakiri.io/github/ManageIQ/manageiq-content/master)
+[![Security](https://hakiri.io/github/ManageIQ/manageiq-content/lasker.svg)](https://hakiri.io/github/ManageIQ/manageiq-content/lasker)
 
 [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ManageIQ/manageiq/automate?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
