@@ -1,0 +1,13 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: is.instance.instance.delete
+    inherits: 
+    description: 
+    relative_path: System/Event/EmsEvent/IBMCloud-VPC/is.instance.instance.delete
+  fields:
+  - rel4:
+      value: "/System/event_handlers/refresh"
