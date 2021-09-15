@@ -1,0 +1,13 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: pvm-instance.start
+    inherits: 
+    description: 
+    relative_path: System/Event/EmsEvent/IBMCloud-PowerVS/pvm-instance.start
+  fields:
+  - rel4:
+      value: "/System/event_handlers/refresh"
