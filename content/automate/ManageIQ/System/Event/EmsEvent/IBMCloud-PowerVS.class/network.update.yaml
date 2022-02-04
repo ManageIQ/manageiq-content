@@ -1,0 +1,13 @@
+---
+object_type: network
+version: 1.0
+object:
+  attributes:
+    display_name:
+    name: network.update
+    inherits:
+    description:
+    relative_path: System/Event/EmsEvent/IBMCloud-PowerVS/network.update
+  fields:
+  - rel4:
+      value: "/System/event_handlers/refresh"
