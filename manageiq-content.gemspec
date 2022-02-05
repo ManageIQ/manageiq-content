@@ -21,5 +21,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "savon", "~>2.11.1" # Because users expect it to be there for custom code
 
   spec.add_development_dependency "manageiq-style"
-  spec.add_development_dependency "simplecov"
+  spec.add_development_dependency "simplecov", ">= 0.21.2"
 end
