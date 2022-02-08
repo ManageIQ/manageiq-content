@@ -34,6 +34,9 @@ RSpec.configure do |config|
   end
 end
 
+puts "yaml gem version: #{YAML::VERSION}"
+puts "libyaml version:  #{YAML::LIBYAML_VERSION}"
+
 ENV["AUTOMATE_DOMAINS"] = "ManageIQ" # Reset only the ManageIQ automate domain when testing.
 
 require "manageiq-content"
