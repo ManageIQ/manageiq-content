@@ -4,7 +4,7 @@ version: 1.0
 object:
   attributes:
     name: CommonMethods
-    description: 
-    display_name: 
-    priority: 
-    enabled: 
+    description:
+    display_name:
+    priority:
+    enabled:

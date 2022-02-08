@@ -5,7 +5,7 @@ object:
   attributes:
     name: provision
     display_name: Provision
-    description: 
+    description:
     scope: instance
     language: ruby
     location: inline

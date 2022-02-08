@@ -4,8 +4,8 @@ version: 1.0
 object:
   attributes:
     name: vmcloudreconfigure_request_auto_approve
-    display_name: 
-    description: 
+    display_name:
+    description:
     scope: instance
     language: ruby
     location: inline

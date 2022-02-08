@@ -5,7 +5,7 @@ object:
   attributes:
     name: vmname
     display_name: default
-    description: 
+    description:
     scope: instance
     language: ruby
     location: inline

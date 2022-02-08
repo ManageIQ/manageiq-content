@@ -5,8 +5,8 @@ object:
   attributes:
     display_name: VM_Placement_Optimization
     name: VM_Placement_Optimization
-    inherits: 
-    description: 
+    inherits:
+    description:
   fields:
   - method1:
       value: VM_Placement_Optimization
