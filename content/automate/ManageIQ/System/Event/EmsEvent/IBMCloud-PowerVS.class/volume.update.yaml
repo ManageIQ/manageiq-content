@@ -3,10 +3,10 @@ object_type: volume
 version: 1.0
 object:
   attributes:
-    display_name:
+    display_name: 
     name: volume.update
-    inherits:
-    description:
+    inherits: 
+    description: 
     relative_path: System/Event/EmsEvent/IBMCloud-PowerVS/volume.update
   fields:
   - rel4:
