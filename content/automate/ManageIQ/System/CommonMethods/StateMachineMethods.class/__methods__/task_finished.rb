@@ -32,10 +32,15 @@ module ManageIQ
                 final_message += "Service [#{task.destination.name}] Provisioned Successfully"
                 @handle.create_notification(:type => :automate_service_provisioned, :subject => task.destination) if task.miq_request_task.nil?
               when 'miq_provision'
-                final_message += "VM [#{task.get_option(:vm_target_name)}] "
-                final_message += "IP [#{task.vm.ipaddresses.first}] " if task.vm&.ipaddresses.present?
-                final_message += "Provisioned Successfully"
-                @handle.create_notification(:type => :automate_vm_provisioned, :subject => task.vm)
+                if task.get_option(:request_type) == :clone_to_template
+                  final_message += "Template [#{task.get_option(:vm_target_name)}] Published Successfully"
+                  @handle.create_notification(:type => :automate_template_published, :subject => task.vm)
+                else
+                  final_message += "VM [#{task.get_option(:vm_target_name)}] "
+                  final_message += "IP [#{task.vm.ipaddresses.first}] " if task.vm&.ipaddresses.present?
+                  final_message += "Provisioned Successfully"
+                  @handle.create_notification(:type => :automate_vm_provisioned, :subject => task.vm)
+                end
               else
                 final_message += @handle.inputs['message']
               end

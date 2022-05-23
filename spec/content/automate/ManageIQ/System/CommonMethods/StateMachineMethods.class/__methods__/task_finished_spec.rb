@@ -91,6 +91,7 @@ describe ManageIQ::Automate::System::CommonMethods::StateMachineMethods::TaskFin
 
     it "task_finished" do
       expect(ae_service).to receive(:create_notification)
+      allow(svc_miq_provision_task).to receive(:get_option).with(:request_type).and_return('clone_to_vm')
       allow(svc_miq_provision_task).to receive(:get_option).with(:vm_target_name).and_return('fred')
       allow(svc_miq_provision_task).to receive(:finished).once
       expect(Notification.count).to eq(0)
