@@ -18,7 +18,7 @@ object:
       datatype: string
       priority: 1
       owner: 
-      default_value: najdorf-1.2
+      default_value: najdorf-1.3
       substitute: true
       message: create
       visibility: 
