@@ -1,0 +1,13 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: GetEms
+    inherits: 
+    description: 
+    relative_path: GetMethods/GetEms/GetEms
+  fields:
+  - GetEms:
+      max_retries: '100'

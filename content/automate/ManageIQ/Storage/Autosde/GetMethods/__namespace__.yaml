@@ -1,0 +1,12 @@
+---
+object_type: namespace
+version: 1.0
+object:
+  attributes:
+    name: GetMethods
+    description: ''
+    display_name:
+    priority:
+    enabled:
+    ancestry: '1388'
+    relative_path: GetMethods

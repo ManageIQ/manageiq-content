@@ -1,0 +1,12 @@
+---
+object_type: namespace
+version: 1.0
+object:
+  attributes:
+    name: Autosde
+    description: ''
+    display_name: 
+    priority: 
+    enabled: 
+    ancestry: 1233/1234
+    relative_path: Storage/Autosde
