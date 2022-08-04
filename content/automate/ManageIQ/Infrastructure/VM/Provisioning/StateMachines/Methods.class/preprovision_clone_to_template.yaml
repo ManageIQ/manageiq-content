@@ -12,3 +12,5 @@ object:
       value: vmware_PreProvision_Clone_to_Template
   - redhat_meth1:
       value: redhat_PreProvision_Clone_to_Template
+  - ovirt_meth1:
+      value: ovirt_PreProvision_Clone_to_Template

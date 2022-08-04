@@ -211,7 +211,7 @@ describe ManageIQ::Automate::AutomationManagement::AnsibleTower::Operations::Sta
     let(:workflow_jt_class) { MiqAeMethodService::MiqAeServiceManageIQ_Providers_AnsibleTower_AutomationManager_ConfigurationWorkflow }
     let(:workflow_job) { FactoryBot.create(:ansible_tower_workflow_job) }
     let(:svc_workflow_job) { workflow_job_class.find(workflow_job.id) }
-    let(:workflow_template) { FactoryBot.create(:configuration_workflow, :manager_id => manager.id) }
+    let(:workflow_template) { FactoryBot.create(:ansible_configuration_workflow, :manager_id => manager.id) }
     let(:svc_workflow_template) { workflow_jt_class.find(workflow_template.id) }
 
     before do

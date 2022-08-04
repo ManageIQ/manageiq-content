@@ -12,3 +12,5 @@ object:
       value: vmware_PostProvision
   - redhat_meth1:
       value: redhat_PostProvision
+  - ovirt_meth1:
+      value: ovirt_PostProvision

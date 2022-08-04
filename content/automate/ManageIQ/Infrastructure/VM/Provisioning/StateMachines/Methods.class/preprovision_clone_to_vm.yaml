@@ -12,3 +12,5 @@ object:
       value: vmware_PreProvision_Clone_to_VM
   - redhat_meth1:
       value: redhat_PreProvision_Clone_to_VM
+  - ovirt_meth1:
+      value: ovirt_PreProvision_Clone_to_VM

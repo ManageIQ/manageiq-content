@@ -10,6 +10,8 @@ object:
   fields:
   - redhat_meth1:
       value: pre_retirement
+  - ovirt_meth1:
+      value: pre_retirement
   - vmware_meth1:
       value: pre_retirement
   - microsoft_meth1:

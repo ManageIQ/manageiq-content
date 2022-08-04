@@ -10,6 +10,8 @@ object:
   fields:
   - redhat:
       value: redhat_best_fit_cluster
+  - ovirt:
+      value: ovirt_best_fit_cluster
   - vmware:
       value: vmware_best_fit_least_utilized
   - microsoft:
