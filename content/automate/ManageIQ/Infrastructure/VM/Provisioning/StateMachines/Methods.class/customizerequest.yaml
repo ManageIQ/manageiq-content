@@ -12,3 +12,5 @@ object:
       value: vmware_CustomizeRequest
   - redhat_meth1:
       value: redhat_CustomizeRequest
+  - ovirt_meth1:
+      value: ovirt_CustomizeRequest

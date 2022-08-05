@@ -12,3 +12,5 @@ object:
       value: vmware_PreProvision
   - redhat_meth1:
       value: redhat_PreProvision
+  - ovirt_meth1:
+      value: ovirt_PreProvision
