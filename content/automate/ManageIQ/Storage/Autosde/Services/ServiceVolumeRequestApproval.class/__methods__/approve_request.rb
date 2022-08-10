@@ -1,12 +1,12 @@
-
+# Create a volume after service request
 ems = $evm.vmdb(:ext_management_system).where(:id=>$evm.root.attributes['dialog_ems']).first
 $evm.log("info", 'creating a volume after order request.')
 
-autosde_client=ems.object_send('autosde_client')
+autosde_client = ems.object_send('autosde_client')
 
-if $evm.root.attributes['dialog_size'] != 'custom'
-  size = $evm.root.attributes['dialog_size']
-else
+size = $evm.root.attributes['dialog_size']
+
+if size == 'custom'
   size = $evm.root.attributes['dialog_custom']
 end
 
@@ -17,6 +17,6 @@ vol_to_create = autosde_client.VolumeCreate(
   :count   => 1
 )
 
-new_volume = autosde_client.VolumeApi.volumes_post(vol_to_create)
+autosde_client.VolumeApi.volumes_post(vol_to_create)
 ems.refresh
 exit MIQ_OK
