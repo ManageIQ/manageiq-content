@@ -10,7 +10,6 @@ object:
     inherits: 
     visibility: 
     owner: 
-    relative_path: GetMethods/GetEms
   schema:
   - field:
       aetype: state

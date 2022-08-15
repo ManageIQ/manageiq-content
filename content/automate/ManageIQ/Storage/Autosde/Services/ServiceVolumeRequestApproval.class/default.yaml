@@ -7,5 +7,4 @@ object:
     name: Default
     inherits: 
     description: 
-    relative_path: Storage/Autosde/Services/ServiceVolumeRequestApproval/Default
   fields: []

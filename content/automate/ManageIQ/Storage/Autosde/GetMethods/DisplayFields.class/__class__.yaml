@@ -10,7 +10,6 @@ object:
     inherits: 
     visibility: 
     owner: 
-    relative_path: Storage/Autosde/GetMethods/DisplayFields
   schema:
   - field:
       aetype: state

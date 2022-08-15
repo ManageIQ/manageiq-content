@@ -10,7 +10,6 @@ object:
     inherits: 
     visibility: 
     owner: 
-    relative_path: Storage/Autosde/Services/ServiceVolumeRequestApproval
   schema:
   - field:
       aetype: state

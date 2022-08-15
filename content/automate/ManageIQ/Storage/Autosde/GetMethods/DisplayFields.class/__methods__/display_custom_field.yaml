@@ -9,5 +9,4 @@ object:
     scope: instance
     language: ruby
     location: inline
-    relative_path: Storage/Autosde/GetMethods/DisplayFields/display_custom_field
   inputs: []

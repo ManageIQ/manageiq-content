@@ -7,7 +7,6 @@ object:
     name: GetEms
     inherits: 
     description: 
-    relative_path: GetMethods/GetEms/GetEms
   fields:
   - GetEms:
       max_retries: '100'

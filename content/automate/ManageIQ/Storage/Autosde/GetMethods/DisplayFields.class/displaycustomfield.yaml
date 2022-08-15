@@ -7,7 +7,6 @@ object:
     name: DisplayCustomField
     inherits: 
     description: 
-    relative_path: Storage/Autosde/GetMethods/DisplayFields/DisplayCustomField
   fields:
   - DisplayCustomField:
       on_entry: display_custom_field

@@ -9,5 +9,4 @@ object:
     scope: instance
     language: ruby
     location: inline
-    relative_path: GetMethods/GetPools/get_pools
   inputs: []

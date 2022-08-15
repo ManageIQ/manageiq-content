@@ -8,5 +8,3 @@ object:
     display_name:
     priority:
     enabled:
-    ancestry: '1388'
-    relative_path: GetMethods

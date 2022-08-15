@@ -7,5 +7,4 @@ object:
     name: GetPools
     inherits: 
     description: 
-    relative_path: GetMethods/GetPools/GetPools
   fields: []

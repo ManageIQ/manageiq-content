@@ -7,6 +7,4 @@ object:
     description: ''
     display_name: 
     priority: 
-    enabled: 
-    ancestry: 1233/1234
-    relative_path: Storage/Autosde
+    enabled:
