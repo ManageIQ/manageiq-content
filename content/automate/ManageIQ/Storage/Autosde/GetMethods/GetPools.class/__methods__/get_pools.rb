@@ -16,7 +16,7 @@ dialog_field["required"] = true
 
 selected_ems = $evm.root.attributes['dialog_ems']
 storage_services = $evm.vmdb(:storage_service).where(:ems_id=>selected_ems)
-ss_l = storage_services.map { |service| {service.ems_ref => service.name }}
+ss_l = storage_services.map { |service| {service.ems_ref => service.name} }
 
 dialog_field["values"] = Hash[*ss_l.map(&:to_a).flatten]
 

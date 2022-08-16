@@ -14,7 +14,7 @@ dialog_field["data_type"] = "string"
 # required: true / false
 dialog_field["required"] = true
 
-ems_l = $evm.vmdb(:ext_management_system).where(:type=>'ManageIQ::Providers::Autosde::StorageManager').map { |ems| {ems.id => ems.name }}
+ems_l = $evm.vmdb(:ext_management_system).where(:type=>'ManageIQ::Providers::Autosde::StorageManager').map { |ems| {ems.id => ems.name} }
 
 dialog_field["values"] = Hash[*ems_l.map(&:to_a).flatten]
 exit MIQ_OK
