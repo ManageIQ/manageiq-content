@@ -1,4 +1,4 @@
-$evm.log("info", 'eilam999')
+#Get autosde storage providers
 
 dialog_field = $evm.object
 
