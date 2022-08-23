@@ -9,11 +9,11 @@ if size == 'custom'
   size = $evm.root.attributes['dialog_custom']
 end
 options = {
-            "name" => $evm.root.attributes['dialog_name'],
-            "size" => size,
-            "count" => 1,
-            "storage_service_id" => $evm.root.attributes['dialog_pool']
-          }
+  "name"               => $evm.root.attributes['dialog_name'],
+  "size"               => size,
+  "count"              => 1,
+  "storage_service_id" => $evm.root.attributes['dialog_pool']
+}
 
 cv = $evm.vmdb(:cloud_volume)
 
