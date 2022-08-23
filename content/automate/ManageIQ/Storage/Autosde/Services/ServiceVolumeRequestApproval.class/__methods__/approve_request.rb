@@ -13,7 +13,7 @@ options = {
             "size" => size,
             "count" => 1,
             "storage_service_id" => $evm.root.attributes['dialog_pool']
-}
+          }
 
 cv = $evm.vmdb(:cloud_volume)
 
