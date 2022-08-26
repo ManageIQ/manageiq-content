@@ -1,0 +1,34 @@
+---
+object_type: class
+version: 1.0
+object:
+  attributes:
+    description: 
+    display_name: 
+    name: GetPools
+    type: 
+    inherits: 
+    visibility: 
+    owner: 
+    relative_path: GetMethods/GetPools
+  schema:
+  - field:
+      aetype: state
+      name: GetPools
+      display_name: 
+      datatype: string
+      priority: 1
+      owner: 
+      default_value: 
+      substitute: true
+      message: create
+      visibility: 
+      collect: 
+      scope: 
+      description: 
+      condition: 
+      on_entry: get_pools
+      on_exit: 
+      on_error: 
+      max_retries: 
+      max_time: 
