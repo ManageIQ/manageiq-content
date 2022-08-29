@@ -1,7 +1,7 @@
 # Create a volume after service request
 
 $evm.log("info", 'creating a volume after order request.')
-ems = $evm.vmdb(:ext_management_system).find_by(:id=>$evm.root.attributes['dialog_ems'])
+ems_id = $evm.root.attributes['dialog_ems']
 
 size = $evm.root.attributes['dialog_size']
 
@@ -17,4 +17,4 @@ options = {
 
 cv = $evm.vmdb(:cloud_volume)
 user = $evm.root['user']
-cv.create_volume_task(ems.id, user.id, options)
+cv.create_volume_task(ems_id, user.userid, options)
