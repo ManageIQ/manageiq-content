@@ -44,12 +44,36 @@ describe ManageIQ::Automate::Cloud::VM::Provisioning::Naming::VmName do
       expect(service.object['vmname']).to eq('abcpro$n{3}')
     end
 
-    it "provisions single vm" do
+    it "provisions single vm without name from dialog" do
       provision.update!(:options => {:number_of_vms => 1})
 
       described_class.new(service).main
 
       expect(service.object['vmname']).to eq('abc$n{3}')
+    end
+
+    it "provisions single vm with name from dialog" do
+      provision.update!(:options => {:number_of_vms => 1, :vm_name => "jay"})
+
+      described_class.new(service).main
+
+      expect(service.object['vmname']).to eq('jay')
+    end
+
+    it "provisions single vm without name from dialog when number of vms is nil" do
+      provision.update!(:options => {})
+
+      described_class.new(service).main
+
+      expect(service.object['vmname']).to eq('abc$n{3}')
+    end
+
+    it "provisions single vm with name from dialog when number of vms is nil" do
+      provision.update!(:options => {:vm_name => "jay"})
+
+      described_class.new(service).main
+
+      expect(service.object['vmname']).to eq('jay')
     end
   end
 end
