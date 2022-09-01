@@ -60,7 +60,7 @@ module ManageIQ
 
               # Returns the name suffix (provision number) or nil if provisioning only one
               def suffix(condensed)
-                "$n{3}" if provision_object.get_option(:number_of_vms) > 1 || !condensed
+                "$n{3}" if (provision_object.get_option(:number_of_vms) || 1) > 1 || !condensed
               end
             end
           end
