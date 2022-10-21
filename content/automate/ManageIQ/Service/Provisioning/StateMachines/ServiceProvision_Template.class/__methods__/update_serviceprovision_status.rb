@@ -26,7 +26,7 @@ module ManageIQ
                 if @handle.root['ae_result'] == "error"
                   check = "Service Provision Error: #{check_message(prov)}"
                   message = "Service Provision Error: #{updated_message}"
-                  notified = @handle.vmdb('notification').where('options LIKE ?',"%#{check}%")
+                  notified = @handle.vmdb('notification').where('options LIKE ?', "%#{check}%")
                   if notified.count < 1
                     @handle.create_notification(:level   => "error",
                                                 :subject => prov.miq_request,
