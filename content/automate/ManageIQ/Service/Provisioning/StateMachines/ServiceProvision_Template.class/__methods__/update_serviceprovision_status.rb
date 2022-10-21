@@ -38,6 +38,11 @@ module ManageIQ
 
               private
 
+              def check_message(prov)
+                updated_message  = "Server [#{@handle.root['miq_server'].name}] "
+                updated_message += "Service [#{prov.destination.name}]"
+              end
+
               def update_status_message(prov, status)
                 updated_message  = "Server [#{@handle.root['miq_server'].name}] "
                 updated_message += "Service [#{prov.destination.name}] "
