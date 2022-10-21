@@ -24,10 +24,15 @@ module ManageIQ
                 updated_message = update_status_message(prov, @handle.inputs['status'])
 
                 if @handle.root['ae_result'] == "error"
-                  @handle.create_notification(:level   => "error",
-                                              :subject => prov.miq_request,
-                                              :message => "Service Provision Error: #{updated_message}")
-                  @handle.log(:error, "Service Provision Error: #{updated_message}")
+                  check = "Service Provision Error: #{check_message(prov)}"
+                  message = "Service Provision Error: #{updated_message}"
+                  notified = @handle.vmdb('notification').where('options LIKE ?',"%#{check}%")
+                  if notified.count < 1
+                    @handle.create_notification(:level   => "error",
+                                                :subject => prov.miq_request,
+                                                :message => message)
+                    @handle.log(:error, message)
+                  end
                 end
               end
 

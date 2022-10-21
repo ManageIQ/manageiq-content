@@ -30,7 +30,8 @@ module ManageIQ
               case @handle.root['vmdb_object_type']
               when 'service_template_provision_task'
                 final_message += "Service [#{task.destination.name}] Provisioned Successfully"
-                @handle.create_notification(:type => :automate_service_provisioned, :subject => task.destination) if task.miq_request_task.nil?
+                notified = @handle.vmdb('notification').where('options LIKE ?',"%#{final_message}%")
+                @handle.create_notification(:type => :automate_service_provisioned, :subject => task.destination) if task.miq_request_task.nil?  && notified.count < 1
               when 'miq_provision'
                 if task.get_option(:request_type) == :clone_to_template
                   final_message += "Template [#{task.get_option(:vm_target_name)}] Published Successfully"
