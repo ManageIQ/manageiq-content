@@ -14,10 +14,10 @@ $evm.log("info", selected_ems.name)
 
 servers = selected_ems.physical_servers
 profiles = selected_ems.physical_server_profiles
-profiles_with_server = profiles.select {|p| p["assigned_server_id"] !=nil  }
-servers_with_profile = profiles_with_server.collect { |p|p["assigned_server_id"] }
+profiles_with_server = profiles.select { |p| !p["assigned_server_id"].nil? }
+servers_with_profile = profiles_with_server.pluck("assigned_server_id")
 
-servers_f = servers.select {|s| s["name"]!=nil && !s.id.in?(servers_with_profile) }
+servers_f = servers.select { |s| !s["name"].nil? && !s.id.in?(servers_with_profile) }
 servers_finale = servers_f.map { |t| {t.ems_ref => t.name} }
 
 dialog_field["values"] = Hash[*servers_finale.map(&:to_a).flatten]
