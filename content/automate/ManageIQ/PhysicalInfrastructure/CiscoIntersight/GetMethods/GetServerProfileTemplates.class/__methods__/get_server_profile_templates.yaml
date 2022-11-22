@@ -1,0 +1,13 @@
+---
+object_type: method
+version: 1.0
+object:
+  attributes:
+    name: get_server_profile_templates
+    display_name: 
+    description: 
+    scope: instance
+    language: ruby
+    location: inline
+    relative_path: cisco/GetServerProfileTemplates/get_server_profile_templates
+  inputs: []
