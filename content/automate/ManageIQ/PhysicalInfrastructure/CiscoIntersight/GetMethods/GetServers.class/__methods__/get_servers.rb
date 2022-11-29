@@ -8,7 +8,7 @@ dialog_field["data_type"] = "string"
 dialog_field["required"] = true
 
 selected_ems_id = $evm.root.attributes['dialog_ems']
-selected_ems = $evm.vmdb(:ext_management_system).where(:id=>selected_ems_id).first
+selected_ems = $evm.vmdb(:ext_management_system).find_by(:id =>=>selected_ems_id).first
 $evm.log("info", 'selected_ems for servers')
 $evm.log("info", selected_ems.name)
 
@@ -17,8 +17,8 @@ profiles = selected_ems.physical_server_profiles
 profiles_with_server = profiles.reject { |p| p["assigned_server_id"].nil? }
 servers_with_profile = profiles_with_server.pluck("assigned_server_id")
 
-servers_f = servers.select { |s| !s["name"].nil? && !s.id.in?(servers_with_profile) }
-servers_finale = servers_f.map { |t| {t.ems_ref => t.name} }
+commission_servers_without_profile = servers.select { |s| !s["name"].nil? && !s.id.in?(servers_with_profile) }
+servers_finale = commission_servers_without_profile.map { |t| {t.ems_ref => t.name} }
 
 dialog_field["values"] = Hash[*servers_finale.map(&:to_a).flatten]
 
