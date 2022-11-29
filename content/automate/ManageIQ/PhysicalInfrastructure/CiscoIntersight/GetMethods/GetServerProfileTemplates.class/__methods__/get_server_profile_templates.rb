@@ -5,7 +5,7 @@ dialog_field["data_type"] = "string"
 dialog_field["required"] = true
 
 selected_ems_id = $evm.root.attributes['dialog_ems']
-selected_ems = $evm.vmdb(:ext_management_system).find_by(:id =>=>selected_ems_id).first
+selected_ems = $evm.vmdb(:ext_management_system).find_by(:id =>selected_ems_id).first
 
 templates = selected_ems.physical_server_profile_templates
 templates_l = templates.map { |t| {t.id => t.name} }
