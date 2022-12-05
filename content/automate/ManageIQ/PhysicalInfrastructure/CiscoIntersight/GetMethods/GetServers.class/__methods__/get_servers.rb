@@ -8,7 +8,7 @@ dialog_field["data_type"] = "string"
 dialog_field["required"] = true
 
 selected_ems_id = $evm.root.attributes['dialog_ems']
-selected_ems = $evm.vmdb(:ext_management_system).find_by(:id =>selected_ems_id).first
+selected_ems = $evm.vmdb(:ext_management_system).find_by(:id =>selected_ems_id)
 $evm.log("info", 'selected_ems for servers')
 $evm.log("info", selected_ems.name)
 
