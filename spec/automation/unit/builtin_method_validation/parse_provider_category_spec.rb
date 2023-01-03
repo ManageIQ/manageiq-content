@@ -11,16 +11,17 @@ describe "parse_provider_category" do
   end
 
   let(:infra_vm_template) do
-    FactoryBot.create(:template_microsoft,
-                       :name                  => "template1",
-                       :ext_management_system => infra_ems)
+    FactoryBot.create(:template_vmware,
+                      :name                  => "template1",
+                      :ext_management_system => infra_ems)
   end
 
   let(:infra_miq_provision) do
-    FactoryBot.create(:miq_provision_microsoft,
-                       :options => {:src_vm_id => infra_vm_template.id},
-                       :userid  => user.userid,
-                       :status  => 'Ok')
+    FactoryBot.create(:miq_provision_vmware,
+                      :options      => {:src_vm_id => infra_vm_template.id},
+                      :userid       => user.userid,
+                      :request_type => :clone_to_vm,
+                      :status       => 'Ok')
   end
 
   let(:infra_miq_provision_request) do
@@ -83,13 +84,13 @@ describe "parse_provider_category" do
     it "for miq_provision" do
       ws = MiqAeEngine.instantiate("#{inst}?MiqProvision::miq_provision=#{infra_miq_provision.id}", user)
       expect(ws.root["ae_provider_category"]).to eq("infrastructure")
-      expect(prepend_namespace(ws)).to eq("microsoft")
+      expect(prepend_namespace(ws)).to eq("vmware")
     end
 
     it "for miq_request" do
       ws = MiqAeEngine.instantiate("#{inst}?MiqRequest::miq_request=#{infra_miq_provision_request.id}", user)
       expect(ws.root["ae_provider_category"]).to eq("infrastructure")
-      expect(prepend_namespace(ws)).to eq("microsoft")
+      expect(prepend_namespace(ws)).to eq("vmware")
     end
 
     it "for vm_migrate_request" do
