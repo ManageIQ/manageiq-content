@@ -3,7 +3,7 @@ server_id = $evm.root.attributes['dialog_server']
 service_template_object = $evm.root['service_template_provision_task'].source
 template_id = service_template_object.options[:server_profile_template_id]
 
-if template_id.nil? || (template_id == "")
+if template_id.blank?
   template_id = $evm.root.attributes['dialog_template']
 end
 
