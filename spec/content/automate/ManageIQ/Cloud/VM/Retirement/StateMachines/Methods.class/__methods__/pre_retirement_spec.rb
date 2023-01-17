@@ -2,11 +2,11 @@ require_domain_file
 
 describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::PreRetirement do
   let(:svc_vm)      { MiqAeMethodService::MiqAeServiceVm.find(vm.id) }
-  let(:ems)         { FactoryBot.create(:ems_microsoft) }
+  let(:ems)         { FactoryBot.create(:ems_vmware) }
   let(:root_object) { Spec::Support::MiqAeMockObject.new(root_hash) }
   let(:root_hash)   { { 'vm' => svc_vm } }
   let(:vm) do
-    FactoryBot.create(:vm_microsoft, :ems_id => ems.id)
+    FactoryBot.create(:vm_vmware, :ems_id => ems.id)
   end
 
   let(:ae_service) do
@@ -23,13 +23,13 @@ describe ManageIQ::Automate::Cloud::VM::Retirement::StateMachines::Methods::PreR
   end
 
   it 'does not stop a vm in \'powered_off\' state' do
-    vm.update(:raw_power_state => "PowerOff")
+    vm.update(:raw_power_state => "poweredOff")
     expect(svc_vm).to_not receive(:stop)
     described_class.new(ae_service).main
   end
 
   context 'nil ems' do
-    let(:vm) { FactoryBot.create(:vm_microsoft) }
+    let(:vm) { FactoryBot.create(:vm_infra) }
 
     it 'does not stop a vm without ems' do
       expect(svc_vm).to_not receive(:stop)

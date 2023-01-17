@@ -3,11 +3,11 @@ require_domain_file
 describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::CheckPreRetirement do
   let(:user) { FactoryBot.create(:user_with_group) }
   let(:zone) { FactoryBot.create(:zone) }
-  let(:ems) { FactoryBot.create(:ems_microsoft, :zone => zone) }
+  let(:ems) { FactoryBot.create(:ems_vmware, :zone => zone) }
   let(:vm) do
-    FactoryBot.create(:vm_microsoft,
-                       :raw_power_state => "PowerOff",
-                       :ems_id          => ems.id)
+    FactoryBot.create(:vm_vmware,
+                      :raw_power_state => "poweredOff",
+                      :ems_id          => ems.id)
   end
 
   let(:svc_model_vm) do
@@ -47,7 +47,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::Chec
   end
 
   context "powered_on " do
-    let(:raw_power_state) { "Running" }
+    let(:raw_power_state) { "poweredOn" }
     let(:power_state) { "on" }
     let(:ae_result) { "retry" }
     it_behaves_like "#vm power state"
@@ -77,7 +77,7 @@ describe ManageIQ::Automate::Infrastructure::VM::Retirement::StateMachines::Chec
 
     context "no ems" do
       let(:vm) do
-        FactoryBot.create(:vm_microsoft, :raw_power_state => "PowerOff")
+        FactoryBot.create(:vm_vmware, :raw_power_state => "poweredOff")
       end
       it_behaves_like "#ae_result nil"
     end

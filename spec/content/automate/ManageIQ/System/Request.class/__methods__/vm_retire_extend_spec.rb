@@ -4,14 +4,14 @@ require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Sys
 describe ManageIQ::Automate::System::Request::VmRetireExtend do
   let(:user) { FactoryBot.create(:user_with_email_and_group) }
   let(:zone) { FactoryBot.create(:zone) }
-  let(:ems) { FactoryBot.create(:ems_microsoft, :zone => zone, :tenant => Tenant.root_tenant) }
+  let(:ems) { FactoryBot.create(:ems_vmware, :zone => zone, :tenant => Tenant.root_tenant) }
   let(:miq_server) { EvmSpecHelper.local_miq_server }
   let(:vm) do
-    FactoryBot.create(:vm_microsoft,
-                       :raw_power_state => "PowerOff",
-                       :retires_on      => Time.zone.now,
-                       :evm_owner       => user,
-                       :ems_id          => ems.id)
+    FactoryBot.create(:vm_vmware,
+                      :raw_power_state => "poweredOff",
+                      :retires_on      => Time.zone.now,
+                      :evm_owner       => user,
+                      :ems_id          => ems.id)
   end
 
   let(:root_hash) do

@@ -3,15 +3,15 @@ describe "check_pre_retirement Method Validation" do
   let(:zone) { FactoryBot.create(:zone) }
 
   context "Infrastructure" do
-    let(:ems) { FactoryBot.create(:ems_microsoft, :zone => zone) }
+    let(:ems) { FactoryBot.create(:ems_vmware, :zone => zone) }
     let(:vm) do
-      FactoryBot.create(:vm_microsoft,
-                         :raw_power_state => "PowerOff",
-                         :ems_id          => ems.id)
+      FactoryBot.create(:vm_vmware,
+                        :raw_power_state => "poweredOff",
+                        :ems_id          => ems.id)
     end
     let(:ws) do
       MiqAeEngine.instantiate("/Infrastructure/VM/Retirement/StateMachines/Methods/CheckPreRetirement?" \
-                              "Vm::vm=#{vm.id}#microsoft", user)
+                              "Vm::vm=#{vm.id}#vmware", user)
     end
 
     it "returns 'ok' for a vm in powered_off state" do
@@ -27,7 +27,7 @@ describe "check_pre_retirement Method Validation" do
     end
 
     it "retries for a vm in powered_on state" do
-      vm.update_attribute(:raw_power_state, "Running")
+      vm.update_attribute(:raw_power_state, "poweredOn")
 
       expect(ws.root['ae_result']).to eq("retry")
       expect(ws.root['vm'].power_state).to eq("on")
