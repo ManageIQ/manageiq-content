@@ -33,6 +33,7 @@ module ManageIQ
                     template_id = @handle.root.attributes['dialog_template']
                   end
                   raise 'server profile template not specified' if template_id.blank?
+
                   template_id
                 end
 
@@ -51,7 +52,6 @@ module ManageIQ
                   manager.create_server_profile_and_deploy_task(template_id, @server_id, @profile_name)
                 end
 
-
                 def log(level, msg, update_message = false)
                   @handle.log(level, msg)
                   @handle.root['miq_provision'].message = msg if @handle.root['miq_provision'] && update_message
@@ -64,6 +64,5 @@ module ManageIQ
     end
   end
 end
-
 
 ManageIQ::Automate::PhysicalInfrastructure::CiscoIntersight::Services::DeployServer::Methods::DeployServerProfileTemplate.new.main
