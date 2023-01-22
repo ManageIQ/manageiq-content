@@ -52,7 +52,7 @@ module ManageIQ
                   manager.create_server_profile_and_deploy_task(template_id, @server_id, @profile_name)
                 end
 
-                def log(level, msg, update_message = false)
+                def log(level, msg, update_message: false)
                   @handle.log(level, msg)
                   @handle.root['miq_provision'].message = msg if @handle.root['miq_provision'] && update_message
                 end

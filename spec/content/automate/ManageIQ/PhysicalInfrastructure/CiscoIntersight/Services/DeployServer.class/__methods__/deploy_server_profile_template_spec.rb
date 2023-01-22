@@ -5,14 +5,14 @@ describe ManageIQ::Automate::PhysicalInfrastructure::CiscoIntersight::Services::
 
   let(:physical_server_profile_template) { FactoryBot.create(:physical_server_profile_template, :ext_management_system=>ems) }
 
-  let(:physical_server_profile_template_2) { FactoryBot.create(:physical_server_profile_template, :ext_management_system=>ems) }
+  let(:physical_server_profile_template_second) { FactoryBot.create(:physical_server_profile_template, :ext_management_system=>ems) }
 
   let(:service_template) { FactoryBot.create(:service_template, :options => {:server_profile_template_id=>physical_server_profile_template.id}) }
 
   let(:task) { FactoryBot.create(:service_template_provision_task, :source=>service_template) }
 
   let(:root_hash) do
-    {:service_template => service_template, :dialog_name => 'test_profile', :dialog_server => 'server_ems_ref', :dialog_template => physical_server_profile_template_2.id, :service_template_provision_task => task}
+    {:service_template => service_template, :dialog_name => 'test_profile', :dialog_server => 'server_ems_ref', :dialog_template => physical_server_profile_template_second.id, :service_template_provision_task => task}
   end
   let(:root_object) { Spec::Support::MiqAeMockObject.new(root_hash) }
 
