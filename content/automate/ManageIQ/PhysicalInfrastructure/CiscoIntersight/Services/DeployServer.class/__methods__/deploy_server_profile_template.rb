@@ -17,9 +17,9 @@ module ManageIQ
                 def main
                   log(:info, "Service template provision task id:<#{service_template_provision_task.id}> ")
                   log(:info, "Server Profile Template id: #{template_id}")
-                  log(:info, "Deploying server from server profile template...", true)
+                  log(:info, "Deploying server from server profile template...", update_message: true)
                   process_deployment
-                  log(:info, "Deploy server from server profile template...Complete", true)
+                  log(:info, "Deploy server from server profile template...Complete", update_message: true)
                 end
 
                 def service_template_provision_task
