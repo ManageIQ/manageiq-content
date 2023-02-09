@@ -36,7 +36,6 @@ describe ManageIQ::Automate::PhysicalInfrastructure::CiscoIntersight::Services::
     expect(queue_item.method_name).to eq("deploy_server_from_template")
     expect(queue_item.class_name).to eq("PhysicalServerProfileTemplate")
     expect(queue_item.instance_id).to eq(physical_server_profile_template.id)
-
   end
 
   it "without server profile template pre selected" do
