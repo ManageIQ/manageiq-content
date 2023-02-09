@@ -28,10 +28,7 @@ module ManageIQ
 
                 def template_id
                   service_template_object = service_template_provision_task.source
-                  template_id = service_template_object.options[:server_profile_template_id]
-                  if template_id.blank?
-                    template_id = @handle.root.attributes['dialog_template']
-                  end
+                  template_id = service_template_object.options[:server_profile_template_id].presence || @handle.root.attributes['dialog_template']
                   raise 'server profile template not specified' if template_id.blank?
 
                   template_id
