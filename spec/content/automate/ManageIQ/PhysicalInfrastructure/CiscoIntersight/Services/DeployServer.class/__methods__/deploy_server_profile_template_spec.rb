@@ -12,7 +12,13 @@ describe ManageIQ::Automate::PhysicalInfrastructure::CiscoIntersight::Services::
   let(:task) { FactoryBot.create(:service_template_provision_task, :source=>service_template) }
 
   let(:root_hash) do
-    {:service_template => service_template, :dialog_name => 'test_profile', :dialog_server => 'server_ems_ref', :dialog_template => physical_server_profile_template_second.id, :service_template_provision_task => task}
+    {
+      :service_template                => service_template,
+      :dialog_name                     => 'test_profile',
+      :dialog_server                   => 'server_ems_ref',
+      :dialog_template                 => physical_server_profile_template_second.id,
+      :service_template_provision_task => task
+    }
   end
   let(:root_object) { Spec::Support::MiqAeMockObject.new(root_hash) }
 
