@@ -45,8 +45,8 @@ module ManageIQ
                 end
 
                 def deploy_from_options
-                  manager = @handle.vmdb(:physical_server)
-                  manager.create_server_profile_and_deploy_task(template_id, @server_id, @profile_name)
+                  physical_server = @handle.vmdb(:physical_server)
+                  physical_server.create_server_profile_and_deploy_task(template_id, @server_id, @profile_name)
                 end
 
                 def log(level, msg, update_message: false)
