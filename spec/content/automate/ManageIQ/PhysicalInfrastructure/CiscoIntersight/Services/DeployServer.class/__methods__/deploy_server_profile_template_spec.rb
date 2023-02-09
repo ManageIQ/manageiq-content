@@ -7,7 +7,7 @@ describe ManageIQ::Automate::PhysicalInfrastructure::CiscoIntersight::Services::
 
   let(:physical_server_profile_template_second) { FactoryBot.create(:physical_server_profile_template, :ext_management_system=>ems) }
 
-  let(:service_template) { FactoryBot.create(:service_template, :options => {:server_profile_template_id=>physical_server_profile_template.id}) }
+  let(:service_template) { FactoryBot.create(:service_template, :options => {:server_profile_template_id => physical_server_profile_template.id}) }
 
   let(:task) { FactoryBot.create(:service_template_provision_task, :source=>service_template) }
 
