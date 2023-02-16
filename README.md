@@ -1,12 +1,12 @@
 # ManageIQ::Content
 
-[![CI](https://github.com/ManageIQ/manageiq-content/actions/workflows/ci.yaml/badge.svg)](https://github.com/ManageIQ/manageiq-content/actions/workflows/ci.yaml)
+[![CI](https://github.com/ManageIQ/manageiq-content/actions/workflows/ci.yaml/badge.svg?branch=petrosian)](https://github.com/ManageIQ/manageiq-content/actions/workflows/ci.yaml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/bc6773f3e24fd6323a5c/maintainability)](https://codeclimate.com/github/ManageIQ/manageiq-content/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/bc6773f3e24fd6323a5c/test_coverage)](https://codeclimate.com/github/ManageIQ/manageiq-content/test_coverage)
 
 [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ManageIQ/manageiq/automate?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Build history for master branch](https://buildstats.info/github/chart/ManageIQ/manageiq-content?branch=master&buildCount=50&includeBuildsFromPullRequest=false&showstats=false)](https://github.com/ManageIQ/manageiq-content/actions?query=branch%3Amaster)
+[![Build history for petrosian branch](https://buildstats.info/github/chart/ManageIQ/manageiq-content?branch=petrosian&buildCount=50&includeBuildsFromPullRequest=false&showstats=false)](https://github.com/ManageIQ/manageiq-content/actions?query=branch%3Amaster)
 
 Content plugin for ManageIQ.
 
