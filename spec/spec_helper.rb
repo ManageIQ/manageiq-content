@@ -36,4 +36,4 @@ end
 
 ENV["AUTOMATE_DOMAINS"] = "ManageIQ" # Reset only the ManageIQ automate domain when testing.
 
-require "manageiq-content"
+require "manageiq/content"
