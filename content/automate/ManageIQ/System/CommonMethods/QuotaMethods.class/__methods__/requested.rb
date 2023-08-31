@@ -109,9 +109,7 @@ def vm_prov_option_value(prov_option, options_array = [])
 end
 
 def requested_memory(args_hash, vendor)
-  memory = get_option_value(args_hash[:resource], :vm_memory)
-  memory = memory.megabytes if %w(amazon openstack google).exclude?(vendor)
-  args_hash[:prov_value] = memory
+  args_hash[:prov_value] = args_hash[:resource].source.memory_for_request(args_hash[:resource])
   if @reconfigure_request && args_hash[:resource].options[:vm_memory]
     # Account for the VM's existing memory
     args_hash[:prov_value] = args_hash[:prov_value].to_i - @vm.hardware.memory_mb.to_i.megabytes
@@ -124,10 +122,7 @@ def requested_memory(args_hash, vendor)
 end
 
 def requested_number_of_cpus(args_hash)
-  cpu_in_request = get_option_value(args_hash[:resource], :number_of_sockets) *
-                   get_option_value(args_hash[:resource], :cores_per_socket)
-  cpu_in_request = get_option_value(args_hash[:resource], args_hash[:number_of_cpus]) if cpu_in_request.zero?
-  args_hash[:prov_value] = cpu_in_request
+  args_hash[:prov_value] = args_hash[:resource].source.number_of_cpus_for_request(args_hash[:resource])
 
   if @reconfigure_request && args_hash[:resource].options[:number_of_sockets]
     # Account for the VM's existing CPUs
@@ -291,15 +286,17 @@ def cloud_volume_storage(args_hash)
 end
 
 def cloud_number_of_cpus(args_hash)
-  flavor = args_hash[:flavor]
-  $evm.log(:info, "Retrieving cloud flavor #{flavor.name} cpus => #{flavor.cpus}")
-  default_option(flavor.cpus, args_hash[:options_array])
+  default_option(
+    args_hash[:resource].source.number_of_cpus_for_request(args_hash[:resource], @flavor_id),
+    args_hash[:options_array]
+  )
 end
 
 def cloud_vm_memory(args_hash)
-  flavor = args_hash[:flavor]
-  $evm.log(:info, "Retrieving flavor #{flavor.name} memory => #{flavor.memory}")
-  default_option(flavor.memory, args_hash[:options_array])
+  default_option(
+    args_hash[:resource].source.memory_for_request(args_hash[:resource], @flavor_id),
+    args_hash[:options_array]
+  )
 end
 
 def cloud_value(args_hash)
