@@ -6,13 +6,13 @@
       "Type": "Task",
       "Resource": "builtin://email",
       "Parameters": {
-        "To": "$.to",
-        "From": "$.from",
-        "Subject": "$.subject",
-        "Cc": "$.cc",
-        "Bcc": "$.bcc",
-        "Body": "$.body",
-        "Attachment": "$.attachment"
+        "To.$": "$.to",
+        "From.$": "$.from",
+        "Subject.$": "$.subject",
+        "Cc.$": "$.cc",
+        "Bcc.$": "$.bcc",
+        "Body.$": "$.body",
+        "Attachment.$": "$.attachment"
       },
       "End": true
     }
