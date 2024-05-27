@@ -1,10 +1,10 @@
 {
-  "Comment": "Send an email.",
+  "Comment": "Send an email",
   "StartAt": "SendEmail",
   "States": {
     "SendEmail": {
       "Type": "Task",
-      "Resource": "builtin://email",
+      "Resource": "manageiq://email",
       "Parameters": {
         "To.$": "$.to",
         "From.$": "$.from",
