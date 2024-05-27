@@ -1,5 +1,5 @@
 {
-  "Comment": "Basic VM Provisioning",
+  "Comment": "Basic Provisioning",
   "StartAt": "PreProvision",
   "States": {
     "PreProvision": {
@@ -8,7 +8,7 @@
     },
     "Provision": {
       "Type": "Task",
-      "Resource": "builtin://provision_execute",
+      "Resource": "manageiq://provision_execute",
       "Next": "PostProvision"
     },
     "PostProvision": {
