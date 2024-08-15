@@ -87,8 +87,7 @@
       "Type": "Task",
       "Resource": "manageiq://email",
       "Parameters": {
-        "To": "user@example.com",
-        "Title": "Your provisioning has completed",
+        "Subject": "Your provisioning has completed",
         "Body": "Your provisioning request has completed"
       },
       "Next": "Finished"
