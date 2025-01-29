@@ -3,10 +3,10 @@ object_type: instance
 version: 1.0
 object:
   attributes:
-    display_name: 
+    display_name:
     name: retire_advanced_resource_post
-    inherits: 
-    description: 
+    inherits:
+    description:
   fields:
   - start:
       value: "/Service/Retirement/StateMachines/Methods/StartRetirement"

@@ -5,6 +5,6 @@ object:
   attributes:
     display_name: Clone VM to Template
     name: clone_to_template
-    inherits: 
-    description: 
+    inherits:
+    description:
   fields: []

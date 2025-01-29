@@ -5,6 +5,6 @@ object:
   attributes:
     name: Storage
     description: ''
-    display_name: 
-    priority: 
-    enabled: 
+    display_name:
+    priority:
+    enabled:
