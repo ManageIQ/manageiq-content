@@ -5,8 +5,8 @@ object:
   attributes:
     display_name: Available_Vdc_Networks
     name: Available_Vdc_Networks
-    inherits: 
-    description: 
+    inherits:
+    description:
   fields:
   - execute:
       value: Available_Vdc_Networks

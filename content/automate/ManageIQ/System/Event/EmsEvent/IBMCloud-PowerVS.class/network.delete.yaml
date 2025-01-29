@@ -3,10 +3,10 @@ object_type: network
 version: 1.0
 object:
   attributes:
-    display_name: 
+    display_name:
     name: network.delete
-    inherits: 
-    description: 
+    inherits:
+    description:
     relative_path: System/Event/EmsEvent/IBMCloud-PowerVS/network.delete
   fields:
   - rel4:

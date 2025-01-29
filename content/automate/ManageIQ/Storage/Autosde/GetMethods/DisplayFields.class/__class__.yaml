@@ -3,31 +3,31 @@ object_type: class
 version: 1.0
 object:
   attributes:
-    description: 
-    display_name: 
+    description:
+    display_name:
     name: DisplayFields
-    type: 
-    inherits: 
-    visibility: 
-    owner: 
+    type:
+    inherits:
+    visibility:
+    owner:
   schema:
   - field:
       aetype: state
       name: DisplayCustomField
-      display_name: 
+      display_name:
       datatype: string
       priority: 1
-      owner: 
-      default_value: 
+      owner:
+      default_value:
       substitute: true
       message: create
-      visibility: 
-      collect: 
-      scope: 
-      description: 
-      condition: 
+      visibility:
+      collect:
+      scope:
+      description:
+      condition:
       on_entry: display_custom_field
-      on_exit: 
+      on_exit:
       on_error: ''
       max_retries: '100'
-      max_time: 
+      max_time:

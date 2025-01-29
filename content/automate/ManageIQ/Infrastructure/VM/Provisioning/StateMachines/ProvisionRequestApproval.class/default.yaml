@@ -5,8 +5,8 @@ object:
   attributes:
     display_name: Default
     name: Default
-    inherits: 
-    description: 
+    inherits:
+    description:
   fields:
   - max_vms:
       value: '1'

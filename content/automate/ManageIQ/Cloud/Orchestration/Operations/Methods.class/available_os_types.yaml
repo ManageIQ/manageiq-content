@@ -5,8 +5,8 @@ object:
   attributes:
     display_name: Available_Os_Types
     name: Available_Os_Types
-    inherits: 
-    description: 
+    inherits:
+    description:
   fields:
   - execute:
       value: Available_Os_Types
