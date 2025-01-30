@@ -22,14 +22,14 @@ module ManageIQ
 
             def used(quota_source)
               quota_used = consumption(quota_source)
-              @handle.log("info", "Quota Used: (:cpu=>#{quota_used[:cpu]}, :memory=>#{quota_used[:memory]} (#{quota_used[:memory].to_s(:human_size)}), :vms=>#{quota_used[:vms]}, storage=>#{quota_used[:storage]} (#{quota_used[:storage].to_s(:human_size)}), provisioned_storage=>#{quota_used[:provisioned_storage]} (#{quota_used[:provisioned_storage].to_s(:human_size)}))")
+              @handle.log("info", "Quota Used: (:cpu=>#{quota_used[:cpu]}, :memory=>#{quota_used[:memory]} (#{quota_used[:memory].to_fs(:human_size)}), :vms=>#{quota_used[:vms]}, storage=>#{quota_used[:storage]} (#{quota_used[:storage].to_fs(:human_size)}), provisioned_storage=>#{quota_used[:provisioned_storage]} (#{quota_used[:provisioned_storage].to_fs(:human_size)}))")
 
               quota_source_type = root_quota_source_type
               @handle.log("info", "Quota source type: #{quota_source_type}")
 
               validate_user_email if quota_source_type == 'user'
               quota_active = active_provision_counts(quota_source_type)
-              @handle.log("info", "Quota #{active_method_name(quota_source_type)}: (:cpu=>#{quota_active[:cpu]}, :memory=>#{quota_active[:memory]} (#{quota_active[:memory].to_s(:human_size)}), :vms=>#{quota_active[:vms]}, storage=>#{quota_active[:storage]} (#{quota_active[:storage].to_s(:human_size)}))")
+              @handle.log("info", "Quota #{active_method_name(quota_source_type)}: (:cpu=>#{quota_active[:cpu]}, :memory=>#{quota_active[:memory]} (#{quota_active[:memory].to_fs(:human_size)}), :vms=>#{quota_active[:vms]}, storage=>#{quota_active[:storage]} (#{quota_active[:storage].to_fs(:human_size)}))")
 
               merge_counts(quota_used, quota_active)
             end
@@ -77,7 +77,7 @@ module ManageIQ
 
             def merge_counts(quota_used, quota_active)
               @handle.root['quota_used'] = quota_used.merge(quota_active) { |_key, val1, val2| val1 + val2 }
-              @handle.log("info", "Quota Totals: (:cpu=>#{quota_used[:cpu]}, :memory=>#{quota_used[:memory]} (#{quota_used[:memory].to_s(:human_size)}), :vms=>#{quota_used[:vms]}, storage=>#{quota_used[:storage]} (#{quota_used[:storage].to_s(:human_size)}), provisioned_storage=>#{quota_used[:provisioned_storage]} (#{quota_used[:provisioned_storage].to_s(:human_size)}))")
+              @handle.log("info", "Quota Totals: (:cpu=>#{quota_used[:cpu]}, :memory=>#{quota_used[:memory]} (#{quota_used[:memory].to_fs(:human_size)}), :vms=>#{quota_used[:vms]}, storage=>#{quota_used[:storage]} (#{quota_used[:storage].to_fs(:human_size)}), provisioned_storage=>#{quota_used[:provisioned_storage]} (#{quota_used[:provisioned_storage].to_fs(:human_size)}))")
             end
           end
         end

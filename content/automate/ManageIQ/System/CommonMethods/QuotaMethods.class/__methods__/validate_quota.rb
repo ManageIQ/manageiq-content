@@ -61,7 +61,7 @@ end
 
 def display_value(item, value, _precision)
   return value unless %w(memory storage).include?(item)
-  value.to_s(:human_size)
+  value.to_fs(:human_size)
 end
 
 def reason(item, used, requested, limits)
