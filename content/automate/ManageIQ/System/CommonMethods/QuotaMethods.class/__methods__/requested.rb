@@ -167,7 +167,7 @@ def requested_storage(args_hash)
         $evm.log(:info, "Reconfigure Disk Removal: #{disk.inspect}")
         disk = HashWithIndifferentAccess.new(disk)
         current_size = get_disk_size(disk[:disk_name])
-        $evm.log(:info, "Reconfigure Disk Removal Disk: <#{disk[:disk_name]}> Disk Size: <#{current_size.to_s(:human_size)}>")
+        $evm.log(:info, "Reconfigure Disk Removal Disk: <#{disk[:disk_name]}> Disk Size: <#{current_size.to_fs(:human_size)}>")
         args_hash[:prov_value] -= current_size
       end
     end
@@ -175,7 +175,7 @@ def requested_storage(args_hash)
       # Disk_resize only supports increasing the size.
       $evm.log(:info, "Reconfigure Disk Resize:  #{disk.inspect}")
       current_size = get_disk_size(disk['disk_name'])
-      $evm.log(:info, "Current disk size: #{current_size.to_s(:human_size)}")
+      $evm.log(:info, "Current disk size: #{current_size.to_fs(:human_size)}")
       args_hash[:prov_value] += disk['disk_size_in_mb'].to_i.megabytes - current_size
     end
   else
@@ -184,7 +184,7 @@ def requested_storage(args_hash)
   end
 
   if @reconfigure_request
-    $evm.log(:info, "VM Reconfigure storage change: #{args_hash[:prov_value].to_s(:human_size)}")
+    $evm.log(:info, "VM Reconfigure storage change: #{args_hash[:prov_value].to_fs(:human_size)}")
     @check_quota = true if args_hash[:prov_value].to_i > 0
   end
   request_hash_value(args_hash)

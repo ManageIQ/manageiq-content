@@ -145,9 +145,9 @@ unless max_memory.blank?
   desired_mem = requested_memory(prov_resource, desired_nvms)
   if desired_mem && (desired_mem.to_i > max_memory.to_i)
     $evm.log("info", "Auto-Approval Threshold(Warning): Number of vRAM requested: \
-    <#{desired_mem.to_s(:human_size)}> exceeds:<#{max_memory}>")
+    <#{desired_mem.to_fs(:human_size)}> exceeds:<#{max_memory}>")
     approval_req = true
-    reason2 = "Requested Memory #{desired_mem.to_s(:human_size)} limit is #{max_memory}"
+    reason2 = "Requested Memory #{desired_mem.to_fs(:human_size)} limit is #{max_memory}"
   end
 end
 
