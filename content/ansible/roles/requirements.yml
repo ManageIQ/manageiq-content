@@ -1,0 +1,3 @@
+roles:
+- name: manageiq.manageiq_vmdb
+- name: manageiq.manageiq_automate
