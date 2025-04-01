@@ -1,0 +1,13 @@
+---
+object_type: method
+version: 1.0
+object:
+  attributes:
+    name: reconfigure_start
+    display_name:
+    description:
+    scope: instance
+    language: ruby
+    location: inline
+    relative_path: Service/Generic/StateMachines/GenericLifecycle/reconfigure_start
+  inputs: []
