@@ -9,5 +9,7 @@ object:
     scope: instance
     language: ruby
     location: inline
-    relative_path: Service/Generic/StateMachines/GenericLifecycle/reconfigure_start
+    embedded_methods:
+    - "/System/CommonMethods/Utils/log_object"
+    - "/Service/Generic/StateMachines/Utils/util_object"
   inputs: []

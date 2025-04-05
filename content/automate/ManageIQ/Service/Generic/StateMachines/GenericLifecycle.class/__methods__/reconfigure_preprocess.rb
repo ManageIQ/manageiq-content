@@ -32,41 +32,19 @@ module ManageIQ
               private
 
               def dump_root
-                @handle.log(:info, "Root:<$evm.root> Attributes - Begin")
-                @handle.root.attributes.sort.each { |k, v| @handle.log(:info, "  Attribute - #{k}: #{v}") }
-                @handle.log(:info, "Root:<$evm.root> Attributes - End")
-                @handle.log(:info, "")
+                ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.dump_root(@handle)
               end
 
-              def update_task(message)
-                if @handle.root["request"] == "service_reconfigure"
-                  @handle.root['service_reconfigure_task'].try { |task| task.miq_request.user_message = message }
-                else
-                  @handle.root['service_template_provision_task'].try { |task| task.miq_request.user_message = message }
-                end
+              def update_task(message, status = nil)
+                ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.update_task(message, status, @handle)
               end
 
               def service
-                service = @handle.root["service"]
-                if service.nil?
-                  task = @handle.root["service_reconfigure_task"]
-                  service = task.source unless task.nil?
-                end
-                if service.nil?
-                  ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise("ERROR - Service not found", @handle)
-                end
-                service
+                ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.service(@handle)
               end
 
               def service_action
-                action = @handle.root["service_action"]
-                if action.nil? && @handle.root["request"] == "service_reconfigure"
-                  action = "Reconfigure"
-                end
-                unless %w[Provision Retirement Reconfigure].include?(action)
-                  ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise("ERROR - Invalid service action: #{action}", @handle)
-                end
-                action
+                ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.service_action(@handle)
               end
 
               def reconfiguration_options
