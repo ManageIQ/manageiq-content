@@ -9,4 +9,7 @@ object:
     scope: instance
     language: ruby
     location: inline
+    embedded_methods:
+    - "/Service/Generic/StateMachines/Utils/util_object"
+    relative_path: Service/Generic/StateMachines/GenericLifecycle/preprocess
   inputs: []
