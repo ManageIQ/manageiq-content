@@ -16,10 +16,13 @@ module ManageIQ
               end
 
               def self.update_task(message, status = nil, handle = $evm)
-                task_name = if handle.root["request"] == "service_reconfigure"
-                              'service_reconfigure_task'
+                task_name = case handle.root["request"]
+                            when "service_reconfigure"
+                              "service_reconfigure_task"
+                            when "service_retire"
+                              "service_retire_task"
                             else
-                              'service_template_provision_task'
+                              "service_template_provision_task"
                             end
                 handle.root[task_name].try do |task|
                   task.miq_request.user_message = message
