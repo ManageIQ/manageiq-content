@@ -8,3 +8,4 @@ object:
     display_name:
     priority:
     enabled:
+    relative_path: Service/Generic
