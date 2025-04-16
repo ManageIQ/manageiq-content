@@ -1,4 +1,6 @@
 require_domain_file
+require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/System/CommonMethods/Utils.class/__methods__/log_object.rb')
+require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Service/Generic/StateMachines/Utils.class/__methods__/util_object.rb')
 
 describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::Execute do
   let(:admin) { FactoryBot.create(:user_admin) }

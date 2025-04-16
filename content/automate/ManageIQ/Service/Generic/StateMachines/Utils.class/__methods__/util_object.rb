@@ -39,7 +39,7 @@ module ManageIQ
                 end
 
                 if service.nil?
-                  ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise("ERROR - Service not found", handle)
+                  ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise("Service not found", handle)
                 end
 
                 service
@@ -50,7 +50,7 @@ module ManageIQ
 
                 handle.root["service_action"].tap do |action|
                   unless %w[Provision Retirement Reconfigure].include?(action)
-                    ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise("ERROR - Invalid service action: #{action}", handle)
+                    ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise("Invalid service_action", handle)
                   end
                 end
               end

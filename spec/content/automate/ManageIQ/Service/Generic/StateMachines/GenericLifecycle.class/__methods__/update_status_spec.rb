@@ -1,5 +1,6 @@
 require_domain_file
 require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/System/CommonMethods/Utils.class/__methods__/log_object.rb')
+require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Service/Generic/StateMachines/Utils.class/__methods__/util_object.rb')
 
 describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::UpdateStatus do
   let(:admin) { FactoryBot.create(:user_admin) }
@@ -37,7 +38,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
   context "Log_and_raise ERROR - " do
     let(:service_action) { 'Not_Provision' }
     it "Invalid service action " do
-      allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/ERROR - Invalid service action/, ae_service).and_raise(RuntimeError)
+      allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/Invalid service_action/, ae_service).and_raise(RuntimeError)
       expect { described_class.new(ae_service).main }.to raise_error(RuntimeError)
     end
   end
@@ -45,7 +46,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
   context "Log_and_raise " do
     let(:service_object) { nil }
     it "Service not found" do
-      allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/ERROR - Service not found/, ae_service).and_raise(RuntimeError)
+      allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/Service not found/, ae_service).and_raise(RuntimeError)
       expect { described_class.new(ae_service).main }.to raise_error(RuntimeError)
     end
   end
