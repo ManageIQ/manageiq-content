@@ -3,7 +3,11 @@ require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Sys
 
 describe ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject do
   let(:admin) { FactoryBot.create(:user_admin) }
-  let(:miq_request) { FactoryBot.create(:service_template_provision_request, :request_type => request_type, :requester => admin) }
+  let(:miq_server) { EvmSpecHelper.local_miq_server }
+  let(:svc_model_miq_server) { MiqAeMethodService::MiqAeServiceMiqServer.find(miq_server.id) }
+  let(:service_object) { FactoryBot.create(:service_terraform_template) }
+  let(:miq_request) { FactoryBot.create(:service_template_provision_request, :requester => admin) }
+  let(:request_type) { miq_request.request_type }
   let(:miq_task) { FactoryBot.create(:service_template_provision_task, :miq_request => miq_request) }
   let(:task) { MiqAeMethodService::MiqAeServiceServiceTemplateProvisionTask.find(miq_task.id) }
   let(:root_object) do
@@ -16,37 +20,132 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject 
     )
   end
   let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
-  let(:miq_server) { EvmSpecHelper.local_miq_server }
-  let(:svc_model_miq_server) { MiqAeMethodService::MiqAeServiceMiqServer.find(miq_server.id) }
-  let(:service_object) { FactoryBot.create(:service_terraform_template) }
-  let(:request_type) { 'clone_to_service' }
   let(:service_action) { 'Provision' }
+
+  RSpec.shared_context 'provision_request_and_task_common' do
+    let(:miq_request) { FactoryBot.create(:service_template_provision_request, :requester => admin) }
+    let(:request_type) { miq_request.request_type }
+    let(:miq_task) { FactoryBot.create(:service_template_provision_task, :miq_request => miq_request, :source => service_object) }
+    let(:task) { MiqAeMethodService::MiqAeServiceServiceTemplateProvisionTask.find(miq_task.id) }
+    let(:root_object) do
+      Spec::Support::MiqAeMockObject.new(
+        'request'                         => request_type,
+        'service_template_provision_task' => task
+      )
+    end
+    let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
+  end
+
+  RSpec.shared_context 'reconfigure_request_and_task_common' do
+    let(:miq_request) { FactoryBot.create(:service_reconfigure_request, :requester => admin) }
+    let(:request_type) { miq_request.request_type }
+    let(:miq_task) { FactoryBot.create(:service_reconfigure_task, :miq_request => miq_request, :source => service_object) }
+    let(:task) { MiqAeMethodService::MiqAeServiceServiceReconfigureTask.find(miq_task.id) }
+    let(:root_object) do
+      Spec::Support::MiqAeMockObject.new(
+        'request'                  => request_type,
+        'service_reconfigure_task' => task
+      )
+    end
+    let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
+  end
+
+  RSpec.shared_context 'retirement_request_and_task_common' do
+    let(:miq_request) { FactoryBot.create(:service_retire_request, :requester => admin) }
+    let(:request_type) { miq_request.request_type }
+    let(:miq_task) { FactoryBot.create(:service_retire_task, :miq_request => miq_request, :source => service_object) }
+    let(:task) { MiqAeMethodService::MiqAeServiceServiceRetireTask.find(miq_task.id) }
+    let(:root_object) do
+      Spec::Support::MiqAeMockObject.new(
+        'request'             => request_type,
+        'service_retire_task' => task
+      )
+    end
+    let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
+  end
+
+  describe "#service_task" do
+    shared_examples_for "has request specific task" do
+      it "gets service_task" do
+        expect(ae_service.root[expected_task_name]).not_to be_nil
+
+        service_task = described_class.service_task(ae_service)
+        expect(service_task).to eq(ae_service.root[expected_task_name])
+      end
+    end
+
+    context "has request with service_template_provision_task" do
+      include_context 'provision_request_and_task_common'
+      let(:expected_task_name) { "service_template_provision_task" }
+
+      it_behaves_like "has request specific task"
+    end
+
+    context "has request with service_reconfigure_task" do
+      include_context 'reconfigure_request_and_task_common'
+      let(:expected_task_name) { "service_reconfigure_task" }
+
+      it_behaves_like "has request specific task"
+    end
+
+    context "has request with service_retire_task" do
+      include_context 'retirement_request_and_task_common'
+      let(:expected_task_name) { "service_retire_task" }
+
+      it_behaves_like "has request specific task"
+    end
+  end
 
   describe "#service_action" do
     shared_examples_for "when we have service_action" do
       it "get service_action" do
-        expect(ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.service_action(ae_service)).to eq(service_action)
+        service_action = described_class.service_action(ae_service)
+        expect(service_action).not_to be_nil
+        expect(service_action).to eq(expected_service_action)
       end
     end
 
-    context "service_action is Provision" do
+    context "when attribute service_action is Provision" do
+      let(:root_object) do
+        Spec::Support::MiqAeMockObject.new(
+          'service_action' => 'Provision'
+        )
+      end
+      let(:expected_service_action) { 'Provision' }
+
       it_behaves_like "when we have service_action"
     end
 
-    context "service_action is Reconfigure" do
-      let(:service_action) { 'Reconfigure' }
+    context "when attribute service_action is Reconfigure" do
+      let(:root_object) do
+        Spec::Support::MiqAeMockObject.new(
+          'service_action' => 'Reconfigure'
+        )
+      end
+      let(:expected_service_action) { 'Reconfigure' }
+
       it_behaves_like "when we have service_action"
     end
 
-    context "service_action is Retirement" do
-      let(:service_action) { 'Retirement' }
+    context "when attribute service_action is Retirement" do
+      let(:root_object) do
+        Spec::Support::MiqAeMockObject.new(
+          'service_action' => 'Retirement'
+        )
+      end
+      let(:expected_service_action) { 'Retirement' }
+
       it_behaves_like "when we have service_action"
     end
 
     context "when request is service_reconfigure" do
-      let(:root_object) { Spec::Support::MiqAeMockObject.new('request' => 'service_reconfigure') }
+      let(:root_object) do
+        Spec::Support::MiqAeMockObject.new(
+          'request' => 'service_reconfigure'
+        )
+      end
       it "service_action is Reconfigure" do
-        expect(ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.service_action(ae_service)).to eq('Reconfigure')
+        expect(described_class.service_action(ae_service)).to eq('Reconfigure')
       end
     end
 
@@ -55,31 +154,21 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject 
       it "Invalid service action " do
         allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/Invalid service_action/, ae_service).and_raise(RuntimeError)
 
-        expect { ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.service_action(ae_service) }.to raise_error(RuntimeError)
+        expect { described_class.service_action(ae_service) }.to raise_error(RuntimeError)
       end
     end
   end
 
   describe "#service" do
     it "when service available" do
-      expect(ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.service(ae_service)).to eq(service_object)
+      expect(described_class.service(ae_service)).to eq(service_object)
     end
 
     context "when request is service_reconfigure, service_reconfigure_task is available and service not available" do
-      let(:request_type) { 'service_reconfigure' }
-      let(:miq_request) { FactoryBot.create(:service_reconfigure_request, :requester => admin) }
-      let(:miq_task) { FactoryBot.create(:service_reconfigure_task, :request_type => request_type, :miq_request => miq_request, :source => service_object) }
-      let(:task) { MiqAeMethodService::MiqAeServiceServiceReconfigureTask.find(miq_task.id) }
-      let(:root_object) do
-        Spec::Support::MiqAeMockObject.new(
-          'request'                  => request_type,
-          'service_reconfigure_task' => task
-        )
-      end
-      let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
+      include_context 'reconfigure_request_and_task_common'
 
       it "get service from service_reconfigure_task" do
-        expect(ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.service(ae_service).id).to eq(service_object.id)
+        expect(described_class.service(ae_service).id).to eq(service_object.id)
       end
     end
 
@@ -88,7 +177,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject 
       it "Service not found" do
         allow(ManageIQ::Automate::System::CommonMethods::Utils::LogObject).to receive(:log_and_raise).with(/Service not found/, ae_service).and_raise(RuntimeError)
 
-        expect { ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.service(ae_service) }.to raise_error(RuntimeError)
+        expect { described_class.service(ae_service) }.to raise_error(RuntimeError)
       end
     end
   end
@@ -99,48 +188,27 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject 
 
     shared_examples_for "update_task passed with message and status" do
       it "update task" do
-        ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.update_task(msg, status, ae_service)
+        described_class.update_task(msg, status, ae_service)
 
-        # TODO: Fix NoMethodError: undefined method `user_message' for an instance of MiqAeMethodService::MiqAeServiceServiceTemplateProvisionRequest
-        # expect(task.miq_request.user_message).to eq(msg)
-
+        expect(task.miq_request[:options][:user_message]).to eq(msg)
         expect(task.message).to eq(status)
       end
     end
 
     context "when service_template_provision_task is available" do
+      include_context 'provision_request_and_task_common'
+
       it_behaves_like "update_task passed with message and status"
     end
 
     context "when service_reconfigure_task is available" do
-      let(:request_type) { 'service_reconfigure' }
-      let(:miq_request) { FactoryBot.create(:service_reconfigure_request, :requester => admin) }
-      let(:miq_task) { FactoryBot.create(:service_reconfigure_task, :request_type => request_type, :miq_request => miq_request, :source => service_object) }
-      let(:task) { MiqAeMethodService::MiqAeServiceServiceReconfigureTask.find(miq_task.id) }
-      let(:root_object) do
-        Spec::Support::MiqAeMockObject.new(
-          'request'                  => request_type,
-          'service_reconfigure_task' => task
-        )
-      end
-      let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
+      include_context 'reconfigure_request_and_task_common'
 
       it_behaves_like "update_task passed with message and status"
     end
 
-    # TODO: fix this
-    xcontext "when service_retire_task is available" do
-      let(:request_type) { 'service_retire' }
-      let(:miq_request) { FactoryBot.create(:service_retire_request, :requester => admin) }
-      let(:miq_task) { FactoryBot.create(:service_retire_task, :request_type => request_type, :miq_request => miq_request, :source => service_object) }
-      let(:task) { MiqAeMethodService::MiqAeServiceServiceReconfigureTask.find(miq_task.id) }
-      let(:root_object) do
-        Spec::Support::MiqAeMockObject.new(
-          'request'             => request_type,
-          'service_retire_task' => task
-        )
-      end
-      let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
+    context "when service_retire_task is available" do
+      include_context 'retirement_request_and_task_common'
 
       it_behaves_like "update_task passed with message and status"
     end

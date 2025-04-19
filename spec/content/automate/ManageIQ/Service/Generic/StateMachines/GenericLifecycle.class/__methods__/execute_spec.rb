@@ -5,6 +5,7 @@ require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Ser
 describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::Execute do
   let(:admin) { FactoryBot.create(:user_admin) }
   let(:request) { FactoryBot.create(:service_template_provision_request, :requester => admin) }
+  let(:request_type) { request.request_type }
   let(:ansible_tower_manager) { FactoryBot.create(:automation_manager_ansible_tower) }
   let(:job_template) { FactoryBot.create(:ansible_configuration_script, :manager => ansible_tower_manager) }
   let(:service_ansible_tower) { FactoryBot.create(:service_ansible_tower, :job_template => job_template) }
@@ -33,6 +34,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
     let(:rc) { 'error' }
     let(:root_object) do
       Spec::Support::MiqAeMockObject.new('service_template_provision_task' => task,
+                                         'request'                         => request_type,
                                          'service_action'                  => 'Provision')
     end
     it_behaves_like "execute_errors"
@@ -44,6 +46,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
     let(:root_object) do
       Spec::Support::MiqAeMockObject.new('service'                         => svc_service,
                                          'service_template_provision_task' => task,
+                                         'request'                         => request_type,
                                          'service_action'                  => 'fred')
     end
     it_behaves_like "execute_errors"

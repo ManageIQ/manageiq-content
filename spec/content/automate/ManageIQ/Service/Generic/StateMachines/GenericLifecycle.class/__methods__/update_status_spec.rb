@@ -5,6 +5,7 @@ require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Ser
 describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::UpdateStatus do
   let(:admin) { FactoryBot.create(:user_admin) }
   let(:request) { FactoryBot.create(:service_template_provision_request, :requester => admin) }
+  let(:request_type) { request.request_type }
   let(:ansible_tower_manager) { FactoryBot.create(:automation_manager_ansible_tower) }
   let(:job_template) { FactoryBot.create(:ansible_configuration_script, :manager => ansible_tower_manager) }
   let(:service_ansible_tower) { FactoryBot.create(:service_ansible_tower, :job_template => job_template) }
@@ -15,6 +16,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
     Spec::Support::MiqAeMockObject.new('service'                         => service_object,
                                        'service_action'                  => service_action,
                                        'service_template_provision_task' => svc_task,
+                                       'request'                         => request_type,
                                        'miq_server'                      => svc_model_miq_server)
   end
   let(:ae_service) { Spec::Support::MiqAeMockService.new(root_object) }
