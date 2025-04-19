@@ -10,8 +10,8 @@ object:
     language: ruby
     location: inline
     embedded_methods:
-    - "/System/CommonMethods/Utils/log_object"
-    options: {}
+    - "/Service/Generic/StateMachines/Utils/util_object"
+    relative_path: Service/Generic/StateMachines/GenericLifecycle/update_status
   inputs:
   - field:
       aetype:

@@ -16,7 +16,7 @@ module ManageIQ
 
                 begin
                   dump_root
-                  options = {}
+                  options = update_options
                   # user can insert options to override options from dialog
                   service.preprocess(service_action, options)
                   @handle.root['ae_result'] = 'ok'
@@ -32,31 +32,31 @@ module ManageIQ
               private
 
               def dump_root
-                @handle.log(:info, "Root:<$evm.root> Attributes - Begin")
-                @handle.root.attributes.sort.each { |k, v| @handle.log(:info, "  Attribute - #{k}: #{v}") }
-                @handle.log(:info, "Root:<$evm.root> Attributes - End")
-                @handle.log(:info, "")
+                ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.dump_root(@handle)
               end
 
-              def update_task(message)
-                @handle.root['service_template_provision_task'].try { |task| task.miq_request.user_message = message }
+              def update_task(message, status = nil)
+                ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.update_task(message, status, @handle)
               end
 
               def service
-                @handle.root["service"].tap do |service|
-                  if service.nil?
-                    @handle.log(:error, 'Service is nil')
-                    raise 'Service not found'
-                  end
-                end
+                ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.service(@handle)
               end
 
               def service_action
-                @handle.root["service_action"].tap do |action|
-                  unless %w(Provision Retirement Reconfigure).include?(action)
-                    @handle.log(:error, "Invalid service action: #{action}")
-                    raise "Invalid service_action"
-                  end
+                ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.service_action(@handle)
+              end
+
+              def reconfiguration_options
+                task = @handle.root["service_reconfigure_task"]
+                {:dialog => task.options[:dialog] || {}}
+              end
+
+              def update_options
+                if service_action == 'Reconfigure'
+                  reconfiguration_options
+                else
+                  {}
                 end
               end
             end

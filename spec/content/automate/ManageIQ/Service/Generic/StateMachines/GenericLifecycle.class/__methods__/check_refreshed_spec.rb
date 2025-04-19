@@ -1,8 +1,11 @@
 require_domain_file
+require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/System/CommonMethods/Utils.class/__methods__/log_object.rb')
+require File.join(ManageIQ::Content::Engine.root, 'content/automate/ManageIQ/Service/Generic/StateMachines/Utils.class/__methods__/util_object.rb')
 
 describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::CheckRefreshed do
   let(:admin) { FactoryBot.create(:user_admin) }
   let(:request) { FactoryBot.create(:service_template_provision_request, :requester => admin) }
+  let(:request_type) { request.request_type }
   let(:ansible_tower_manager) { FactoryBot.create(:automation_manager_ansible_tower) }
   let(:job_template) { FactoryBot.create(:ansible_configuration_script, :manager => ansible_tower_manager) }
   let(:service_ansible_tower) { FactoryBot.create(:service_ansible_tower, :job_template => job_template) }
@@ -13,6 +16,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
   let(:root_object) do
     Spec::Support::MiqAeMockObject.new('service'                         => svc_service,
                                        'service_template_provision_task' => task,
+                                       'request'                         => request_type,
                                        'service_action'                  => 'Provision')
   end
 
@@ -58,6 +62,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
     let(:errormsg)           { 'Invalid service_action' }
     let(:root_object) do
       Spec::Support::MiqAeMockObject.new('service'        => svc_service,
+                                         'request'        => request_type,
                                          'service_action' => 'fred')
     end
     it_behaves_like "check_refreshed_error"
@@ -68,6 +73,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::GenericLifecycle::
     let(:errormsg)           { 'Service not found' }
     let(:root_object) do
       Spec::Support::MiqAeMockObject.new('service_template_provision_task' => task,
+                                         'request'                         => request_type,
                                          'service_action'                  => 'Provision')
     end
     it_behaves_like "check_refreshed_error"
