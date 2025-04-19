@@ -8,6 +8,18 @@ module ManageIQ
         module StateMachines
           module Utils
             class UtilObject
+              REQUEST_TO_SERVICE_ACTION = {
+                "clone_to_service"    => "Provision",
+                "service_reconfigure" => "Reconfigure",
+                "service_retire"      => "Retirement"
+              }.freeze
+
+              REQUEST_TO_SERVICE_TASK = {
+                "clone_to_service"    => "service_template_provision_task",
+                "service_reconfigure" => "service_reconfigure_task",
+                "service_retire"      => "service_retire_task"
+              }.freeze
+
               def self.dump_root(handle = $evm)
                 handle.log(:info, "Root:<$evm.root> Attributes - Begin")
                 handle.root.attributes.sort.each { |k, v| handle.log(:info, "  Attribute - #{k}: #{v}") }
@@ -15,40 +27,29 @@ module ManageIQ
                 handle.log(:info, "")
               end
 
+              def self.service_task(handle = $evm)
+                request = handle.root["request"]
+                handle.root[REQUEST_TO_SERVICE_TASK[request]] unless request.nil?
+              end
+
               def self.update_task(message, status = nil, handle = $evm)
-                task_name = case handle.root["request"]
-                            when "service_reconfigure"
-                              "service_reconfigure_task"
-                            when "service_retire"
-                              "service_retire_task"
-                            else
-                              "service_template_provision_task"
-                            end
-                handle.root[task_name].try do |task|
+                task = service_task(handle)
+                unless task.nil?
                   task.miq_request.user_message = message
                   task.message = status unless status.nil?
                 end
               end
 
               def self.service(handle = $evm)
-                if handle.root["request"] == "service_reconfigure"
-                  task = handle.root["service_reconfigure_task"]
-                  service = task.source unless task.nil?
-                else
-                  service = handle.root["service"]
+                service = handle.root["service"] || service_task(handle)&.source
+                service.tap do |s|
+                  ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise("Service not found", handle) if s.nil?
                 end
-
-                if service.nil?
-                  ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise("Service not found", handle)
-                end
-
-                service
               end
 
               def self.service_action(handle = $evm)
-                return "Reconfigure" if handle.root["request"] == "service_reconfigure"
-
-                handle.root["service_action"].tap do |action|
+                service_action = handle.root["service_action"] || REQUEST_TO_SERVICE_ACTION[handle.root["request"]]
+                service_action.tap do |action|
                   unless %w[Provision Retirement Reconfigure].include?(action)
                     ManageIQ::Automate::System::CommonMethods::Utils::LogObject.log_and_raise("Invalid service_action", handle)
                   end
