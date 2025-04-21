@@ -138,7 +138,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject 
       it_behaves_like "when we have service_action"
     end
 
-    context "when request is service_reconfigure" do
+    context "when request is service_reconfigure, but no service_action attribute" do
       let(:root_object) do
         Spec::Support::MiqAeMockObject.new(
           'request' => 'service_reconfigure'
@@ -164,7 +164,7 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject 
       expect(described_class.service(ae_service)).to eq(service_object)
     end
 
-    context "when request is service_reconfigure, service_reconfigure_task is available and service not available" do
+    context "when request is service_reconfigure, service_reconfigure_task is available and 'service' attribute not available in ae_service.root" do
       include_context 'reconfigure_request_and_task_common'
 
       it "get service from service_reconfigure_task" do
@@ -211,6 +211,19 @@ describe ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject 
       include_context 'retirement_request_and_task_common'
 
       it_behaves_like "update_task passed with message and status"
+    end
+
+    context "when task attribute is not available in ae_service.root, don't raise error" do
+      let(:root_object) do
+        Spec::Support::MiqAeMockObject.new(
+          'service_action'                  => 'Provision',
+          'service_template_provision_task' => nil
+        )
+      end
+
+      it("not raise error") do
+        expect { described_class.update_task(msg, status, ae_service) }.not_to raise_error
+      end
     end
   end
 end

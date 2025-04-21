@@ -18,6 +18,7 @@ module ManageIQ
                   dump_root
                   options = update_options
                   # user can insert options to override options from dialog
+                  # or user changes the input params values, eg. ServiceTerraformTemplate
                   service.preprocess(service_action, options)
                   @handle.root['ae_result'] = 'ok'
                   @handle.log(:info, "Ending preprocess")
@@ -47,6 +48,7 @@ module ManageIQ
                 ManageIQ::Automate::Service::Generic::StateMachines::Utils::UtilObject.service_action(@handle)
               end
 
+              # User changes to the input params values, eg. ServiceTerraformTemplate
               def reconfiguration_options
                 task = @handle.root["service_reconfigure_task"]
                 {:dialog => task.options[:dialog] || {}}
@@ -56,6 +58,7 @@ module ManageIQ
                 if service_action == 'Reconfigure'
                   reconfiguration_options
                 else
+                  # user can insert options to override options from dialog
                   {}
                 end
               end
