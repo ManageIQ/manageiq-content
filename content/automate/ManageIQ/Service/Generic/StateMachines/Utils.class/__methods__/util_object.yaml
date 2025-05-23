@@ -1,0 +1,15 @@
+---
+object_type: method
+version: 1.0
+object:
+  attributes:
+    name: util_object
+    display_name:
+    description:
+    scope: instance
+    language: ruby
+    location: inline
+    embedded_methods:
+    - "/System/CommonMethods/Utils/log_object"
+    relative_path: Service/Generic/StateMachines/Utils/util_object
+  inputs: []

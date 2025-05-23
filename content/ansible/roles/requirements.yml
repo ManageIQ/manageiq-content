@@ -1,0 +1,5 @@
+roles:
+- name: manageiq.manageiq_vmdb
+  version: v1.0.0
+- name: manageiq.manageiq_automate
+  version: v1.0.0
