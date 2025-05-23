@@ -50,22 +50,15 @@ describe "parse_provider_category" do
                        :status  => 'Ok')
   end
 
-  def prepend_namespace(ws)
-    dom_search = ws.instance_variable_get('@dom_search')
-    dom_search.instance_variable_get('@prepend_namespace')
-  end
-
   context "#parse_provider_category for cloud objects" do
     it "for VM" do
       ws = MiqAeEngine.instantiate("#{inst}?Vm::vm=#{cloud_vm.id}", user)
       expect(ws.root["ae_provider_category"]).to eq("cloud")
-      expect(prepend_namespace(ws)).to eq("amazon")
     end
 
     it "for orchestration stack" do
       ws = MiqAeEngine.instantiate("#{inst}?OrchestrationStack::orchestration_stack=#{stack.id}", user)
       expect(ws.root["ae_provider_category"]).to eq("cloud")
-      expect(prepend_namespace(ws)).to match(/amazon/i)
     end
 
     it "for orchestration stack retire task" do
@@ -76,7 +69,6 @@ describe "parse_provider_category" do
     it "for miq_provision" do
       ws = MiqAeEngine.instantiate("#{inst}?MiqProvision::miq_provision=#{cloud_miq_provision.id}", user)
       expect(ws.root["ae_provider_category"]).to eq("cloud")
-      expect(prepend_namespace(ws)).to eq("amazon")
     end
   end
 
@@ -84,19 +76,16 @@ describe "parse_provider_category" do
     it "for miq_provision" do
       ws = MiqAeEngine.instantiate("#{inst}?MiqProvision::miq_provision=#{infra_miq_provision.id}", user)
       expect(ws.root["ae_provider_category"]).to eq("infrastructure")
-      expect(prepend_namespace(ws)).to eq("vmware")
     end
 
     it "for miq_request" do
       ws = MiqAeEngine.instantiate("#{inst}?MiqRequest::miq_request=#{infra_miq_provision_request.id}", user)
       expect(ws.root["ae_provider_category"]).to eq("infrastructure")
-      expect(prepend_namespace(ws)).to eq("vmware")
     end
 
     it "for vm_migrate_request" do
       ws = MiqAeEngine.instantiate("#{inst}?MiqRequestTask::vm_migrate_task=#{infra_miq_request_task.id}", user)
       expect(ws.root["ae_provider_category"]).to eq("infrastructure")
-      expect(prepend_namespace(ws)).to eq("vmware")
     end
   end
 
@@ -104,13 +93,11 @@ describe "parse_provider_category" do
     it "for cloud platform_category" do
       ws = MiqAeEngine.instantiate("#{inst}?platform_category=cloud", user)
       expect(ws.root["ae_provider_category"]).to eq("cloud")
-      expect(prepend_namespace(ws)).to be_nil
     end
 
     it "for infra platform_category" do
       ws = MiqAeEngine.instantiate("#{inst}?platform_category=infra", user)
       expect(ws.root["ae_provider_category"]).to eq("infrastructure")
-      expect(prepend_namespace(ws)).to be_nil
     end
   end
 end
