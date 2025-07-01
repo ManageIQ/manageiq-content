@@ -7,7 +7,7 @@ describe ManageIQ::Automate::AutomationManagement::TerraformEnterprise::Service:
   let(:workspace)   { FactoryBot.create(:configuration_script_terraform_enterprise, :manager => ems) }
   let(:task)        { FactoryBot.create(:service_template_provision_task, :destination => service, :miq_request => request) }
   let(:svc_task)    { MiqAeMethodService::MiqAeServiceServiceTemplateProvisionTask.find(task.id) }
-  let(:ems)         { FactoryBot.create(:ems_terraform_enterprise_with_vcr_authentication,) }
+  let(:ems)         { FactoryBot.create(:ems_terraform_enterprise).tap { |ems| ems.authentications << FactoryBot.create(:auth_token) } }
   let(:root_object) { Spec::Support::MiqAeMockObject.new('service_template_provision_task' => svc_task) }
   let(:ae_service)  { Spec::Support::MiqAeMockService.new(root_object) }
   let(:stack_class) { ManageIQ::Providers::TerraformEnterprise::AutomationManager::OrchestrationStack }
