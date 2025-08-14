@@ -6,8 +6,6 @@
 
 [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ManageIQ/manageiq/automate?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Build history for spassky branch](https://buildstats.info/github/chart/ManageIQ/manageiq-content?branch=spassky&buildCount=50&includeBuildsFromPullRequest=false&showstats=false)](https://github.com/ManageIQ/manageiq-content/actions?query=branch%3Amaster)
-
 Content plugin for ManageIQ.
 
 ## Notes on content
