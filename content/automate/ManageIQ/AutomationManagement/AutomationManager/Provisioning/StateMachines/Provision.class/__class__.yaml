@@ -53,26 +53,6 @@ object:
       max_time:
   - field:
       aetype: state
-      name: CheckProvisioned
-      display_name:
-      datatype: string
-      priority: 10
-      owner:
-      default_value: "/AutomationManagement/AutomationManager/Provisioning/StateMachines/Methods/CheckProvisioned"
-      substitute: true
-      message: create
-      visibility:
-      collect:
-      scope:
-      description:
-      condition:
-      on_entry:
-      on_exit: update_provision_status(status => 'Creating')
-      on_error: update_provision_status(status => 'Error Creating')
-      max_retries: '100'
-      max_time:
-  - field:
-      aetype: state
       name: PostProvision
       display_name:
       datatype: string
