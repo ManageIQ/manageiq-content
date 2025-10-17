@@ -1,0 +1,33 @@
+---
+object_type: class
+version: 1.0
+object:
+  attributes:
+    description: Profile
+    display_name:
+    name: Profile
+    type:
+    inherits:
+    visibility:
+    owner:
+  schema:
+  - field:
+      aetype: attribute
+      name: state_machine
+      display_name:
+      datatype: string
+      priority: 9
+      owner:
+      default_value: Provision
+      substitute: true
+      message: get_state_machine
+      visibility:
+      collect: "/state_machine = state_machine"
+      scope:
+      description:
+      condition:
+      on_entry:
+      on_exit:
+      on_error:
+      max_retries:
+      max_time:
