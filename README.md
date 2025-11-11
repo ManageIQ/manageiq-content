@@ -1,6 +1,6 @@
 # ManageIQ::Content
 
-[![CI](https://github.com/ManageIQ/manageiq-content/actions/workflows/ci.yaml/badge.svg?branch=spassky)](https://github.com/ManageIQ/manageiq-content/actions/workflows/ci.yaml)
+[![CI](https://github.com/ManageIQ/manageiq-content/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/ManageIQ/manageiq-content/actions/workflows/ci.yaml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/bc6773f3e24fd6323a5c/maintainability)](https://codeclimate.com/github/ManageIQ/manageiq-content/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/bc6773f3e24fd6323a5c/test_coverage)](https://codeclimate.com/github/ManageIQ/manageiq-content/test_coverage)
 

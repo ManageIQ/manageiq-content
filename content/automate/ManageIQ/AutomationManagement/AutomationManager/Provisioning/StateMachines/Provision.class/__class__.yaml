@@ -1,0 +1,93 @@
+---
+object_type: class
+version: 1.0
+object:
+  attributes:
+    description: Factory State Machines
+    display_name:
+    name: Provision
+    type:
+    inherits:
+    visibility:
+    owner:
+  schema:
+  - field:
+      aetype: state
+      name: PreProvision
+      display_name:
+      datatype: string
+      priority: 8
+      owner:
+      default_value: "/AutomationManagement/AutomationManager/Provisioning/StateMachines/Methods/PreProvision"
+      substitute: true
+      message: create
+      visibility:
+      collect:
+      scope:
+      description:
+      condition:
+      on_entry: update_provision_status(status => 'Applying PreProvision Customizations')
+      on_exit: update_provision_status(status => 'Applied PreProvision Customizations')
+      on_error: update_provision_status(status => 'Error Applying PreProvision Customizations')
+      max_retries: '100'
+      max_time:
+  - field:
+      aetype: state
+      name: Provision
+      display_name:
+      datatype: string
+      priority: 9
+      owner:
+      default_value: "/AutomationManagement/AutomationManager/Provisioning/StateMachines/Methods/Provision"
+      substitute: true
+      message: create
+      visibility:
+      collect:
+      scope:
+      description:
+      condition:
+      on_entry: update_provision_status(status => 'Creating')
+      on_exit: update_provision_status(status => 'Creating')
+      on_error: update_provision_status(status => 'Error Creating')
+      max_retries: '100'
+      max_time:
+  - field:
+      aetype: state
+      name: PostProvision
+      display_name:
+      datatype: string
+      priority: 11
+      owner:
+      default_value: "/AutomationManagement/AutomationManager/Provisioning/StateMachines/Methods/PostProvision"
+      substitute: true
+      message: create
+      visibility:
+      collect:
+      scope:
+      description:
+      condition:
+      on_entry: update_provision_status(status => 'Applying PostProvision Customizations')
+      on_exit: update_provision_status(status => 'Applied PostProvision Customizations')
+      on_error: update_provision_status(status => 'Error Applying PostProvision Customizations')
+      max_retries:
+      max_time:
+  - field:
+      aetype: state
+      name: Finished
+      display_name:
+      datatype: string
+      priority: 15
+      owner:
+      default_value: "/System/CommonMethods/StateMachineMethods/automation_manager_provision_finished"
+      substitute: true
+      message: create
+      visibility:
+      collect:
+      scope:
+      description:
+      condition:
+      on_entry:
+      on_exit:
+      on_error:
+      max_retries: '100'
+      max_time:
