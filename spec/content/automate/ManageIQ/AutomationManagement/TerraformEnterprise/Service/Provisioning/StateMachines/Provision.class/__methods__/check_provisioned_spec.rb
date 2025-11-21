@@ -30,6 +30,7 @@ describe ManageIQ::Automate::AutomationManagement::TerraformEnterprise::Service:
       let(:status) { "plan_queued" }
 
       it "retries the step" do
+        expect(stack).to receive(:refresh_ems)
         described_class.new(ae_service).main
         expect(ae_service.root['ae_result']).to eq('retry')
       end
