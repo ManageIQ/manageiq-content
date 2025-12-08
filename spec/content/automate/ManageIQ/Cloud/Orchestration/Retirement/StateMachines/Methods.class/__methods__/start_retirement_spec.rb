@@ -40,7 +40,7 @@ describe ManageIQ::Automate::Cloud::Orchestration::Retirement::StateMachines::Me
   end
 
   it "starts retirement" do
-    expect(ae_service).to receive(:create_notification).with(:type => :vm_retiring, :subject => svc_model_stack)
+    expect(ae_service).to receive(:create_notification).with(:type => :orchestration_stack_retiring, :subject => svc_model_stack)
     expect(svc_model_stack).to receive(:start_retirement)
     expect { described_class.new(ae_service).main }.to_not raise_error
   end

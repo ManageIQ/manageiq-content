@@ -45,7 +45,7 @@ module ManageIQ
                 def start_retirement(stack)
                   stack_validation(stack)
                   @handle.log('info', "Stack before start_retirement: #{stack.inspect} ")
-                  @handle.create_notification(:type => :vm_retiring, :subject => stack)
+                  @handle.create_notification(:type => :orchestration_stack_retiring, :subject => stack)
 
                   stack.start_retirement
                 end
