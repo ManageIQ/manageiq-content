@@ -9,6 +9,7 @@
     "Retire": {
       "Type": "Task",
       "Resource": "manageiq://retire_execute",
+      "TimeoutSeconds": 3600,
       "Parameters": {
         "RemoveFromProvider": true,
         "RemovalType": "remove_from_disk",
