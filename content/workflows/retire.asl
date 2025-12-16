@@ -12,8 +12,8 @@
       "TimeoutSeconds": 3600,
       "Parameters": {
         "RemoveFromProvider": true,
-        "RemovalType": "remove_from_disk",
-        "DeleteFromVmdb": true
+        "RemoveFromProviderStorage": true,
+        "RemoveFromInventory": true
       },
       "Next": "PostRetire"
     },
