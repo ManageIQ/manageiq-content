@@ -39,18 +39,18 @@ Step 4 is very critical because it uses the consistent YAML export package to cr
 * Other escape sequences
 * Inconsistent names, the filename on disk can be different from the internal name stored in the YAML files.
 
-Are all consistent, when you hand edit these files you might not see these nuances. 
+Are all consistent, when you hand edit these files you might not see these nuances.
 
 To unlock the ManageIQ domain use the following command from a rails console:
 
 ```ruby
-MiqAeDomain.find_by_name("ManageIQ").update_attributes(:source => "user")
+MiqAeDomain.find_by_name("ManageIQ").update_attribute(:source, "user")
 ```
 
 To lock the ManageIQ domain use the following command from a rails console:
 
 ```ruby
-MiqAeDomain.find_by_name("ManageIQ").update_attributes(:source => "system")
+MiqAeDomain.find_by_name("ManageIQ").update_attribute(:source, "system")
 ```
 
 Please note that after you do a round trip of the ManageIQ domain you would still see that `db/fixtures/ae_datastore/ManageIQ/__domain__.yaml` would be different because it has the tenant_id which is different from appliance to appliance. The tenant_id is used only when a customer does a backup/restore, when doing normal imports the tenant_id is ignored and we use the actual tenant_id from the appliance where the import is being run.
