@@ -15,4 +15,4 @@ object:
   - vmware:
       value: vmware_best_fit_least_utilized
   - microsoft:
-      value: microsoft_best_fit_least_utilized    
+      value: microsoft_best_fit_least_utilized

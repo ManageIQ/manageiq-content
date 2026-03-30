@@ -15,4 +15,4 @@ object:
   - vmware_meth1:
       value: pre_retirement
   - microsoft_meth1:
-      value: pre_retirement    
+      value: pre_retirement
