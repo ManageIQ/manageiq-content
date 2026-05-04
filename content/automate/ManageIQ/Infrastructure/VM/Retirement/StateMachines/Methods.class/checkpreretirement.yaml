@@ -16,3 +16,5 @@ object:
       value: check_pre_retirement
   - microsoft_meth1:
       value: check_pre_retirement
+  - proxmox_meth1:
+      value: check_pre_retirement
