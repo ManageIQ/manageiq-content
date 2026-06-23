@@ -13,7 +13,7 @@
       "Parameters": {
         "RemoveFromProvider": true,
         "RemoveFromProviderStorage": true,
-        "RemoveFromInventory": true
+        "RemoveFromInventory": false
       },
       "Next": "PostRetire"
     },
