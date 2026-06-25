@@ -18,7 +18,7 @@ describe "DialogParser Automate Method" do
 
   def create_tags
     FactoryBot.create(:classification_department_with_tags)
-    @array_name = "Array::dialog_tag_0_department"
+    @array_name = "dialog_tag_0_department"
     @dept_ids = Classification.find_by_description('Department').children.collect do |x|
       "Classification::#{x.id}"
     end.join(',')
@@ -59,8 +59,10 @@ describe "DialogParser Automate Method" do
       create_vms
       dialog_hash = {'dialog_option_1_numero' => 'one', 'dialog_option_2_numero' => 'two',
                      'dialog_option_3_numero' => 'three', 'dialog_option_0_numero' => 'zero',
-                     'dialog_tag_0_location' => 'NYC', 'dialog_tag_1_location' => 'BOM',
-                     'dialog_tag_2_location' => 'EWR', @array_name => @dept_ids,
+                     'dialog_tag_0_location' => ['Classification::47000000000058'],
+                     'dialog_tag_1_location' => ['Classification::47000000000059'],
+                     'dialog_tag_2_location' => ['Classification::47000000000060'],
+                     @array_name => @dept_ids,
                      array_key               => array_value.join(","),
                      @vm_array_name          => @vm_id_array.join(",")}
 
@@ -71,9 +73,10 @@ describe "DialogParser Automate Method" do
                                           :dialog_str_array => array_value,
                                           :dialog_vm_array  => @vm_name_array,
                                           :vm_array         => @vm_name_array}}
-      parsed_dialog_tags_hash = {0 => {:location => "NYC"},
-                                 1 => {:location => "BOM"},
-                                 2 => {:location => "EWR"}}
+      parsed_dialog_tags_hash = {0 => {:location => "Accounting"},
+                                 1 => {:location => "Financial Services"},
+                                 2 => {:location => "Human Resources"}}
+
 
       setup_and_run_method(dialog_hash)
       pdo = load_options
