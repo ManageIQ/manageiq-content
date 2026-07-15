@@ -37,7 +37,7 @@ module ManageIQ
                   @handle.create_notification(
                     :level   => "error",
                     :subject => task.miq_request,
-                    :message => "Automation Manager Provision Error: #{msg}"
+                    :message => "Automation Provider Provision Error: #{msg}"
                   )
                 end
 
