@@ -18,14 +18,26 @@ end
 def process_comma_separated_object_array(sequence_id, option_key, value, hash)
   return if value.nil?
   options_value_array = []
-  value.split(",").each do |entry|
-    next if entry.blank?
-    vmdb_obj = vmdb_object_from_array_entry(entry)
-    options_value_array << if vmdb_obj.nil?
+  if value.kind_of?(Array)
+    value.each do |entry|
+      next if entry.blank?
+      vmdb_obj = vmdb_object_from_array_entry(entry)
+      options_value_array << if vmdb_obj.nil?
                              entry
                            else
                              (vmdb_obj.respond_to?(:name) ? vmdb_obj.name : "#{vmdb_obj.class.name}::#{vmdb_obj.id}")
                            end
+    end
+  else
+    value.split(",").each do |entry|
+      next if entry.blank?
+      vmdb_obj = vmdb_object_from_array_entry(entry)
+      options_value_array << if vmdb_obj.nil?
+                              'THIS IS A TEST 1'
+                            else
+                              'THIS IS A TEST 2'
+                            end
+    end
   end
   hash[sequence_id][option_key] = options_value_array
 end
@@ -70,13 +82,19 @@ def option_array_value(dialog_key, dialog_value, options_hash)
 end
 
 def tag_hash_value(dialog_key, dialog_value, tags_hash)
-  return false unless /^dialog_tag_(?<sequence>\d*)_(?<option_key>.*)/i =~ dialog_key
+  $evm.log('TESTING', dialog_key)
+  $evm.log('TESTING', dialog_value)
+  $evm.log('TESTING', tags_hash)
+  return false unless /^dialog_tag_(?<sequence>\d*)_(?<option_key>.*)/i =~ dialog_key || (/^dialog_tag_(?<sequence>\d*)_(?<option_key>.*)/i =~ dialog_key && dialog_value.kind_of?(Array))
   add_hash_value(sequence.to_i, option_key.to_sym, dialog_value, tags_hash)
   true
 end
 
 def tag_array_value(dialog_key, dialog_value, tags_hash)
-  return false unless /^array::dialog_tag_(?<sequence>\d*)_(?<option_key>.*)/i =~ dialog_key
+  $evm.log('TESTING', dialog_key)
+  $evm.log('TESTING', dialog_value)
+  $evm.log('TESTING', tags_hash)
+  return false unless /^array::dialog_tag_(?<sequence>\d*)_(?<option_key>.*)/i =~ dialog_key ||  /^dialog_tag_(?<sequence>\d*)_(?<option_key>.*)/i =~ dialog_key
   process_comma_separated_object_array(sequence.to_i, option_key.to_sym, dialog_value, tags_hash)
   true
 end
