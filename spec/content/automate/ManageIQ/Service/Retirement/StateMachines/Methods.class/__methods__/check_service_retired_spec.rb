@@ -23,7 +23,7 @@ describe ManageIQ::Automate::Service::Retirement::StateMachines::Methods::CheckS
     end
   end
 
-  context " with finished task" do
+  context "with finished task" do
     it "check" do
       task.miq_request_tasks << FactoryBot.create(:service_retire_task, :miq_request => request, :state => 'finished')
       described_class.new(ae_service).main
@@ -32,9 +32,27 @@ describe ManageIQ::Automate::Service::Retirement::StateMachines::Methods::CheckS
     end
   end
 
-  context " with error task" do
+  context "with failed child task" do
     it "check" do
-      task.miq_request_tasks << FactoryBot.create(:service_retire_task, :miq_request => request, :state => 'pending')
+      task.miq_request_tasks << FactoryBot.create(:service_retire_task, :miq_request => request, :state => 'finished', :status => 'Error', :message => 'Error: child failed')
+      described_class.new(ae_service).main
+
+      expect(ae_service.root['ae_result']).to eq('error')
+    end
+
+    it "sets ae_reason from child task when parent message is blank" do
+      task.update!(:message => nil)
+      task.miq_request_tasks << FactoryBot.create(:service_retire_task, :miq_request => request, :state => 'finished', :status => 'Error', :message => 'Error: child failed')
+      described_class.new(ae_service).main
+
+      expect(ae_service.root['ae_result']).to eq('error')
+      expect(ae_service.root['ae_reason']).to eq('child failed')
+    end
+  end
+
+  context "with error task" do
+    it "check" do
+      task.miq_request_tasks << FactoryBot.create(:service_retire_task, :miq_request => request, :state => 'finished')
       expect(svc_task).to receive(:statemachine_task_status).and_return('error')
       described_class.new(ae_service).main
 
